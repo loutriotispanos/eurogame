@@ -1,0 +1,9 @@
+# Local Claude Code settings — not for the public repo
+.claude/
+
+# Throwaway localStorage-seed pages used during headless testing
+_*.html
+
+# Windows cruft
+Thumbs.db
+desktop.ini
