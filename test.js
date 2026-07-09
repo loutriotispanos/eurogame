@@ -46,10 +46,11 @@ var doc = {
   _listeners: {},
   getElementById: function (id) { return byKey[id] || mk(id); },
   querySelector: function (sel) { return byKey["sel:" + sel] || mk("sel:" + sel); },
+  querySelectorAll: function () { return []; },
   createElement: function (tag) { return new El(tag); },
   addEventListener: function (t, fn) { (doc._listeners[t] = doc._listeners[t] || []).push(fn); }
 };
-["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
+["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
 
 var store = {}, captured = "", reduceMotion = false;
 var win = {
@@ -80,6 +81,11 @@ eval(fs.readFileSync("playerid.js", "utf8"));
 eval(fs.readFileSync("completefive.js", "utf8"));
 eval(fs.readFileSync("connections.js", "utf8"));
 eval(fs.readFileSync("careerorder.js", "utf8"));
+eval(fs.readFileSync("grids.js", "utf8"));
+eval(fs.readFileSync("thegrid.js", "utf8"));
+eval(fs.readFileSync("clubreveal.js", "utf8"));
+win.__ELG_NO_WIRE__ = true;   // drive window.Hub directly; skip app.js DOM wiring
+eval(fs.readFileSync("app.js", "utf8"));
 
 var pass = 0, fail = 0;
 function ok(c, m) { if (c) { pass++; console.log("  ok   " + m); } else { fail++; console.log("  FAIL " + m); } }
@@ -639,6 +645,260 @@ ok(byId("info-modal").hidden === false, "first onShow auto-opens the how-to");
 fire(byId("info-close"), "click");
 window.Mystery.onShow();
 ok(byId("info-modal").hidden === true, "second onShow stays quiet");
+
+console.log("grids data (The Grid)");
+ok(window.GRIDS && window.GRIDS.length >= 30, "grids loaded (" + (window.GRIDS || []).length + ")");
+ok(window.GRIDS.every(function (g) { return g.rows.length === 3 && g.cols.length === 3; }), "every grid has 3 rows + 3 cols");
+ok(window.GRIDS.every(function (g) { return g.rows.every(function (c) { return c.t === "club"; }); }), "rows are always clubs");
+ok(window.GRIDS.every(function (g) {
+  var vals = {}; return g.rows.concat(g.cols).every(function (c) { var k = c.t + ":" + c.v; if (vals[k]) return false; vals[k] = 1; return true; });
+}), "no repeated criterion on one board");
+ok(window.GRIDS.every(function (g) {
+  return g.rows.every(function (r) { return g.cols.every(function (c) { return window.TheGrid._answers(r, c).length >= 2; }); });
+}), "every cell of every grid has at least 2 known answers");
+// each board must be fillable with 9 DISTINCT players (players can be used once)
+function grDistinctFill(g) {
+  var cellAns = [];
+  g.rows.forEach(function (r) { g.cols.forEach(function (c) { cellAns.push(window.TheGrid._answers(r, c)); }); });
+  cellAns.sort(function (a, b) { return a.length - b.length; });
+  var taken = {};
+  function bt(k) {
+    if (k === cellAns.length) return true;
+    for (var i = 0; i < cellAns[k].length; i++) {
+      var n = cellAns[k][i];
+      if (taken[n]) continue;
+      taken[n] = 1;
+      if (bt(k + 1)) return true;
+      delete taken[n];
+    }
+    return false;
+  }
+  return bt(0);
+}
+ok(window.GRIDS.every(grDistinctFill), "every grid is fillable with 9 distinct players");
+
+console.log("The Grid game");
+// distinct assignment of one answer per cell, used to actually solve a board
+function grAssignment(g) {
+  var cells = [];
+  g.rows.forEach(function (r) { g.cols.forEach(function (c) { cells.push(window.TheGrid._answers(r, c)); }); });
+  var order = cells.map(function (a, i) { return { i: i, a: a }; }).sort(function (x, y) { return x.a.length - y.a.length; });
+  var taken = {}, out = [];
+  function bt(k) {
+    if (k === order.length) return true;
+    for (var i = 0; i < order[k].a.length; i++) {
+      var n = order[k].a[i];
+      if (taken[n]) continue;
+      taken[n] = 1; out[order[k].i] = n;
+      if (bt(k + 1)) return true;
+      delete taken[n]; out[order[k].i] = null;
+    }
+    return false;
+  }
+  bt(0);
+  return out;
+}
+delete store["elg:gr:stats"];
+window.TheGrid._setMode("practice");
+var gr = window.TheGrid._peek();
+ok(gr.mode === "practice" && gr.over === false && gr.puzzle && gr.left === 12, "practice grid dealt with 12 guesses");
+ok(gr.selected === 0, "first empty cell auto-selected");
+var grU = window.TheGrid._universe();
+var grBad = null;
+for (var grN in grU) { if (!window.TheGrid._fits(grN, gr.puzzle.rows[0]) && !window.TheGrid._fits(grN, gr.puzzle.cols[0])) { grBad = grN; break; } }
+window.TheGrid._submit(grBad);
+var gr1 = window.TheGrid._peek();
+ok(gr1.left === 11 && gr1.wrong === 1 && !gr1.cells[0], "a miss burns a guess, cell stays empty");
+var grAns = grAssignment(gr.puzzle);
+ok(grAns.every(function (n) { return !!n; }), "test found a distinct 9-player fill");
+window.TheGrid._select(0);
+window.TheGrid._submit(grAns[0]);
+var gr2 = window.TheGrid._peek();
+ok(gr2.cells[0] && gr2.cells[0].name === grAns[0] && gr2.left === 10, "a fitting player fills the cell (and costs a guess)");
+window.TheGrid._select(1);
+window.TheGrid._submit(grAns[0]);
+var gr2b = window.TheGrid._peek();
+ok(gr2b.left === 10 && !gr2b.cells[1], "a name already on the board does not burn a guess");
+for (var gi = 1; gi < 9; gi++) { window.TheGrid._select(gi); window.TheGrid._submit(grAns[gi]); }
+var gr3 = window.TheGrid._peek();
+ok(gr3.over === true && gr3.won === true, "filling all 9 cells wins");
+ok(JSON.parse(store["elg:gr:stats"]).solved >= 1, "practice win recorded");
+fireDoc("keydown", { key: " ", code: "Space", target: doc.body, preventDefault: function () {} });
+ok(window.TheGrid._peek().over === false, "Space deals a new grid when practice game over");
+
+console.log("The Grid — remembers misses per cell");
+window.TheGrid._deal();
+var grm = window.TheGrid._peek(), grmBad = null;
+for (var grmN in grU) { if (!window.TheGrid._fits(grmN, grm.puzzle.rows[0]) && !window.TheGrid._fits(grmN, grm.puzzle.cols[0])) { grmBad = grmN; break; } }
+window.TheGrid._select(0);
+window.TheGrid._submit(grmBad);
+ok(window.TheGrid._peek().misses[0].indexOf(grmBad) >= 0, "a wrong guess is remembered on its cell");
+window.TheGrid._select(1);
+ok(byId("gr-flash").textContent.indexOf(grmBad) < 0, "switching cells clears the miss reminder");
+window.TheGrid._select(0);
+ok(byId("gr-flash").textContent.indexOf(grmBad) >= 0, "returning to the cell shows what was tried there");
+
+console.log("The Grid — losing reveals answers");
+window.TheGrid._deal();
+var grl = window.TheGrid._peek(), grlBad = null;
+for (var grM in grU) { if (!window.TheGrid._fits(grM, grl.puzzle.rows[0]) && !window.TheGrid._fits(grM, grl.puzzle.cols[0])) { grlBad = grM; break; } }
+var grlPool = Object.keys(grU).filter(function (n) { return !window.TheGrid._fits(n, grl.puzzle.rows[0]) || !window.TheGrid._fits(n, grl.puzzle.cols[0]); });
+for (var gk = 0; gk < 12; gk++) { window.TheGrid._select(0); window.TheGrid._submit(grlPool[gk]); }
+var grl2 = window.TheGrid._peek();
+ok(grl2.over === true && grl2.won === false && grl2.left === 0, "12 misses end the game (loss)");
+ok(grl2.cells.every(function (c) { return !!c; }), "loss reveals an answer in every empty cell");
+
+console.log("The Grid — Give up (practice only)");
+window.TheGrid._deal();
+ok(byId("gr-giveup").style.display !== "none", "Give up shown in practice");
+fire(byId("gr-giveup"), "click");
+ok(window.TheGrid._peek().over === true && window.TheGrid._peek().won === false, "Give up ends the game (loss)");
+
+console.log("The Grid — Daily");
+function grTodayKey() { var d = new Date(); function p(n) { return n < 10 ? "0" + n : "" + n; } return "elg:gr:daily:" + d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
+delete store["elg:gr:dstats"]; delete store[grTodayKey()];
+window.TheGrid._setMode("daily");
+var grd = window.TheGrid._peek();
+ok(grd.mode === "daily" && grd.puzzle && grd.over === false, "Daily deals a grid");
+ok(byId("gr-next").style.display === "none" && byId("gr-giveup").style.display === "none", "New-grid + Give-up hidden in Daily");
+var grdAns = grAssignment(grd.puzzle);
+for (var gd = 0; gd < 9; gd++) { window.TheGrid._select(gd); window.TheGrid._submit(grdAns[gd]); }
+ok(window.TheGrid._peek().won === true, "solved the daily grid");
+var grds = JSON.parse(store["elg:gr:dstats"]);
+ok(grds.solved >= 1 && grds.curStreak >= 1 && grds.lastDate, "daily win recorded with streak");
+window.TheGrid._setMode("practice");
+window.TheGrid._setMode("daily");
+ok(window.TheGrid._peek().over === true && window.TheGrid._peek().won === true, "returning to Daily restores the finished grid");
+window.TheGrid.goPractice();
+ok(window.TheGrid._peek().mode === "practice", "TheGrid.goPractice → practice");
+window.TheGrid.goDaily();
+ok(window.TheGrid._peek().mode === "daily", "TheGrid.goDaily → daily");
+
+console.log("The Grid — how-to modal + first-visit help");
+delete store["elg:gr:seenhelp"];
+window.TheGrid.onShow();
+ok(byId("gr-info-modal").hidden === false, "first onShow auto-opens the how-to");
+fire(byId("gr-info-close"), "click");
+window.TheGrid.onShow();
+ok(byId("gr-info-modal").hidden === true, "second onShow stays quiet");
+fire(byId("gr-info-btn"), "click");
+ok(byId("gr-info-modal").hidden === false, "info button re-opens it manually");
+fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
+ok(byId("gr-info-modal").hidden === true, "Escape closes it");
+
+console.log("Club Reveal — pools + reveal order");
+var cvPools = window.ClubReveal._pools();
+ok(Object.keys(cvPools.active).length >= 18, "active pool has all current clubs (" + Object.keys(cvPools.active).length + ")");
+ok(Object.keys(cvPools.active).every(function (c) { return cvPools.active[c].length >= 6; }), "every current roster has at least 6 players");
+ok(Object.keys(cvPools.legends).length >= 10, "legends pool has enough clubs (" + Object.keys(cvPools.legends).length + ")");
+ok(Object.keys(cvPools.legends).every(function (c) { return cvPools.legends[c].length >= 4; }), "every legends club has at least 4 names");
+
+console.log("Club Reveal — game flow");
+delete store["elg:cv:stats"];
+window.ClubReveal._setMode("active");
+var cv = window.ClubReveal._peek();
+ok(cv.club && cv.order.length >= 6 && cv.revealed === 1 && cv.over === false, "a club is dealt with one name showing");
+ok(window.ClubReveal._recog(cv.order[0].name) <= window.ClubReveal._recog(cv.order[cv.order.length - 1].name),
+   "reveal order is obscure-first (first name no more famous than last)");
+window.ClubReveal._reveal();
+ok(window.ClubReveal._peek().revealed === 2, "Reveal next shows another name (free)");
+var cvWrong = Object.keys(cvPools.active).filter(function (c) { return c !== cv.club; });
+window.ClubReveal._guess(cvWrong[0]);
+var cv2 = window.ClubReveal._peek();
+ok(cv2.guesses.length === 1 && cv2.revealed === 3 && cv2.over === false, "a wrong guess burns a life AND forces a reveal");
+window.ClubReveal._guess(cvWrong[0]);
+ok(window.ClubReveal._peek().guesses.length === 1, "repeating the same wrong club costs nothing");
+window.ClubReveal._guess(cv.club);
+var cv3 = window.ClubReveal._peek();
+ok(cv3.over === true && cv3.won === true, "naming the club wins");
+ok(JSON.parse(store["elg:cv:stats"]).solved >= 1, "practice win recorded");
+fireDoc("keydown", { key: " ", code: "Space", target: doc.body, preventDefault: function () {} });
+ok(window.ClubReveal._peek().over === false, "Space deals the next club when practice game over");
+var cvL = window.ClubReveal._peek();
+var cvLwrong = Object.keys(cvPools.active).filter(function (c) { return c !== cvL.club; });
+window.ClubReveal._guess(cvLwrong[0]); window.ClubReveal._guess(cvLwrong[1]); window.ClubReveal._guess(cvLwrong[2]);
+var cvL2 = window.ClubReveal._peek();
+ok(cvL2.over === true && cvL2.won === false, "three wrong guesses lose");
+fire(byId("cv-next"), "click");
+fire(byId("cv-giveup"), "click");
+ok(window.ClubReveal._peek().over === true && window.ClubReveal._peek().won === false, "Give up ends the round (loss)");
+window.ClubReveal._setMode("legends");
+var cvLeg = window.ClubReveal._peek();
+ok(cvPools.legends[cvLeg.club] && cvPools.legends[cvLeg.club].some(function (p) { return p.name === cvLeg.order[0].name; }),
+   "Legends mode deals a club's retired greats");
+
+console.log("Club Reveal — Daily");
+function cvTodayKey() { var d = new Date(); function p(n) { return n < 10 ? "0" + n : "" + n; } return "elg:cv:daily:" + d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
+delete store["elg:cv:dstats"]; delete store[cvTodayKey()];
+window.ClubReveal._setMode("daily");
+var cvd = window.ClubReveal._peek();
+ok(cvd.club && cvd.revealed === 1 && cvd.over === false, "Daily deals a club");
+ok(byId("cv-next").style.display === "none" && byId("cv-giveup").style.display === "none", "New-club + Give-up hidden in Daily");
+window.ClubReveal._setMode("active");
+window.ClubReveal._setMode("daily");
+ok(window.ClubReveal._peek().club === cvd.club, "Daily is deterministic (same club on re-deal)");
+window.ClubReveal._guess(cvd.club);
+ok(window.ClubReveal._peek().won === true, "solved the daily");
+var cvds = JSON.parse(store["elg:cv:dstats"]);
+ok(cvds.solved >= 1 && cvds.curStreak >= 1 && cvds.lastDate, "daily win recorded with streak");
+window.ClubReveal._setMode("active");
+window.ClubReveal._setMode("daily");
+ok(window.ClubReveal._peek().over === true && window.ClubReveal._peek().won === true, "returning to Daily restores the finished round");
+window.ClubReveal.goPractice();
+ok(window.ClubReveal._peek().mode === "both", "ClubReveal.goPractice → Both");
+window.ClubReveal.goDaily();
+ok(window.ClubReveal._peek().mode === "daily", "ClubReveal.goDaily → daily");
+window.ClubReveal._setMode("both");
+var cvB = window.ClubReveal._peek();
+ok(!!(cvPools.active[cvB.club] || cvPools.legends[cvB.club]), "Both mode deals from either pool");
+ok(cvB.over === false && cvB.revealed === 1, "Both round starts fresh with one name");
+
+console.log("Club Reveal — how-to modal + first-visit help");
+delete store["elg:cv:seenhelp"];
+window.ClubReveal.onShow();
+ok(byId("cv-info-modal").hidden === false, "first onShow auto-opens the how-to");
+fire(byId("cv-info-close"), "click");
+window.ClubReveal.onShow();
+ok(byId("cv-info-modal").hidden === true, "second onShow stays quiet");
+fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
+
+console.log("hub streak (unified, all games)");
+function hpad(n) { return n < 10 ? "0" + n : "" + n; }
+function hdate(off) { var d = new Date(); d.setDate(d.getDate() - off); return d.getFullYear() + "-" + hpad(d.getMonth() + 1) + "-" + hpad(d.getDate()); }
+var HTODAY = hdate(0), HY = hdate(1), HY2 = hdate(2), HY3 = hdate(3);
+var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:"];
+function clearToday() { DAILY_PREFIXES.forEach(function (p) { delete store[p + HTODAY]; }); }
+function markDoneToday() { store["elg:gr:daily:" + HTODAY] = JSON.stringify({ puzzle: 0, done: true, won: true }); }
+clearToday();
+ok(window.Hub._isTodayDone() === false, "nothing finished today → not done");
+window.Hub._setHub({ cur: 0, best: 0, last: null, freeze: true, freezeAt: 0 });
+markDoneToday();
+ok(window.Hub._isTodayDone() === true, "a finished daily counts as done today");
+var H1 = window.Hub._reconcile();
+ok(H1.cur === 1 && H1.best === 1 && H1.last === HTODAY, "first daily starts a 1-day streak");
+ok(window.Hub._reconcile().cur === 1, "replaying the same day does not double-count");
+window.Hub._setHub({ cur: 5, best: 5, last: HY, freeze: true, freezeAt: 0 });
+ok(window.Hub._reconcile().cur === 6, "playing the day after continues the streak");
+window.Hub._setHub({ cur: 5, best: 9, last: HY2, freeze: true, freezeAt: 0 });
+var H3 = window.Hub._reconcile();
+ok(H3.cur === 6 && H3.freeze === false, "a single missed day is bridged by the streak freeze");
+window.Hub._setHub({ cur: 8, best: 9, last: HY3, freeze: true, freezeAt: 0 });
+var H4 = window.Hub._reconcile();
+ok(H4.cur === 1 && H4.freeze === true, "a 2+ day gap resets the streak (freeze kept)");
+window.Hub._setHub({ cur: 8, best: 9, last: HY2, freeze: false, freezeAt: 0 });
+ok(window.Hub._reconcile().cur === 1, "a missed day with no freeze left resets the streak");
+window.Hub._setHub({ cur: 12, best: 12, last: HY, freeze: false, freezeAt: 5 });
+var H6 = window.Hub._reconcile();
+ok(H6.cur === 13 && H6.freeze === true, "the streak freeze recharges after 7 more days");
+clearToday();
+window.Hub._setHub({ cur: 6, best: 9, last: HY, freeze: true, freezeAt: 0 });
+var HI = window.Hub._info();
+ok(HI.cur === 6 && HI.done === false && HI.atRisk === true, "streak stays alive but 'at risk' until you play today");
+window.Hub._setHub({ cur: 4, best: 9, last: HY3, freeze: false, freezeAt: 0 });
+ok(window.Hub._info().cur === 0, "a lapsed streak shows 0 until you play again");
+clearToday();
+store["elg:cv:daily:" + HTODAY] = JSON.stringify({ club: "x", revealed: 3, guesses: [], done: true, won: false });
+ok(window.Hub._isTodayDone() === true, "a finished Club Reveal daily counts toward the hub streak");
 
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);
