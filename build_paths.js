@@ -1,0 +1,122 @@
+/*
+ * Generates paths.js (window.PATHS) for Path Between — run `node build_paths.js`.
+ *
+ * Each puzzle = a pair of careers.js players + the par (BFS-shortest number of
+ * teammate links between them). Bands: par 2 = Easy, 3 = Medium (the Daily
+ * pool), 4 = Hard.
+ *
+ * IMPORTANT: this loads the REAL pathbetween.js and generates through its
+ * exposed _teammates/_bfs/_link hooks, so the generator and the game share ONE
+ * teammate graph (same club aliases, same year-overlap rule) — they can never
+ * disagree.
+ *
+ * Guarantees per puzzle:
+ *   - par re-verified by BFS (endpoints are never direct teammates: par >= 2)
+ *   - at least MIN_WAYS distinct shortest routes, so no single forced
+ *     obscure link decides the puzzle
+ *   - per-player usage caps keep the pairs varied
+ */
+"use strict";
+const fs = require("fs");
+
+// --- Minimal browser stubs so the data files + pathbetween.js load ------------
+global.window = {
+  addEventListener: function () {},
+  localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} }
+};
+global.document = {
+  readyState: "complete",
+  addEventListener: function () {},
+  getElementById: function () { return null; },
+  createElement: function () { return {}; },
+  querySelector: function () { return null; }
+};
+eval(fs.readFileSync("careers.js", "utf8"));
+window.PATHS = [];                        // not built yet — pathbetween.js only needs careers
+eval(fs.readFileSync("pathbetween.js", "utf8"));
+const G = window.PathBetween;
+
+// --- Tuning knobs ---------------------------------------------------------------
+const SEED = 20260710;
+const BANDS = [
+  { par: 2, target: 50, min: 30, minWays: 2, maxUse: 3 },   // Easy — one player in between
+  { par: 3, target: 80, min: 50, minWays: 3, maxUse: 4 },   // Medium — the Daily pool
+  { par: 4, target: 40, min: 20, minWays: 2, maxUse: 4 }    // Hard — three stops
+];
+
+// --- Seeded RNG (deterministic output) --------------------------------------------
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rnd = mulberry32(SEED);
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+
+// --- All-pairs distances + shortest-route counts through the game's own graph ----
+const NAMES = window.CAREERS.map(c => c.name);
+const N = NAMES.length;
+console.log("players: " + N + ", edges: " + NAMES.reduce((s, n) => s + G._teammates(n).length, 0) / 2);
+
+function bfsWays(src) {                    // dist + number of distinct shortest paths
+  const dist = {}, ways = {};
+  dist[src] = 0; ways[src] = 1;
+  const q = [src];
+  for (let h = 0; h < q.length; h++) {
+    const v = q[h];
+    for (const w of G._teammates(v)) {
+      if (dist[w] == null) { dist[w] = dist[v] + 1; ways[w] = ways[v]; q.push(w); }
+      else if (dist[w] === dist[v] + 1) ways[w] += ways[v];
+    }
+  }
+  return { dist, ways };
+}
+
+const candidates = { 2: [], 3: [], 4: [] };
+for (let i = 0; i < N; i++) {
+  const { dist, ways } = bfsWays(NAMES[i]);
+  for (let j = i + 1; j < N; j++) {
+    const d = dist[NAMES[j]];
+    if (candidates[d]) candidates[d].push({ a: NAMES[i], b: NAMES[j], ways: ways[NAMES[j]] });
+  }
+}
+console.log("candidate pairs: par2 " + candidates[2].length + ", par3 " + candidates[3].length + ", par4 " + candidates[4].length);
+
+// --- Pick puzzles per band: shuffled, robust, capped per player -------------------
+const puzzles = [];
+for (const band of BANDS) {
+  const used = {};
+  const pool = shuffle(candidates[band.par].filter(c => c.ways >= band.minWays));
+  const picked = [];
+  for (const c of pool) {
+    if (picked.length >= band.target) break;
+    if ((used[c.a] || 0) >= band.maxUse || (used[c.b] || 0) >= band.maxUse) continue;
+    used[c.a] = (used[c.a] || 0) + 1; used[c.b] = (used[c.b] || 0) + 1;
+    // randomize which endpoint is the start, for variety
+    picked.push(rnd() < 0.5 ? { a: c.a, b: c.b, par: band.par } : { a: c.b, b: c.a, par: band.par });
+  }
+  console.log("par " + band.par + ": picked " + picked.length + " of " + pool.length + " robust candidates");
+  if (picked.length < band.min) { console.error("too few par-" + band.par + " puzzles — loosen the knobs"); process.exit(1); }
+  puzzles.push(...picked);
+}
+
+// --- Paranoid self-check through the game's own hooks ------------------------------
+for (const p of puzzles) {
+  const d = G._bfs(p.a).dist[p.b];
+  if (d !== p.par) { console.error("par mismatch for " + p.a + " ~ " + p.b + ": stored " + p.par + ", BFS " + d); process.exit(1); }
+  if (p.par >= 2 && G._link(p.a, p.b)) { console.error(p.a + " ~ " + p.b + " are direct teammates"); process.exit(1); }
+}
+
+const out = "/* AUTO-GENERATED by build_paths.js — do not edit by hand. Puzzles for Path Between. */\n" +
+  "window.PATHS = [\n" +
+  puzzles.map(p => "  " + JSON.stringify(p)).join(",\n") +
+  "\n];\n";
+fs.writeFileSync("paths.js", out);
+console.log("wrote paths.js (" + puzzles.length + " puzzles)");

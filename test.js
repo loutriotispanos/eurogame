@@ -50,7 +50,7 @@ var doc = {
   createElement: function (tag) { return new El(tag); },
   addEventListener: function (t, fn) { (doc._listeners[t] = doc._listeners[t] || []).push(fn); }
 };
-["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
+["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
 
 var store = {}, captured = "", reduceMotion = false;
 var win = {
@@ -84,6 +84,8 @@ eval(fs.readFileSync("careerorder.js", "utf8"));
 eval(fs.readFileSync("grids.js", "utf8"));
 eval(fs.readFileSync("thegrid.js", "utf8"));
 eval(fs.readFileSync("clubreveal.js", "utf8"));
+eval(fs.readFileSync("paths.js", "utf8"));
+eval(fs.readFileSync("pathbetween.js", "utf8"));
 win.__ELG_NO_WIRE__ = true;   // drive window.Hub directly; skip app.js DOM wiring
 eval(fs.readFileSync("app.js", "utf8"));
 
@@ -862,11 +864,131 @@ window.ClubReveal.onShow();
 ok(byId("cv-info-modal").hidden === true, "second onShow stays quiet");
 fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
 
+console.log("paths data (Path Between)");
+ok(window.PATHS && window.PATHS.length >= 100, "paths loaded (" + (window.PATHS || []).length + ")");
+ok(window.PATHS.every(function (p) { return p.a && p.b && p.a !== p.b && [2, 3, 4].indexOf(p.par) >= 0; }), "every puzzle has two distinct endpoints + par 2-4");
+var pbCareerNames = {}; window.CAREERS.forEach(function (c) { pbCareerNames[c.name] = 1; });
+ok(window.PATHS.every(function (p) { return pbCareerNames[p.a] && pbCareerNames[p.b]; }), "every endpoint resolves in careers.js");
+ok(window.PATHS.every(function (p) { return !window.PathBetween._link(p.a, p.b); }), "no pair is direct teammates (par >= 2 by construction)");
+ok(window.PATHS.every(function (p) { return window.PathBetween._bfs(p.a).dist[p.b] === p.par; }), "every stored par matches an independent BFS re-check");
+(function () {
+  var sigs = {}, dup = false;
+  window.PATHS.forEach(function (p) { var s = [p.a, p.b].sort().join("|"); if (sigs[s]) dup = true; sigs[s] = 1; });
+  ok(!dup, "no duplicate pairs across the bands");
+})();
+var pbPools = window.PathBetween._pools();
+ok(pbPools[2].length >= 30 && pbPools[3].length >= 50 && pbPools[4].length >= 20,
+   "all bands populated (easy " + pbPools[2].length + ", medium " + pbPools[3].length + ", hard " + pbPools[4].length + ")");
+
+console.log("teammate graph (Path Between)");
+ok(window.PathBetween._link("Nicolas Laprovittola", "Juancho Hernangomez") != null,
+   "club aliases merge stored name variants (Estudiantes = CB Estudiantes)");
+ok(window.PathBetween._link("Kostas Sloukas", "Jan Vesely") != null, "overlapping years at one club → teammates (Fenerbahce)");
+ok(window.PathBetween._link("Kostas Sloukas", "Evan Fournier") == null, "same club in different eras → NOT teammates (Olympiacos)");
+(function () {
+  var names = window.CAREERS.map(function (c) { return c.name; });
+  var sym = names.every(function (a) {
+    return window.PathBetween._teammates(a).every(function (b) { return window.PathBetween._teammates(b).indexOf(a) >= 0; });
+  });
+  ok(sym, "teammate graph is symmetric");
+})();
+
+console.log("Path Between game");
+var pbInput = byId("pb-input"), pbDd = byId("pb-dropdown");
+function pbSubmit(name) {
+  pbInput.value = name; fire(pbInput, "input");
+  var opt = null;
+  pbDd.children.forEach(function (c) { if (!opt && (c._html || "").indexOf(">" + name + "</span>") >= 0) opt = c; });
+  if (!opt) return false;
+  fire(opt, "pointerdown", { preventDefault: function () {} });
+  return true;
+}
+delete store["elg:pb:stats"];
+window.PathBetween._setMode("easy");
+var pb = window.PathBetween._peek();
+ok(pb.mode === "easy" && pb.par === 2 && pb.left === 5 && pb.chain.length === 1 && pb.chain[0] === pb.a,
+   "easy pair dealt: par 2 → 5 guesses, chain starts at A");
+var pbRoute = window.PathBetween._route(pb.a, pb.b);
+ok(pbRoute && pbRoute.length === pb.par + 1 && pbRoute[0] === pb.a && pbRoute[pbRoute.length - 1] === pb.b,
+   "_route returns a shortest chain A→…→B");
+var pbAdjA = {}; window.PathBetween._teammates(pb.a).forEach(function (n) { pbAdjA[n] = 1; });
+var pbBad = window.CAREERS.map(function (c) { return c.name; }).filter(function (n) { return n !== pb.a && n !== pb.b && !pbAdjA[n]; })[0];
+ok(pbSubmit(pbBad), "submitted a non-teammate through the dropdown");
+var pb1 = window.PathBetween._peek();
+ok(pb1.left === 4 && pb1.wrong === 1 && pb1.chain.length === 1 && pb1.misses.indexOf(pbBad) >= 0,
+   "a miss burns a guess, chain unchanged, miss remembered");
+window.PathBetween._guess(pb.a);
+ok(window.PathBetween._peek().left === 4, "re-guessing a player already in the chain costs nothing");
+ok(pbSubmit(pbRoute[1]), "linked the first hop through the dropdown");
+var pb2 = window.PathBetween._peek();
+ok(pb2.chain.length === 2 && pb2.chain[1] === pbRoute[1] && pb2.left === 3 && pb2.misses.length === 0,
+   "a valid link extends the chain (costs a guess, clears the miss list)");
+window.PathBetween._guess(pbRoute[2]);
+var pb3 = window.PathBetween._peek();
+ok(pb3.over === true && pb3.won === true, "reaching the target wins");
+ok(JSON.parse(store["elg:pb:stats"]).solved >= 1, "practice win recorded");
+fireDoc("keydown", { key: " ", code: "Space", target: doc.body, preventDefault: function () {} });
+ok(window.PathBetween._peek().over === false, "Space deals a new pair when practice game over");
+
+console.log("Path Between — running out of guesses loses");
+window.PathBetween._deal();
+var pbl = window.PathBetween._peek();
+var pblAdj = {}; window.PathBetween._teammates(pbl.a).forEach(function (n) { pblAdj[n] = 1; });
+var pblBads = window.CAREERS.map(function (c) { return c.name; }).filter(function (n) { return n !== pbl.a && n !== pbl.b && !pblAdj[n]; });
+for (var pk = 0; pk < 12 && !window.PathBetween._peek().over; pk++) window.PathBetween._guess(pblBads[pk]);
+var pbl2 = window.PathBetween._peek();
+ok(pbl2.over === true && pbl2.won === false && pbl2.left === 0, "misses drain the budget → loss");
+var pbSubEl = byId("pb-banner").children[1];
+ok(pbSubEl && (pbSubEl._html || "").indexOf("One route:") >= 0, "loss banner reveals a shortest route");
+
+console.log("Path Between — Give up + hooks");
+window.PathBetween._deal();
+ok(byId("pb-giveup").style.display !== "none", "Give up shown in practice");
+fire(byId("pb-giveup"), "click");
+ok(window.PathBetween._peek().over === true && window.PathBetween._peek().won === false, "Give up ends the round (loss)");
+window.PathBetween.goDaily();
+ok(window.PathBetween._peek().mode === "daily", "PathBetween.goDaily → daily");
+window.PathBetween.goPractice();
+ok(window.PathBetween._peek().mode === "medium", "PathBetween.goPractice → medium");
+
+console.log("Path Between — Daily");
+function pbTodayKey() { var d = new Date(); function p(n) { return n < 10 ? "0" + n : "" + n; } return "elg:pb:daily:" + d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
+delete store["elg:pb:dstats"]; delete store[pbTodayKey()];
+window.PathBetween._setMode("daily");
+var pbd = window.PathBetween._peek();
+ok(pbd.mode === "daily" && pbd.par === 3 && pbd.over === false, "Daily deals a par-3 pair");
+ok(byId("pb-next").style.display === "none" && byId("pb-giveup").style.display === "none", "New-pair + Give-up hidden in Daily");
+window.PathBetween._setMode("medium");
+window.PathBetween._setMode("daily");
+ok(window.PathBetween._peek().a === pbd.a && window.PathBetween._peek().b === pbd.b, "Daily is deterministic (same pair on re-deal)");
+var pbdR = window.PathBetween._route(pbd.a, pbd.b);
+for (var pd = 1; pd < pbdR.length; pd++) window.PathBetween._guess(pbdR[pd]);
+ok(window.PathBetween._peek().won === true, "solved the daily");
+var pbds = JSON.parse(store["elg:pb:dstats"]);
+ok(pbds.solved >= 1 && pbds.curStreak >= 1 && pbds.lastDate, "daily win recorded with streak");
+var pbSaved = JSON.parse(store[pbTodayKey()]);
+ok(pbSaved.done === true && pbSaved.won === true, "daily state saved in the shape the hub chip reads");
+window.PathBetween._setMode("medium");
+window.PathBetween._setMode("daily");
+ok(window.PathBetween._peek().over === true && window.PathBetween._peek().won === true, "returning to Daily restores the finished pair");
+
+console.log("Path Between — how-to modal + first-visit help");
+delete store["elg:pb:seenhelp"];
+window.PathBetween.onShow();
+ok(byId("pb-info-modal").hidden === false, "first onShow auto-opens the how-to");
+fire(byId("pb-info-close"), "click");
+window.PathBetween.onShow();
+ok(byId("pb-info-modal").hidden === true, "second onShow stays quiet");
+fire(byId("pb-info-btn"), "click");
+ok(byId("pb-info-modal").hidden === false, "info button re-opens it manually");
+fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
+ok(byId("pb-info-modal").hidden === true, "Escape closes it");
+
 console.log("hub streak (unified, all games)");
 function hpad(n) { return n < 10 ? "0" + n : "" + n; }
 function hdate(off) { var d = new Date(); d.setDate(d.getDate() - off); return d.getFullYear() + "-" + hpad(d.getMonth() + 1) + "-" + hpad(d.getDate()); }
 var HTODAY = hdate(0), HY = hdate(1), HY2 = hdate(2), HY3 = hdate(3);
-var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:"];
+var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:", "elg:pb:daily:"];
 function clearToday() { DAILY_PREFIXES.forEach(function (p) { delete store[p + HTODAY]; }); }
 function markDoneToday() { store["elg:gr:daily:" + HTODAY] = JSON.stringify({ puzzle: 0, done: true, won: true }); }
 clearToday();
