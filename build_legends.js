@@ -76,6 +76,16 @@ raw.push([
 // --- Consolidate -----------------------------------------------------------
 const all = raw.flat();
 
+// Merge the researched expansion batch (retired legends w/ careers) if present.
+// legends_extra.json is a flat array of full records; here we take only the
+// roster fields (careers are consumed separately by build_careers.js).
+if (fs.existsSync("legends_extra.json")) {
+  const extra = JSON.parse(fs.readFileSync("legends_extra.json", "utf8"));
+  for (const p of extra) all.push({ name: p.name, team: p.team, teamCountry: p.teamCountry,
+    nationality: p.nationality, position: p.position, height: p.height, birthYear: p.birthYear, number: p.number });
+  console.log("Merged legends_extra.json:", extra.length, "researched legends");
+}
+
 const seen = new Map();
 const dropped = [];
 for (const p of all) {

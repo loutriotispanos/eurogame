@@ -116,7 +116,7 @@ function submitByName(name) {
 
 console.log("data + init");
 ok(window.PLAYERS && window.PLAYERS.length === 303, "303 players loaded");
-ok(window.LEGENDS && window.LEGENDS.length === 87, "87 legends loaded");
+ok(window.LEGENDS && window.LEGENDS.length === 172, "172 legends loaded");
 ok(window.LEGENDS.every(function (p) { return ["Guard", "Forward", "Center"].indexOf(p.position) >= 0; }), "all legend positions valid");
 ok(window.LEGENDS.every(function (p) { return window.TEAMS[p.team]; }), "every legend team resolves in TEAMS");
 ok(window.TEAMS["AS Monaco"] && window.TEAMS["AS Monaco"].country === "France", "AS Monaco counts as France (plays in the French league)");
@@ -270,10 +270,44 @@ fire(byId("stats-close"), "click");
 
 console.log("careers data (Player ID)");
 ok(window.CAREERS && window.CAREERS.length >= 20, "careers dataset loaded (" + (window.CAREERS || []).length + ")");
-ok(window.CAREERS.every(function (c) { return c.career.length >= 2; }), "every career has >= 2 clubs");
+ok(window.CAREERS.every(function (c) { return c.career.length >= 1; }), "every career has at least 1 club");
+ok(window.CAREERS.filter(function (c) { return c.career.length >= 2; }).length >= 100, "plenty of multi-club careers for Player ID");
 ok(window.CAREERS.some(function (c) { return c.active; }) && window.CAREERS.some(function (c) { return !c.active; }), "careers include both active + retired");
 var rosterNames = {}; window.PLAYERS.concat(window.LEGENDS).forEach(function (p) { rosterNames[p.name] = 1; });
 ok(window.CAREERS.every(function (c) { return rosterNames[c.name]; }), "every career name resolves in the roster");
+
+console.log("careers integrity (consistency invariants)");
+var pbRosterTeam = {}; window.PLAYERS.forEach(function (p) { pbRosterTeam[p.name] = p.team; });
+var pbBirthOf = {}; window.PLAYERS.concat(window.LEGENDS).forEach(function (p) { pbBirthOf[p.name] = p.birthYear; });
+ok(window.CAREERS.filter(function (c) { return c.active; }).every(function (c) {
+  var last = c.career[c.career.length - 1];
+  return last.to === null && last.team === pbRosterTeam[c.name];
+}), "every active career ends open (to:null) at the player's current roster club");
+ok(window.CAREERS.filter(function (c) { return !c.active; }).every(function (c) {
+  var last = c.career[c.career.length - 1];
+  return last.to !== null;
+}), "every retired career is fully closed");
+ok(window.CAREERS.every(function (c) {
+  for (var ci = 0; ci < c.career.length; ci++) {
+    var s = c.career[ci];
+    if (s.to != null && s.from > s.to) return false;
+    if (ci && s.from < c.career[ci - 1].from) return false;
+    if (s.to === null && ci !== c.career.length - 1) return false;
+  }
+  return true;
+}), "every career is chronological and only the last stint may be open");
+ok(window.CAREERS.every(function (c) {
+  var b = pbBirthOf[c.name];
+  return !b || c.career.every(function (s) { return s.from >= b + 14; });
+}), "no stint starts before age 14");
+(function () {
+  var variants = ["Elan Chalon", "JSF Nanterre", "Nanterre 92", "CB Estudiantes", "Antibes Sharks",
+    "Joventut Badalona", "Buducnost Podgorica", "Baxi Manresa", "Aquila Basket Trento", "Benetton Treviso",
+    "Pallacanestro Varese", "Union Olimpija", "Wollongong Hawks", "Mega Vizura", "Mega Basket", "Crvena zvezda", "Valencia Basket"];
+  var found = [];
+  window.CAREERS.forEach(function (c) { c.career.forEach(function (s) { if (variants.indexOf(s.team) >= 0) found.push(c.name + ":" + s.team); }); });
+  ok(found.length === 0, "no known club-name variants survive in careers.js" + (found.length ? " — FOUND " + found.join(", ") : " (normalized at source)"));
+})();
 
 console.log("Player ID game");
 var pidInput = byId("pid-input"), pidDd = byId("pid-dropdown");
@@ -312,6 +346,7 @@ delete store["elg:pid:dstats"];
 window.PlayerID._setFilter("daily");
 var dt = window.PlayerID._peek();
 ok(dt && dt.career && dt.career.length >= 2, "Daily deals a player");
+ok(dt.career.length >= 4, "Daily only deals well-travelled paths (>= 4 clubs)");
 ok(byId("pid-next").style.display === "none", "New-player button hidden in Daily (one per day)");
 ok(pidSubmit(dt.name), "solved the daily");
 var ds = JSON.parse(store["elg:pid:dstats"]);

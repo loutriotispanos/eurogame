@@ -8,7 +8,7 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v41";  /* Path Between (game 8): teammate-chain routing — new paths.js + pathbetween.js */
+var CACHE = "elg-v42";  /* Legends DB expansion: +85 researched retired players (legends 87->172, careers 138->223); regenerated paths/grids/puzzles */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js",
   "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "app.js",
