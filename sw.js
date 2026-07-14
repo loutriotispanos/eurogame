@@ -8,10 +8,10 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v40";  /* CSS rewritten from scratch: NYT-Games grammar — rules not boxes, underline tabs, ink pills */
+var CACHE = "elg-v42";  /* Legends DB expansion: +85 researched retired players (legends 87->172, careers 138->223); regenerated paths/grids/puzzles */
 var ASSETS = [
-  "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js",
-  "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "app.js",
+  "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js",
+  "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "app.js",
   "manifest.webmanifest", "icon-192.png", "icon-512.png"
 ];
 

@@ -6,11 +6,20 @@
  */
 
 window.LEGENDS = [
+  // --- AEK Athens ---
+  {"name":"Keith Langford","team":"AEK Athens","nationality":"USA","position":"Guard","height":193,"birthYear":1983,"number":5},
   // --- Anadolu Efes ---
+  {"name":"Ender Arslan","team":"Anadolu Efes","nationality":"Turkey","position":"Guard","height":190,"birthYear":1983,"number":4},
+  {"name":"Hidayet Turkoglu","team":"Anadolu Efes","nationality":"Turkey","position":"Forward","height":208,"birthYear":1979,"number":5},
   {"name":"Petar Naumoski","team":"Anadolu Efes","nationality":"North Macedonia","position":"Guard","height":195,"birthYear":1968,"number":7},
+  {"name":"Kerem Tunceri","team":"Anadolu Efes","nationality":"Turkey","position":"Guard","height":194,"birthYear":1979,"number":10},
   {"name":"Huseyin Besok","team":"Anadolu Efes","nationality":"Turkey","position":"Center","height":211,"birthYear":1975,"number":12},
   {"name":"Mehmet Okur","team":"Anadolu Efes","nationality":"Turkey","position":"Forward","height":211,"birthYear":1979,"number":13},
+  {"name":"Kaya Peker","team":"Anadolu Efes","nationality":"Turkey","position":"Center","height":208,"birthYear":1980,"number":14},
   {"name":"Ufuk Sarica","team":"Anadolu Efes","nationality":"Turkey","position":"Guard","height":194,"birthYear":1972,"number":15},
+  // --- Aris ---
+  {"name":"Nikos Galis","team":"Aris","nationality":"USA","position":"Guard","height":183,"birthYear":1957,"number":6},
+  {"name":"Panagiotis Giannakis","team":"Aris","nationality":"Greece","position":"Guard","height":193,"birthYear":1959,"number":6},
   // --- AS Monaco ---
   {"name":"Sergii Gladyr","team":"AS Monaco","nationality":"Ukraine","position":"Guard","height":196,"birthYear":1988,"number":8},
   {"name":"Ali Traore","team":"AS Monaco","nationality":"France","position":"Center","height":208,"birthYear":1985,"number":24},
@@ -18,6 +27,7 @@ window.LEGENDS = [
   {"name":"Alain Gilles","team":"ASVEL","nationality":"France","position":"Guard","height":188,"birthYear":1945,"number":4},
   {"name":"Delaney Rudd","team":"ASVEL","nationality":"USA","position":"Guard","height":188,"birthYear":1962,"number":4},
   {"name":"Amara Sy","team":"ASVEL","nationality":"France","position":"Forward","height":202,"birthYear":1981,"number":5},
+  {"name":"Makan Dioumassi","team":"ASVEL","nationality":"France","position":"Guard","height":191,"birthYear":1972,"number":9},
   // --- Baskonia ---
   {"name":"Fabricio Oberto","team":"Baskonia","nationality":"Argentina","position":"Center","height":208,"birthYear":1975,"number":0},
   {"name":"Luis Scola","team":"Baskonia","nationality":"Argentina","position":"Forward","height":206,"birthYear":1980,"number":4},
@@ -28,6 +38,10 @@ window.LEGENDS = [
   {"name":"Steffen Hamann","team":"Bayern Munich","nationality":"Germany","position":"Guard","height":194,"birthYear":1981,"number":6},
   {"name":"Malcolm Delaney","team":"Bayern Munich","nationality":"USA","position":"Guard","height":191,"birthYear":1989,"number":23},
   {"name":"Demond Greene","team":"Bayern Munich","nationality":"Germany","position":"Guard","height":185,"birthYear":1979,"number":24},
+  // --- Buducnost ---
+  {"name":"Zarko Cabarkapa","team":"Buducnost","nationality":"Serbia","position":"Forward","height":211,"birthYear":1981,"number":11},
+  // --- Cibona ---
+  {"name":"Drazen Petrovic","team":"Cibona","nationality":"Croatia","position":"Guard","height":196,"birthYear":1964,"number":3},
   // --- Crvena Zvezda ---
   {"name":"Marko Keselj","team":"Crvena Zvezda","nationality":"Serbia","position":"Forward","height":208,"birthYear":1988,"number":4},
   {"name":"Branko Lazic","team":"Crvena Zvezda","nationality":"Serbia","position":"Guard","height":195,"birthYear":1989,"number":10},
@@ -36,74 +50,166 @@ window.LEGENDS = [
   // --- CSKA Moscow ---
   {"name":"Milos Teodosic","team":"CSKA Moscow","nationality":"Serbia","position":"Guard","height":196,"birthYear":1987,"number":4},
   {"name":"Nikos Zisis","team":"CSKA Moscow","nationality":"Greece","position":"Guard","height":197,"birthYear":1983,"number":6},
+  {"name":"Anton Ponkrashov","team":"CSKA Moscow","nationality":"Russia","position":"Guard","height":200,"birthYear":1986,"number":6},
+  {"name":"Vitaly Fridzon","team":"CSKA Moscow","nationality":"Russia","position":"Guard","height":195,"birthYear":1985,"number":7},
+  {"name":"Zakhar Pashutin","team":"CSKA Moscow","nationality":"Russia","position":"Guard","height":196,"birthYear":1974,"number":7},
   {"name":"Ramunas Siskauskas","team":"CSKA Moscow","nationality":"Lithuania","position":"Forward","height":198,"birthYear":1978,"number":8},
+  {"name":"Darius Songaila","team":"CSKA Moscow","nationality":"Lithuania","position":"Center","height":206,"birthYear":1978,"number":9},
   {"name":"J.R. Holden","team":"CSKA Moscow","nationality":"USA","position":"Guard","height":185,"birthYear":1976,"number":10},
   {"name":"Nenad Krstic","team":"CSKA Moscow","nationality":"Serbia","position":"Center","height":213,"birthYear":1983,"number":12},
   {"name":"David Andersen","team":"CSKA Moscow","nationality":"Australia","position":"Center","height":211,"birthYear":1980,"number":13},
   {"name":"Trajan Langdon","team":"CSKA Moscow","nationality":"USA","position":"Guard","height":193,"birthYear":1976,"number":21},
+  {"name":"Sasha Kaun","team":"CSKA Moscow","nationality":"Russia","position":"Center","height":211,"birthYear":1985,"number":24},
   {"name":"Viktor Khryapa","team":"CSKA Moscow","nationality":"Russia","position":"Forward","height":206,"birthYear":1982,"number":31},
   {"name":"Theodoros Papaloukas","team":"CSKA Moscow","nationality":"Greece","position":"Guard","height":201,"birthYear":1977,"number":44},
   {"name":"Andrei Kirilenko","team":"CSKA Moscow","nationality":"Russia","position":"Forward","height":206,"birthYear":1981,"number":47},
+  // --- Estudiantes ---
+  {"name":"Carlos Jimenez","team":"Estudiantes","nationality":"Spain","position":"Forward","height":205,"birthYear":1976,"number":10},
+  {"name":"Alfonso Reyes","team":"Estudiantes","nationality":"Spain","position":"Forward","height":202,"birthYear":1971,"number":14},
   // --- FC Barcelona ---
   {"name":"Roberto Duenas","team":"FC Barcelona","nationality":"Spain","position":"Center","height":221,"birthYear":1975,"number":0},
+  {"name":"Andres Jimenez","team":"FC Barcelona","nationality":"Spain","position":"Forward","height":206,"birthYear":1962,"number":4},
   {"name":"Gianluca Basile","team":"FC Barcelona","nationality":"Italy","position":"Guard","height":192,"birthYear":1975,"number":5},
+  {"name":"Ersan Ilyasova","team":"FC Barcelona","nationality":"Turkey","position":"Forward","height":206,"birthYear":1987,"number":7},
   {"name":"Juan Carlos Navarro","team":"FC Barcelona","nationality":"Spain","position":"Guard","height":193,"birthYear":1980,"number":11},
+  {"name":"Arturas Karnisovas","team":"FC Barcelona","nationality":"Lithuania","position":"Forward","height":204,"birthYear":1971,"number":12},
+  {"name":"Efthimios Rentzias","team":"FC Barcelona","nationality":"Greece","position":"Center","height":211,"birthYear":1976,"number":14},
+  {"name":"Juan Antonio San Epifanio","team":"FC Barcelona","nationality":"Spain","position":"Guard","height":201,"birthYear":1959,"number":15},
+  {"name":"Michalis Kakiouzis","team":"FC Barcelona","nationality":"Greece","position":"Forward","height":207,"birthYear":1976,"number":15},
   {"name":"Pau Gasol","team":"FC Barcelona","nationality":"Spain","position":"Center","height":213,"birthYear":1980,"number":16},
+  {"name":"Roger Grimau","team":"FC Barcelona","nationality":"Spain","position":"Guard","height":196,"birthYear":1978,"number":44},
   // --- Fenerbahce ---
+  {"name":"Omer Asik","team":"Fenerbahce","nationality":"Turkey","position":"Center","height":213,"birthYear":1986,"number":3},
   {"name":"Roko Ukic","team":"Fenerbahce","nationality":"Croatia","position":"Guard","height":196,"birthYear":1984,"number":4},
   {"name":"Mirsad Turkcan","team":"Fenerbahce","nationality":"Turkey","position":"Forward","height":206,"birthYear":1976,"number":6},
   {"name":"Omer Onan","team":"Fenerbahce","nationality":"Turkey","position":"Guard","height":194,"birthYear":1978,"number":7},
   {"name":"Semih Erden","team":"Fenerbahce","nationality":"Turkey","position":"Center","height":211,"birthYear":1986,"number":9},
   {"name":"Bobby Dixon","team":"Fenerbahce","nationality":"USA","position":"Guard","height":178,"birthYear":1983,"number":35},
+  // --- Fortitudo Bologna ---
+  {"name":"Gregor Fucka","team":"Fortitudo Bologna","nationality":"Slovenia","position":"Center","height":215,"birthYear":1971,"number":0},
+  {"name":"Carlton Myers","team":"Fortitudo Bologna","nationality":"Italy","position":"Guard","height":192,"birthYear":1971,"number":10},
+  // --- Galatasaray ---
+  {"name":"Sinan Guler","team":"Galatasaray","nationality":"Turkey","position":"Guard","height":192,"birthYear":1983,"number":5},
   // --- Hapoel Tel Aviv ---
   {"name":"Raviv Limonad","team":"Hapoel Tel Aviv","nationality":"Israel","position":"Guard","height":191,"birthYear":1984,"number":6},
+  // --- Joventut ---
+  {"name":"Rafael Jofresa","team":"Joventut","nationality":"Spain","position":"Guard","height":183,"birthYear":1966,"number":5},
+  {"name":"Jordi Villacampa","team":"Joventut","nationality":"Spain","position":"Guard","height":196,"birthYear":1963,"number":8},
+  {"name":"Ferran Martinez","team":"Joventut","nationality":"Spain","position":"Center","height":213,"birthYear":1968,"number":13},
+  // --- Juvecaserta ---
+  {"name":"Nando Gentile","team":"Juvecaserta","nationality":"Italy","position":"Guard","height":190,"birthYear":1967,"number":5},
+  // --- Khimki ---
+  {"name":"Sergei Monia","team":"Khimki","nationality":"Russia","position":"Forward","height":203,"birthYear":1983,"number":15},
+  {"name":"Timofey Mozgov","team":"Khimki","nationality":"Russia","position":"Center","height":216,"birthYear":1986,"number":25},
+  {"name":"Zoran Planinic","team":"Khimki","nationality":"Croatia","position":"Guard","height":201,"birthYear":1982,"number":34},
+  // --- KK Split ---
+  {"name":"Toni Kukoc","team":"KK Split","nationality":"Croatia","position":"Forward","height":211,"birthYear":1968,"number":7},
+  {"name":"Dino Radja","team":"KK Split","nationality":"Croatia","position":"Center","height":211,"birthYear":1967,"number":40},
+  // --- Limoges ---
+  {"name":"Yann Bonato","team":"Limoges","nationality":"France","position":"Forward","height":201,"birthYear":1972,"number":8},
+  {"name":"Frederic Weis","team":"Limoges","nationality":"France","position":"Center","height":218,"birthYear":1977,"number":13},
   // --- Maccabi Tel Aviv ---
   {"name":"Marcus Brown","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":191,"birthYear":1974,"number":0},
   {"name":"Oded Kattash","team":"Maccabi Tel Aviv","nationality":"Israel","position":"Guard","height":194,"birthYear":1974,"number":0},
+  {"name":"Jordan Farmar","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":188,"birthYear":1986,"number":1},
   {"name":"Nikola Vujcic","team":"Maccabi Tel Aviv","nationality":"Croatia","position":"Center","height":211,"birthYear":1978,"number":7},
   {"name":"Anthony Parker","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":198,"birthYear":1975,"number":8},
   {"name":"Sarunas Jasikevicius","team":"Maccabi Tel Aviv","nationality":"Lithuania","position":"Guard","height":194,"birthYear":1976,"number":13},
   {"name":"Sofoklis Schortsanitis","team":"Maccabi Tel Aviv","nationality":"Greece","position":"Center","height":208,"birthYear":1985,"number":21},
   // --- Montepaschi Siena ---
   {"name":"Bo McCalebb","team":"Montepaschi Siena","nationality":"USA","position":"Guard","height":183,"birthYear":1985,"number":4},
+  {"name":"Terrell McIntyre","team":"Montepaschi Siena","nationality":"USA","position":"Guard","height":176,"birthYear":1977,"number":5},
   // --- Olimpia Milano ---
   {"name":"Mike D'Antoni","team":"Olimpia Milano","nationality":"USA","position":"Guard","height":191,"birthYear":1951,"number":8},
   {"name":"Dino Meneghin","team":"Olimpia Milano","nationality":"Italy","position":"Center","height":206,"birthYear":1950,"number":11},
   {"name":"Antonello Riva","team":"Olimpia Milano","nationality":"Italy","position":"Forward","height":196,"birthYear":1962,"number":12},
   {"name":"Bob McAdoo","team":"Olimpia Milano","nationality":"USA","position":"Center","height":206,"birthYear":1951,"number":15},
+  {"name":"Kyle Hines","team":"Olimpia Milano","nationality":"USA","position":"Center","height":198,"birthYear":1986,"number":42},
+  // --- Olimpija Ljubljana ---
+  {"name":"Rasho Nesterovic","team":"Olimpija Ljubljana","nationality":"Slovenia","position":"Center","height":213,"birthYear":1976,"number":8},
+  {"name":"Marko Milic","team":"Olimpija Ljubljana","nationality":"Slovenia","position":"Forward","height":199,"birthYear":1977,"number":12},
   // --- Olympiacos ---
+  {"name":"Josh Childress","team":"Olympiacos","nationality":"USA","position":"Forward","height":203,"birthYear":1983,"number":1},
+  {"name":"Giorgos Sigalas","team":"Olympiacos","nationality":"Greece","position":"Guard","height":201,"birthYear":1971,"number":5},
   {"name":"Vassilis Spanoulis","team":"Olympiacos","nationality":"Greece","position":"Guard","height":193,"birthYear":1982,"number":7},
   {"name":"Lynn Greer","team":"Olympiacos","nationality":"USA","position":"Guard","height":185,"birthYear":1979,"number":11},
+  {"name":"David Rivers","team":"Olympiacos","nationality":"USA","position":"Guard","height":181,"birthYear":1965,"number":14},
   {"name":"Georgios Printezis","team":"Olympiacos","nationality":"Greece","position":"Forward","height":205,"birthYear":1985,"number":15},
   // --- Panathinaikos ---
   {"name":"Fragiskos Alvertis","team":"Panathinaikos","nationality":"Greece","position":"Forward","height":205,"birthYear":1974,"number":4},
+  {"name":"Byron Scott","team":"Panathinaikos","nationality":"USA","position":"Guard","height":193,"birthYear":1961,"number":4},
   {"name":"Jaka Lakovic","team":"Panathinaikos","nationality":"Slovenia","position":"Guard","height":186,"birthYear":1978,"number":5},
   {"name":"Sani Becirovic","team":"Panathinaikos","nationality":"Slovenia","position":"Guard","height":196,"birthYear":1981,"number":7},
+  {"name":"Darryl Middleton","team":"Panathinaikos","nationality":"USA","position":"Forward","height":203,"birthYear":1966,"number":7},
   {"name":"Mike Batiste","team":"Panathinaikos","nationality":"USA","position":"Forward","height":203,"birthYear":1977,"number":8},
   {"name":"Antonis Fotsis","team":"Panathinaikos","nationality":"Greece","position":"Forward","height":209,"birthYear":1981,"number":9},
   {"name":"Dejan Bodiroga","team":"Panathinaikos","nationality":"Serbia","position":"Forward","height":205,"birthYear":1973,"number":10},
+  {"name":"Nikos Chatzivrettas","team":"Panathinaikos","nationality":"Greece","position":"Guard","height":197,"birthYear":1977,"number":10},
   {"name":"Drew Nicholas","team":"Panathinaikos","nationality":"USA","position":"Guard","height":193,"birthYear":1981,"number":11},
+  {"name":"Dimos Dikoudis","team":"Panathinaikos","nationality":"Greece","position":"Forward","height":208,"birthYear":1977,"number":11},
   {"name":"Kostas Tsartsaris","team":"Panathinaikos","nationality":"Greece","position":"Forward","height":210,"birthYear":1979,"number":12},
   {"name":"Ibrahim Kutluay","team":"Panathinaikos","nationality":"Turkey","position":"Guard","height":198,"birthYear":1974,"number":12},
   {"name":"Dimitris Diamantidis","team":"Panathinaikos","nationality":"Greece","position":"Guard","height":196,"birthYear":1980,"number":13},
+  {"name":"Nikola Pekovic","team":"Panathinaikos","nationality":"Montenegro","position":"Center","height":211,"birthYear":1986,"number":14},
+  {"name":"Lazaros Papadopoulos","team":"Panathinaikos","nationality":"Greece","position":"Center","height":213,"birthYear":1980,"number":14},
   {"name":"Dejan Tomasevic","team":"Panathinaikos","nationality":"Serbia","position":"Center","height":208,"birthYear":1973,"number":15},
+  {"name":"Kostas Kaimakoglou","team":"Panathinaikos","nationality":"Greece","position":"Forward","height":206,"birthYear":1983,"number":15},
+  {"name":"Dominique Wilkins","team":"Panathinaikos","nationality":"USA","position":"Forward","height":203,"birthYear":1960,"number":21},
+  // --- Panionios ---
+  {"name":"Fanis Christodoulou","team":"Panionios","nationality":"Greece","position":"Forward","height":203,"birthYear":1965,"number":15},
+  // --- PAOK ---
+  {"name":"Peja Stojakovic","team":"PAOK","nationality":"Serbia","position":"Forward","height":208,"birthYear":1977,"number":16},
+  // --- Paris Basket Racing ---
+  {"name":"Laurent Sciarra","team":"Paris Basket Racing","nationality":"France","position":"Guard","height":195,"birthYear":1973,"number":7},
+  {"name":"Tony Parker","team":"Paris Basket Racing","nationality":"France","position":"Guard","height":188,"birthYear":1982,"number":9},
   // --- Partizan ---
   {"name":"Aleksandar Djordjevic","team":"Partizan","nationality":"Serbia","position":"Guard","height":188,"birthYear":1967,"number":5},
   {"name":"Dusan Kecman","team":"Partizan","nationality":"Serbia","position":"Guard","height":197,"birthYear":1977,"number":7},
+  {"name":"Zeljko Rebraca","team":"Partizan","nationality":"Serbia","position":"Center","height":213,"birthYear":1972,"number":9},
+  {"name":"Novica Velickovic","team":"Partizan","nationality":"Serbia","position":"Forward","height":205,"birthYear":1986,"number":12},
   {"name":"Zarko Paspalj","team":"Partizan","nationality":"Serbia","position":"Forward","height":207,"birthYear":1966,"number":14},
   {"name":"Predrag Drobnjak","team":"Partizan","nationality":"Montenegro","position":"Center","height":211,"birthYear":1975,"number":18},
+  {"name":"Vlade Divac","team":"Partizan","nationality":"Serbia","position":"Center","height":216,"birthYear":1968,"number":21},
+  // --- Pau-Orthez ---
+  {"name":"Mickael Pietrus","team":"Pau-Orthez","nationality":"France","position":"Guard","height":198,"birthYear":1982,"number":2},
+  {"name":"Boris Diaw","team":"Pau-Orthez","nationality":"France","position":"Forward","height":203,"birthYear":1982,"number":3},
   // --- Real Madrid ---
   {"name":"Rudy Fernandez","team":"Real Madrid","nationality":"Spain","position":"Guard","height":196,"birthYear":1985,"number":5},
   {"name":"Felipe Reyes","team":"Real Madrid","nationality":"Spain","position":"Forward","height":206,"birthYear":1980,"number":9},
+  {"name":"Fernando Martin","team":"Real Madrid","nationality":"Spain","position":"Center","height":206,"birthYear":1962,"number":10},
+  {"name":"Alberto Herreros","team":"Real Madrid","nationality":"Spain","position":"Forward","height":200,"birthYear":1969,"number":11},
+  {"name":"Juan Antonio Corbalan","team":"Real Madrid","nationality":"Spain","position":"Guard","height":184,"birthYear":1954,"number":11},
   {"name":"Sergio Rodriguez","team":"Real Madrid","nationality":"Spain","position":"Guard","height":191,"birthYear":1986,"number":13},
+  {"name":"Raul Lopez","team":"Real Madrid","nationality":"Spain","position":"Guard","height":183,"birthYear":1980,"number":24},
   {"name":"Ioannis Bourousis","team":"Real Madrid","nationality":"Greece","position":"Center","height":215,"birthYear":1983,"number":30},
+  {"name":"Joe Arlauckas","team":"Real Madrid","nationality":"USA","position":"Forward","height":206,"birthYear":1965,"number":53},
+  // --- Statyba Vilnius ---
+  {"name":"Sarunas Marciulionis","team":"Statyba Vilnius","nationality":"Lithuania","position":"Guard","height":196,"birthYear":1964,"number":13},
+  // --- Tau Ceramica ---
+  {"name":"Jose Calderon","team":"Tau Ceramica","nationality":"Spain","position":"Guard","height":191,"birthYear":1981,"number":8},
+  // --- Treviso ---
+  {"name":"Andrea Bargnani","team":"Treviso","nationality":"Italy","position":"Center","height":213,"birthYear":1985,"number":7},
+  {"name":"Riccardo Pittis","team":"Treviso","nationality":"Italy","position":"Forward","height":203,"birthYear":1968,"number":7},
+  {"name":"Denis Marconato","team":"Treviso","nationality":"Italy","position":"Center","height":211,"birthYear":1975,"number":8},
+  {"name":"Bostjan Nachbar","team":"Treviso","nationality":"Slovenia","position":"Forward","height":206,"birthYear":1980,"number":9},
+  {"name":"Massimo Bulleri","team":"Treviso","nationality":"Italy","position":"Guard","height":188,"birthYear":1977,"number":48},
+  // --- Unicaja ---
+  {"name":"Berni Rodriguez","team":"Unicaja","nationality":"Spain","position":"Guard","height":197,"birthYear":1980,"number":5},
+  {"name":"Fran Vazquez","team":"Unicaja","nationality":"Spain","position":"Center","height":208,"birthYear":1983,"number":17},
   // --- Valencia ---
   {"name":"Nacho Rodilla","team":"Valencia","nationality":"Spain","position":"Guard","height":192,"birthYear":1974,"number":11},
+  {"name":"Florent Pietrus","team":"Valencia","nationality":"France","position":"Forward","height":202,"birthYear":1981,"number":11},
   {"name":"Victor Luengo","team":"Valencia","nationality":"Spain","position":"Forward","height":196,"birthYear":1974,"number":15},
   {"name":"Rafa Martinez","team":"Valencia","nationality":"Spain","position":"Guard","height":190,"birthYear":1982,"number":17},
   {"name":"Matthew Nielsen","team":"Valencia","nationality":"Australia","position":"Forward","height":208,"birthYear":1978,"number":44},
+  // --- Varese ---
+  {"name":"Gianmarco Pozzecco","team":"Varese","nationality":"Italy","position":"Guard","height":181,"birthYear":1972,"number":10},
+  // --- VEF Riga ---
+  {"name":"Gundars Vetra","team":"VEF Riga","nationality":"Latvia","position":"Forward","height":198,"birthYear":1967,"number":2},
   // --- Virtus Bologna ---
+  {"name":"Zoran Savic","team":"Virtus Bologna","nationality":"Serbia","position":"Center","height":206,"birthYear":1966,"number":0},
   {"name":"Marco Belinelli","team":"Virtus Bologna","nationality":"Italy","position":"Guard","height":196,"birthYear":1986,"number":3},
+  {"name":"Roberto Brunamonti","team":"Virtus Bologna","nationality":"Italy","position":"Guard","height":191,"birthYear":1959,"number":4},
   {"name":"Predrag Danilovic","team":"Virtus Bologna","nationality":"Serbia","position":"Guard","height":196,"birthYear":1970,"number":5},
   {"name":"Manu Ginobili","team":"Virtus Bologna","nationality":"Argentina","position":"Guard","height":198,"birthYear":1977,"number":6},
   {"name":"Antoine Rigaudeau","team":"Virtus Bologna","nationality":"France","position":"Guard","height":199,"birthYear":1971,"number":14},
@@ -111,8 +217,10 @@ window.LEGENDS = [
   // --- Zalgiris Kaunas ---
   {"name":"Tyus Edney","team":"Zalgiris Kaunas","nationality":"USA","position":"Guard","height":178,"birthYear":1973,"number":4},
   {"name":"Saulius Stombergas","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Forward","height":204,"birthYear":1973,"number":7},
+  {"name":"Rimas Kurtinaitis","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Guard","height":196,"birthYear":1960,"number":10},
   {"name":"Arvydas Sabonis","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Center","height":221,"birthYear":1964,"number":11},
   {"name":"Eurelijus Zukauskas","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Center","height":218,"birthYear":1973,"number":11},
+  {"name":"Robertas Javtokas","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Center","height":211,"birthYear":1980,"number":15},
 ];
 
 // Register clubs used by legends without overwriting current-team entries.
@@ -177,6 +285,75 @@ window.LEGENDS = [
     },
     "Hapoel Tel Aviv": {
       "country": "Israel"
+    },
+    "Cibona": {
+      "country": "Croatia"
+    },
+    "KK Split": {
+      "country": "Croatia"
+    },
+    "PAOK": {
+      "country": "Greece"
+    },
+    "Olimpija Ljubljana": {
+      "country": "Slovenia"
+    },
+    "Buducnost": {
+      "country": "Montenegro"
+    },
+    "Treviso": {
+      "country": "Italy"
+    },
+    "Fortitudo Bologna": {
+      "country": "Italy"
+    },
+    "Khimki": {
+      "country": "Russia"
+    },
+    "Joventut": {
+      "country": "Spain"
+    },
+    "Tau Ceramica": {
+      "country": "Spain"
+    },
+    "Unicaja": {
+      "country": "Spain"
+    },
+    "Estudiantes": {
+      "country": "Spain"
+    },
+    "Aris": {
+      "country": "Greece"
+    },
+    "Panionios": {
+      "country": "Greece"
+    },
+    "Paris Basket Racing": {
+      "country": "France"
+    },
+    "Pau-Orthez": {
+      "country": "France"
+    },
+    "Limoges": {
+      "country": "France"
+    },
+    "Statyba Vilnius": {
+      "country": "Lithuania"
+    },
+    "VEF Riga": {
+      "country": "Latvia"
+    },
+    "Varese": {
+      "country": "Italy"
+    },
+    "Juvecaserta": {
+      "country": "Italy"
+    },
+    "Galatasaray": {
+      "country": "Turkey"
+    },
+    "AEK Athens": {
+      "country": "Greece"
     }
   };
   window.TEAMS = window.TEAMS || {};

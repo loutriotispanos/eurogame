@@ -44,7 +44,47 @@ const TEAM_FIX = {
   "Budućnost": "Buducnost",
   "Murcia": "UCAM Murcia",
   "Strasbourg": "SIG Strasbourg",
-  "LA Clippers": "Los Angeles Clippers"
+  "LA Clippers": "Los Angeles Clippers",
+  // Same club, sponsor-era name variants — one canonical spelling each, so
+  // teammate edges (Path Between) and career displays never split a club.
+  // (The Paris-Levallois → Levallois Metropolitans → Metropolitans 92 lineage
+  // stays era-accurate here; pathbetween.js merges it for the graph.)
+  "Elan Chalon": "Chalon",
+  "JSF Nanterre": "Nanterre",
+  "Nanterre 92": "Nanterre",
+  "CB Estudiantes": "Estudiantes",
+  "Antibes Sharks": "Antibes",
+  "Joventut Badalona": "Joventut",
+  "Buducnost Podgorica": "Buducnost",
+  "Baxi Manresa": "Manresa",
+  "Aquila Basket Trento": "Trento",
+  "Benetton Treviso": "Treviso",
+  "Pallacanestro Varese": "Varese",
+  "Union Olimpija": "Olimpija Ljubljana",
+  "Wollongong Hawks": "Illawarra Hawks",
+  "Mega Vizura": "Mega", "Mega Basket": "Mega", "Mega Leks": "Mega",
+  "Mega Bemax": "Mega", "Mega Soccerbet": "Mega", "Mega MIS": "Mega",
+  // Same-club spelling variants introduced by the researched legends batch,
+  // folded onto the spelling already used elsewhere in this file so one real
+  // club never splits into two nodes (matters for The Grid / Path Between).
+  "Brose Baskets": "Brose Bamberg",
+  "Sevilla": "CB Sevilla",
+  "Stefanel Milano": "Olimpia Milano",
+  "BC Khimki": "Khimki",
+  "Zaragoza": "Basket Zaragoza",
+  "New Basket Brindisi": "Brindisi",
+  "Reggio Emilia": "Pallacanestro Reggiana",
+  "Reggiana": "Pallacanestro Reggiana",
+  "Taugres": "Tau Ceramica",
+  "Akasvayu Girona": "Girona",
+  "CB Girona": "Girona",
+  "CB Valladolid": "Forum Valladolid",
+  "Blancos de Rueda Valladolid": "Forum Valladolid",
+  "Il Messaggero Roma": "Virtus Roma",
+  "Snaidero Udine": "Udine",
+  "Olympique Antibes": "Antibes",
+  "KK Zadar": "Zadar",
+  "Orlandina": "Orlandina Basket"
 };
 function fixTeam(t) { t = String(t).trim(); return TEAM_FIX[t] || t; }
 
@@ -159,7 +199,8 @@ const RAW = [
     { team: "Pau-Orthez", from: 2007, to: 2009 }, { team: "ASVEL", from: 2009, to: 2011 },
     { team: "Baskonia", from: 2011, to: 2014 }, { team: "Anadolu Efes", from: 2014, to: 2017 },
     { team: "FC Barcelona", from: 2017, to: 2021 }, { team: "Real Madrid", from: 2021, to: 2022 },
-    { team: "Zenit Saint Petersburg", from: 2022, to: 2024 }, { team: "Basquet Coruna", from: 2025, to: null } ] },
+    { team: "Zenit Saint Petersburg", from: 2022, to: 2024 }, { team: "Basquet Coruna", from: 2025, to: 2025 },
+    { team: "ASVEL", from: 2025, to: null } ] },
   { name: "Alexandros Vezenkov", career: [
     { team: "Aris", from: 2011, to: 2015 }, { team: "FC Barcelona", from: 2015, to: 2018 },
     { team: "Olympiacos", from: 2018, to: 2023 }, { team: "Sacramento Kings", from: 2023, to: 2024 },
@@ -320,8 +361,7 @@ const RAW = [
     { team: "Valencia", from: 2024, to: null } ] },
   { name: "Brancou Badio", career: [
     { team: "FC Barcelona", from: 2019, to: 2021 }, { team: "Skyliners Frankfurt", from: 2021, to: 2022 },
-    { team: "Manresa", from: 2022, to: 2024 }, { team: "Valencia", from: 2024, to: 2026 },
-    { team: "Panathinaikos", from: 2026, to: null } ] },
+    { team: "Manresa", from: 2022, to: 2024 }, { team: "Valencia", from: 2024, to: null } ] },
 
   // --- Hapoel Tel Aviv starting five (Micic already above) ---
   { name: "Antonio Blakeney", career: [
@@ -715,6 +755,15 @@ const RAW = [
     { team: "Olimpia Milano", from: 2012, to: 2013 }, { team: "Orlandina Basket", from: 2013, to: 2016 } ] }
 ];
 
+// Merge researched expansion careers (retired legends). Each name resolves in
+// LEGENDS via legends_extra.json (build_legends.js loads the same file into
+// legends.js), so find() will tag these active:false and validate them.
+if (fs.existsSync("legends_extra.json")) {
+  JSON.parse(fs.readFileSync("legends_extra.json", "utf8")).forEach(function (p) {
+    RAW.push({ name: p.name, career: p.career });
+  });
+}
+
 // --- clean(): tidy each timeline into a non-overlapping chronological path -------
 const PRESENT = 9999;
 function eff(to) { return to == null ? PRESENT : to; }
@@ -743,12 +792,30 @@ function find(name) {
   if (l) return { p: l, active: false };
   return null;
 }
-var CAREERS = [], errors = [];
+var CAREERS = [], errors = [], seen = {};
 RAW.forEach(function (r) {
   var f = find(r.name);
   if (!f) { errors.push(r.name + " (not found in PLAYERS/LEGENDS)"); return; }
+  if (seen[r.name]) { errors.push(r.name + " (duplicate RAW entry)"); return; }
+  seen[r.name] = 1;
   var career = clean(r.career);
-  if (career.length < 2) { errors.push(r.name + " (career too short after clean: " + career.length + ")"); return; }
+  if (career.length < 1) { errors.push(r.name + " (empty career after clean)"); return; }
+  // Consistency invariants (the audit caught real bugs here — keep them fatal):
+  // an active player's path must END at his current players.js club, still open;
+  // a retired player's path must be fully closed.
+  var last = career[career.length - 1];
+  if (f.active) {
+    if (last.to !== null) errors.push(r.name + " (active but last stint ends " + last.to + ")");
+    if (last.team !== f.p.team) errors.push(r.name + " (last stint '" + last.team + "' != roster club '" + f.p.team + "')");
+  } else if (last.to === null) {
+    errors.push(r.name + " (retired but last stint is open-ended)");
+  }
+  for (var i = 0; i < career.length; i++) {
+    var s = career[i];
+    if (s.to != null && s.from > s.to) errors.push(r.name + " (stint " + s.team + " " + s.from + ">" + s.to + ")");
+    if (i && s.from < career[i - 1].from) errors.push(r.name + " (out of order at " + s.team + ")");
+    if (f.p.birthYear && s.from < f.p.birthYear + 14) errors.push(r.name + " (stint " + s.team + " starts at age " + (s.from - f.p.birthYear) + ")");
+  }
   CAREERS.push({ name: r.name, nationality: f.p.nationality, position: f.p.position, active: f.active, career: career });
 });
 if (errors.length) { console.error("ERRORS:\n  " + errors.join("\n  ")); process.exit(1); }

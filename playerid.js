@@ -39,10 +39,16 @@
   var matches = [], activeIndex = -1;
 
   function filterLabel() { return filter === "daily" ? "Daily" : filter === "active" ? "Active" : filter === "retired" ? "Retired" : "Both"; }
+  // careers.js also carries 1-2 club players for The Grid / Path Between now;
+  // a guess-from-the-route puzzle needs a route: practice wants >=2 clubs and
+  // the Daily sticks to well-travelled paths (>=4) so the trip tells a story.
   function pool() {
-    return CAREERS.filter(function (c) { return filter === "active" ? c.active : filter === "retired" ? !c.active : true; });
+    return CAREERS.filter(function (c) { return c.career.length >= 2 && (filter === "active" ? c.active : filter === "retired" ? !c.active : true); });
   }
-  function dailyTarget() { return CAREERS[hashStr(todayStr()) % CAREERS.length]; }
+  function dailyTarget() {
+    var p = CAREERS.filter(function (c) { return c.career.length >= 4; });
+    return p.length ? p[hashStr(todayStr()) % p.length] : null;
+  }
   // Autocomplete suggests from the matching roster so the answer is always offered.
   function namePool() { return filter === "active" ? PLAYERS : filter === "retired" ? LEGENDS : PLAYERS.concat(LEGENDS); }
 
@@ -190,6 +196,7 @@
 
   function dealDaily() {
     target = dailyTarget();
+    if (!target) { els.counter.textContent = "No players available."; return; }
     guesses = []; over = false; won = false; dealt = true;
     els.input.value = ""; els.input.disabled = false; els.banner.hidden = true;
     var saved = lsGet(K.daily(todayStr()), null);
