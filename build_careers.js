@@ -96,7 +96,12 @@ const TEAM_FIX = {
   "Iberostar Tenerife": "CB Canarias", "Lenovo Tenerife": "CB Canarias",
   "Merkezefendi Denizli": "Merkezefendi Belediyesi", "Merkezefendi Denizli Basket": "Merkezefendi Belediyesi",
   "Zhejiang Guangsha Lions": "Zhejiang Lions", "Pallacanestro Udine": "Udine",
-  "Aris Thessaloniki": "Aris"
+  "Aris Thessaloniki": "Aris",
+  // Batch 3 (Anadolu Efes + Real Madrid) variant folds.
+  "La Laguna Tenerife": "CB Canarias", "Iberostar Canarias": "CB Canarias",
+  "Zenit St Petersburg": "Zenit Saint Petersburg", "CB Manresa": "Manresa",
+  "Riesen Ludwigsburg": "MHP Riesen Ludwigsburg",
+  "Basketball Lowen Braunschweig": "Braunschweig", "ALBA Berlin": "Alba Berlin"
 };
 function fixTeam(t) { t = String(t).trim(); return TEAM_FIX[t] || t; }
 
@@ -752,6 +757,104 @@ const RAW = [
   { name: "Alexandros Samodurov", career: [
     { team: "Panathinaikos", from: 2022, to: 2023 }, { team: "Panerythraikos", from: 2023, to: 2024 },
     { team: "Panathinaikos", from: 2024, to: null } ] },
+
+  // --- Anadolu Efes ---
+  { name: "Georgios Papagiannis", career: [
+    { team: "Peristeri", from: 2011, to: 2013 }, { team: "Panathinaikos", from: 2014, to: 2016 },
+    { team: "Sacramento Kings", from: 2016, to: 2017 }, { team: "Portland Trail Blazers", from: 2017, to: 2018 },
+    { team: "Panathinaikos", from: 2018, to: 2023 }, { team: "Fenerbahce", from: 2023, to: 2024 },
+    { team: "AS Monaco", from: 2024, to: 2025 }, { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "Cole Swider", career: [
+    { team: "Los Angeles Lakers", from: 2022, to: 2023 }, { team: "Miami Heat", from: 2023, to: 2024 },
+    { team: "Detroit Pistons", from: 2024, to: 2025 }, { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "Kai Jones", career: [
+    { team: "Charlotte Hornets", from: 2021, to: 2023 }, { team: "Los Angeles Clippers", from: 2024, to: 2025 },
+    { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "P.J. Dozier", career: [
+    { team: "Oklahoma City Thunder", from: 2017, to: 2018 }, { team: "Boston Celtics", from: 2018, to: 2019 },
+    { team: "Denver Nuggets", from: 2019, to: 2022 }, { team: "Sacramento Kings", from: 2022, to: 2023 },
+    { team: "Partizan", from: 2023, to: 2024 }, { team: "Minnesota Timberwolves", from: 2024, to: 2025 },
+    { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "Saben Lee", career: [
+    { team: "Detroit Pistons", from: 2020, to: 2022 }, { team: "Philadelphia 76ers", from: 2022, to: 2023 },
+    { team: "Phoenix Suns", from: 2023, to: 2024 }, { team: "Olympiacos", from: 2024, to: 2025 },
+    { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "Jordan Loyd", career: [
+    { team: "Hapoel Eilat", from: 2017, to: 2018 }, { team: "Toronto Raptors", from: 2018, to: 2019 },
+    { team: "Valencia", from: 2019, to: 2020 }, { team: "Crvena Zvezda", from: 2020, to: 2021 },
+    { team: "Zenit Saint Petersburg", from: 2021, to: 2022 }, { team: "AS Monaco", from: 2022, to: 2025 },
+    { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "Nick Weiler-Babb", career: [
+    { team: "MHP Riesen Ludwigsburg", from: 2019, to: 2020 }, { team: "Bayern Munich", from: 2020, to: 2025 },
+    { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "Sehmus Hazer", career: [
+    { team: "Banvit", from: 2017, to: 2019 }, { team: "Teksut Bandirma", from: 2019, to: 2020 },
+    { team: "Besiktas", from: 2020, to: 2021 }, { team: "Fenerbahce", from: 2021, to: 2024 },
+    { team: "Bahcesehir Koleji", from: 2024, to: 2025 }, { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "Burak Can Yildizli", career: [
+    { team: "Pertevniyal", from: 2012, to: 2015 }, { team: "Buyukcekmece Basketbol", from: 2015, to: 2018 },
+    { team: "Besiktas", from: 2018, to: 2020 }, { team: "Bahcesehir Koleji", from: 2020, to: 2021 },
+    { team: "Pinar Karsiyaka", from: 2021, to: 2022 }, { team: "Besiktas", from: 2022, to: 2023 },
+    { team: "Anadolu Efes", from: 2023, to: null } ] },
+  { name: "David Mutaf", career: [
+    { team: "Gran Canaria II", from: 2020, to: 2022 }, { team: "Gran Canaria", from: 2022, to: 2023 },
+    { team: "Bursaspor", from: 2023, to: 2025 }, { team: "Anadolu Efes", from: 2025, to: null } ] },
+  { name: "Ercan Osmani", career: [
+    { team: "Bandirma Kirmizi", from: 2014, to: 2018 }, { team: "Teksut Bandirma", from: 2018, to: 2020 },
+    { team: "Besiktas", from: 2020, to: 2022 }, { team: "Darussafaka", from: 2022, to: 2023 },
+    { team: "Anadolu Efes", from: 2023, to: null } ] },
+  { name: "Erkan Yilmaz", career: [
+    { team: "Antalyaspor", from: 2013, to: 2015 }, { team: "Banvit", from: 2015, to: 2016 },
+    { team: "Bandirma Kirmizi", from: 2016, to: 2017 }, { team: "Yesilgiresun Belediye", from: 2017, to: 2018 },
+    { team: "Yeni Mamak", from: 2018, to: 2019 }, { team: "Bandirma", from: 2019, to: 2020 },
+    { team: "Bahcesehir Koleji", from: 2020, to: 2022 }, { team: "Turk Telekom", from: 2022, to: 2023 },
+    { team: "Anadolu Efes", from: 2023, to: null } ] },
+  { name: "Brice Dessert", career: [
+    { team: "Rouen", from: 2021, to: 2022 }, { team: "Ada Blois", from: 2022, to: 2024 },
+    { team: "SIG Strasbourg", from: 2024, to: 2025 }, { team: "Anadolu Efes", from: 2025, to: null } ] },
+
+  // --- Real Madrid ---
+  { name: "Trey Lyles", career: [
+    { team: "Utah Jazz", from: 2015, to: 2017 }, { team: "Denver Nuggets", from: 2017, to: 2019 },
+    { team: "San Antonio Spurs", from: 2019, to: 2021 }, { team: "Detroit Pistons", from: 2021, to: 2022 },
+    { team: "Sacramento Kings", from: 2022, to: 2025 }, { team: "Real Madrid", from: 2025, to: null } ] },
+  { name: "Alex Len", career: [
+    { team: "BC Dnipro", from: 2010, to: 2011 }, { team: "Phoenix Suns", from: 2013, to: 2018 },
+    { team: "Atlanta Hawks", from: 2018, to: 2020 }, { team: "Sacramento Kings", from: 2020, to: 2020 },
+    { team: "Toronto Raptors", from: 2020, to: 2021 }, { team: "Washington Wizards", from: 2021, to: 2021 },
+    { team: "Sacramento Kings", from: 2021, to: 2025 }, { team: "Los Angeles Lakers", from: 2025, to: 2025 },
+    { team: "Real Madrid", from: 2025, to: null } ] },
+  { name: "Omer Yurtseven", career: [
+    { team: "Fenerbahce", from: 2014, to: 2016 }, { team: "Miami Heat", from: 2021, to: 2023 },
+    { team: "Utah Jazz", from: 2023, to: 2024 }, { team: "Panathinaikos", from: 2024, to: 2026 },
+    { team: "Real Madrid", from: 2026, to: null } ] },
+  { name: "Chuma Okeke", career: [
+    { team: "Orlando Magic", from: 2020, to: 2024 }, { team: "Philadelphia 76ers", from: 2024, to: 2025 },
+    { team: "Real Madrid", from: 2025, to: null } ] },
+  { name: "Usman Garuba", career: [
+    { team: "Real Madrid", from: 2018, to: 2021 }, { team: "Houston Rockets", from: 2021, to: 2023 },
+    { team: "Golden State Warriors", from: 2023, to: 2024 }, { team: "Real Madrid", from: 2024, to: null } ] },
+  { name: "Sergio Llull", career: [
+    { team: "Manresa", from: 2005, to: 2007 }, { team: "Real Madrid", from: 2007, to: null } ] },
+  { name: "Alberto Abalde", career: [
+    { team: "Joventut", from: 2013, to: 2017 }, { team: "Valencia", from: 2017, to: 2020 },
+    { team: "Real Madrid", from: 2020, to: null } ] },
+  { name: "Andres Feliz", career: [
+    { team: "CB Prat", from: 2020, to: 2021 }, { team: "Joventut", from: 2021, to: 2024 },
+    { team: "Real Madrid", from: 2024, to: null } ] },
+  { name: "Gabriele Procida", career: [
+    { team: "Pallacanestro Cantu", from: 2019, to: 2021 }, { team: "Fortitudo Bologna", from: 2021, to: 2022 },
+    { team: "Alba Berlin", from: 2022, to: 2025 }, { team: "Real Madrid", from: 2025, to: null } ] },
+  { name: "Mady Sissoko", career: [
+    { team: "Pallacanestro Trieste", from: 2025, to: 2026 }, { team: "Real Madrid", from: 2026, to: null } ] },
+  { name: "David Kramer", career: [
+    { team: "Oberwart Gunners", from: 2013, to: 2014 }, { team: "Ratiopharm Ulm", from: 2014, to: 2019 },
+    { team: "Bayern Munich", from: 2020, to: 2021 }, { team: "Braunschweig", from: 2021, to: 2023 },
+    { team: "Granada", from: 2023, to: 2024 }, { team: "CB Canarias", from: 2024, to: 2025 },
+    { team: "Real Madrid", from: 2025, to: null } ] },
+  { name: "Izan Almansa", career: [
+    { team: "Overtime Elite", from: 2021, to: 2023 }, { team: "G League Ignite", from: 2023, to: 2024 },
+    { team: "Perth Wildcats", from: 2024, to: 2025 }, { team: "Real Madrid", from: 2025, to: null } ] },
 
   // ===== Retired legends (in LEGENDS) =====
   { name: "Arvydas Sabonis", career: [
