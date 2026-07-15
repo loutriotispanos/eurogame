@@ -8,7 +8,7 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v51";  /* Active careers FINALE: +21 (Hapoel Tel Aviv + ASVEL + Fenerbahce youth); careers 400->421. All 20 active rosters now mapped (bar 5 one-club players). Regenerated paths/grids/puzzles */
+var CACHE = "elg-v52";  /* Official 2025-26 roster cross-check (11 of 20 teams): -17 removed, +12 added (researched careers), Begarin->F / Vesely->C, Chris Jones moved to Hapoel Tel Aviv. players 303->298, careers 421->418. Regenerated paths/grids/puzzles */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js",
   "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "app.js",
