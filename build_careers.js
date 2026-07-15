@@ -109,7 +109,12 @@ const TEAM_FIX = {
   // Batch 5 (Partizan + Crvena Zvezda) variant folds.
   "Spars Sarajevo": "OKK Spars", "Gaziantep": "Gaziantep Basketbol",
   "MoraBanc Andorra": "Andorra", "Vrijednosnice Osijek": "Osijek",
-  "Baskets Oldenburg": "Oldenburg", "Denain Voltaire": "Denain-Voltaire"
+  "Baskets Oldenburg": "Oldenburg", "Denain Voltaire": "Denain-Voltaire",
+  // Batch 6 (AS Monaco + Baskonia + FC Barcelona) variant folds.
+  "Le Mans Sarthe": "Le Mans", "ASVEL Villeurbanne": "ASVEL",
+  "Unicaja Malaga": "Unicaja", "Penarol Mar del Plata": "Penarol",
+  "Basquet Girona": "Girona", "Aquila Trento": "Trento",
+  "Denain": "Denain-Voltaire", "Forca Lleida": "Lleida"
 };
 function fixTeam(t) { t = String(t).trim(); return TEAM_FIX[t] || t; }
 
@@ -1022,6 +1027,82 @@ const RAW = [
     { team: "Mega", from: 2020, to: 2024 }, { team: "Crvena Zvezda", from: 2026, to: null } ] },
   { name: "Ognjen Radosic", career: [
     { team: "Igokea", from: 2024, to: 2025 }, { team: "Crvena Zvezda", from: 2025, to: null } ] },
+
+  // --- AS Monaco ---
+  { name: "Jaron Blossomgame", career: [
+    { team: "Cleveland Cavaliers", from: 2018, to: 2019 }, { team: "Ironi Nahariya", from: 2020, to: 2021 },
+    { team: "Ratiopharm Ulm", from: 2021, to: 2022 }, { team: "AS Monaco", from: 2022, to: null } ] },
+  { name: "Terry Tarpey", career: [
+    { team: "Denain-Voltaire", from: 2016, to: 2017 }, { team: "Le Mans", from: 2017, to: 2023 },
+    { team: "AS Monaco", from: 2023, to: null } ] },
+  { name: "Kevarrius Hayes", career: [
+    { team: "Pallacanestro Cantu", from: 2019, to: 2020 }, { team: "ASVEL", from: 2020, to: 2021 },
+    { team: "Bursaspor", from: 2021, to: 2022 }, { team: "Zalgiris Kaunas", from: 2022, to: 2024 },
+    { team: "Paris Basketball", from: 2024, to: 2025 }, { team: "AS Monaco", from: 2025, to: null } ] },
+  { name: "Alpha Diallo", career: [
+    { team: "Lavrio", from: 2020, to: 2021 }, { team: "AS Monaco", from: 2021, to: null } ] },
+  { name: "Juhann Begarin", career: [
+    { team: "Paris Basketball", from: 2019, to: 2023 }, { team: "Nanterre", from: 2023, to: 2024 },
+    { team: "AS Monaco", from: 2024, to: null } ] },
+  { name: "Yoan Makoundou", career: [
+    { team: "Cholet Basket", from: 2020, to: 2022 }, { team: "AS Monaco", from: 2022, to: 2023 },
+    { team: "Buducnost", from: 2023, to: 2024 }, { team: "Turk Telekom", from: 2024, to: 2026 },
+    { team: "AS Monaco", from: 2026, to: null } ] },
+  { name: "Matthew Strazel", career: [
+    { team: "ASVEL", from: 2019, to: 2022 }, { team: "AS Monaco", from: 2022, to: null } ] },
+
+  // --- Baskonia ---
+  { name: "Markquis Nowell", career: [
+    { team: "Toronto Raptors", from: 2023, to: 2024 }, { team: "Baskonia", from: 2025, to: null } ] },
+  { name: "Kobi Simmons", career: [
+    { team: "Memphis Grizzlies", from: 2017, to: 2018 }, { team: "Cleveland Cavaliers", from: 2018, to: 2019 },
+    { team: "Stal Ostrow Wielkopolski", from: 2021, to: 2022 }, { team: "Charlotte Hornets", from: 2022, to: 2023 },
+    { team: "Toronto Raptors", from: 2023, to: 2024 }, { team: "Zhejiang Golden Bulls", from: 2024, to: 2025 },
+    { team: "Baskonia", from: 2025, to: null } ] },
+  { name: "Matteo Spagnolo", career: [
+    { team: "Real Madrid", from: 2019, to: 2021 }, { team: "Vanoli Cremona", from: 2021, to: 2022 },
+    { team: "Trento", from: 2022, to: 2023 }, { team: "Alba Berlin", from: 2023, to: 2025 },
+    { team: "Baskonia", from: 2025, to: null } ] },
+  { name: "Tadas Sedekerskis", career: [
+    { team: "Baskonia", from: 2016, to: 2017 }, { team: "San Pablo Burgos", from: 2017, to: 2017 },
+    { team: "Nevezis", from: 2017, to: 2018 }, { team: "Baskonia", from: 2018, to: 2019 },
+    { team: "Neptunas", from: 2019, to: 2020 }, { team: "Baskonia", from: 2020, to: null } ] },
+  { name: "Jesse Edwards", career: [
+    { team: "Minnesota Timberwolves", from: 2024, to: 2025 }, { team: "Melbourne United", from: 2025, to: 2026 },
+    { team: "Baskonia", from: 2026, to: null } ] },
+  { name: "Khalifa Diop", career: [
+    { team: "Gran Canaria", from: 2019, to: 2023 }, { team: "Baskonia", from: 2023, to: null } ] },
+  { name: "Rafa Villar", career: [
+    { team: "Lleida", from: 2022, to: 2025 }, { team: "Baskonia", from: 2025, to: null } ] },
+  { name: "Clement Frisch", career: [
+    { team: "SIG Strasbourg", from: 2020, to: 2021 }, { team: "Denain-Voltaire", from: 2021, to: 2022 },
+    { team: "SLUC Nancy", from: 2022, to: 2025 }, { team: "Baskonia", from: 2025, to: null } ] },
+
+  // --- FC Barcelona ---
+  { name: "Dario Brizuela", career: [
+    { team: "Estudiantes", from: 2012, to: 2014 }, { team: "Penas Huesca", from: 2014, to: 2015 },
+    { team: "Estudiantes", from: 2015, to: 2019 }, { team: "Unicaja", from: 2019, to: 2023 },
+    { team: "FC Barcelona", from: 2023, to: null } ] },
+  { name: "Youssoupha Fall", career: [
+    { team: "Le Mans", from: 2014, to: 2016 }, { team: "Poitiers Basket 86", from: 2016, to: 2017 },
+    { team: "Le Mans", from: 2017, to: 2018 }, { team: "SIG Strasbourg", from: 2018, to: 2019 },
+    { team: "Baskonia", from: 2019, to: 2021 }, { team: "ASVEL", from: 2021, to: 2024 },
+    { team: "FC Barcelona", from: 2024, to: null } ] },
+  { name: "Juan Nunez", career: [
+    { team: "Real Madrid", from: 2021, to: 2022 }, { team: "Ratiopharm Ulm", from: 2022, to: 2024 },
+    { team: "FC Barcelona", from: 2024, to: null } ] },
+  { name: "Joel Parra", career: [
+    { team: "Joventut", from: 2017, to: 2018 }, { team: "CB Prat", from: 2018, to: 2019 },
+    { team: "Joventut", from: 2019, to: 2023 }, { team: "FC Barcelona", from: 2023, to: null } ] },
+  { name: "Miles Norris", career: [
+    { team: "Cagdas Bodrumspor", from: 2023, to: 2024 }, { team: "FC Barcelona", from: 2025, to: null } ] },
+  { name: "Myles Cale", career: [
+    { team: "Limburg United", from: 2022, to: 2024 }, { team: "Trento", from: 2024, to: 2025 },
+    { team: "FC Barcelona", from: 2025, to: null } ] },
+  { name: "Juani Marcos", career: [
+    { team: "Penarol", from: 2015, to: 2019 }, { team: "FC Barcelona B", from: 2019, to: 2021 },
+    { team: "Lleida", from: 2021, to: 2023 }, { team: "Girona", from: 2023, to: 2025 },
+    { team: "FC Barcelona", from: 2025, to: null } ] },
 
   // ===== Retired legends (in LEGENDS) =====
   { name: "Arvydas Sabonis", career: [

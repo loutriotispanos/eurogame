@@ -8,7 +8,7 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v47";  /* Active careers batch 5: +17 researched paths (Partizan + Crvena Zvezda, both Belgrade clubs now complete); careers 317->334; regenerated paths/grids/puzzles */
+var CACHE = "elg-v48";  /* Active careers batch 6: +22 researched paths (AS Monaco + Baskonia + FC Barcelona, all now complete); careers 334->356; regenerated paths/grids/puzzles */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js",
   "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "app.js",
