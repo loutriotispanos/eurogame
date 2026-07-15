@@ -105,7 +105,11 @@ const TEAM_FIX = {
   // Batch 4 (Bayern Munich + Olympiacos) variant folds.
   "s.Oliver Wurzburg": "Wurzburg", "Wurzburg Baskets": "Wurzburg",
   "BG Gottingen": "Gottingen", "JL Bourg": "JL Bourg-en-Bresse",
-  "Victoria Libertas Pesaro": "Pesaro", "CB Breogan": "Breogan"
+  "Victoria Libertas Pesaro": "Pesaro", "CB Breogan": "Breogan",
+  // Batch 5 (Partizan + Crvena Zvezda) variant folds.
+  "Spars Sarajevo": "OKK Spars", "Gaziantep": "Gaziantep Basketbol",
+  "MoraBanc Andorra": "Andorra", "Vrijednosnice Osijek": "Osijek",
+  "Baskets Oldenburg": "Oldenburg", "Denain Voltaire": "Denain-Voltaire"
 };
 function fixTeam(t) { t = String(t).trim(); return TEAM_FIX[t] || t; }
 
@@ -948,6 +952,76 @@ const RAW = [
   { name: "Omiros Netzipoglou", career: [
     { team: "Aris", from: 2019, to: 2023 }, { team: "AEK Athens", from: 2023, to: 2025 },
     { team: "Olympiacos", from: 2025, to: null } ] },
+
+  // --- Partizan ---
+  { name: "Duane Washington Jr.", career: [
+    { team: "Indiana Pacers", from: 2021, to: 2022 }, { team: "Phoenix Suns", from: 2022, to: 2023 },
+    { team: "Partizan", from: 2024, to: null } ] },
+  { name: "Aleksej Pokusevski", career: [
+    { team: "Olympiacos B", from: 2018, to: 2020 }, { team: "Oklahoma City Thunder", from: 2020, to: 2024 },
+    { team: "Charlotte Hornets", from: 2023, to: 2024 }, { team: "Partizan", from: 2024, to: null } ] },
+  { name: "Isaac Bonga", career: [
+    { team: "Skyliners Frankfurt", from: 2016, to: 2018 }, { team: "Los Angeles Lakers", from: 2018, to: 2019 },
+    { team: "Washington Wizards", from: 2019, to: 2021 }, { team: "Toronto Raptors", from: 2021, to: 2022 },
+    { team: "Bayern Munich", from: 2022, to: 2024 }, { team: "Partizan", from: 2024, to: null } ] },
+  { name: "Tonye Jekiri", career: [
+    { team: "Bandirma", from: 2016, to: 2017 }, { team: "Oostende", from: 2017, to: 2018 },
+    { team: "Gaziantep Basketbol", from: 2018, to: 2019 }, { team: "ASVEL", from: 2019, to: 2020 },
+    { team: "Baskonia", from: 2020, to: 2021 }, { team: "UNICS Kazan", from: 2021, to: 2022 },
+    { team: "Fenerbahce", from: 2022, to: 2023 }, { team: "CSKA Moscow", from: 2023, to: 2025 },
+    { team: "Partizan", from: 2025, to: null } ] },
+  { name: "Dylan Osetkowski", career: [
+    { team: "Gottingen", from: 2019, to: 2020 }, { team: "Ratiopharm Ulm", from: 2020, to: 2021 },
+    { team: "ASVEL", from: 2021, to: 2022 }, { team: "Unicaja", from: 2022, to: 2025 },
+    { team: "Partizan", from: 2025, to: null } ] },
+  { name: "Vanja Marinkovic", career: [
+    { team: "Partizan", from: 2013, to: 2019 }, { team: "Valencia", from: 2019, to: 2021 },
+    { team: "Baskonia", from: 2021, to: 2024 }, { team: "Partizan", from: 2024, to: null } ] },
+  { name: "Mario Nakic", career: [
+    { team: "Real Madrid", from: 2018, to: 2020 }, { team: "Oostende", from: 2020, to: 2021 },
+    { team: "Andorra", from: 2021, to: 2022 }, { team: "Igokea", from: 2022, to: 2024 },
+    { team: "Partizan", from: 2024, to: null } ] },
+  { name: "Aleksa Radanov", career: [
+    { team: "FMP", from: 2015, to: 2018 }, { team: "Crvena Zvezda", from: 2018, to: 2019 },
+    { team: "FMP", from: 2019, to: 2020 }, { team: "Crvena Zvezda", from: 2020, to: 2021 },
+    { team: "Igokea", from: 2021, to: 2022 }, { team: "Peristeri", from: 2022, to: 2023 },
+    { team: "Runa Moscow", from: 2023, to: 2024 }, { team: "Mega", from: 2024, to: 2025 },
+    { team: "Bayern Munich", from: 2025, to: 2026 }, { team: "Partizan", from: 2026, to: null } ] },
+  { name: "Arijan Lakic", career: [
+    { team: "FMP", from: 2018, to: 2019 }, { team: "Osijek", from: 2019, to: 2021 },
+    { team: "OKK Spars", from: 2021, to: 2022 }, { team: "Zadar", from: 2022, to: 2024 },
+    { team: "Partizan", from: 2024, to: null } ] },
+
+  // --- Crvena Zvezda ---
+  { name: "Ognjen Dobric", career: [
+    { team: "FMP", from: 2013, to: 2016 }, { team: "Crvena Zvezda", from: 2016, to: 2023 },
+    { team: "Virtus Bologna", from: 2023, to: 2024 }, { team: "Crvena Zvezda", from: 2024, to: null } ] },
+  { name: "Dejan Davidovac", career: [
+    { team: "Proleter", from: 2011, to: 2012 }, { team: "Vrsac", from: 2012, to: 2015 },
+    { team: "FMP", from: 2015, to: 2017 }, { team: "Crvena Zvezda", from: 2017, to: 2022 },
+    { team: "CSKA Moscow", from: 2022, to: 2023 }, { team: "Crvena Zvezda", from: 2023, to: null } ] },
+  { name: "Ebuka Izundu", career: [
+    { team: "Real Betis", from: 2019, to: 2020 }, { team: "SIG Strasbourg", from: 2020, to: 2021 },
+    { team: "FMP", from: 2021, to: 2023 }, { team: "Oldenburg", from: 2023, to: 2024 },
+    { team: "Galatasaray", from: 2024, to: 2025 }, { team: "Crvena Zvezda", from: 2025, to: null } ] },
+  { name: "Chima Moneke", career: [
+    { team: "Rouen", from: 2018, to: 2018 }, { team: "Denain-Voltaire", from: 2018, to: 2019 },
+    { team: "Quimper", from: 2019, to: 2020 }, { team: "Orleans", from: 2020, to: 2021 },
+    { team: "Manresa", from: 2021, to: 2022 }, { team: "Sacramento Kings", from: 2022, to: 2023 },
+    { team: "AS Monaco", from: 2023, to: 2023 }, { team: "Baskonia", from: 2023, to: 2025 },
+    { team: "Crvena Zvezda", from: 2025, to: null } ] },
+  { name: "Jasiel Rivero", career: [
+    { team: "Estudiantes de Concordia", from: 2015, to: 2018 }, { team: "Boca Juniors", from: 2018, to: 2019 },
+    { team: "San Pablo Burgos", from: 2019, to: 2021 }, { team: "Valencia", from: 2021, to: 2023 },
+    { team: "Maccabi Tel Aviv", from: 2023, to: 2025 }, { team: "Crvena Zvezda", from: 2025, to: null } ] },
+  { name: "Stefan Miljenovic", career: [
+    { team: "Leotar Trebinje", from: 2021, to: 2022 }, { team: "Slodes", from: 2021, to: 2022 },
+    { team: "OKK Beograd", from: 2022, to: 2023 }, { team: "Mega", from: 2023, to: 2025 },
+    { team: "Crvena Zvezda", from: 2025, to: null } ] },
+  { name: "Nikola Djurisic", career: [
+    { team: "Mega", from: 2020, to: 2024 }, { team: "Crvena Zvezda", from: 2026, to: null } ] },
+  { name: "Ognjen Radosic", career: [
+    { team: "Igokea", from: 2024, to: 2025 }, { team: "Crvena Zvezda", from: 2025, to: null } ] },
 
   // ===== Retired legends (in LEGENDS) =====
   { name: "Arvydas Sabonis", career: [
