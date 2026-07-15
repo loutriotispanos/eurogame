@@ -114,7 +114,11 @@ const TEAM_FIX = {
   "Le Mans Sarthe": "Le Mans", "ASVEL Villeurbanne": "ASVEL",
   "Unicaja Malaga": "Unicaja", "Penarol Mar del Plata": "Penarol",
   "Basquet Girona": "Girona", "Aquila Trento": "Trento",
-  "Denain": "Denain-Voltaire", "Forca Lleida": "Lleida"
+  "Denain": "Denain-Voltaire", "Forca Lleida": "Lleida",
+  // Batch 7 (Paris Basketball + Valencia) variant folds.
+  "Elan Bearnais Pau-Lacq-Orthez": "Pau-Orthez", "Pau-Lacq-Orthez": "Pau-Orthez",
+  "Dijon": "JDA Dijon", "EWE Baskets Oldenburg": "Oldenburg",
+  "Happy Casa Brindisi": "Brindisi"
 };
 function fixTeam(t) { t = String(t).trim(); return TEAM_FIX[t] || t; }
 
@@ -1103,6 +1107,83 @@ const RAW = [
     { team: "Penarol", from: 2015, to: 2019 }, { team: "FC Barcelona B", from: 2019, to: 2021 },
     { team: "Lleida", from: 2021, to: 2023 }, { team: "Girona", from: 2023, to: 2025 },
     { team: "FC Barcelona", from: 2025, to: null } ] },
+
+  // --- Paris Basketball ---
+  { name: "Amath M'Baye", career: [
+    { team: "Mitsubishi Diamond Dolphins", from: 2013, to: 2016 }, { team: "Brindisi", from: 2016, to: 2017 },
+    { team: "Olimpia Milano", from: 2017, to: 2018 }, { team: "Virtus Bologna", from: 2018, to: 2019 },
+    { team: "Pinar Karsiyaka", from: 2019, to: 2022 }, { team: "Anadolu Efes", from: 2022, to: 2023 },
+    { team: "CSKA Moscow", from: 2023, to: 2025 }, { team: "Paris Basketball", from: 2025, to: null } ] },
+  { name: "Yakuba Ouattara", career: [
+    { team: "Chalon", from: 2012, to: 2014 }, { team: "Denain-Voltaire", from: 2014, to: 2015 },
+    { team: "AS Monaco", from: 2015, to: 2017 }, { team: "AS Monaco", from: 2018, to: 2020 },
+    { team: "Real Betis", from: 2020, to: 2021 }, { team: "AS Monaco", from: 2021, to: 2024 },
+    { team: "Paris Basketball", from: 2024, to: null } ] },
+  { name: "Daulton Hommes", career: [
+    { team: "Vanoli Cremona", from: 2020, to: 2021 }, { team: "Baskonia", from: 2022, to: 2023 },
+    { team: "Trento", from: 2023, to: 2024 }, { team: "Paris Basketball", from: 2024, to: null } ] },
+  { name: "Derek Willis", career: [
+    { team: "Gottingen", from: 2018, to: 2019 }, { team: "Ratiopharm Ulm", from: 2019, to: 2020 },
+    { team: "Brindisi", from: 2020, to: 2021 }, { team: "Joventut", from: 2021, to: 2022 },
+    { team: "Reyer Venezia", from: 2022, to: 2023 }, { team: "Anadolu Efes", from: 2023, to: 2025 },
+    { team: "Paris Basketball", from: 2025, to: null } ] },
+  { name: "Joel Ayayi", career: [
+    { team: "Washington Wizards", from: 2021, to: 2022 }, { team: "Nanterre", from: 2023, to: 2024 },
+    { team: "JL Bourg-en-Bresse", from: 2024, to: 2025 }, { team: "Paris Basketball", from: 2025, to: null } ] },
+  { name: "Jeremy Morgan", career: [
+    { team: "Kouvot", from: 2018, to: 2019 }, { team: "Crailsheim Merlins", from: 2019, to: 2020 },
+    { team: "Trento", from: 2020, to: 2021 }, { team: "Telekom Baskets Bonn", from: 2021, to: 2023 },
+    { team: "JL Bourg-en-Bresse", from: 2023, to: 2024 }, { team: "Hapoel Jerusalem", from: 2024, to: 2025 },
+    { team: "Paris Basketball", from: 2025, to: null } ] },
+  { name: "Leopold Cavaliere", career: [
+    { team: "Pau-Orthez", from: 2013, to: 2020 }, { team: "SIG Strasbourg", from: 2020, to: 2024 },
+    { team: "Paris Basketball", from: 2024, to: null } ] },
+  { name: "Sebastian Herrera", career: [
+    { team: "Gladiators Trier", from: 2015, to: 2017 }, { team: "Crailsheim Merlins", from: 2017, to: 2020 },
+    { team: "Oldenburg", from: 2020, to: 2022 }, { team: "Telekom Baskets Bonn", from: 2022, to: 2023 },
+    { team: "Paris Basketball", from: 2023, to: null } ] },
+  { name: "Allan Dokossi", career: [
+    { team: "Fos Provence", from: 2018, to: 2023 }, { team: "JDA Dijon", from: 2023, to: 2025 },
+    { team: "Paris Basketball", from: 2025, to: null } ] },
+  { name: "Mouhamed Faye", career: [
+    { team: "Pallacanestro Reggiana", from: 2023, to: 2025 }, { team: "Paris Basketball", from: 2025, to: null } ] },
+  { name: "Enzo Shahrvin", career: [
+    { team: "Pau-Orthez", from: 2022, to: 2023 }, { team: "Paris Basketball", from: 2023, to: 2024 },
+    { team: "Saint-Quentin", from: 2024, to: 2025 }, { team: "Paris Basketball", from: 2025, to: null } ] },
+
+  // --- Valencia ---
+  { name: "Kameron Taylor", career: [
+    { team: "Erdgas Ehingen", from: 2016, to: 2017 }, { team: "Dragons Rhondorf", from: 2017, to: 2018 },
+    { team: "PVSK Panthers", from: 2018, to: 2019 }, { team: "Brose Bamberg", from: 2019, to: 2020 },
+    { team: "Hamburg Towers", from: 2020, to: 2021 }, { team: "Maccabi Tel Aviv", from: 2021, to: 2022 },
+    { team: "Girona", from: 2022, to: 2023 }, { team: "Unicaja", from: 2023, to: 2025 },
+    { team: "Valencia", from: 2025, to: null } ] },
+  { name: "Braxton Key", career: [
+    { team: "Detroit Pistons", from: 2021, to: 2022 }, { team: "Denver Nuggets", from: 2023, to: 2024 },
+    { team: "Golden State Warriors", from: 2024, to: 2025 }, { team: "Valencia", from: 2025, to: null } ] },
+  { name: "Omari Moore", career: [
+    { team: "Milwaukee Bucks", from: 2023, to: 2024 }, { team: "Darussafaka", from: 2024, to: 2025 },
+    { team: "Valencia", from: 2025, to: null } ] },
+  { name: "Nate Reuvers", career: [
+    { team: "Cibona", from: 2021, to: 2022 }, { team: "Pallacanestro Reggiana", from: 2022, to: 2023 },
+    { team: "Valencia", from: 2023, to: null } ] },
+  { name: "Yankuba Sima", career: [
+    { team: "Manresa", from: 2018, to: 2022 }, { team: "Reyer Venezia", from: 2022, to: 2023 },
+    { team: "Unicaja", from: 2023, to: 2025 }, { team: "Valencia", from: 2025, to: null } ] },
+  { name: "Neal Sako", career: [
+    { team: "Metropolitans 92", from: 2018, to: 2021 }, { team: "Champagne Basket", from: 2021, to: 2022 },
+    { team: "Cholet Basket", from: 2022, to: 2024 }, { team: "ASVEL", from: 2024, to: 2025 },
+    { team: "Valencia", from: 2025, to: null } ] },
+  { name: "Jaime Pradilla", career: [
+    { team: "Basket Zaragoza", from: 2018, to: 2019 }, { team: "Palencia", from: 2019, to: 2020 },
+    { team: "Valencia", from: 2020, to: null } ] },
+  { name: "Josep Puerto", career: [
+    { team: "Valencia", from: 2016, to: 2018 }, { team: "Oviedo", from: 2018, to: 2019 },
+    { team: "TAU Castello", from: 2019, to: 2020 }, { team: "Valencia", from: 2020, to: null } ] },
+  { name: "Sergio de Larrea", career: [
+    { team: "L'Horta Godella", from: 2022, to: 2024 }, { team: "Valencia", from: 2024, to: null } ] },
+  { name: "Isaac Nogues", career: [
+    { team: "Penas Huesca", from: 2023, to: 2024 }, { team: "Valencia", from: 2025, to: null } ] },
 
   // ===== Retired legends (in LEGENDS) =====
   { name: "Arvydas Sabonis", career: [
