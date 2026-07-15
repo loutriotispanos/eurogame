@@ -77,7 +77,57 @@ const NATIONALITY_OVERRIDES = {
   "Alpha Diallo":   "France",// born/raised France, plays for Guinea
 };
 
-const all = raw.flatMap(r => r.players);
+// --- 2025-26 official-roster cross-check corrections -------------------------
+// Verified team-by-team against the official euroleaguebasketball.net
+// ?season=2025-26 roster pages. (1) remove players not on the official roster
+// (or rostered but never played a EuroLeague game); (2) fix positions only where
+// ours was clearly wrong; (3) move a misassigned player; adds are appended below.
+const ROSTER_REMOVE = new Set([
+  "Yoan Makoundou", "Maxim Klitschko",                           // AS Monaco
+  "Jesse Edwards",                                               // Baskonia
+  "Johannes Thiemann", "Rokas Jokubaitis",                       // Bayern Munich
+  "Nikola Djurisic", "Ognjen Radosic",                           // Crvena Zvezda
+  "Mam Jaiteh",                                                  // Dubai BC
+  "Juan Nunez",                                                  // FC Barcelona
+  "Mert Emre Eksioglu", "Yigit Hamza Mestoglu", "Jilson Bango",  // Fenerbahce
+  "Itay Segev", "Tyler Ennis", "Oz Blayzer", "Keandre Cook",     // Hapoel Tel Aviv
+  "Amit Ebo",                                                    // Maccabi Tel Aviv
+].map(n => n.toLowerCase()));
+
+// Positions fixed only where ours was clearly wrong and the official page better.
+const ROSTER_POSITION = { "Juhann Begarin": "Forward", "Jan Vesely": "Center" };
+
+// Chris Jones is on Hapoel Tel Aviv's official 2025-26 roster (was misassigned to Crvena Zvezda).
+const ROSTER_TEAM = { "Chris Jones": "Hapoel Tel Aviv" };
+
+// Keep despite the born-2007+ development filter — actually played EuroLeague
+// minutes and is on the official roster (user-confirmed).
+const ROSTER_KEEP_YOUNG = new Set(["Sayon Keita"]);
+
+// Official-roster players missing from our DB who DID play a EuroLeague game
+// (researched careers live in build_careers.js). Sayon Keita is already in the
+// raw blobs above, so he is only whitelisted (above), not re-added here.
+const ROSTER_ADD = [
+  {"name":"Trent Forrest","team":"Baskonia","nationality":"USA","position":"Guard","height":193,"birthYear":1998,"number":11},
+  {"name":"Eugene Omoruyi","team":"Baskonia","nationality":"Nigeria","position":"Forward","height":198,"birthYear":1997,"number":5},
+  {"name":"Gytis Radzevicius","team":"Baskonia","nationality":"Lithuania","position":"Forward","height":197,"birthYear":1995,"number":17},
+  {"name":"Codi Miller-McIntyre","team":"Crvena Zvezda","nationality":"USA","position":"Guard","height":191,"birthYear":1994,"number":0},
+  {"name":"Isaiah Canaan","team":"Crvena Zvezda","nationality":"USA","position":"Guard","height":183,"birthYear":1991,"number":3},
+  {"name":"Donatas Motiejunas","team":"Crvena Zvezda","nationality":"Lithuania","position":"Center","height":213,"birthYear":1990,"number":20},
+  {"name":"Joel Bolomboy","team":"Crvena Zvezda","nationality":"Ukraine","position":"Forward","height":203,"birthYear":1994,"number":21},
+  {"name":"Neno Dimitrijevic","team":"Bayern Munich","nationality":"North Macedonia","position":"Guard","height":190,"birthYear":1998,"number":0},
+  {"name":"Bruno Caboclo","team":"Dubai BC","nationality":"Brazil","position":"Forward","height":208,"birthYear":1995,"number":51},
+  {"name":"Kessler Edwards","team":"Hapoel Tel Aviv","nationality":"USA","position":"Forward","height":203,"birthYear":2000,"number":15},
+  {"name":"Jeffrey Dowtin Jr.","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":191,"birthYear":1997,"number":21},
+];
+
+const all = raw.flatMap(r => r.players)
+  .filter(p => !ROSTER_REMOVE.has(p.name.trim().toLowerCase()));
+for (const p of all) {
+  if (ROSTER_POSITION[p.name]) p.position = ROSTER_POSITION[p.name];
+  if (ROSTER_TEAM[p.name])     p.team     = ROSTER_TEAM[p.name];
+}
+for (const a of ROSTER_ADD) all.push(a);
 
 // Validate teams; collect unknowns.
 const unknownTeams = new Set();
@@ -92,7 +142,7 @@ const seen = new Map();
 const dropped = { young: [], dup: [] };
 for (const p of all) {
   const key = p.name.trim().toLowerCase();
-  if (p.birthYear > YOUNGEST_BIRTH_YEAR) { dropped.young.push(p.name); continue; }
+  if (p.birthYear > YOUNGEST_BIRTH_YEAR && !ROSTER_KEEP_YOUNG.has(p.name)) { dropped.young.push(p.name); continue; }
   if (seen.has(key)) { dropped.dup.push(`${p.name} (${p.team} dup of ${seen.get(key).team})`); continue; }
   seen.set(key, p);
 }

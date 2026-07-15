@@ -451,8 +451,7 @@ const RAW = [
     { team: "Tuv Ajmag", from: 2015, to: 2016 }, { team: "Starwings Basel", from: 2016, to: 2017 },
     { team: "Mons-Hainaut", from: 2017, to: 2019 }, { team: "Bursaspor", from: 2019, to: 2020 },
     { team: "Maccabi Tel Aviv", from: 2020, to: 2021 }, { team: "ASVEL", from: 2021, to: 2022 },
-    { team: "Valencia", from: 2022, to: 2025 }, { team: "Hapoel Tel Aviv", from: 2025, to: 2026 },
-    { team: "Crvena Zvezda", from: 2026, to: null } ] },
+    { team: "Valencia", from: 2022, to: 2025 }, { team: "Hapoel Tel Aviv", from: 2025, to: null } ] },
   { name: "Tyson Carter", career: [
     { team: "Lavrio", from: 2020, to: 2021 }, { team: "Zenit Saint Petersburg", from: 2021, to: 2022 },
     { team: "Unicaja", from: 2022, to: 2025 }, { team: "Crvena Zvezda", from: 2025, to: null } ] },
@@ -1599,6 +1598,66 @@ const RAW = [
     { team: "Olimpia Milano", from: 2012, to: 2013 }, { team: "Orlandina Basket", from: 2013, to: 2016 } ] }
 ];
 
+// --- 2025-26 official-roster cross-check: careers for the added players ------
+// Verified against the official euroleaguebasketball.net ?season=2025-26 rosters;
+// each actually played a EuroLeague game. Club spellings canonicalised to those
+// already used above (TEAM_FIX folds the rest). Sayon Keita is an FC Barcelona
+// youth kept in players.js via the born-2007+ whitelist.
+RAW.push(
+  { name: "Trent Forrest", career: [
+    { team: "Utah Jazz", from: 2020, to: 2022 }, { team: "Atlanta Hawks", from: 2022, to: 2024 },
+    { team: "Baskonia", from: 2024, to: null } ] },
+  { name: "Eugene Omoruyi", career: [
+    { team: "Dallas Mavericks", from: 2021, to: 2022 }, { team: "Oklahoma City Thunder", from: 2022, to: 2023 },
+    { team: "Washington Wizards", from: 2023, to: 2024 }, { team: "Al-Nasr Dubai", from: 2024, to: 2025 },
+    { team: "Baskonia", from: 2025, to: null } ] },
+  { name: "Gytis Radzevicius", career: [
+    { team: "Kupiskis", from: 2014, to: 2015 }, { team: "Perlas", from: 2015, to: 2017 },
+    { team: "Vytis", from: 2017, to: 2018 }, { team: "Juventus Utena", from: 2018, to: 2020 },
+    { team: "Lietuvos Rytas", from: 2020, to: 2025 }, { team: "Baskonia", from: 2025, to: null } ] },
+  { name: "Codi Miller-McIntyre", career: [
+    { team: "Leuven Bears", from: 2016, to: 2017 }, { team: "Parma Basket", from: 2017, to: 2018 },
+    { team: "Zenit Saint Petersburg", from: 2018, to: 2019 }, { team: "Cedevita Olimpija", from: 2019, to: 2020 },
+    { team: "JL Bourg-en-Bresse", from: 2020, to: 2021 }, { team: "Andorra", from: 2021, to: 2022 },
+    { team: "Gaziantep Basketbol", from: 2022, to: 2023 }, { team: "Baskonia", from: 2023, to: 2024 },
+    { team: "Crvena Zvezda", from: 2024, to: null } ] },
+  { name: "Isaiah Canaan", career: [
+    { team: "Houston Rockets", from: 2013, to: 2015 }, { team: "Philadelphia 76ers", from: 2015, to: 2016 },
+    { team: "Chicago Bulls", from: 2016, to: 2017 }, { team: "Phoenix Suns", from: 2017, to: 2018 },
+    { team: "Minnesota Timberwolves", from: 2018, to: 2019 }, { team: "Shandong Golden Stars", from: 2019, to: 2020 },
+    { team: "UNICS Kazan", from: 2020, to: 2021 }, { team: "Galatasaray", from: 2021, to: 2022 },
+    { team: "Olympiacos", from: 2022, to: 2024 }, { team: "Crvena Zvezda", from: 2024, to: null } ] },
+  { name: "Donatas Motiejunas", career: [
+    { team: "Zalgiris Kaunas", from: 2007, to: 2008 }, { team: "Aisciai Kaunas", from: 2008, to: 2009 },
+    { team: "Treviso", from: 2009, to: 2011 }, { team: "Asseco Prokom", from: 2011, to: 2012 },
+    { team: "Houston Rockets", from: 2012, to: 2016 }, { team: "New Orleans Pelicans", from: 2016, to: 2017 },
+    { team: "Shandong Golden Stars", from: 2017, to: 2018 }, { team: "San Antonio Spurs", from: 2018, to: 2019 },
+    { team: "Shanghai Sharks", from: 2019, to: 2020 }, { team: "Xinjiang Flying Tigers", from: 2020, to: 2021 },
+    { team: "AS Monaco", from: 2021, to: 2025 }, { team: "Crvena Zvezda", from: 2025, to: null } ] },
+  { name: "Joel Bolomboy", career: [
+    { team: "Utah Jazz", from: 2016, to: 2017 }, { team: "Milwaukee Bucks", from: 2017, to: 2018 },
+    { team: "CSKA Moscow", from: 2018, to: 2022 }, { team: "Olympiacos", from: 2022, to: 2023 },
+    { team: "Crvena Zvezda", from: 2023, to: null } ] },
+  { name: "Neno Dimitrijevic", career: [
+    { team: "Joventut", from: 2016, to: 2021 }, { team: "Valencia", from: 2021, to: 2022 },
+    { team: "UNICS Kazan", from: 2022, to: 2024 }, { team: "Olimpia Milano", from: 2024, to: 2025 },
+    { team: "Bayern Munich", from: 2025, to: null } ] },
+  { name: "Bruno Caboclo", career: [
+    { team: "Pinheiros", from: 2013, to: 2014 }, { team: "Toronto Raptors", from: 2014, to: 2018 },
+    { team: "Sacramento Kings", from: 2018, to: 2019 }, { team: "Memphis Grizzlies", from: 2019, to: 2020 },
+    { team: "Houston Rockets", from: 2020, to: 2021 }, { team: "Limoges", from: 2021, to: 2022 },
+    { team: "Mexico City Capitanes", from: 2022, to: 2023 }, { team: "Partizan", from: 2023, to: 2024 },
+    { team: "Hapoel Tel Aviv", from: 2024, to: 2025 }, { team: "Dubai BC", from: 2025, to: null } ] },
+  { name: "Kessler Edwards", career: [
+    { team: "Brooklyn Nets", from: 2021, to: 2023 }, { team: "Sacramento Kings", from: 2023, to: 2024 },
+    { team: "Dallas Mavericks", from: 2024, to: 2025 }, { team: "Hapoel Tel Aviv", from: 2025, to: null } ] },
+  { name: "Jeffrey Dowtin Jr.", career: [
+    { team: "Golden State Warriors", from: 2021, to: 2022 }, { team: "Toronto Raptors", from: 2022, to: 2023 },
+    { team: "Philadelphia 76ers", from: 2023, to: 2025 }, { team: "Maccabi Tel Aviv", from: 2025, to: null } ] },
+  { name: "Sayon Keita", career: [
+    { team: "FC Barcelona B", from: 2023, to: 2025 }, { team: "FC Barcelona", from: 2025, to: null } ] }
+);
+
 // Merge researched expansion careers (retired legends). Each name resolves in
 // LEGENDS via legends_extra.json (build_legends.js loads the same file into
 // legends.js), so find() will tag these active:false and validate them.
@@ -1637,7 +1696,17 @@ function find(name) {
   return null;
 }
 var CAREERS = [], errors = [], seen = {};
+// 2025-26 official-roster cross-check: these players were removed from players.js
+// (not on the official roster / did not play a EuroLeague game), so drop any
+// career we had for them — otherwise find() would fail them as "not in PLAYERS".
+var ROSTER_REMOVE = new Set([
+  "Yoan Makoundou", "Maxim Klitschko", "Jesse Edwards", "Johannes Thiemann",
+  "Rokas Jokubaitis", "Nikola Djurisic", "Ognjen Radosic", "Mam Jaiteh",
+  "Juan Nunez", "Mert Emre Eksioglu", "Yigit Hamza Mestoglu", "Jilson Bango",
+  "Itay Segev", "Tyler Ennis", "Oz Blayzer", "Keandre Cook", "Amit Ebo"
+]);
 RAW.forEach(function (r) {
+  if (ROSTER_REMOVE.has(r.name)) return;
   var f = find(r.name);
   if (!f) { errors.push(r.name + " (not found in PLAYERS/LEGENDS)"); return; }
   if (seen[r.name]) { errors.push(r.name + " (duplicate RAW entry)"); return; }
