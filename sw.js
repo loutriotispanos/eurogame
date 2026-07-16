@@ -8,7 +8,7 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v52";  /* Official 2025-26 roster cross-check (11 of 20 teams): -17 removed, +12 added (researched careers), Begarin->F / Vesely->C, Chris Jones moved to Hapoel Tel Aviv. players 303->298, careers 421->418. Regenerated paths/grids/puzzles */
+var CACHE = "elg-v54";  /* Roster cross-check COMPLETE (all 20 teams) — teams 13-20: -7 removed (Keenan Evans, Netzipoglou, Richaun Holmes, Kouzeloglou, Lauvergne, Mady Sissoko, Yago dos Santos), +2 added (Frank Ntilikina & Moustapha Fall, both Olympiacos, researched careers). Positions all kept as ours; user skip-lists honoured; Yurtseven kept per user. players 298->293, careers 418->413. Regenerated paths/grids/puzzles */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js",
   "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "app.js",

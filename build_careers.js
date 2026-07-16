@@ -1655,7 +1655,20 @@ RAW.push(
     { team: "Golden State Warriors", from: 2021, to: 2022 }, { team: "Toronto Raptors", from: 2022, to: 2023 },
     { team: "Philadelphia 76ers", from: 2023, to: 2025 }, { team: "Maccabi Tel Aviv", from: 2025, to: null } ] },
   { name: "Sayon Keita", career: [
-    { team: "FC Barcelona B", from: 2023, to: 2025 }, { team: "FC Barcelona", from: 2025, to: null } ] }
+    { team: "FC Barcelona B", from: 2023, to: 2025 }, { team: "FC Barcelona", from: 2025, to: null } ] },
+  { name: "Quinn Ellis", career: [
+    { team: "Orlandina Basket", from: 2019, to: 2022 }, { team: "Casale Monferrato", from: 2022, to: 2023 },
+    { team: "Trento", from: 2023, to: 2025 }, { team: "Olimpia Milano", from: 2025, to: null } ] },
+  { name: "Frank Ntilikina", career: [
+    { team: "Strasbourg", from: 2015, to: 2017 }, { team: "New York Knicks", from: 2017, to: 2021 },
+    { team: "Dallas Mavericks", from: 2021, to: 2023 }, { team: "Charlotte Hornets", from: 2023, to: 2024 },
+    { team: "Partizan", from: 2024, to: 2025 }, { team: "Olympiacos", from: 2025, to: null } ] },
+  { name: "Moustapha Fall", career: [
+    { team: "Poitiers", from: 2011, to: 2014 }, { team: "AS Monaco", from: 2014, to: 2015 },
+    { team: "Antibes", from: 2015, to: 2016 }, { team: "Chalon", from: 2016, to: 2017 },
+    { team: "Sakarya", from: 2017, to: 2018 }, { team: "Lokomotiv Kuban", from: 2018, to: 2019 },
+    { team: "Turk Telekom", from: 2019, to: 2020 }, { team: "ASVEL", from: 2020, to: 2021 },
+    { team: "Olympiacos", from: 2021, to: null } ] }
 );
 
 // Merge researched expansion careers (retired legends). Each name resolves in
@@ -1703,7 +1716,10 @@ var ROSTER_REMOVE = new Set([
   "Yoan Makoundou", "Maxim Klitschko", "Jesse Edwards", "Johannes Thiemann",
   "Rokas Jokubaitis", "Nikola Djurisic", "Ognjen Radosic", "Mam Jaiteh",
   "Juan Nunez", "Mert Emre Eksioglu", "Yigit Hamza Mestoglu", "Jilson Bango",
-  "Itay Segev", "Tyler Ennis", "Oz Blayzer", "Keandre Cook", "Amit Ebo"
+  "Itay Segev", "Tyler Ennis", "Oz Blayzer", "Keandre Cook", "Amit Ebo",
+  "Vlatko Cancar",
+  "Keenan Evans", "Omiros Netzipoglou", "Richaun Holmes", "Ioannis Kouzeloglou",
+  "Joffrey Lauvergne", "Mady Sissoko", "Yago dos Santos"
 ]);
 RAW.forEach(function (r) {
   if (ROSTER_REMOVE.has(r.name)) return;

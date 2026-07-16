@@ -92,6 +92,12 @@ const ROSTER_REMOVE = new Set([
   "Mert Emre Eksioglu", "Yigit Hamza Mestoglu", "Jilson Bango",  // Fenerbahce
   "Itay Segev", "Tyler Ennis", "Oz Blayzer", "Keandre Cook",     // Hapoel Tel Aviv
   "Amit Ebo",                                                    // Maccabi Tel Aviv
+  "Vlatko Cancar",                                               // Olimpia Milano (contract terminated Oct 2025, 2 EL games)
+  "Keenan Evans", "Omiros Netzipoglou",                          // Olympiacos
+  "Richaun Holmes", "Ioannis Kouzeloglou",                       // Panathinaikos
+  "Joffrey Lauvergne",                                           // Partizan
+  "Mady Sissoko",                                                // Real Madrid (Omer Yurtseven kept per user)
+  "Yago dos Santos",                                             // Virtus Bologna
 ].map(n => n.toLowerCase()));
 
 // Positions fixed only where ours was clearly wrong and the official page better.
@@ -119,6 +125,9 @@ const ROSTER_ADD = [
   {"name":"Bruno Caboclo","team":"Dubai BC","nationality":"Brazil","position":"Forward","height":208,"birthYear":1995,"number":51},
   {"name":"Kessler Edwards","team":"Hapoel Tel Aviv","nationality":"USA","position":"Forward","height":203,"birthYear":2000,"number":15},
   {"name":"Jeffrey Dowtin Jr.","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":191,"birthYear":1997,"number":21},
+  {"name":"Quinn Ellis","team":"Olimpia Milano","nationality":"United Kingdom","position":"Guard","height":196,"birthYear":2003,"number":3},
+  {"name":"Frank Ntilikina","team":"Olympiacos","nationality":"France","position":"Guard","height":193,"birthYear":1998,"number":1},
+  {"name":"Moustapha Fall","team":"Olympiacos","nationality":"France","position":"Center","height":218,"birthYear":1992,"number":10},
 ];
 
 const all = raw.flatMap(r => r.players)
