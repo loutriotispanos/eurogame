@@ -166,6 +166,21 @@
     say("Board cleared.");
   }
 
+  // Clear ALL boards from the picker — same contract: bests (and gold) survive.
+  var armedAll = false;
+  function disarmClearAll() { armedAll = false; if (els.clearAll) { els.clearAll.classList.remove("armed"); els.clearAll.textContent = "Clear all boards"; } }
+  function onClearAll() {
+    if (!armedAll) { armedAll = true; els.clearAll.classList.add("armed"); els.clearAll.textContent = "Really clear all " + TEAMS.length + "?"; return; }
+    performClearAll();
+  }
+  function performClearAll() {
+    TEAMS.forEach(function (t) { lsSet(K.board(t), []); });
+    if (club) named = {};
+    disarmClearAll();
+    renderPicker(); renderSummary();
+    say("All boards cleared. Best scores kept.");
+  }
+
   // --- Rendering --------------------------------------------------------------------
   function flash(msg, cls) { if (!els.flash) return; els.flash.textContent = msg || ""; els.flash.className = "rm-flash" + (cls ? " " + cls : ""); }
   function say(msg) { if (els.sr) els.sr.textContent = msg; }
@@ -228,8 +243,9 @@
   function openClub(t) {
     club = t; named = loadBoard(t); bumpBest();          // reconcile best with any pre-existing board
     lsSet(K.open, t);
-    disarmClear(); flash("");
+    disarmClear(); disarmClearAll(); flash("");
     if (els.picker) els.picker.hidden = true;
+    if (els.pickerActions) els.pickerActions.hidden = true;
     if (els.board) els.board.hidden = false;
     if (els.input) { els.input.value = ""; if (els.input.focus) els.input.focus(); }
     renderBoard();
@@ -237,9 +253,10 @@
   function backToPicker() {
     saveBoard();
     club = null; lsSet(K.open, null);
-    disarmClear(); flash("");
+    disarmClear(); disarmClearAll(); flash("");
     if (els.board) els.board.hidden = true;
     if (els.picker) els.picker.hidden = false;
+    if (els.pickerActions) els.pickerActions.hidden = false;
     renderPicker(); renderSummary();
   }
 
@@ -268,7 +285,8 @@
   // --- Init --------------------------------------------------------------------------------
   function init() {
     els.view = $("rostermaster-view"); els.summary = $("rm-summary");
-    els.picker = $("rm-picker"); els.board = $("rm-board");
+    els.picker = $("rm-picker"); els.pickerActions = $("rm-picker-actions"); els.clearAll = $("rm-clear-all");
+    els.board = $("rm-board");
     els.back = $("rm-back"); els.clubName = $("rm-club"); els.clear = $("rm-clear");
     els.progress = $("rm-progress"); els.input = $("rm-input");
     els.flash = $("rm-flash"); els.sr = $("rm-sr"); els.groups = $("rm-groups");
@@ -289,6 +307,7 @@
     }
     if (els.back) els.back.addEventListener("click", backToPicker);
     if (els.clear) els.clear.addEventListener("click", onClear);
+    if (els.clearAll) els.clearAll.addEventListener("click", onClearAll);
     if (els.infoBtn) els.infoBtn.addEventListener("click", openInfo);
     if (els.infoClose) els.infoClose.addEventListener("click", closeInfo);
     if (els.infoModal) els.infoModal.addEventListener("click", function (e) { if (e.target === els.infoModal) closeInfo(); });
@@ -308,7 +327,7 @@
     chipLabel: chipLabel,
     _open: openClub, _back: backToPicker,
     _guess: function (t) { return tryGuess(t, true); },
-    _clear: performClear, _meta: clubMeta,
+    _clear: performClear, _clearAll: performClearAll, _meta: clubMeta,
     _peek: function () {
       return { club: club, teams: TEAMS.length, total: club ? ROSTER[club].length : 0,
         named: club ? Object.keys(named).length : 0, best: club ? getBest(club) : null };

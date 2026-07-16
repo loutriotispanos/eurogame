@@ -1213,6 +1213,19 @@ ok(rmGold === 1, "completed club stays GOLD on the picker even after Clear");
 var rmBadges = 0;
 byId("rm-picker").children.forEach(function (c) { if ((c.innerHTML || "").indexOf("rm-badge") >= 0) rmBadges++; });
 ok(rmBadges === 20, "every club chip carries its colour badge");
+
+console.log("Roster Master — Clear all boards");
+window.RosterMaster._open(RMC);
+ok(window.RosterMaster._peek().named >= 1, "a board has progress before Clear all");
+window.RosterMaster._back();
+window.RosterMaster._clearAll();
+window.RosterMaster._open(RMC);
+var rmCA = window.RosterMaster._peek();
+ok(rmCA.named === 0 && rmCA.best.n >= 2, "Clear all wipes every board — bests survive");
+window.RosterMaster._back();
+var rmGoldAfterAll = 0;
+byId("rm-picker").children.forEach(function (c) { if (c.className && c.className.indexOf("gold") >= 0) rmGoldAfterAll++; });
+ok(rmGoldAfterAll === 1, "gold clubs stay gold after Clear all");
 var rmIni = window.PLAYERS.filter(function (p) { return /^([A-Z]\.){2}/.test(p.name); })[0];
 if (rmIni) {
   window.RosterMaster._open(rmIni.team);
