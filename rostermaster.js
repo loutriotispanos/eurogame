@@ -240,7 +240,12 @@
   }
 
   // --- Navigation --------------------------------------------------------------------
-  function openClub(t) {
+  // picker ⇄ board hops are real history entries, so the browser Back button
+  // walks out of a club board the way the user walked in. `fromHist` skips the
+  // push when the hop IS the history navigation (driven by app.js popstate).
+  function pushNav(state) { try { if (window.history && window.history.pushState) window.history.pushState(state, "", ""); } catch (e) {} }
+  function openClub(t, fromHist) {
+    if (!fromHist) pushNav({ v: "rostermaster", club: t });
     club = t; named = loadBoard(t); bumpBest();          // reconcile best with any pre-existing board
     lsSet(K.open, t);
     disarmClear(); disarmClearAll(); flash("");
@@ -250,7 +255,8 @@
     if (els.input) { els.input.value = ""; if (els.input.focus) els.input.focus(); }
     renderBoard();
   }
-  function backToPicker() {
+  function backToPicker(fromHist) {
+    if (!fromHist && club) pushNav({ v: "rostermaster" });
     saveBoard();
     club = null; lsSet(K.open, null);
     disarmClear(); disarmClearAll(); flash("");
@@ -316,12 +322,17 @@
     renderPicker(); renderSummary();
   }
 
+  var restoredOnce = false;
   window.RosterMaster = {
     onShow: function () {
       if (!inited) return;
-      var last = lsGet(K.open, null);
-      if (last && ROSTER[last]) openClub(last);
-      else { backToPicker(); }
+      if (!restoredOnce) {                       // first show per load: reopen where the user left off
+        restoredOnce = true;
+        var last = lsGet(K.open, null);
+        if (last && ROSTER[last]) openClub(last);
+        else backToPicker(true);
+      } else if (club) { renderBoard(); }        // later shows keep the in-memory state (Back drives the rest)
+      else { renderPicker(); renderSummary(); }
       maybeFirstHelp();
     },
     chipLabel: chipLabel,
