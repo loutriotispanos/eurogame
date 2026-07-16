@@ -1185,6 +1185,7 @@ ok(!!rmUniq, "found a unique-surname player to test");
 ok(window.RosterMaster._guess(rmSur(rmUniq.name)) === "hit", "unique surname alone fills the right slot");
 ok(window.RosterMaster._guess("zz nobody") === "miss", "unknown name → no match");
 ok(window.RosterMaster._peek().named === 2, "two named so far");
+ok(/\(\d+%\)/.test(byId("rm-summary").textContent), "summary line shows the total percentage");
 window.RosterMaster._back();
 window.RosterMaster._open(RMC);
 ok(window.RosterMaster._peek().named === 2, "progress persists across close + reopen");

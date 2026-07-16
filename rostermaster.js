@@ -187,9 +187,16 @@
 
   function renderSummary() {
     if (!els.summary) return;
-    var total = 0, full = 0;
-    TEAMS.forEach(function (t) { var n = savedCount(t); total += n; if (n >= ROSTER[t].length) full++; });
-    els.summary.textContent = "Named " + total + "/" + TOTAL + " · Clubs complete " + full + "/" + TEAMS.length;
+    var total = 0, bestTotal = 0, full = 0;
+    TEAMS.forEach(function (t) {
+      var n = savedCount(t); total += n;
+      bestTotal += Math.min(getBest(t).n, ROSTER[t].length);
+      if (n >= ROSTER[t].length) full++;
+    });
+    var pcNow = Math.round(100 * total / TOTAL), pcBest = Math.round(100 * bestTotal / TOTAL);
+    els.summary.textContent = "Named " + total + "/" + TOTAL + " (" + pcNow + "%)" +
+      (pcBest > pcNow ? " · Best " + pcBest + "%" : "") +
+      " · Clubs complete " + full + "/" + TEAMS.length;
   }
   function everGold(t) { return getBest(t).n >= ROSTER[t].length && ROSTER[t].length > 0; }
   function renderPicker() {
