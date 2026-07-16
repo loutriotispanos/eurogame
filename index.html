@@ -6,6 +6,8 @@
 <link rel="manifest" href="manifest.webmanifest" />
 <meta name="theme-color" content="#f7f3ea" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
+<!-- Night mode: set the saved (or OS-preferred) theme BEFORE first paint to avoid a flash. -->
+<script>(function(){try{var t=localStorage.getItem("elg:theme");if(t)t=JSON.parse(t);if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="EuroGuess" />
 <link rel="apple-touch-icon" href="icon-192.png" />
@@ -65,6 +67,10 @@
     --label: 700 11px/1 var(--font-sans);      /* small-caps section labels */
     /* almost everything is square; pills are reserved for buttons */
     --r: 4px;
+    /* Complete-the-Five court wood (overridden in night mode) */
+    --court-a: #f0e3c6;
+    --court-b: #e7d4ad;
+    color-scheme: light;
   }
 
   * { box-sizing: border-box; }
@@ -288,6 +294,15 @@
   .icon-btn:hover { border-color: var(--ink); }
   .icon-btn.left { left: 14px; right: auto; }
   .icon-btn.stats { right: 54px; }
+  #theme-btn { left: 52px; }                  /* sits beside Home on a game view */
+  body.view-home #theme-btn { left: 14px; }   /* Home button is hidden here → take the corner */
+  /* sun ⇄ moon: the sun spins out + the moon spins in when the theme flips */
+  #theme-btn .tt { overflow: visible; }
+  .tt-sun, .tt-moon { transition: opacity .3s ease, transform .5s cubic-bezier(.5,1.5,.4,1); transform-box: fill-box; transform-origin: center; }
+  .tt-sun  { opacity: 1; transform: none; }
+  .tt-moon { opacity: 0; transform: rotate(-50deg) scale(.3); }
+  [data-theme="dark"] .tt-sun  { opacity: 0; transform: rotate(50deg) scale(.3); }
+  [data-theme="dark"] .tt-moon { opacity: 1; transform: none; }
 
   .modal-overlay {
     position: fixed; inset: 0; z-index: 50;
@@ -383,6 +398,70 @@
   body.view-thegrid      { --accent: #3767b4; --accent-2: #2d569a; }
   body.view-clubreveal   { --accent: #a94456; --accent-2: #903a49; }
   body.view-pathbetween  { --accent: #0f6f8f; --accent-2: #0c5c77; }
+  body.view-oddoneout    { --accent: #9a3f7d; --accent-2: #82356a; }
+
+  /* ============ NIGHT MODE ============================================== */
+  /* Warm "dark newsprint": near-black warm paper, off-white ink, hairlines
+     kept, accents brightened for contrast. Toggled via <html data-theme>. */
+  :root[data-theme="dark"] {
+    --paper: #15120c;      /* deep warm base */
+    --paper-2: #2c2618;    /* inset / hover — clearly lifted off paper */
+    --card: #241f16;       /* card surface — a clear step above paper (kills the mud) */
+    --ink: #e6dfd0;        /* off-white, not pure white — avoids halation (NYT/Material) */
+    --muted: #a29881;
+    --rule: #4a4133;       /* hairline — now actually readable on dark (~ Wordle #3a3a3c) */
+    --rule-strong: #897f6b;/* masthead double-rule — defined, not glaring */
+    --green: #538d4e; --yellow: #b59f3b; --grey: #443c2f;   /* Wordle dark-board greens/golds — muted, not neon */
+    --accent: #cf7b41; --accent-2: #b56d33;                 /* desaturated ~20% for dark (Material) */
+    --court-a: #2a2017; --court-b: #19130c;
+    color-scheme: dark;
+  }
+  :root[data-theme="dark"] body.view-playerid     { --accent: #2aa190; --accent-2: #228b7c; }
+  :root[data-theme="dark"] body.view-completefive { --accent: #cfab41; --accent-2: #b6942f; }
+  :root[data-theme="dark"] body.view-connections  { --accent: #a583d8; --accent-2: #9270c4; }
+  :root[data-theme="dark"] body.view-careerorder  { --accent: #6bae73; --accent-2: #57985f; }
+  :root[data-theme="dark"] body.view-thegrid      { --accent: #6f96da; --accent-2: #5b82c6; }
+  :root[data-theme="dark"] body.view-clubreveal   { --accent: #d4738a; --accent-2: #c05a72; }
+  :root[data-theme="dark"] body.view-pathbetween  { --accent: #3ba2c1; --accent-2: #2d8ba8; }
+  :root[data-theme="dark"] body.view-oddoneout    { --accent: #c46da8; --accent-2: #b0578f; }
+  /* hardcoded light surfaces that tokens don't reach */
+  [data-theme="dark"] .option + .option { border-top-color: var(--rule); }
+  [data-theme="dark"] button { border-color: #4a4234; }
+  [data-theme="dark"] .share-btn.alt { border-color: #4a4234; }
+  [data-theme="dark"] #new-game:hover, [data-theme="dark"] #pid-next:hover, [data-theme="dark"] #c5-next:hover,
+  [data-theme="dark"] #cv-next:hover, [data-theme="dark"] #pb-next:hover, [data-theme="dark"] #co-check:hover:not(:disabled),
+  [data-theme="dark"] .cn-actions .cn-primary:hover:not(:disabled), [data-theme="dark"] .banner-actions button:hover,
+  [data-theme="dark"] .share-btn:hover { background: #ece0c8; border-color: #ece0c8; }
+  /* dim the light "ink" pills so they don't glare; soften the strong structural rules */
+  [data-theme="dark"] #new-game, [data-theme="dark"] #pid-next, [data-theme="dark"] #c5-next,
+  [data-theme="dark"] #cv-next, [data-theme="dark"] #pb-next, [data-theme="dark"] #co-check,
+  [data-theme="dark"] .cn-actions .cn-primary, [data-theme="dark"] .banner-actions button { background: #d9ceb7; border-color: #d9ceb7; }
+  [data-theme="dark"] .stat { border-top-color: #6f6656; }
+  [data-theme="dark"] .gr-head { border-color: #6f6656; }
+  /* mute the loud Connections group-bars (kept colourful, just not neon) */
+  [data-theme="dark"] .cn-l1 { background: #cba14a; }
+  [data-theme="dark"] .cn-l2 { background: #6ba572; }
+  [data-theme="dark"] .cn-l3 { background: #6b92c6; }
+  [data-theme="dark"] .cn-l4 { background: #9f7ec6; }
+  /* elevation: floating surfaces sit a step lighter than cards (Material dark) */
+  [data-theme="dark"] .modal, [data-theme="dark"] .dropdown, [data-theme="dark"] .toast,
+  [data-theme="dark"] .challenge-note { background: #322b1d; }
+  [data-theme="dark"] .game-card:hover,
+  [data-theme="dark"] .oo-tile:hover,
+  [data-theme="dark"] .co-row.co-dragging { background: #322c1e; }
+  [data-theme="dark"] .cn-tile { background: #2e2820; }
+  [data-theme="dark"] .cn-tile:hover { background: #383022; }
+  [data-theme="dark"] .oo-tile.correct { background: #1d2a1e; border-color: #538d4e; box-shadow: inset 0 0 0 1px #538d4e; }
+  [data-theme="dark"] .oo-tile.wrong { background: #2c1c1b; border-color: #b0574f; box-shadow: inset 0 0 0 1px #b0574f; }
+  [data-theme="dark"] .oo-reveal.ok { background: #19231a; border-color: #538d4e; }
+  [data-theme="dark"] .oo-reveal.miss { background: #251a18; border-color: #b0574f; }
+  [data-theme="dark"] .oo-pip.ok { background: #538d4e; border-color: #538d4e; }
+  [data-theme="dark"] .oo-pip.miss { background: #b0574f; border-color: #b0574f; }
+  [data-theme="dark"] .gr-cell.tried:not(.sel):not(.filled) { border-color: #a3564f; background: #251a18; }
+  [data-theme="dark"] .gr-cell.filled { background: #19231a; }
+  [data-theme="dark"] .pid-wrong { color: #e0a196; }
+  [data-theme="dark"] .co-row.co-wrong { border-color: #8f544c; }
+  [data-theme="dark"] .c5-pos { color: #b6a07e; }
 
   .home-header { margin-top: 18px; }
   #home-view { flex: 1; min-height: 0; }
@@ -431,10 +510,11 @@
   .game-card[data-game="thegrid"]      { --gc: #3767b4; }
   .game-card[data-game="clubreveal"]   { --gc: #a94456; }
   .game-card[data-game="pathbetween"]  { --gc: #0f6f8f; }
+  .game-card[data-game="oddoneout"]    { --gc: #9a3f7d; }
   .game-card:hover { border-color: var(--gc); background: #fffef9; }
   .game-card:active { transform: translateY(1px); }
   .gc-ico svg, .h1-ico svg, .icon-btn svg, .hub-streak svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-  .gc-ico svg [data-fill], .h1-ico svg [data-fill] { fill: currentColor; stroke: none; }
+  .gc-ico svg [data-fill], .h1-ico svg [data-fill], .icon-btn svg [data-fill] { fill: currentColor; stroke: none; }
   .icon-btn svg { width: 18px; height: 18px; display: block; }
   .gc-ico { flex: none; color: var(--gc); }
   .gc-ico svg { width: 34px; height: 34px; display: block; }
@@ -474,7 +554,7 @@
     border: 1px solid var(--rule); border-radius: var(--r); overflow: hidden;
     background:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 120' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23875a1f' stroke-opacity='0.38' stroke-width='1'%3E%3Cpath d='M12 120 L12 82 A38 44 0 0 1 88 82 L88 120'/%3E%3Crect x='36' y='80' width='28' height='40'/%3E%3Ccircle cx='50' cy='80' r='11'/%3E%3Cpath d='M44 114 L56 114'/%3E%3Ccircle cx='50' cy='111' r='2.6'/%3E%3Cpath d='M40 0 A11 11 0 0 0 62 0'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat,
-      linear-gradient(180deg, #f0e3c6, #e7d4ad);
+      linear-gradient(180deg, var(--court-a), var(--court-b));
   }
   .c5-slot { position: absolute; transform: translate(-50%, -50%); width: 84px; text-align: center; }
   .c5-pos { font: var(--label); font-size: 10px; letter-spacing: 1.2px; color: #7c6a49; }
@@ -523,6 +603,30 @@
   .cn-mist-lbl { font-size: 12px; }
   .cn-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ink); }
   .cn-dot.used { background: var(--grey); }
+
+  /* Odd One Out */
+  .oo-pips { display: flex; justify-content: center; gap: 9px; margin: 12px auto 2px; }
+  .oo-pip { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--rule); background: transparent; }
+  .oo-pip.now { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,0,0,.05); }
+  .oo-pip.ok { background: #3f7d4f; border-color: #3f7d4f; }
+  .oo-pip.miss { background: #b0473f; border-color: #b0473f; }
+  .oo-tiles { max-width: 520px; width: 100%; margin: 14px auto 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .oo-tile {
+    min-height: 74px; display: flex; align-items: center; justify-content: center; text-align: center;
+    padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; background: var(--card);
+    color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: clamp(14px, 3.3vw, 18px); line-height: 1.15;
+    cursor: pointer; word-break: break-word; transition: transform .06s, background .12s, border-color .12s;
+  }
+  .oo-tile:hover { border-color: var(--accent); background: #fffef9; }
+  .oo-tile:active { transform: translateY(1px); }
+  .oo-tile:disabled { cursor: default; }
+  .oo-tile.correct { background: #e6f0e6; border-color: #3f7d4f; box-shadow: inset 0 0 0 1px #3f7d4f; }
+  .oo-tile.wrong { background: #f4e2e0; border-color: #b0473f; box-shadow: inset 0 0 0 1px #b0473f; }
+  .oo-tile.dim { opacity: .48; }
+  .oo-reveal { max-width: 520px; margin: 14px auto 0; padding: 11px 14px; border-radius: 8px; font-size: 14.5px; line-height: 1.5; border: 1px solid var(--rule); background: var(--card); }
+  .oo-reveal.ok { border-color: #3f7d4f; background: #eef5ee; }
+  .oo-reveal.miss { border-color: #b0473f; background: #f7ece9; }
+  @media (max-width: 380px) { .oo-tiles { grid-template-columns: 1fr; } }
   .cn-actions { max-width: 560px; margin: 14px auto 0; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   .cn-actions button { padding: 9px 18px; }
   .cn-key { margin: 6px 0; padding: 0; list-style: none; }
@@ -618,6 +722,7 @@
   @media (prefers-reduced-motion: reduce) {
     .cell.flip { animation: none; }
     .banner, .modal, .modal-overlay, .toast, .dropdown, .cv-row { animation: none; }
+    .tt-sun, .tt-moon { transition: none; }
     .confetti span { animation-duration: .01ms; }
   }
 
@@ -713,6 +818,12 @@
       <circle cx="19" cy="5.5" r="2.3"/>
       <path d="M6.8 16.6 C10.5 13.5 7.5 10.5 11 8.8 C13.8 7.4 15.2 8.6 17.2 7"/>
     </symbol>
+    <symbol id="ico-oddoneout" viewBox="0 0 24 24">
+      <circle cx="7.6" cy="7.6" r="3"/>
+      <circle cx="16.4" cy="7.6" r="3"/>
+      <circle cx="7.6" cy="16.4" r="3"/>
+      <rect x="13.2" y="13.2" width="6.4" height="6.4" rx="1.3" data-fill="1"/>
+    </symbol>
     <symbol id="ico-flame" viewBox="0 0 24 24">
       <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
     </symbol>
@@ -722,6 +833,7 @@
   </defs></svg>
 
   <button id="home-btn" class="icon-btn left" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><use href="#ico-home"/></svg></button>
+  <button id="theme-btn" class="icon-btn left theme" type="button" aria-label="Switch to night mode" title="Night mode"><svg viewBox="0 0 24 24" class="tt" aria-hidden="true"><g class="tt-sun"><circle cx="12" cy="12" r="4.5"/><g class="tt-rays"><line x1="12" y1="1.7" x2="12" y2="4.1"/><line x1="12" y1="19.9" x2="12" y2="22.3"/><line x1="1.7" y1="12" x2="4.1" y2="12"/><line x1="19.9" y1="12" x2="22.3" y2="12"/><line x1="4.6" y1="4.6" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.7" y2="6.3"/><line x1="6.3" y1="17.7" x2="4.6" y2="19.4"/></g></g><path class="tt-moon" data-fill="1" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
 
   <!-- ===== HOME HUB ===== -->
   <div id="home-view" class="view">
@@ -779,6 +891,12 @@
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-pathbetween"/></svg></span>
         <span class="gc-text"><span class="gc-title">Path Between</span>
           <span class="gc-desc">Two players, one hidden chain — connect them through shared teammates in as few steps as possible.</span></span>
+        <span class="gc-daily" hidden></span>
+      </button>
+      <button class="game-card" type="button" data-game="oddoneout">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-oddoneout"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Odd One Out</span>
+          <span class="gc-desc">Four names, three belong together, one doesn't — spot the intruder. Five a day, or play on.</span></span>
         <span class="gc-daily" hidden></span>
       </button>
     </div>
@@ -1079,6 +1197,31 @@
     </div>
   </div><!-- /pathbetween-view -->
 
+  <!-- ===== GAME 9: ODD ONE OUT ===== -->
+  <div id="oddoneout-view" class="view" hidden>
+    <header>
+      <button id="oo-info-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">i</button>
+      <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-oddoneout"/></svg></span><span><span class="accent">Odd</span> One Out</span></h1>
+      <div class="tagline">Three of four belong together — tap the intruder</div>
+    </header>
+    <div class="app">
+      <div class="modes" id="oo-modes" role="tablist" aria-label="Game mode">
+        <button id="oo-daily" type="button" role="tab" aria-selected="true" tabindex="0">Daily</button>
+        <button id="oo-practice" type="button" role="tab" aria-selected="false" tabindex="-1">Practice</button>
+      </div>
+      <div id="oo-stats" class="pid-stats"></div>
+      <div id="oo-pips" class="oo-pips"></div>
+      <div id="oo-counter" class="counter" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div id="oo-sr" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div id="oo-tiles" class="oo-tiles" aria-label="Four names — tap the one that does not belong"></div>
+      <div id="oo-reveal" class="oo-reveal" role="status" aria-live="polite" hidden></div>
+      <div id="oo-banner" class="banner" hidden></div>
+      <div class="cn-actions">
+        <button id="oo-next" type="button" class="cn-primary" hidden>Next round</button>
+      </div>
+    </div>
+  </div><!-- /oddoneout-view -->
+
   <div id="pb-info-modal" class="modal-overlay" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Path Between" tabindex="-1">
       <button id="pb-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
@@ -1096,6 +1239,24 @@
         <li><strong>Easy / Medium / Hard</strong> — one, two or three players stand between the pair.</li>
       </ul>
       <p class="modal-note">Teammates are judged by the careers we store — the same well-travelled pool as The Grid — so a real-life teammate outside this data won't count.</p>
+    </div>
+  </div>
+
+  <div id="oo-info-modal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Odd One Out" tabindex="-1">
+      <button id="oo-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
+      <h2>How to play</h2>
+      <p>Four EuroLeague names. <strong>Three</strong> of them share one thing — a club they all played for, a nationality, a jersey number, or a Final Four starting five. <strong>One doesn't.</strong> Tap the odd one out.</p>
+      <ul>
+        <li>Every round has <strong>exactly one</strong> defensible answer — whichever connection you spot, it points to the same intruder.</li>
+        <li>After you tap, the shared connection is revealed.</li>
+      </ul>
+      <h3>Game modes</h3>
+      <ul>
+        <li><strong>Daily</strong> — five rounds, the same for everyone. Four or more right = solved. Keeps your hub streak alive.</li>
+        <li><strong>Practice</strong> — endless rounds; chase your best streak.</li>
+      </ul>
+      <p class="modal-note">Facts are judged by the data we store — players, careers and Final Four lineups — the same pool as Connections.</p>
     </div>
   </div>
 
@@ -1294,6 +1455,7 @@
   <script src="careers.js"></script>
   <script src="lineups.js"></script>
   <script src="puzzles.js"></script>
+  <script src="oddones.js"></script>
   <script src="game.js"></script>
   <script src="playerid.js"></script>
   <script src="completefive.js"></script>
@@ -1304,6 +1466,7 @@
   <script src="clubreveal.js"></script>
   <script src="paths.js"></script>
   <script src="pathbetween.js"></script>
+  <script src="oddoneout.js"></script>
   <script src="app.js"></script>
   <script>
     /* Register the offline service worker (only runs over https / localhost). */

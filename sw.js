@@ -8,10 +8,10 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v54";  /* Roster cross-check COMPLETE (all 20 teams) — teams 13-20: -7 removed (Keenan Evans, Netzipoglou, Richaun Holmes, Kouzeloglou, Lauvergne, Mady Sissoko, Yago dos Santos), +2 added (Frank Ntilikina & Moustapha Fall, both Olympiacos, researched careers). Positions all kept as ours; user skip-lists honoured; Yurtseven kept per user. players 298->293, careers 418->413. Regenerated paths/grids/puzzles */
+var CACHE = "elg-v56";  /* Night mode — global light/dark toggle (top-left, #theme-btn). Warm "dark newsprint" palette via <html data-theme=dark>: core tokens overridden + per-game accents brightened + targeted overrides for hardcoded surfaces (tiles, win/lose tints, court). Persisted to elg:theme; OS prefers-color-scheme is the first-run default (inline head script applies it pre-paint to avoid flash). Also: Odd One Out (game 9, v55) — 4 names/tap the intruder, Daily+Practice, oddones.js from build_oddoneout.js, memorable-number curation. */
 var ASSETS = [
-  "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js",
-  "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "app.js",
+  "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "oddones.js", "grids.js", "paths.js",
+  "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "oddoneout.js", "app.js",
   "manifest.webmanifest", "icon-192.png", "icon-512.png"
 ];
 

@@ -42,7 +42,7 @@ El.prototype.focus = function () { doc.activeElement = this; };
 var byKey = {};
 function mk(key) { var e = new El("stub"); e.id = key; byKey[key] = e; return e; }
 var doc = {
-  readyState: "complete", activeElement: null, hidden: false, body: new El("body"),
+  readyState: "complete", activeElement: null, hidden: false, body: new El("body"), documentElement: new El("html"),
   _listeners: {},
   getElementById: function (id) { return byKey[id] || mk(id); },
   querySelector: function (sel) { return byKey["sel:" + sel] || mk("sel:" + sel); },
@@ -50,7 +50,7 @@ var doc = {
   createElement: function (tag) { return new El(tag); },
   addEventListener: function (t, fn) { (doc._listeners[t] = doc._listeners[t] || []).push(fn); }
 };
-["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
+["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal", "oo-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
 
 var store = {}, captured = "", reduceMotion = false;
 var win = {
@@ -76,6 +76,7 @@ eval(fs.readFileSync("legends.js", "utf8"));
 eval(fs.readFileSync("careers.js", "utf8"));
 eval(fs.readFileSync("lineups.js", "utf8"));
 eval(fs.readFileSync("puzzles.js", "utf8"));
+eval(fs.readFileSync("oddones.js", "utf8"));
 eval(fs.readFileSync("game.js", "utf8"));
 eval(fs.readFileSync("playerid.js", "utf8"));
 eval(fs.readFileSync("completefive.js", "utf8"));
@@ -86,6 +87,7 @@ eval(fs.readFileSync("thegrid.js", "utf8"));
 eval(fs.readFileSync("clubreveal.js", "utf8"));
 eval(fs.readFileSync("paths.js", "utf8"));
 eval(fs.readFileSync("pathbetween.js", "utf8"));
+eval(fs.readFileSync("oddoneout.js", "utf8"));
 win.__ELG_NO_WIRE__ = true;   // drive window.Hub directly; skip app.js DOM wiring
 eval(fs.readFileSync("app.js", "utf8"));
 
@@ -1019,11 +1021,89 @@ ok(byId("pb-info-modal").hidden === false, "info button re-opens it manually");
 fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
 ok(byId("pb-info-modal").hidden === true, "Escape closes it");
 
+console.log("oddones data (Odd One Out)");
+ok(window.ODDONES && window.ODDONES.length >= 40, "odd-one-out rounds loaded (" + (window.ODDONES || []).length + ")");
+ok(window.ODDONES.every(function (r) { return r.names.length === 4 && r.names.indexOf(r.odd) >= 0; }), "every round has 4 names incl. the odd one");
+ok(window.ODDONES.every(function (r) { var s = {}; return r.names.every(function (n) { if (s[n]) return false; s[n] = 1; return true; }); }), "every round has 4 distinct names");
+ok(window.ODDONES.every(function (r) { return r.theme && r.axis; }), "every round has a theme + axis");
+(function () {   // re-verify the whole fairness guarantee: the odd one must be uniquely determined
+  var PROF = {}; window.PLAYERS.concat(window.LEGENDS).forEach(function (p) { if (!PROF[p.name]) PROF[p.name] = p; });
+  var CB = {}; window.CAREERS.forEach(function (c) { CB[c.name] = c; });
+  var LU = window.LINEUPS;
+  function playedFor(n, c) { var x = CB[n]; return !!(x && x.career.some(function (e) { return e.team === c; })); }
+  function clubsOf(n) { var x = CB[n], s = {}, o = []; if (!x) return o; x.career.forEach(function (e) { if (!s[e.team]) { s[e.team] = 1; o.push(e.team); } }); return o; }
+  function inFive(n, L) { return L.five.some(function (p) { return p.name === n; }); }
+  function dec(n) { return PROF[n] ? Math.floor(PROF[n].birthYear / 10) * 10 : null; }
+  function exVal(S, f) { var by = {}; S.forEach(function (n) { var k = f(n); if (k == null) return; (by[k] = by[k] || []).push(n); }); var o = []; Object.keys(by).forEach(function (k) { if (by[k].length === 3) o.push(S.filter(function (n) { return by[k].indexOf(n) < 0; })[0]); }); return o; }
+  function exMem(S, m) { var i = S.filter(m); return i.length === 3 ? [S.filter(function (n) { return i.indexOf(n) < 0; })[0]] : []; }
+  function allEx(S) {
+    var e = exVal(S, function (n) { return PROF[n].nationality; }).concat(exVal(S, function (n) { return PROF[n].position; }), exVal(S, function (n) { return dec(n); }), exVal(S, function (n) { return PROF[n].number; }));
+    var cs = {}; S.forEach(function (n) { clubsOf(n).forEach(function (c) { cs[c] = 1; }); });
+    Object.keys(cs).forEach(function (c) { e = e.concat(exMem(S, function (n) { return playedFor(n, c); })); });
+    LU.forEach(function (L) { e = e.concat(exMem(S, function (n) { return inFive(n, L); })); });
+    return e;
+  }
+  ok(window.ODDONES.every(function (r) { return r.names.every(function (n) { return PROF[n] && CB[n]; }); }), "every name has a full profile + career (facts verifiable)");
+  var bad = 0;
+  window.ODDONES.forEach(function (r) { var ex = allEx(r.names); if (!(ex.length > 0 && ex.every(function (n) { return n === r.odd; }))) bad++; });
+  ok(bad === 0, "every round's odd one is uniquely determined (no ambiguity)");
+})();
+
+console.log("Odd One Out game — Practice");
+delete store["elg:oo:stats"];
+window.OddOneOut._setMode("practice");
+var oo = window.OddOneOut._peek();
+ok(oo.mode === "practice" && oo.over === false && oo.revealed === false && oo.round, "practice round dealt");
+window.OddOneOut._pick(oo.round.odd);
+var oow = window.OddOneOut._peek();
+ok(oow.revealed === true && oow.won === true && oow.results[0] === true, "tapping the odd one reveals the reason (round won)");
+ok(byId("oo-reveal").hidden === false && byId("oo-reveal").innerHTML.indexOf(oo.round.odd) >= 0, "correct pick shows the connection");
+ok(JSON.parse(store["elg:oo:stats"]).correct >= 1, "practice correct recorded");
+window.OddOneOut._deal();
+var oo2 = window.OddOneOut._peek();
+var ooWrong = oo2.round.names.filter(function (n) { return n !== oo2.round.odd; })[0];
+window.OddOneOut._pick(ooWrong);
+var ool = window.OddOneOut._peek();
+ok(ool.results[0] === false && ool.won === false && ool.revealed === true, "tapping a belonger loses the round");
+ok(byId("oo-reveal").hidden === false && byId("oo-reveal").innerHTML.indexOf(oo2.round.odd) >= 0, "WRONG practice pick still shows the reason (the connection)");
+
+console.log("Odd One Out — Daily");
+function ooTodayKey() { var d = new Date(); function p(n) { return n < 10 ? "0" + n : "" + n; } return "elg:oo:daily:" + d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
+delete store["elg:oo:dstats"]; delete store[ooTodayKey()];
+window.OddOneOut._setMode("daily");
+var od = window.OddOneOut._peek();
+ok(od.mode === "daily" && od.over === false && od.results.length === 0, "Daily starts at round 1 of 5");
+for (var ooI = 0; ooI < 5; ooI++) { var opk = window.OddOneOut._peek(); window.OddOneOut._pick(opk.round.odd); window.OddOneOut._next(); }
+var odf = window.OddOneOut._peek();
+ok(odf.over === true && odf.won === true && odf.results.length === 5, "playing all five perfectly wins the Daily");
+ok(JSON.parse(store[ooTodayKey()]).done === true, "Daily saved as done (feeds hub streak)");
+ok(JSON.parse(store["elg:oo:dstats"]).solved >= 1, "Daily solve recorded");
+window.OddOneOut._setMode("practice");
+window.OddOneOut._setMode("daily");
+ok(window.OddOneOut._peek().over === true, "returning to Daily restores the finished round");
+
+console.log("Odd One Out — hooks + how-to modal");
+window.OddOneOut.goPractice();
+ok(window.OddOneOut._peek().mode === "practice", "goPractice → practice");
+window.OddOneOut.goDaily();
+ok(window.OddOneOut._peek().mode === "daily", "goDaily → daily");
+delete store["elg:oo:seenhelp"];
+window.OddOneOut.onShow();
+ok(byId("oo-info-modal").hidden === false, "first onShow auto-opens the how-to");
+fire(byId("oo-info-close"), "click");
+window.OddOneOut.onShow();
+ok(byId("oo-info-modal").hidden === true, "second onShow stays quiet");
+fire(byId("oo-info-btn"), "click");
+ok(byId("oo-info-modal").hidden === false, "info button re-opens it manually");
+fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
+ok(byId("oo-info-modal").hidden === true, "Escape closes it");
+delete store[ooTodayKey()];   // don't leak a finished daily into the hub-streak block
+
 console.log("hub streak (unified, all games)");
 function hpad(n) { return n < 10 ? "0" + n : "" + n; }
 function hdate(off) { var d = new Date(); d.setDate(d.getDate() - off); return d.getFullYear() + "-" + hpad(d.getMonth() + 1) + "-" + hpad(d.getDate()); }
 var HTODAY = hdate(0), HY = hdate(1), HY2 = hdate(2), HY3 = hdate(3);
-var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:", "elg:pb:daily:"];
+var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:", "elg:pb:daily:", "elg:oo:daily:"];
 function clearToday() { DAILY_PREFIXES.forEach(function (p) { delete store[p + HTODAY]; }); }
 function markDoneToday() { store["elg:gr:daily:" + HTODAY] = JSON.stringify({ puzzle: 0, done: true, won: true }); }
 clearToday();
@@ -1056,6 +1136,18 @@ ok(window.Hub._info().cur === 0, "a lapsed streak shows 0 until you play again")
 clearToday();
 store["elg:cv:daily:" + HTODAY] = JSON.stringify({ club: "x", revealed: 3, guesses: [], done: true, won: false });
 ok(window.Hub._isTodayDone() === true, "a finished Club Reveal daily counts toward the hub streak");
+
+console.log("night mode toggle");
+delete store["elg:theme"];
+ok(window.Hub._getTheme() === "light", "defaults to light when nothing saved (OS not dark in harness)");
+window.Hub._toggleTheme();
+ok(store["elg:theme"] === JSON.stringify("dark") && window.Hub._getTheme() === "dark", "toggle → dark, persisted to elg:theme");
+ok(doc.documentElement.getAttribute("data-theme") === "dark", "dark theme applied to <html data-theme>");
+window.Hub._toggleTheme();
+ok(window.Hub._getTheme() === "light" && doc.documentElement.getAttribute("data-theme") === "light", "toggle again → back to light");
+window.Hub._applyTheme("dark");
+ok(byId("theme-btn").getAttribute("aria-label") === "Switch to day mode", "toggle button label reflects the switch target");
+window.Hub._applyTheme("light");
 
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);
