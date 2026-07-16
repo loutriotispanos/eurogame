@@ -5,8 +5,8 @@
   "use strict";
   function $(id) { return document.getElementById(id); }
 
-  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout"];
-  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view") };
+  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"];
+  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view"), higherlower: $("higherlower-view"), rostermaster: $("rostermaster-view") };
 
   // mode: "practice" | "daily" (force a mode) | undefined (plain open → resume last mode)
   function showView(name, mode) {
@@ -14,7 +14,7 @@
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
     if (name === "home") { refreshDailyChips(); renderHubStreak(); layoutHome(); }   // state may have changed while playing
-    var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : null;
+    var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : null;
     if (api) {
       if (mode === "daily" && api.goDaily) api.goDaily();
       else if (mode === "practice" && api.goPractice) api.goPractice();
@@ -73,7 +73,7 @@
 
   // --- Per-tile daily status --------------------------------------------------
   // Each game stores its daily under a per-game key; the hub only peeks.
-  var DAILY_KEY = { mystery: "elg:daily:", playerid: "elg:pid:daily:", completefive: "elg:c5:daily:", connections: "elg:cn:daily:", careerorder: "elg:co:daily:", thegrid: "elg:gr:daily:", clubreveal: "elg:cv:daily:", pathbetween: "elg:pb:daily:", oddoneout: "elg:oo:daily:" };
+  var DAILY_KEY = { mystery: "elg:daily:", playerid: "elg:pid:daily:", completefive: "elg:c5:daily:", connections: "elg:cn:daily:", careerorder: "elg:co:daily:", thegrid: "elg:gr:daily:", clubreveal: "elg:cv:daily:", pathbetween: "elg:pb:daily:", oddoneout: "elg:oo:daily:", higherlower: "elg:hl:daily:" };
   function dailyState(game) {           // "ready" | "playing" (started, not done) | "won" | "lost"
     var v = lsGet(DAILY_KEY[game] + todayStr(), null);
     if (!v) return "ready";
@@ -84,7 +84,17 @@
     Array.prototype.forEach.call(document.querySelectorAll(".game-card"), function (c) {
       var chip = c.querySelector(".gc-daily");
       if (!chip) return;
-      var st = dailyState(c.getAttribute("data-game"));
+      var game = c.getAttribute("data-game");
+      if (game === "rostermaster") {           // completion board, not a daily — chip shows overall recall
+        var lbl = (window.RosterMaster && window.RosterMaster.chipLabel && window.RosterMaster.chipLabel()) || "";
+        chip.textContent = lbl || "Play";
+        chip.classList.toggle("done", lbl.indexOf("100%") === 0);
+        chip.classList.remove("lost");
+        chip.classList.toggle("playing", !!lbl && lbl.indexOf("100%") !== 0);
+        chip.hidden = false;
+        return;
+      }
+      var st = dailyState(game);
       // NYT-style progress cards: a tile shows where you are and pulls you back to finish.
       chip.textContent = st === "won" ? "✓ Solved" : st === "lost" ? "✗ Missed" : st === "playing" ? "Resume" : "Play";
       chip.classList.toggle("done", st === "won");

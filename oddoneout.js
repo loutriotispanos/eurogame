@@ -208,7 +208,8 @@
     var saved = lsGet(K.daily(todayStr()), null);
     if (saved && saved.results) {
       results = saved.results.slice();
-      if (saved.done || results.length >= PER_DAY) { over = true; won = !!saved.won; clearRound(); round = dayRounds[PER_DAY - 1]; renderTiles(); renderReveal(); renderPips(); renderCounter(); updateButtons(); renderStats(); showBanner(); return; }
+      if (saved.done) { over = true; won = !!saved.won; clearRound(); round = dayRounds[PER_DAY - 1]; renderTiles(); renderReveal(); renderPips(); renderCounter(); updateButtons(); renderStats(); showBanner(); return; }
+      if (results.length >= PER_DAY) { clearRound(); round = dayRounds[PER_DAY - 1]; renderTiles(); renderReveal(); finishDaily(); return; }   // all answered, never clicked "See results"
     }
     dealDailyRound(); renderStats();
   }
