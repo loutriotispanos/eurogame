@@ -123,7 +123,7 @@ function submitByName(name) {
 
 console.log("data + init");
 ok(window.PLAYERS && window.PLAYERS.length === 293, "293 players loaded");
-ok(window.LEGENDS && window.LEGENDS.length === 172, "172 legends loaded");
+ok(window.LEGENDS && window.LEGENDS.length === 173, "173 legends loaded");
 ok(window.LEGENDS.every(function (p) { return ["Guard", "Forward", "Center"].indexOf(p.position) >= 0; }), "all legend positions valid");
 ok(window.LEGENDS.every(function (p) { return window.TEAMS[p.team]; }), "every legend team resolves in TEAMS");
 ok(window.TEAMS["AS Monaco"] && window.TEAMS["AS Monaco"].country === "France", "AS Monaco counts as France (plays in the French league)");

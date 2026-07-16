@@ -112,6 +112,7 @@ window.LEGENDS = [
   {"name":"Marcus Brown","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":191,"birthYear":1974,"number":0},
   {"name":"Oded Kattash","team":"Maccabi Tel Aviv","nationality":"Israel","position":"Guard","height":194,"birthYear":1974,"number":0},
   {"name":"Jordan Farmar","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":188,"birthYear":1986,"number":1},
+  {"name":"Scottie Wilbekin","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":188,"birthYear":1993,"number":1},
   {"name":"Nikola Vujcic","team":"Maccabi Tel Aviv","nationality":"Croatia","position":"Center","height":211,"birthYear":1978,"number":7},
   {"name":"Anthony Parker","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":198,"birthYear":1975,"number":8},
   {"name":"Sarunas Jasikevicius","team":"Maccabi Tel Aviv","nationality":"Lithuania","position":"Guard","height":194,"birthYear":1976,"number":13},
