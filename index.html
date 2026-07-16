@@ -698,7 +698,9 @@
   .rm-board-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 0 0; }
   .rm-board-head button { padding: 8px 14px; font-size: 12.5px; flex: none; }
   .rm-club { display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-display); font-weight: 700; font-size: clamp(16px, 4vw, 21px); text-align: center; min-width: 0; }
-  #rm-clear.armed { background: #a33d33; border-color: #a33d33; color: #fff; }
+  #rm-clear.armed, #rm-clear-all.armed { background: #a33d33; border-color: #a33d33; color: #fff; }
+  #rm-picker-actions[hidden] { display: none; }
+  #rm-clear-all { padding: 8px 16px; font-size: 12.5px; }
   .rm-flash { text-align: center; font-weight: 700; font-size: 13px; margin: 6px auto 0; min-height: 18px; }
   .rm-flash.ok { color: var(--green); }
   .rm-flash.err { color: #a33d33; }
@@ -1365,6 +1367,9 @@
     <div class="app">
       <div id="rm-summary" class="pid-stats"></div>
       <div id="rm-picker" class="rm-picker" aria-label="Pick a club"></div>
+      <div id="rm-picker-actions" class="cn-actions">
+        <button id="rm-clear-all" type="button">Clear all boards</button>
+      </div>
       <div id="rm-board" class="rm-board" hidden>
         <div class="rm-board-head">
           <button id="rm-back" type="button">← All clubs</button>
@@ -1451,7 +1456,7 @@
         <li>Pick a club — its board shows <strong>empty slots</strong> under Guards, Forwards and Centers, so you always know how many you're missing.</li>
         <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type a name and a match fills its slot instantly. A surname is enough when it's unique on that roster; accents and dots don't matter.</li>
         <li>Your progress <strong>saves automatically</strong>, per club. Come back any time.</li>
-        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card.</li>
+        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card. <em>Clear all boards</em> on the club list does the same for all twenty at once.</li>
         <li>Name a full roster once and that club turns <strong>gold ★ — for good</strong>, even if you clear it. Collect all twenty.</li>
       </ul>
       <p class="modal-note">Rosters are our cross-checked 2025-26 database — the exact squads the other games play by. No daily here; this is the long game.</p>

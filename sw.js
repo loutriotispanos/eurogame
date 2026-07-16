@@ -8,7 +8,7 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v58";  /* Since v56 (live): GAME 10 HIGHER OR LOWER (v57 — two players, taller/older/higher-number, Daily 10 matchups 8+=solved + Endless one-wrong-ends-run; zero data files, reads players+legends) and ROSTER MASTER (v58 — the user's completion board: all 20 cross-checked 2025-26 rosters, name every player from memory into a Guards/Forwards/Centers grid; NO autocomplete, pure recall with forgiving matching; progress auto-saves per club, Clear keeps the best %; hub chip shows overall recall %; saddle-brown accent). Also patched an OOO daily-restore edge. */
+var CACHE = "elg-v59";  /* Roster Master follow-ups + hub navigation: "Clear all boards" on the club picker (two-click armed; bests + gold survive) and browser BACK/FORWARD support for the whole hub — every in-app hop (home↔game, RM picker↔club board) is a pushState entry retraced by a popstate listener; URL stays clean, refresh-to-lobby unchanged. (v58 = Higher or Lower + Roster Master.) */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "oddones.js", "grids.js", "paths.js",
   "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "oddoneout.js", "higherlower.js", "rostermaster.js", "app.js",

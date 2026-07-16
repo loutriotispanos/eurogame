@@ -178,22 +178,38 @@
       try { dl.textContent = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }); }
       catch (e) { dl.textContent = todayStr(); }
     }
+    // Browser back/forward: every in-app navigation pushes a history entry
+    // (URL untouched), so the arrows retrace the user's own path. Games and
+    // Roster Master club boards (which push their own {club} states) included.
+    function pushNav(state) { try { if (window.history && window.history.pushState) window.history.pushState(state, "", ""); } catch (e) {} }
     var cards = document.querySelectorAll(".game-card");
     Array.prototype.forEach.call(cards, function (c) {
       // Plain open: each game resumes its last-used mode (Daily for first-timers).
-      c.addEventListener("click", function () { showView(c.getAttribute("data-game")); });
+      c.addEventListener("click", function () { var v = c.getAttribute("data-game"); pushNav({ v: v }); showView(v); });
     });
     var hb = $("home-btn");
-    if (hb) hb.addEventListener("click", function () { showView("home"); });
+    if (hb) hb.addEventListener("click", function () { pushNav({ v: "home" }); showView("home"); });
     window.addEventListener("resize", layoutHome);   // no-op while a game is open
     window.addEventListener("hashchange", function () { if (hasChallenge()) showView("mystery"); });
+    window.addEventListener("popstate", function (e) {
+      if (hasChallenge()) { showView("mystery"); return; }
+      var st = e.state || { v: "home" };
+      showView(st.v || "home");
+      if (st.v === "rostermaster" && window.RosterMaster) {   // sub-state: picker vs a club board
+        if (st.club) window.RosterMaster._open(st.club, true);
+        else window.RosterMaster._back(true);
+      }
+    });
     var linked = linkedGame();
+    var initial = hasChallenge() ? "mystery" : (linked || "home");
     // A ?game= deep link opens that game ONCE, then we strip it from the URL so a
-    // refresh returns to the lobby (home) instead of re-entering the game.
-    if (linked && !hasChallenge() && window.history && window.history.replaceState) {
-      try { window.history.replaceState(null, "", window.location.pathname); } catch (e) {}
-    }
-    showView(hasChallenge() ? "mystery" : (linked || "home"));
+    // refresh returns to the lobby (home) instead of re-entering the game. The
+    // replaced entry carries the initial view so Back/Forward stay coherent.
+    try {
+      if (window.history && window.history.replaceState)
+        window.history.replaceState({ v: initial }, "", (linked && !hasChallenge()) ? window.location.pathname : "");
+    } catch (e) {}
+    showView(initial);
   }
 
   // Test hooks + programmatic refresh (the headless harness drives these directly).

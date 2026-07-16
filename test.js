@@ -60,7 +60,10 @@ var win = {
   matchMedia: function (q) { return { matches: /reduce/.test(q) ? reduceMotion : false }; },
   // URL stub so challenge links (#c=…) can be built and parsed.
   location: { origin: "https://elg.test", pathname: "/", search: "", hash: "", href: "https://elg.test/" },
-  history: { replaceState: function (s, t, url) { win.location.hash = (typeof url === "string" && url.indexOf("#") >= 0) ? url.slice(url.indexOf("#")) : ""; } },
+  history: {
+    replaceState: function (s, t, url) { win.location.hash = (typeof url === "string" && url.indexOf("#") >= 0) ? url.slice(url.indexOf("#")) : ""; },
+    pushState: function (s) { win._pushedState = s; }
+  },
   localStorage: {
     getItem: function (k) { return k in store ? store[k] : null; },
     setItem: function (k, v) { store[k] = String(v); },
@@ -1170,6 +1173,7 @@ var rmRos = window.PLAYERS.filter(function (p) { return p.team === RMC; });
 window.RosterMaster._open(RMC);
 var rmp = window.RosterMaster._peek();
 ok(rmp.club === RMC && rmp.named === 0 && rmp.total === rmRos.length, "club board opens empty (" + rmRos.length + " slots)");
+ok(win._pushedState && win._pushedState.v === "rostermaster" && win._pushedState.club === RMC, "opening a club pushes a history entry (browser Back works)");
 ok(window.RosterMaster._guess(rmRos[0].name) === "hit", "full name fills a slot");
 ok(window.RosterMaster._guess(rmRos[0].name.toUpperCase()) === "dup", "same player again → already named");
 var rmUniq = null;
@@ -1213,6 +1217,19 @@ ok(rmGold === 1, "completed club stays GOLD on the picker even after Clear");
 var rmBadges = 0;
 byId("rm-picker").children.forEach(function (c) { if ((c.innerHTML || "").indexOf("rm-badge") >= 0) rmBadges++; });
 ok(rmBadges === 20, "every club chip carries its colour badge");
+
+console.log("Roster Master — Clear all boards");
+window.RosterMaster._open(RMC);
+ok(window.RosterMaster._peek().named >= 1, "a board has progress before Clear all");
+window.RosterMaster._back();
+window.RosterMaster._clearAll();
+window.RosterMaster._open(RMC);
+var rmCA = window.RosterMaster._peek();
+ok(rmCA.named === 0 && rmCA.best.n >= 2, "Clear all wipes every board — bests survive");
+window.RosterMaster._back();
+var rmGoldAfterAll = 0;
+byId("rm-picker").children.forEach(function (c) { if (c.className && c.className.indexOf("gold") >= 0) rmGoldAfterAll++; });
+ok(rmGoldAfterAll === 1, "gold clubs stay gold after Clear all");
 var rmIni = window.PLAYERS.filter(function (p) { return /^([A-Z]\.){2}/.test(p.name); })[0];
 if (rmIni) {
   window.RosterMaster._open(rmIni.team);

@@ -166,6 +166,21 @@
     say("Board cleared.");
   }
 
+  // Clear ALL boards from the picker — same contract: bests (and gold) survive.
+  var armedAll = false;
+  function disarmClearAll() { armedAll = false; if (els.clearAll) { els.clearAll.classList.remove("armed"); els.clearAll.textContent = "Clear all boards"; } }
+  function onClearAll() {
+    if (!armedAll) { armedAll = true; els.clearAll.classList.add("armed"); els.clearAll.textContent = "Really clear all " + TEAMS.length + "?"; return; }
+    performClearAll();
+  }
+  function performClearAll() {
+    TEAMS.forEach(function (t) { lsSet(K.board(t), []); });
+    if (club) named = {};
+    disarmClearAll();
+    renderPicker(); renderSummary();
+    say("All boards cleared. Best scores kept.");
+  }
+
   // --- Rendering --------------------------------------------------------------------
   function flash(msg, cls) { if (!els.flash) return; els.flash.textContent = msg || ""; els.flash.className = "rm-flash" + (cls ? " " + cls : ""); }
   function say(msg) { if (els.sr) els.sr.textContent = msg; }
@@ -225,21 +240,29 @@
   }
 
   // --- Navigation --------------------------------------------------------------------
-  function openClub(t) {
+  // picker ⇄ board hops are real history entries, so the browser Back button
+  // walks out of a club board the way the user walked in. `fromHist` skips the
+  // push when the hop IS the history navigation (driven by app.js popstate).
+  function pushNav(state) { try { if (window.history && window.history.pushState) window.history.pushState(state, "", ""); } catch (e) {} }
+  function openClub(t, fromHist) {
+    if (!fromHist) pushNav({ v: "rostermaster", club: t });
     club = t; named = loadBoard(t); bumpBest();          // reconcile best with any pre-existing board
     lsSet(K.open, t);
-    disarmClear(); flash("");
+    disarmClear(); disarmClearAll(); flash("");
     if (els.picker) els.picker.hidden = true;
+    if (els.pickerActions) els.pickerActions.hidden = true;
     if (els.board) els.board.hidden = false;
     if (els.input) { els.input.value = ""; if (els.input.focus) els.input.focus(); }
     renderBoard();
   }
-  function backToPicker() {
+  function backToPicker(fromHist) {
+    if (!fromHist && club) pushNav({ v: "rostermaster" });
     saveBoard();
     club = null; lsSet(K.open, null);
-    disarmClear(); flash("");
+    disarmClear(); disarmClearAll(); flash("");
     if (els.board) els.board.hidden = true;
     if (els.picker) els.picker.hidden = false;
+    if (els.pickerActions) els.pickerActions.hidden = false;
     renderPicker(); renderSummary();
   }
 
@@ -268,7 +291,8 @@
   // --- Init --------------------------------------------------------------------------------
   function init() {
     els.view = $("rostermaster-view"); els.summary = $("rm-summary");
-    els.picker = $("rm-picker"); els.board = $("rm-board");
+    els.picker = $("rm-picker"); els.pickerActions = $("rm-picker-actions"); els.clearAll = $("rm-clear-all");
+    els.board = $("rm-board");
     els.back = $("rm-back"); els.clubName = $("rm-club"); els.clear = $("rm-clear");
     els.progress = $("rm-progress"); els.input = $("rm-input");
     els.flash = $("rm-flash"); els.sr = $("rm-sr"); els.groups = $("rm-groups");
@@ -289,6 +313,7 @@
     }
     if (els.back) els.back.addEventListener("click", backToPicker);
     if (els.clear) els.clear.addEventListener("click", onClear);
+    if (els.clearAll) els.clearAll.addEventListener("click", onClearAll);
     if (els.infoBtn) els.infoBtn.addEventListener("click", openInfo);
     if (els.infoClose) els.infoClose.addEventListener("click", closeInfo);
     if (els.infoModal) els.infoModal.addEventListener("click", function (e) { if (e.target === els.infoModal) closeInfo(); });
@@ -297,18 +322,23 @@
     renderPicker(); renderSummary();
   }
 
+  var restoredOnce = false;
   window.RosterMaster = {
     onShow: function () {
       if (!inited) return;
-      var last = lsGet(K.open, null);
-      if (last && ROSTER[last]) openClub(last);
-      else { backToPicker(); }
+      if (!restoredOnce) {                       // first show per load: reopen where the user left off
+        restoredOnce = true;
+        var last = lsGet(K.open, null);
+        if (last && ROSTER[last]) openClub(last);
+        else backToPicker(true);
+      } else if (club) { renderBoard(); }        // later shows keep the in-memory state (Back drives the rest)
+      else { renderPicker(); renderSummary(); }
       maybeFirstHelp();
     },
     chipLabel: chipLabel,
     _open: openClub, _back: backToPicker,
     _guess: function (t) { return tryGuess(t, true); },
-    _clear: performClear, _meta: clubMeta,
+    _clear: performClear, _clearAll: performClearAll, _meta: clubMeta,
     _peek: function () {
       return { club: club, teams: TEAMS.length, total: club ? ROSTER[club].length : 0,
         named: club ? Object.keys(named).length : 0, best: club ? getBest(club) : null };
