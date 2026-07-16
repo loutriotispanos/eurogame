@@ -50,7 +50,7 @@ var doc = {
   createElement: function (tag) { return new El(tag); },
   addEventListener: function (t, fn) { (doc._listeners[t] = doc._listeners[t] || []).push(fn); }
 };
-["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal", "oo-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
+["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal", "oo-info-modal", "hl-info-modal", "rm-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
 
 var store = {}, captured = "", reduceMotion = false;
 var win = {
@@ -88,6 +88,8 @@ eval(fs.readFileSync("clubreveal.js", "utf8"));
 eval(fs.readFileSync("paths.js", "utf8"));
 eval(fs.readFileSync("pathbetween.js", "utf8"));
 eval(fs.readFileSync("oddoneout.js", "utf8"));
+eval(fs.readFileSync("higherlower.js", "utf8"));
+eval(fs.readFileSync("rostermaster.js", "utf8"));
 win.__ELG_NO_WIRE__ = true;   // drive window.Hub directly; skip app.js DOM wiring
 eval(fs.readFileSync("app.js", "utf8"));
 
@@ -1099,11 +1101,153 @@ fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
 ok(byId("oo-info-modal").hidden === true, "Escape closes it");
 delete store[ooTodayKey()];   // don't leak a finished daily into the hub-streak block
 
+console.log("Higher or Lower — pool + endless");
+(function () {
+  var seen = {}, n = 0;
+  window.PLAYERS.concat(window.LEGENDS).forEach(function (p) {
+    if (seen[p.name]) return; seen[p.name] = 1;
+    if (typeof p.height === "number" && typeof p.birthYear === "number" && typeof p.number === "number") n++;
+  });
+  ok(n >= 100, "fully-profiled pool for all three questions (" + n + ")");
+})();
+function hlWinIdx(m) { return ((m.wins === "higher") === (m.aVal > m.bVal)) ? 0 : 1; }
+delete store["elg:hl:stats"];
+window.HigherLower._setMode("endless");
+var hl = window.HigherLower._peek();
+ok(hl.mode === "endless" && !hl.over && !hl.revealed && hl.matchup !== null, "endless matchup dealt");
+ok(hl.matchup.aVal !== hl.matchup.bVal, "no ties by construction");
+window.HigherLower._pick(hlWinIdx(hl.matchup));
+hl = window.HigherLower._peek();
+ok(hl.revealed && hl.streak === 1 && !hl.over, "correct pick reveals the values + streak 1");
+window.HigherLower._next();
+hl = window.HigherLower._peek();
+ok(!hl.revealed && hl.matchup !== null && hl.streak === 1, "next matchup dealt, streak carried");
+window.HigherLower._pick(1 - hlWinIdx(hl.matchup));
+hl = window.HigherLower._peek();
+ok(hl.over && hl.revealed && hl.won === false, "wrong pick ends the run");
+var hlStats = JSON.parse(store["elg:hl:stats"]);
+ok(hlStats.best >= 1 && hlStats.runs >= 1, "best streak + run recorded");
+
+console.log("Higher or Lower — Daily");
+function hlTodayKey() { var d = new Date(); function p(n) { return n < 10 ? "0" + n : "" + n; } return "elg:hl:daily:" + d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
+delete store["elg:hl:dstats"]; delete store[hlTodayKey()];
+window.HigherLower._setMode("daily");
+var hld = window.HigherLower._peek();
+ok(hld.mode === "daily" && !hld.over && hld.results.length === 0 && hld.matchup !== null, "Daily starts at matchup 1 of 10");
+for (var hlI = 0; hlI < 10; hlI++) { var hp = window.HigherLower._peek(); window.HigherLower._pick(hlWinIdx(hp.matchup)); window.HigherLower._next(); }
+hld = window.HigherLower._peek();
+ok(hld.over === true && hld.won === true && hld.results.length === 10, "ten perfect answers win the Daily");
+ok(JSON.parse(store[hlTodayKey()]).done === true, "Daily saved as done (feeds hub streak)");
+ok(JSON.parse(store["elg:hl:dstats"]).solved >= 1, "Daily solve recorded");
+window.HigherLower._setMode("endless");
+window.HigherLower._setMode("daily");
+ok(window.HigherLower._peek().over === true, "returning to Daily restores the finished state");
+
+console.log("Higher or Lower — hooks + how-to modal");
+window.HigherLower.goPractice();
+ok(window.HigherLower._peek().mode === "endless", "goPractice → endless");
+window.HigherLower.goDaily();
+ok(window.HigherLower._peek().mode === "daily", "goDaily → daily");
+delete store["elg:hl:seenhelp"];
+window.HigherLower.onShow();
+ok(byId("hl-info-modal").hidden === false, "first onShow auto-opens the how-to");
+fire(byId("hl-info-close"), "click");
+window.HigherLower.onShow();
+ok(byId("hl-info-modal").hidden === true, "second onShow stays quiet");
+fire(byId("hl-info-btn"), "click");
+ok(byId("hl-info-modal").hidden === false, "info button re-opens it manually");
+fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
+ok(byId("hl-info-modal").hidden === true, "Escape closes it");
+delete store[hlTodayKey()];   // don't leak a finished daily into the hub-streak block
+
+console.log("Roster Master — clubs + recall matching");
+Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
+function rmSur(n) { var t = n.toLowerCase().replace(/['’]/g, "").replace(/[.\-]/g, " ").replace(/\s+/g, " ").trim().split(" "); var last = t[t.length - 1]; if (["jr", "sr", "ii", "iii", "iv"].indexOf(last) >= 0 && t.length > 1) last = t[t.length - 2]; return last; }
+ok(window.RosterMaster && typeof window.RosterMaster._open === "function", "module exposed");
+ok(window.RosterMaster._peek().teams === 20, "all 20 clubs on the board");
+var RMC = "Olympiacos";
+var rmRos = window.PLAYERS.filter(function (p) { return p.team === RMC; });
+window.RosterMaster._open(RMC);
+var rmp = window.RosterMaster._peek();
+ok(rmp.club === RMC && rmp.named === 0 && rmp.total === rmRos.length, "club board opens empty (" + rmRos.length + " slots)");
+ok(window.RosterMaster._guess(rmRos[0].name) === "hit", "full name fills a slot");
+ok(window.RosterMaster._guess(rmRos[0].name.toUpperCase()) === "dup", "same player again → already named");
+var rmUniq = null;
+for (var rmi = 1; rmi < rmRos.length && !rmUniq; rmi++) {
+  var s0 = rmSur(rmRos[rmi].name);
+  if (rmRos.filter(function (p) { return rmSur(p.name) === s0; }).length === 1) rmUniq = rmRos[rmi];
+}
+ok(!!rmUniq, "found a unique-surname player to test");
+ok(window.RosterMaster._guess(rmSur(rmUniq.name)) === "hit", "unique surname alone fills the right slot");
+ok(window.RosterMaster._guess("zz nobody") === "miss", "unknown name → no match");
+ok(window.RosterMaster._peek().named === 2, "two named so far");
+window.RosterMaster._back();
+window.RosterMaster._open(RMC);
+ok(window.RosterMaster._peek().named === 2, "progress persists across close + reopen");
+window.RosterMaster._clear();
+var rmc2 = window.RosterMaster._peek();
+ok(rmc2.named === 0 && rmc2.best && rmc2.best.n === 2, "Clear wipes the board but best (2) survives");
+ok(window.RosterMaster._guess(rmRos[0].name) === "hit" && window.RosterMaster._peek().best.n === 2, "best only moves when beaten");
+ok(/% named/.test(window.RosterMaster.chipLabel()), "hub chip shows overall recall %");
+
+console.log("Roster Master — badges + gold completion");
+(function () {
+  var teams = {}; window.PLAYERS.forEach(function (p) { teams[p.team] = 1; });
+  var bad = Object.keys(teams).filter(function (t) { var m = window.RosterMaster._meta(t); return !(m.code && m.code.length === 3 && m.bg !== "#6e6656"); });
+  ok(bad.length === 0, "every club has a hand-mapped badge (code + colours)" + (bad.length ? " — missing: " + bad.join(", ") : ""));
+})();
+var rmSmall = null;
+(function () {
+  var teams = {}; window.PLAYERS.forEach(function (p) { (teams[p.team] = teams[p.team] || []).push(p); });
+  Object.keys(teams).forEach(function (t) { if (!rmSmall || teams[t].length < rmSmall.ros.length) rmSmall = { team: t, ros: teams[t] }; });
+})();
+window.RosterMaster._open(rmSmall.team);
+rmSmall.ros.forEach(function (p) { window.RosterMaster._guess(p.name); });
+var rmFull = window.RosterMaster._peek();
+ok(rmFull.named === rmSmall.ros.length && rmFull.best.n === rmSmall.ros.length, "naming a full roster sets best to 100% (" + rmSmall.team + ", " + rmSmall.ros.length + " players)");
+window.RosterMaster._clear();
+window.RosterMaster._back();
+var rmGold = 0;
+byId("rm-picker").children.forEach(function (c) { if (c.className && c.className.indexOf("gold") >= 0) rmGold++; });
+ok(rmGold === 1, "completed club stays GOLD on the picker even after Clear");
+var rmBadges = 0;
+byId("rm-picker").children.forEach(function (c) { if ((c.innerHTML || "").indexOf("rm-badge") >= 0) rmBadges++; });
+ok(rmBadges === 20, "every club chip carries its colour badge");
+var rmIni = window.PLAYERS.filter(function (p) { return /^([A-Z]\.){2}/.test(p.name); })[0];
+if (rmIni) {
+  window.RosterMaster._open(rmIni.team);
+  var rmTyped = rmIni.name.split(" ")[0].replace(/\./g, "") + " " + rmIni.name.split(" ").slice(1).join(" ");
+  ok(window.RosterMaster._guess(rmTyped) === "hit", "initials without dots accepted (" + rmIni.name + " ← " + rmTyped + ")");
+} else ok(true, "no initials-name in pool (skip)");
+var rmAmb = null;
+window.PLAYERS.forEach(function (p) {
+  if (rmAmb) return;
+  var twin = window.PLAYERS.filter(function (q) { return q.team === p.team && rmSur(q.name) === rmSur(p.name); });
+  if (twin.length === 2) rmAmb = { team: p.team, sur: rmSur(p.name) };
+});
+if (rmAmb) {
+  window.RosterMaster._open(rmAmb.team);
+  ok(window.RosterMaster._guess(rmAmb.sur) === "ambiguous", "shared surname asks to be more specific (" + rmAmb.team + ": " + rmAmb.sur + ")");
+} else ok(true, "no shared-surname club in data (skip)");
+
+console.log("Roster Master — how-to modal");
+Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
+window.RosterMaster.onShow();
+ok(byId("rm-info-modal").hidden === false, "first onShow auto-opens the how-to");
+fire(byId("rm-info-close"), "click");
+window.RosterMaster.onShow();
+ok(byId("rm-info-modal").hidden === true, "second onShow stays quiet");
+fire(byId("rm-info-btn"), "click");
+ok(byId("rm-info-modal").hidden === false, "info button re-opens it manually");
+fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
+ok(byId("rm-info-modal").hidden === true, "Escape closes it");
+Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
+
 console.log("hub streak (unified, all games)");
 function hpad(n) { return n < 10 ? "0" + n : "" + n; }
 function hdate(off) { var d = new Date(); d.setDate(d.getDate() - off); return d.getFullYear() + "-" + hpad(d.getMonth() + 1) + "-" + hpad(d.getDate()); }
 var HTODAY = hdate(0), HY = hdate(1), HY2 = hdate(2), HY3 = hdate(3);
-var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:", "elg:pb:daily:", "elg:oo:daily:"];
+var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:", "elg:pb:daily:", "elg:oo:daily:", "elg:hl:daily:"];
 function clearToday() { DAILY_PREFIXES.forEach(function (p) { delete store[p + HTODAY]; }); }
 function markDoneToday() { store["elg:gr:daily:" + HTODAY] = JSON.stringify({ puzzle: 0, done: true, won: true }); }
 clearToday();

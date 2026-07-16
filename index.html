@@ -399,6 +399,8 @@
   body.view-clubreveal   { --accent: #a94456; --accent-2: #903a49; }
   body.view-pathbetween  { --accent: #0f6f8f; --accent-2: #0c5c77; }
   body.view-oddoneout    { --accent: #9a3f7d; --accent-2: #82356a; }
+  body.view-higherlower  { --accent: #6e7b2f; --accent-2: #5c672a; }
+  body.view-rostermaster { --accent: #875327; --accent-2: #714523; }
 
   /* ============ NIGHT MODE ============================================== */
   /* Warm "dark newsprint": near-black warm paper, off-white ink, hairlines
@@ -424,6 +426,8 @@
   :root[data-theme="dark"] body.view-clubreveal   { --accent: #d4738a; --accent-2: #c05a72; }
   :root[data-theme="dark"] body.view-pathbetween  { --accent: #3ba2c1; --accent-2: #2d8ba8; }
   :root[data-theme="dark"] body.view-oddoneout    { --accent: #c46da8; --accent-2: #b0578f; }
+  :root[data-theme="dark"] body.view-higherlower  { --accent: #a8b85e; --accent-2: #97a74e; }
+  :root[data-theme="dark"] body.view-rostermaster { --accent: #c99a62; --accent-2: #b78a52; }
   /* hardcoded light surfaces that tokens don't reach */
   [data-theme="dark"] .option + .option { border-top-color: var(--rule); }
   [data-theme="dark"] button { border-color: #4a4234; }
@@ -448,6 +452,8 @@
   [data-theme="dark"] .challenge-note { background: #322b1d; }
   [data-theme="dark"] .game-card:hover,
   [data-theme="dark"] .oo-tile:hover,
+  [data-theme="dark"] .hl-card:hover,
+  [data-theme="dark"] .rm-chip:hover,
   [data-theme="dark"] .co-row.co-dragging { background: #322c1e; }
   [data-theme="dark"] .cn-tile { background: #2e2820; }
   [data-theme="dark"] .cn-tile:hover { background: #383022; }
@@ -455,11 +461,20 @@
   [data-theme="dark"] .oo-tile.wrong { background: #2c1c1b; border-color: #b0574f; box-shadow: inset 0 0 0 1px #b0574f; }
   [data-theme="dark"] .oo-reveal.ok { background: #19231a; border-color: #538d4e; }
   [data-theme="dark"] .oo-reveal.miss { background: #251a18; border-color: #b0574f; }
+  [data-theme="dark"] .hl-card.win  { background: #1d2a1e; border-color: #538d4e; box-shadow: inset 0 0 0 1px #538d4e; }
+  [data-theme="dark"] .hl-card.lose { background: #2c1c1b; border-color: #b0574f; box-shadow: inset 0 0 0 1px #b0574f; }
   [data-theme="dark"] .oo-pip.ok { background: #538d4e; border-color: #538d4e; }
   [data-theme="dark"] .oo-pip.miss { background: #b0574f; border-color: #b0574f; }
   [data-theme="dark"] .gr-cell.tried:not(.sel):not(.filled) { border-color: #a3564f; background: #251a18; }
   [data-theme="dark"] .gr-cell.filled { background: #19231a; }
   [data-theme="dark"] .pid-wrong { color: #e0a196; }
+  [data-theme="dark"] .rm-flash.err { color: #e0a196; }
+  [data-theme="dark"] .rm-ghead { border-bottom-color: #6f6656; }
+  [data-theme="dark"] .rm-badge { border-color: rgba(255,255,255,.16); }
+  [data-theme="dark"] .rm-chip.gold { background: #2a2416; }
+  [data-theme="dark"] .rm-chip.gold .rm-chip-meta { color: #d6bc55; }
+  [data-theme="dark"] .rm-chip.gold .rm-chip-club::after { color: #d6bc55; }
+  [data-theme="dark"] .rm-gold-line { color: #d6bc55 !important; }
   [data-theme="dark"] .co-row.co-wrong { border-color: #8f544c; }
   [data-theme="dark"] .c5-pos { color: #b6a07e; }
 
@@ -511,6 +526,8 @@
   .game-card[data-game="clubreveal"]   { --gc: #a94456; }
   .game-card[data-game="pathbetween"]  { --gc: #0f6f8f; }
   .game-card[data-game="oddoneout"]    { --gc: #9a3f7d; }
+  .game-card[data-game="higherlower"]  { --gc: #6e7b2f; }
+  .game-card[data-game="rostermaster"] { --gc: #875327; }
   .game-card:hover { border-color: var(--gc); background: #fffef9; }
   .game-card:active { transform: translateY(1px); }
   .gc-ico svg, .h1-ico svg, .icon-btn svg, .hub-streak svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
@@ -627,6 +644,76 @@
   .oo-reveal.ok { border-color: #3f7d4f; background: #eef5ee; }
   .oo-reveal.miss { border-color: #b0473f; background: #f7ece9; }
   @media (max-width: 380px) { .oo-tiles { grid-template-columns: 1fr; } }
+
+  /* Higher or Lower */
+  .hl-q { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: clamp(17px, 4.4vw, 22px); margin: 10px 2px 0; }
+  .hl-q b { color: var(--accent); }
+  .hl-cards { max-width: 560px; width: 100%; margin: 14px auto 0; display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: stretch; }
+  .hl-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-height: 128px; padding: 14px 10px; text-align: center;
+    border: 1px solid var(--rule); border-radius: 8px; background: var(--card);
+    cursor: pointer; transition: transform .06s, background .12s, border-color .12s;
+  }
+  .hl-card:hover { border-color: var(--accent); background: #fffef9; }
+  .hl-card:active { transform: translateY(1px); }
+  .hl-card:disabled { cursor: default; }
+  .hl-name { font-family: var(--font-display); font-weight: 700; font-size: clamp(15px, 3.6vw, 19px); line-height: 1.15; color: var(--ink); }
+  .hl-team { color: var(--muted); font-size: 12px; }
+  .hl-val { margin-top: 6px; font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; color: var(--accent-2); visibility: hidden; min-height: 18px; }
+  .hl-card.revealed .hl-val { visibility: visible; }
+  .hl-vs { align-self: center; color: var(--muted); font: var(--label); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .hl-card.win  { background: #e6f0e6; border-color: #3f7d4f; box-shadow: inset 0 0 0 1px #3f7d4f; }
+  .hl-card.lose { background: #f4e2e0; border-color: #b0473f; box-shadow: inset 0 0 0 1px #b0473f; }
+  .hl-card.dim { opacity: .55; }
+
+  /* Roster Master (completion board) — this view spreads to the full width */
+  body.view-rostermaster .app { max-width: min(1240px, 96vw); }
+  .rm-picker { width: 100%; margin: 14px auto 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 10px; }
+  .rm-picker[hidden] { display: none; }
+  .rm-chip {
+    display: flex; align-items: center; gap: 11px;
+    padding: 13px 14px; text-align: left;
+    border: 1px solid var(--rule); border-radius: var(--r); background: var(--card);
+    cursor: pointer; transition: border-color .12s, background .12s;
+  }
+  .rm-chip:hover { border-color: var(--accent); background: #fffef9; }
+  .rm-badge {
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+    width: 34px; height: 34px; border-radius: 50%;
+    font: 800 11px/1 var(--font-sans); letter-spacing: .5px;
+    border: 1px solid rgba(0,0,0,.18);
+  }
+  .rm-chip-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .rm-chip-club { font-family: var(--font-display); font-weight: 700; font-size: 15.5px; line-height: 1.15; color: var(--ink); }
+  .rm-chip-meta { font: var(--label); font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .rm-chip.started { border-left: 3px solid var(--accent); }
+  /* GOLD = the club has been fully named at least once (survives a Clear) */
+  .rm-chip.gold { border-color: var(--yellow); border-left: 3px solid var(--yellow); background: #f7efd4; }
+  .rm-chip.gold .rm-chip-meta { color: #8a6d1a; }
+  .rm-chip.gold .rm-chip-club::after { content: " ★"; color: #b28e1c; }
+  .rm-gold-line { color: #8a6d1a !important; font-weight: 700; }
+  .rm-board { width: 100%; max-width: 960px; margin: 0 auto; }
+  .rm-board[hidden] { display: none; }
+  .rm-board-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 0 0; }
+  .rm-board-head button { padding: 8px 14px; font-size: 12.5px; flex: none; }
+  .rm-club { display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-display); font-weight: 700; font-size: clamp(16px, 4vw, 21px); text-align: center; min-width: 0; }
+  #rm-clear.armed { background: #a33d33; border-color: #a33d33; color: #fff; }
+  .rm-flash { text-align: center; font-weight: 700; font-size: 13px; margin: 6px auto 0; min-height: 18px; }
+  .rm-flash.ok { color: var(--green); }
+  .rm-flash.err { color: #a33d33; }
+  .rm-groups { margin-top: 10px; display: flex; flex-direction: column; gap: 16px; }
+  .rm-ghead {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 2px solid var(--ink); padding-bottom: 4px; margin-bottom: 8px;
+    font: var(--label); font-size: 12px; letter-spacing: 1.4px; text-transform: uppercase;
+  }
+  .rm-gcount { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .rm-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
+  .rm-slot { border: 1px dashed var(--rule); border-radius: var(--r); padding: 7px 10px; font-size: 13.5px; min-height: 33px; color: var(--ink); }
+  .rm-slot.filled { border-style: solid; background: var(--card); font-weight: 700; animation: cv-in .18s ease both; }
+  .rm-slot .rm-num { color: var(--muted); font-size: 11px; font-weight: 700; margin-right: 5px; font-variant-numeric: tabular-nums; }
+
   .cn-actions { max-width: 560px; margin: 14px auto 0; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
   .cn-actions button { padding: 9px 18px; }
   .cn-key { margin: 6px 0; padding: 0; list-style: none; }
@@ -824,6 +911,15 @@
       <circle cx="7.6" cy="16.4" r="3"/>
       <rect x="13.2" y="13.2" width="6.4" height="6.4" rx="1.3" data-fill="1"/>
     </symbol>
+    <symbol id="ico-higherlower" viewBox="0 0 24 24">
+      <path d="M8 20 V5.5 M8 5.5 L4.8 8.7 M8 5.5 L11.2 8.7"/>
+      <path d="M16 4 V18.5 M16 18.5 L12.8 15.3 M16 18.5 L19.2 15.3"/>
+    </symbol>
+    <symbol id="ico-rostermaster" viewBox="0 0 24 24">
+      <rect x="5" y="4.5" width="14" height="16.5" rx="2"/>
+      <path d="M9.2 4.5 V3.4 A1.4 1.4 0 0 1 10.6 2 H13.4 A1.4 1.4 0 0 1 14.8 3.4 V4.5"/>
+      <path d="M8.5 10 H15.5 M8.5 13.5 H15.5 M8.5 17 H12.5"/>
+    </symbol>
     <symbol id="ico-flame" viewBox="0 0 24 24">
       <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
     </symbol>
@@ -897,6 +993,18 @@
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-oddoneout"/></svg></span>
         <span class="gc-text"><span class="gc-title">Odd One Out</span>
           <span class="gc-desc">Four names, three belong together, one doesn't — spot the intruder. Five a day, or play on.</span></span>
+        <span class="gc-daily" hidden></span>
+      </button>
+      <button class="game-card" type="button" data-game="higherlower">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-higherlower"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Higher or Lower</span>
+          <span class="gc-desc">Two players, one question — taller, older, bigger number? One wrong answer ends the run.</span></span>
+        <span class="gc-daily" hidden></span>
+      </button>
+      <button class="game-card" type="button" data-game="rostermaster">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-rostermaster"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Roster Master</span>
+          <span class="gc-desc">The 2025-26 rosters, from memory — name every player, club by club. Your best score sticks.</span></span>
         <span class="gc-daily" hidden></span>
       </button>
     </div>
@@ -1222,6 +1330,62 @@
     </div>
   </div><!-- /oddoneout-view -->
 
+  <!-- ===== GAME 10: HIGHER OR LOWER ===== -->
+  <div id="higherlower-view" class="view" hidden>
+    <header>
+      <button id="hl-info-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">i</button>
+      <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-higherlower"/></svg></span><span><span class="accent">Higher</span> or Lower</span></h1>
+      <div class="tagline">Two players, one question — trust your gut</div>
+    </header>
+    <div class="app">
+      <div class="modes" id="hl-modes" role="tablist" aria-label="Game mode">
+        <button id="hl-daily" type="button" role="tab" aria-selected="true" tabindex="0">Daily</button>
+        <button id="hl-endless" type="button" role="tab" aria-selected="false" tabindex="-1">Endless</button>
+      </div>
+      <div id="hl-stats" class="pid-stats"></div>
+      <div id="hl-pips" class="oo-pips"></div>
+      <div id="hl-counter" class="counter" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div id="hl-sr" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div id="hl-q" class="hl-q"></div>
+      <div id="hl-cards" class="hl-cards" aria-label="Two players — tap your answer"></div>
+      <div id="hl-banner" class="banner" hidden></div>
+      <div class="cn-actions">
+        <button id="hl-next" type="button" class="cn-primary" hidden>Next matchup</button>
+      </div>
+    </div>
+  </div><!-- /higherlower-view -->
+
+  <!-- ===== ROSTER MASTER (challenge board) ===== -->
+  <div id="rostermaster-view" class="view" hidden>
+    <header>
+      <button id="rm-info-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">i</button>
+      <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-rostermaster"/></svg></span><span><span class="accent">Roster</span> Master</span></h1>
+      <div class="tagline">Name every player on every 2025-26 roster</div>
+    </header>
+    <div class="app">
+      <div id="rm-summary" class="pid-stats"></div>
+      <div id="rm-picker" class="rm-picker" aria-label="Pick a club"></div>
+      <div id="rm-board" class="rm-board" hidden>
+        <div class="rm-board-head">
+          <button id="rm-back" type="button">← All clubs</button>
+          <div id="rm-club" class="rm-club"></div>
+          <button id="rm-clear" type="button">Clear board</button>
+        </div>
+        <div id="rm-progress" class="counter" role="status" aria-live="polite" aria-atomic="true"></div>
+        <div class="controls">
+          <div class="search">
+            <input id="rm-input" type="text" autocomplete="rm-guess" autocorrect="off" autocapitalize="off" spellcheck="false"
+                   placeholder="Type a player — surname is enough…"
+                   aria-label="Guess a player from this roster" />
+          </div>
+        </div>
+        <div id="rm-flash" class="rm-flash" role="status" aria-live="polite"></div>
+        <div id="rm-sr" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+        <div id="rm-groups" class="rm-groups"></div>
+      </div>
+    </div>
+  </div><!-- /rostermaster-view -->
+
   <div id="pb-info-modal" class="modal-overlay" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Path Between" tabindex="-1">
       <button id="pb-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
@@ -1257,6 +1421,40 @@
         <li><strong>Practice</strong> — endless rounds; chase your best streak.</li>
       </ul>
       <p class="modal-note">Facts are judged by the data we store — players, careers and Final Four lineups — the same pool as Connections.</p>
+    </div>
+  </div>
+
+  <div id="hl-info-modal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Higher or Lower" tabindex="-1">
+      <button id="hl-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
+      <h2>How to play</h2>
+      <p>Two EuroLeague players, one question — <strong>who is taller</strong>, <strong>who is older</strong>, or <strong>whose jersey number is higher</strong>? Tap your answer and the values are revealed.</p>
+      <ul>
+        <li>Every matchup has a real gap — no ties, no 1&nbsp;cm coin flips.</li>
+        <li>The pool mixes <strong>today's players and the legends</strong>, so eras collide.</li>
+      </ul>
+      <h3>Game modes</h3>
+      <ul>
+        <li><strong>Daily</strong> — ten matchups, the same for everyone. Eight or more right = solved. Keeps your hub streak alive.</li>
+        <li><strong>Endless</strong> — one wrong answer ends the run. How long can you ride your gut?</li>
+      </ul>
+      <p class="modal-note">Heights, birth years and numbers come from our database — the same facts the other games play by.</p>
+    </div>
+  </div>
+
+  <div id="rm-info-modal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Roster Master" tabindex="-1">
+      <button id="rm-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
+      <h2>How to play</h2>
+      <p>The big one: name <strong>every player on every 2025-26 roster</strong>, club by club, from memory.</p>
+      <ul>
+        <li>Pick a club — its board shows <strong>empty slots</strong> under Guards, Forwards and Centers, so you always know how many you're missing.</li>
+        <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type a name and a match fills its slot instantly. A surname is enough when it's unique on that roster; accents and dots don't matter.</li>
+        <li>Your progress <strong>saves automatically</strong>, per club. Come back any time.</li>
+        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card.</li>
+        <li>Name a full roster once and that club turns <strong>gold ★ — for good</strong>, even if you clear it. Collect all twenty.</li>
+      </ul>
+      <p class="modal-note">Rosters are our cross-checked 2025-26 database — the exact squads the other games play by. No daily here; this is the long game.</p>
     </div>
   </div>
 
@@ -1355,7 +1553,7 @@
 
   <footer>
     Rosters are from the <strong>2025–26 EuroLeague season</strong> — more recent transfers aren't included yet.<br />
-    303 players · 20 clubs · 87 retired legends · compiled from official rosters, Wikipedia, FIBA &amp; Proballers.<br />
+    293 players · 20 clubs · 172 retired legends · compiled from official rosters, Wikipedia, FIBA &amp; Proballers.<br />
     Made with ❤️ for European basketball fans — free, no ads, no tracking, and it works offline.
   </footer>
 
@@ -1467,6 +1665,8 @@
   <script src="paths.js"></script>
   <script src="pathbetween.js"></script>
   <script src="oddoneout.js"></script>
+  <script src="higherlower.js"></script>
+  <script src="rostermaster.js"></script>
   <script src="app.js"></script>
   <script>
     /* Register the offline service worker (only runs over https / localhost). */
