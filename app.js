@@ -5,8 +5,8 @@
   "use strict";
   function $(id) { return document.getElementById(id); }
 
-  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween"];
-  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view") };
+  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout"];
+  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view") };
 
   // mode: "practice" | "daily" (force a mode) | undefined (plain open → resume last mode)
   function showView(name, mode) {
@@ -14,7 +14,7 @@
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
     if (name === "home") { refreshDailyChips(); renderHubStreak(); layoutHome(); }   // state may have changed while playing
-    var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : null;
+    var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : null;
     if (api) {
       if (mode === "daily" && api.goDaily) api.goDaily();
       else if (mode === "practice" && api.goPractice) api.goPractice();
@@ -60,9 +60,20 @@
   function todayStr() { return dateStr(new Date()); }
   function daysAgoStr(n) { var d = new Date(); d.setDate(d.getDate() - n); return dateStr(d); }
 
+  // --- Night mode (persisted; OS preference is the first-run default) ---------
+  function prefersDark() { try { return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches); } catch (e) { return false; } }
+  function getTheme() { var t = lsGet("elg:theme", null); return (t === "dark" || t === "light") ? t : (prefersDark() ? "dark" : "light"); }
+  function applyTheme(t) {
+    var root = document.documentElement; if (root && root.setAttribute) root.setAttribute("data-theme", t);
+    var m = document.querySelector('meta[name="theme-color"]'); if (m && m.setAttribute) m.setAttribute("content", t === "dark" ? "#15120d" : "#f7f3ea");
+    var btn = $("theme-btn");
+    if (btn && btn.setAttribute) { var toDay = t === "dark"; btn.setAttribute("aria-label", toDay ? "Switch to day mode" : "Switch to night mode"); btn.setAttribute("title", toDay ? "Day mode" : "Night mode"); }
+  }
+  function toggleTheme() { var t = getTheme() === "dark" ? "light" : "dark"; lsSet("elg:theme", t); applyTheme(t); }
+
   // --- Per-tile daily status --------------------------------------------------
   // Each game stores its daily under a per-game key; the hub only peeks.
-  var DAILY_KEY = { mystery: "elg:daily:", playerid: "elg:pid:daily:", completefive: "elg:c5:daily:", connections: "elg:cn:daily:", careerorder: "elg:co:daily:", thegrid: "elg:gr:daily:", clubreveal: "elg:cv:daily:", pathbetween: "elg:pb:daily:" };
+  var DAILY_KEY = { mystery: "elg:daily:", playerid: "elg:pid:daily:", completefive: "elg:c5:daily:", connections: "elg:cn:daily:", careerorder: "elg:co:daily:", thegrid: "elg:gr:daily:", clubreveal: "elg:cv:daily:", pathbetween: "elg:pb:daily:", oddoneout: "elg:oo:daily:" };
   function dailyState(game) {           // "ready" | "playing" (started, not done) | "won" | "lost"
     var v = lsGet(DAILY_KEY[game] + todayStr(), null);
     if (!v) return "ready";
@@ -148,6 +159,9 @@
   }
 
   function wire() {
+    applyTheme(getTheme());                              // reconcile the pre-paint theme + set the toggle label
+    var tb = $("theme-btn");
+    if (tb) tb.addEventListener("click", toggleTheme);
     // Newspaper dateline under the masthead (e.g. "Wednesday, 9 July 2026").
     var dl = $("dateline");
     if (dl) {
@@ -176,7 +190,8 @@
   window.Hub = {
     refresh: function () { refreshDailyChips(); renderHubStreak(); },
     _reconcile: reconcileHub, _info: hubInfo, _isTodayDone: isTodayDone,
-    _getHub: getHub, _setHub: setHub
+    _getHub: getHub, _setHub: setHub,
+    _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme
   };
 
   // Auto-wire on load, unless a harness asked to drive Hub without DOM wiring.
