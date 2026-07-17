@@ -212,6 +212,37 @@
     showView(initial);
   }
 
+  // --- Share plumbing ----------------------------------------------------------
+  // Every game builds its own emoji share text; this copies it and flashes the
+  // button. Lives here (not per game) so all ten dailies share one clipboard path.
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.top = "-1000px";
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      var ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) { return false; }
+  }
+  function copyShare(text, btn) {
+    var flash = function () {
+      var orig = btn.textContent;
+      btn.textContent = "Copied!";
+      setTimeout(function () { btn.textContent = orig; }, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(flash, function () { if (legacyCopy(text)) flash(); });
+    } else if (legacyCopy(text)) flash();
+  }
+  window.ELG = {
+    copyShare: copyShare,
+    shareURL: function (game) {
+      try { return window.location.origin + window.location.pathname + "?game=" + game; }
+      catch (e) { return "?game=" + game; }
+    }
+  };
+
   // Test hooks + programmatic refresh (the headless harness drives these directly).
   window.Hub = {
     refresh: function () { refreshDailyChips(); renderHubStreak(); },

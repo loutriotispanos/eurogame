@@ -37,6 +37,7 @@
   var solvedG = [];          // solved group indices, in solve order
   var mistakes = 0, over = false, won = false, dealt = false;
   var tried = [];            // signatures of guesses already made (block dup submits)
+  var hist = [];             // per-guess group levels, e.g. [[1,3,1,1], …] — the share rows
 
   // --- Puzzle selection ------------------------------------------------------
   function dailyPuzzle() { return PUZZLES[hashStr(todayStr()) % PUZZLES.length]; }
@@ -136,6 +137,22 @@
     return s.curStreak >= 2 ? " 🔥 " + s.curStreak + "-day streak — see you tomorrow!"
                             : " Come back tomorrow for a new puzzle. 👋";
   }
+  function shareText() {
+    var em = { 1: "🟨", 2: "🟩", 3: "🟦", 4: "🟪" };
+    var rows = hist.length
+      ? hist.map(function (g) { return g.map(function (lv) { return em[lv] || "⬜"; }).join(""); })
+      : solvedG.map(function (gi) { var e = em[puzzle.groups[gi].level] || "⬜"; return e + e + e + e; });
+    var score = won ? (mistakes === 0 ? "Flawless!" : mistakes + (mistakes === 1 ? " mistake" : " mistakes")) : "X — " + MAX_MIST + " mistakes";
+    return "Connections 🏀 " + todayStr() + "\n" + score + "\n" + rows.join("\n") +
+      (window.ELG ? "\n" + window.ELG.shareURL("connections") : "");
+  }
+  function addShareBtn(actions) {
+    if (!actions) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "share-btn alt";
+    b.textContent = "Share result";
+    b.addEventListener("click", function () { if (window.ELG) window.ELG.copyShare(shareText(), b); });
+    actions.appendChild(b);
+  }
   function showBanner() {
     if (!els.banner) return;
     els.banner.className = "banner " + (won ? "win" : "lose");
@@ -151,6 +168,7 @@
     if (mode === "daily") { btn.textContent = "Practice mode"; btn.addEventListener("click", function () { setMode("practice"); }); }
     else { btn.textContent = "New puzzle"; btn.addEventListener("click", deal); }
     actions.appendChild(btn);
+    if (mode === "daily") addShareBtn(actions);
     els.banner.appendChild(title); els.banner.appendChild(sub); els.banner.appendChild(actions);
     if (mode === "practice") {
       var hint = document.createElement("div"); hint.className = "banner-hint"; hint.textContent = "or just press Space for a new puzzle";
@@ -181,7 +199,7 @@
     renderGrid(); updateButtons();
   }
 
-  function saveDaily() { lsSet(K.daily(todayStr()), { solved: solvedG.slice(), mistakes: mistakes, done: over, won: won }); }
+  function saveDaily() { lsSet(K.daily(todayStr()), { solved: solvedG.slice(), mistakes: mistakes, hist: hist.slice(), done: over, won: won }); }
 
   function submit() {
     if (over || selected.length !== GROUP) return;
@@ -189,6 +207,7 @@
     var sig = picks.map(function (c) { return c.name; }).sort().join("|");
     if (tried.indexOf(sig) >= 0) { say("Already tried that group."); return; }
     tried.push(sig);
+    hist.push(picks.map(function (c) { return puzzle.groups[c.g].level; }));
 
     // Count how many of the four share the most-common group.
     var byG = {}; picks.forEach(function (c) { byG[c.g] = (byG[c.g] || 0) + 1; });
@@ -226,13 +245,13 @@
   }
 
   // --- Deal ------------------------------------------------------------------
-  function resetRound() { selected = []; solvedG = []; mistakes = 0; over = false; won = false; tried = []; dealt = true; if (els.banner) els.banner.hidden = true; say(""); }
+  function resetRound() { selected = []; solvedG = []; mistakes = 0; over = false; won = false; tried = []; hist = []; dealt = true; if (els.banner) els.banner.hidden = true; say(""); }
   function dealDaily() {
     puzzle = dailyPuzzle();
     cells = buildCells(puzzle, hashStr(todayStr() + "#board"));
     resetRound();
     var saved = lsGet(K.daily(todayStr()), null);
-    if (saved) { solvedG = (saved.solved || []).slice(); mistakes = saved.mistakes || 0; over = !!saved.done; won = !!saved.won; }
+    if (saved) { solvedG = (saved.solved || []).slice(); mistakes = saved.mistakes || 0; hist = (saved.hist || []).slice(); over = !!saved.done; won = !!saved.won; }
     renderAll();
     if (over) showBanner();
   }
@@ -346,6 +365,7 @@
     _peek: function () { return { mode: mode, solved: solvedG.slice(), mistakes: mistakes, over: over, won: won, groups: puzzle && puzzle.groups }; },
     _deal: deal,
     _setMode: setMode,
+    _shareText: shareText,
     // test hook: select the four tiles matching these names, then submit.
     _submitNames: function (names) {
       selected = [];

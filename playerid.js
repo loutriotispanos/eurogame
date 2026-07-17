@@ -111,6 +111,21 @@
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
                             : "<br>Come back tomorrow for a new career. 👋";
   }
+  function shareText() {
+    var row = "", i;
+    for (i = 0; i < guesses.length; i++) row += "🟥";
+    if (won) row += "🟩";
+    var score = won ? (guesses.length + 1) + "/" + MAX : "X/" + MAX;
+    return "Player ID 🏀 " + todayStr() + "\n" + score + "\n" + row +
+      (window.ELG ? "\n" + window.ELG.shareURL("playerid") : "");
+  }
+  function addShareBtn(actions) {
+    if (!actions) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "share-btn alt";
+    b.textContent = "Share result";
+    b.addEventListener("click", function () { if (window.ELG) window.ELG.copyShare(shareText(), b); });
+    actions.appendChild(b);
+  }
   function showBanner() {
     els.banner.className = "banner " + (won ? "win" : "lose");
     els.banner.innerHTML = "";
@@ -124,6 +139,7 @@
     if (filter === "daily") { btn.textContent = "Practice mode"; btn.addEventListener("click", function () { setFilter("both"); }); }
     else { btn.textContent = "Next player"; btn.addEventListener("click", deal); }
     actions.appendChild(btn);
+    if (filter === "daily") addShareBtn(actions);
     els.banner.appendChild(title); els.banner.appendChild(sub); els.banner.appendChild(actions);
     if (filter !== "daily") {
       var hint = document.createElement("div"); hint.className = "banner-hint";
@@ -330,7 +346,9 @@
     // internal hooks used by the headless test (test.js)
     _peek: function () { return target; },
     _deal: deal,
-    _setFilter: setFilter
+    _setFilter: setFilter,
+    _guess: submitGuess,
+    _shareText: shareText
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

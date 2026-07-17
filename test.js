@@ -1311,5 +1311,95 @@ window.Hub._applyTheme("dark");
 ok(byId("theme-btn").getAttribute("aria-label") === "Switch to day mode", "toggle button label reflects the switch target");
 window.Hub._applyTheme("light");
 
+console.log("Share result — every daily builds an emoji share line");
+clearToday();
+ok(window.ELG && typeof window.ELG.copyShare === "function", "app.js exposes the shared clipboard plumbing (window.ELG)");
+ok(window.ELG.shareURL("thegrid").indexOf("?game=thegrid") > 0, "ELG.shareURL builds a ?game= deep link");
+
+// Higher or Lower — replay a perfect daily
+window.HigherLower._setMode("daily");
+for (var shI = 0; shI < 10; shI++) { var shp = window.HigherLower._peek(); window.HigherLower._pick(hlWinIdx(shp.matchup)); window.HigherLower._next(); }
+var hlShare = window.HigherLower._shareText();
+ok(hlShare.indexOf("Higher or Lower 🏀 ") === 0 && hlShare.indexOf("\n10/10\n") > 0, "HL share: masthead + score");
+ok((hlShare.split("🟩").length - 1) === 10 && hlShare.indexOf("?game=higherlower") > 0, "HL share: ten green pips + deep link");
+
+// Odd One Out — perfect daily
+window.OddOneOut._setMode("daily");
+for (var shJ = 0; shJ < 5; shJ++) { var sho = window.OddOneOut._peek(); window.OddOneOut._pick(sho.round.odd); window.OddOneOut._next(); }
+var ooShare = window.OddOneOut._shareText();
+ok(ooShare.indexOf("Odd One Out 🏀 ") === 0 && ooShare.indexOf("\n5/5\n") > 0, "OOO share: masthead + score");
+ok((ooShare.split("🟩").length - 1) === 5 && ooShare.indexOf("?game=oddoneout") > 0, "OOO share: five pips + deep link");
+
+// Player ID — first-try daily win via the new _guess hook
+window.PlayerID._setFilter("daily");
+window.PlayerID._guess(window.PlayerID._peek().name);
+var pidShare = window.PlayerID._shareText();
+ok(pidShare.indexOf("Player ID 🏀 ") === 0 && pidShare.indexOf("\n1/2\n") > 0, "PID share: masthead + first-try score");
+ok(pidShare.indexOf("🟩") > 0 && pidShare.indexOf("?game=playerid") > 0, "PID share: green pip + deep link");
+
+// Complete the Five — first-try daily win
+window.CompleteFive._setDiff("daily");
+window.CompleteFive._guess(window.CompleteFive._peek().target);
+var c5Share = window.CompleteFive._shareText();
+ok(c5Share.indexOf("Complete the Five 🏀 ") === 0 && c5Share.indexOf("\n1/2\n") > 0, "C5 share: masthead + first-try score");
+ok(c5Share.indexOf("?game=completefive") > 0, "C5 share: deep link");
+
+// Connections — one deliberate mistake, then solve: 5 true-history colour rows
+window.Connections._setMode("daily");
+var cnP = window.Connections._peek();
+window.Connections._submitNames([cnP.groups[0].members[0], cnP.groups[0].members[1], cnP.groups[0].members[2], cnP.groups[1].members[0]]);
+cnP.groups.forEach(function (g) { window.Connections._submitNames(g.members); });
+var cnShare = window.Connections._shareText();
+ok(cnShare.indexOf("Connections 🏀 ") === 0 && cnShare.indexOf("1 mistake") > 0, "CN share: masthead + mistake count");
+var cnSquares = ["🟨", "🟩", "🟦", "🟪"].reduce(function (n, e) { return n + (cnShare.split(e).length - 1); }, 0);
+ok(cnShare.split("\n").length === 8 && cnSquares === 20, "CN share: five guess rows of four colour squares");
+ok(JSON.parse(store["elg:cn:daily:" + HTODAY]).hist.length === 5, "CN daily state persists the guess history");
+
+// Career Order — solve on the first check
+window.CareerOrder._setDiff("daily");
+window.CareerOrder._solve();
+var coShare = window.CareerOrder._shareText();
+ok(coShare.indexOf("Career Order 🏀 ") === 0 && coShare.indexOf("\n1/3 · ") > 0, "CO share: masthead + first-check score + club count");
+ok(coShare.indexOf("?game=careerorder") > 0, "CO share: deep link");
+
+// The Grid — fill all nine cells with fresh valid answers
+window.TheGrid._setMode("daily");
+var grP = window.TheGrid._peek(), grUsed = {};
+for (var grI = 0; grI < 9; grI++) {
+  window.TheGrid._select(grI);
+  var grOpts = window.TheGrid._answers(grP.puzzle.rows[Math.floor(grI / 3)], grP.puzzle.cols[grI % 3]).filter(function (n) { return !grUsed[n]; });
+  grUsed[grOpts[0]] = 1;
+  window.TheGrid._submit(grOpts[0]);
+}
+var grShare = window.TheGrid._shareText();
+ok(grShare.indexOf("The Grid 🏀 ") === 0 && grShare.indexOf("9/9") > 0, "Grid share: masthead + 9/9");
+ok(grShare.split("\n").length === 6 && (grShare.split("🟩").length - 1) === 9, "Grid share: three rows of three green cells");
+ok(grShare.indexOf("?game=thegrid") > 0, "Grid share: deep link");
+
+// Club Reveal — name it off the very first name
+window.ClubReveal._setMode("daily");
+window.ClubReveal._guess(window.ClubReveal._peek().club);
+var cvShare = window.ClubReveal._shareText();
+ok(cvShare.indexOf("Club Reveal 🏀 ") === 0 && cvShare.indexOf("Named after 1 of ") > 0, "CV share: masthead + reveal count");
+ok(cvShare.indexOf("🟦🟩") > 0 && cvShare.indexOf("?game=clubreveal") > 0, "CV share: reveal pip + green + deep link");
+
+// Path Between — walk the shortest route
+window.PathBetween._setMode("daily");
+var pbP = window.PathBetween._peek();
+var pbRoute = window.PathBetween._route(pbP.a, pbP.b);
+for (var pbI = 1; pbI < pbRoute.length; pbI++) window.PathBetween._guess(pbRoute[pbI]);
+var pbShare = window.PathBetween._shareText();
+ok(pbShare.indexOf("Path Between 🏀 ") === 0 && pbShare.indexOf("Par 3 · connected in 3") > 0, "PB share: masthead + par line");
+ok((pbShare.split("🟩").length - 1) === 3 && pbShare.indexOf("?game=pathbetween") > 0, "PB share: three links + deep link");
+
+// The button itself: rendered into the banner, wired through window.ELG
+var hlActions = byId("hl-banner").children[2];
+var hlShareBtn = hlActions.children[hlActions.children.length - 1];
+ok(hlShareBtn && hlShareBtn.className === "share-btn alt" && hlShareBtn.textContent === "Share result", "HL banner carries the outline Share button");
+captured = "";
+fire(hlShareBtn, "click");
+ok(captured === window.HigherLower._shareText(), "clicking Share copies the exact share text (via window.ELG)");
+clearToday();   // leave no finished dailies behind
+
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);

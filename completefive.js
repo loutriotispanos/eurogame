@@ -130,6 +130,21 @@
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
                             : "<br>Come back tomorrow for a new five. 👋";
   }
+  function shareText() {
+    var row = "", i;
+    for (i = 0; i < guesses.length; i++) row += "🟥";
+    if (won) row += "🟩";
+    var score = won ? (guesses.length + 1) + "/" + MAX : "X/" + MAX;
+    return "Complete the Five 🏀 " + todayStr() + "\n" + score + "\n" + row +
+      (window.ELG ? "\n" + window.ELG.shareURL("completefive") : "");
+  }
+  function addShareBtn(actions) {
+    if (!actions) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "share-btn alt";
+    b.textContent = "Share result";
+    b.addEventListener("click", function () { if (window.ELG) window.ELG.copyShare(shareText(), b); });
+    actions.appendChild(b);
+  }
   function showBanner() {
     els.banner.className = "banner " + (won ? "win" : "lose");
     els.banner.innerHTML = "";
@@ -143,6 +158,7 @@
     if (diff === "daily") { btn.textContent = "Practice mode"; btn.addEventListener("click", function () { setDiff("medium"); }); }
     else { btn.textContent = "Next five"; btn.addEventListener("click", deal); }
     actions.appendChild(btn);
+    if (diff === "daily") addShareBtn(actions);
     els.banner.appendChild(title); els.banner.appendChild(sub); els.banner.appendChild(actions);
     if (diff !== "daily") {
       var hint = document.createElement("div"); hint.className = "banner-hint";
@@ -344,7 +360,9 @@
     goPractice: function () { setDiff("medium"); },
     _peek: function () { return { team: lineup && lineup.team, hiddenPos: hiddenPos, target: target, diff: diff }; },
     _deal: deal,
-    _setDiff: setDiff
+    _setDiff: setDiff,
+    _guess: submitGuess,
+    _shareText: shareText
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
