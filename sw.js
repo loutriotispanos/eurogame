@@ -8,7 +8,7 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v59";  /* Roster Master follow-ups + hub navigation: "Clear all boards" on the club picker (two-click armed; bests + gold survive) and browser BACK/FORWARD support for the whole hub — every in-app hop (home↔game, RM picker↔club board) is a pushState entry retraced by a popstate listener; URL stays clean, refresh-to-lobby unchanged. (v58 = Higher or Lower + Roster Master.) */
+var CACHE = "elg-v60";  /* Roster Master picker summary now shows the TOTAL percentage — "Named 129/293 (44%)", plus the overall BEST % once it differs (after clears). Also the cache refresh for the Wilbekin legends addition that merged in PR #13 (legends 173, careers 414). */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "oddones.js", "grids.js", "paths.js",
   "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "oddoneout.js", "higherlower.js", "rostermaster.js", "app.js",
