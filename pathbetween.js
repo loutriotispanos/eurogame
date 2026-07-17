@@ -244,6 +244,22 @@
                             : "<br>Come back tomorrow for a new pair. 👋";
   }
   function escapeHtml(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function shareText() {
+    var row = "", i;
+    for (i = 0; i < steps(); i++) row += "🟩";
+    if (!won) row += "⬛";
+    var score = "Par " + par + " · " + (won ? "connected in " + steps() : "not connected") +
+      (wrong ? " · " + wrong + (wrong === 1 ? " miss" : " misses") : "");
+    return "Path Between 🏀 " + todayStr() + "\n" + score + "\n" + row +
+      (window.ELG ? "\n" + window.ELG.shareURL("pathbetween") : "");
+  }
+  function addShareBtn(actions) {
+    if (!actions) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "share-btn alt";
+    b.textContent = "Share result";
+    b.addEventListener("click", function () { if (window.ELG) window.ELG.copyShare(shareText(), b); });
+    actions.appendChild(b);
+  }
   function showBanner(deadEnd) {
     els.banner.className = "banner " + (won ? "win" : "lose");
     els.banner.innerHTML = "";
@@ -269,6 +285,7 @@
     if (mode === "daily") { btn.textContent = "Practice mode"; btn.addEventListener("click", function () { setMode("medium"); }); }
     else { btn.textContent = "New pair"; btn.addEventListener("click", deal); }
     actions.appendChild(btn);
+    if (mode === "daily") addShareBtn(actions);
     els.banner.appendChild(title); els.banner.appendChild(sub); els.banner.appendChild(actions);
     if (mode !== "daily") {
       var hint = document.createElement("div"); hint.className = "banner-hint";
@@ -521,6 +538,7 @@
     _deal: deal,
     _setMode: setMode,
     _guess: submitGuess,
+    _shareText: shareText,
     _link: link,
     _teammates: teammates,
     _bfs: bfs,

@@ -352,6 +352,7 @@
   .share-btn { display: block; width: 100%; margin-top: 12px; }
   .share-btn.alt { background: transparent; color: var(--ink); border-color: #b7ac96; }
   .share-btn.alt:hover { border-color: var(--ink); background: transparent; }
+  .banner-actions .share-btn { display: inline-block; width: auto; margin-top: 0; }
 
   .hints { display: flex; flex-direction: column; gap: 6px; margin: 0 2px 10px; }
   .hints:empty { display: none; }
@@ -440,6 +441,8 @@
   [data-theme="dark"] #new-game, [data-theme="dark"] #pid-next, [data-theme="dark"] #c5-next,
   [data-theme="dark"] #cv-next, [data-theme="dark"] #pb-next, [data-theme="dark"] #co-check,
   [data-theme="dark"] .cn-actions .cn-primary, [data-theme="dark"] .banner-actions button { background: #d9ceb7; border-color: #d9ceb7; }
+  [data-theme="dark"] .share-btn.alt { background: transparent; color: var(--ink); }
+  [data-theme="dark"] .share-btn.alt:hover { background: transparent; border-color: var(--ink); }
   [data-theme="dark"] .stat { border-top-color: #6f6656; }
   [data-theme="dark"] .gr-head { border-color: #6f6656; }
   /* mute the loud Connections group-bars (kept colourful, just not neon) */

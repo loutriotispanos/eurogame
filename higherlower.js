@@ -195,6 +195,19 @@
     els.banner.appendChild(t); els.banner.appendChild(s); els.banner.appendChild(actions);
     if (hint) { var h = document.createElement("div"); h.className = "banner-hint"; h.textContent = hint; els.banner.appendChild(h); }
     els.banner.hidden = false;
+    return actions;
+  }
+  function shareText() {
+    var rows = results.map(function (r) { return r ? "🟩" : "🟥"; }).join("");
+    return "Higher or Lower 🏀 " + todayStr() + "\n" + scoreSoFar() + "/" + PER_DAY + "\n" + rows +
+      (window.ELG ? "\n" + window.ELG.shareURL("higherlower") : "");
+  }
+  function addShareBtn(actions) {
+    if (!actions) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "share-btn alt";
+    b.textContent = "Share result";
+    b.addEventListener("click", function () { if (window.ELG) window.ELG.copyShare(shareText(), b); });
+    actions.appendChild(b);
   }
   function showDailyBanner() {
     if (!els.banner) return;
@@ -202,7 +215,7 @@
     els.banner.className = "banner " + (won ? "win" : "lose");
     var title = sc === PER_DAY ? "🤩 Perfect 10!" : won ? "🎉 Nice — " + sc + "/" + PER_DAY : "😅 " + sc + "/" + PER_DAY + " today";
     var sub = (sc === PER_DAY ? "Ten out of ten. Scouting-department stuff." : won ? "Sharp eye — that's a solve." : "Gut let you down today.") + dailyBannerNote();
-    bannerHTML(title, sub, "Endless mode", function () { setMode("endless"); });
+    addShareBtn(bannerHTML(title, sub, "Endless mode", function () { setMode("endless"); }));
   }
   function showRunBanner() {
     if (!els.banner) return;
@@ -355,7 +368,8 @@
         matchup: matchup ? { qkey: matchup.qkey, wins: q.wins, aName: matchup.a.name, bName: matchup.b.name, aVal: q.get(matchup.a), bVal: q.get(matchup.b) } : null };
     },
     _deal: deal, _setMode: setMode, _next: next,
-    _pick: function (idx) { pick(idx); }
+    _pick: function (idx) { pick(idx); },
+    _shareText: shareText
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

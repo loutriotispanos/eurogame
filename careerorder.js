@@ -202,6 +202,21 @@
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
                             : "<br>Come back tomorrow for a new career. 👋";
   }
+  function shareText() {
+    var row = "", i;
+    for (i = 0; i < tries; i++) row += "🟥";
+    if (won) row += "🟩";
+    var score = (won ? (tries + 1) + "/" + MAX : "X/" + MAX) + " · " + segments.length + " clubs";
+    return "Career Order 🏀 " + todayStr() + "\n" + score + "\n" + row +
+      (window.ELG ? "\n" + window.ELG.shareURL("careerorder") : "");
+  }
+  function addShareBtn(actions) {
+    if (!actions) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "share-btn alt";
+    b.textContent = "Share result";
+    b.addEventListener("click", function () { if (window.ELG) window.ELG.copyShare(shareText(), b); });
+    actions.appendChild(b);
+  }
   function showBanner() {
     if (!els.banner) return;
     els.banner.className = "banner " + (won ? "win" : "lose");
@@ -216,6 +231,7 @@
     if (diff === "daily") { btn.textContent = "Practice mode"; btn.addEventListener("click", function () { setDiff("medium"); }); }
     else { btn.textContent = "Next player"; btn.addEventListener("click", deal); }
     actions.appendChild(btn);
+    if (diff === "daily") addShareBtn(actions);
     els.banner.appendChild(title); els.banner.appendChild(sub); els.banner.appendChild(actions);
     if (diff !== "daily") {
       var hint = document.createElement("div"); hint.className = "banner-hint"; hint.textContent = "or just press Space for the next player";
@@ -376,6 +392,7 @@
     _setOrder: function (arr) { if (arr && arr.length === order.length) { order = arr.slice(); sanitizeConfirmed(); renderList(); } },
     _move: moveRow,
     _check: check,
+    _shareText: shareText,
     _solve: function () { order = identity(segments.length); confirmed = []; check(); }
   };
 

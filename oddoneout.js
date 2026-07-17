@@ -152,7 +152,8 @@
     els.banner.className = "banner " + (won ? "win" : "lose");
     var title = sc === PER_DAY ? "🤩 Flawless — " + sc + "/" + PER_DAY + "!" : won ? "🎉 Nice — " + sc + "/" + PER_DAY : "😅 " + sc + "/" + PER_DAY + " today";
     var sub = (sc === PER_DAY ? "A perfect five. Ice in the veins." : won ? "Solid round of spotting the intruder." : "The intruders got the better of you today.") + dailyBannerNote();
-    bannerHTML(title, sub, "Practice mode", function () { setMode("practice"); });
+    var actions = bannerHTML(title, sub, "Practice mode", function () { setMode("practice"); });
+    if (mode === "daily") addShareBtn(actions);
     els.banner.hidden = false;
   }
   function bannerHTML(title, sub, btnLabel, btnFn) {
@@ -164,6 +165,19 @@
     btn.addEventListener("click", btnFn); actions.appendChild(btn);
     els.banner.appendChild(t); els.banner.appendChild(s); els.banner.appendChild(actions);
     if (mode === "practice") { var h = document.createElement("div"); h.className = "banner-hint"; h.textContent = "or press Space for the next round"; els.banner.appendChild(h); }
+    return actions;
+  }
+  function shareText() {
+    var rows = results.map(function (r) { return r ? "🟩" : "🟥"; }).join("");
+    return "Odd One Out 🏀 " + todayStr() + "\n" + scoreSoFar() + "/" + PER_DAY + "\n" + rows +
+      (window.ELG ? "\n" + window.ELG.shareURL("oddoneout") : "");
+  }
+  function addShareBtn(actions) {
+    if (!actions) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "share-btn alt";
+    b.textContent = "Share result";
+    b.addEventListener("click", function () { if (window.ELG) window.ELG.copyShare(shareText(), b); });
+    actions.appendChild(b);
   }
   function say(msg) { if (els.sr) els.sr.textContent = msg; if (els.flash) { els.flash.textContent = msg; els.flash.hidden = !msg; } }
 
@@ -300,7 +314,8 @@
     goPractice: function () { setMode("practice"); },
     _peek: function () { return { mode: mode, results: results.slice(), over: over, won: won, revealed: revealed, round: round }; },
     _deal: deal, _setMode: setMode, _next: next,
-    _pick: function (name) { pick(name); }
+    _pick: function (name) { pick(name); },
+    _shareText: shareText
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

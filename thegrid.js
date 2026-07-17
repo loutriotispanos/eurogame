@@ -171,6 +171,24 @@
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
                             : "<br>Come back tomorrow for a new grid. 👋";
   }
+  function shareText() {
+    var rows = [], r, c;
+    for (r = 0; r < 3; r++) {
+      var line = "";
+      for (c = 0; c < 3; c++) { var cell = cells[r * 3 + c]; line += (cell && !cell.revealed) ? "🟩" : "⬛"; }
+      rows.push(line);
+    }
+    var score = won ? "9/9" + (wrong ? " · " + wrong + (wrong === 1 ? " miss" : " misses") : " · immaculate") : filledCount() + "/9";
+    return "The Grid 🏀 " + todayStr() + "\n" + score + "\n" + rows.join("\n") +
+      (window.ELG ? "\n" + window.ELG.shareURL("thegrid") : "");
+  }
+  function addShareBtn(actions) {
+    if (!actions) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "share-btn alt";
+    b.textContent = "Share result";
+    b.addEventListener("click", function () { if (window.ELG) window.ELG.copyShare(shareText(), b); });
+    actions.appendChild(b);
+  }
   function showBanner() {
     els.banner.className = "banner " + (won ? "win" : "lose");
     els.banner.innerHTML = "";
@@ -185,6 +203,7 @@
     if (mode === "daily") { btn.textContent = "Practice mode"; btn.addEventListener("click", function () { setMode("practice"); }); }
     else { btn.textContent = "New grid"; btn.addEventListener("click", deal); }
     actions.appendChild(btn);
+    if (mode === "daily") addShareBtn(actions);
     els.banner.appendChild(title); els.banner.appendChild(sub); els.banner.appendChild(actions);
     if (mode !== "daily") {
       var hint = document.createElement("div"); hint.className = "banner-hint";
@@ -460,6 +479,7 @@
     _setMode: setMode,
     _select: select,
     _submit: submitGuess,
+    _shareText: shareText,
     _fits: fits,
     _answers: answers,
     _universe: universe

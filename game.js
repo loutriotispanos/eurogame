@@ -659,7 +659,8 @@
     var rows = guesses.map(function (g) {
       return evaluate(g).map(function (r) { return emoji[r.state]; }).join("");
     });
-    return head + "\n" + score + "\n" + rows.join("\n");
+    var link = window.ELG ? "\n" + window.ELG.shareURL("mystery") : "";
+    return head + "\n" + score + "\n" + rows.join("\n") + link;
   }
 
   function legacyCopy(text) {
