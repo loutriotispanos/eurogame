@@ -8,10 +8,10 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v61";  /* Share result on every daily: all ten games now offer a Wordle-style emoji share from the end-of-daily banner (Connections gets true per-guess colour rows via a new hist field in its daily state). Shared clipboard plumbing lives in app.js (window.ELG). */
+var CACHE = "elg-v62";  /* Records — the agate page: a hub-wide stats sheet (records.js + a home-corner button) aggregating the unified streak, every game's daily record, endless/practice bests and Roster Master recall totals from localStorage. */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "oddones.js", "grids.js", "paths.js",
-  "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "oddoneout.js", "higherlower.js", "rostermaster.js", "app.js",
+  "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "oddoneout.js", "higherlower.js", "rostermaster.js", "records.js", "app.js",
   "manifest.webmanifest", "icon-192.png", "icon-512.png"
 ];
 

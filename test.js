@@ -93,6 +93,7 @@ eval(fs.readFileSync("pathbetween.js", "utf8"));
 eval(fs.readFileSync("oddoneout.js", "utf8"));
 eval(fs.readFileSync("higherlower.js", "utf8"));
 eval(fs.readFileSync("rostermaster.js", "utf8"));
+eval(fs.readFileSync("records.js", "utf8"));
 win.__ELG_NO_WIRE__ = true;   // drive window.Hub directly; skip app.js DOM wiring
 eval(fs.readFileSync("app.js", "utf8"));
 
@@ -1400,6 +1401,28 @@ captured = "";
 fire(hlShareBtn, "click");
 ok(captured === window.HigherLower._shareText(), "clicking Share copies the exact share text (via window.ELG)");
 clearToday();   // leave no finished dailies behind
+
+console.log("Records — the agate page aggregates every stats key");
+store["elg:hl:dstats"] = JSON.stringify({ played: 4, solved: 3, curStreak: 2, maxStreak: 3, lastDate: HTODAY, lastWon: true });
+store["elg:stats"] = JSON.stringify({ played: 10, wins: 8, curStreak: 1, maxStreak: 5, dist: [0, 0, 0, 0, 0, 0, 0, 0], lastDate: HTODAY, lastWon: true, lastGuessCount: 3 });
+store["elg:hl:stats"] = JSON.stringify({ runs: 7, best: 12 });
+var rc = window.Records._collect();
+ok(rc.dailies.length === 10, "all ten daily games are on the sheet");
+var rcHL = rc.dailies.filter(function (r) { return r.id === "higherlower"; })[0];
+ok(rcHL.played === 4 && rcHL.won === 3 && rcHL.pct === 75 && rcHL.best === 3, "a daily row aggregates played/solved/win%/best from dstats");
+ok(rc.dailies[0].won === 8 && rc.dailies[0].pct === 80, "Mystery's row reads wins from its older elg:stats shape");
+ok(rc.extras.some(function (x) { return x.line.indexOf("best streak 12") >= 0; }), "HL endless best surfaces under Endless & practice");
+var rcG0 = rc.rm.gold;
+var rmTeam2 = window.PLAYERS.filter(function (p) { return p.team !== "AS Monaco"; })[0].team;
+var rmSize2 = window.PLAYERS.filter(function (p) { return p.team === rmTeam2; }).length;
+store["elg:rm:best:" + rmTeam2] = JSON.stringify({ n: rmSize2, of: rmSize2 });
+rc = window.Records._collect();
+ok(rc.rm.gold === rcG0 + 1, "a full-roster best counts as one more gold club");
+ok(rc.rm.of === window.PLAYERS.length && rc.rm.named >= rmSize2, "Roster Master totals count every rostered player");
+window.Records._render();
+var recHTML = byId("records-body").innerHTML;
+ok(recHTML.indexOf("Higher or Lower") > 0 && recHTML.indexOf("75%") > 0, "the sheet renders the daily table");
+ok(recHTML.indexOf("gold") > 0, "the sheet renders the Roster Master line");
 
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);

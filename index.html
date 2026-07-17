@@ -227,6 +227,21 @@
   .banner-actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
   .banner-hint { margin-top: 10px; font-size: 12.5px; color: var(--muted); }
 
+  /* ---------- Records: the agate page (rule-separated, no boxes) ---------- */
+  body.view-records .app { max-width: 640px; }
+  .rec-streak { padding: 12px 2px; font-size: 15px; line-height: 1.5; border-bottom: 1px solid var(--rule); }
+  .rec-sect {
+    margin-top: 20px; padding-bottom: 6px; border-bottom: 1px solid var(--rule);
+    font: var(--label); letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted);
+  }
+  .rec-grid { display: grid; grid-template-columns: 1fr 3em 3em 4em 3.6em; gap: 0 8px; align-items: baseline; }
+  .rec-head { padding: 8px 2px 4px; font: var(--label); letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .rec-head span + span, .rec-row.rec-grid span + span { text-align: right; font-variant-numeric: tabular-nums; }
+  .rec-row { padding: 7px 2px; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
+  .rec-row.rec-grid span:first-child { font-weight: 600; }
+  .rec-line { line-height: 1.5; }
+  .rec-empty { padding: 12px 2px; color: var(--muted); font-size: 13.5px; }
+
   /* ---------- Mystery board: square cells, Wordle grammar ---------------- */
   .board-wrap { position: relative; }
   .board-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
@@ -295,6 +310,8 @@
   .icon-btn.left { left: 14px; right: auto; }
   .icon-btn.stats { right: 54px; }
   #theme-btn { left: 52px; }                  /* sits beside Home on a game view */
+  #records-btn { right: 14px; }               /* the hub's right corner — home only */
+  body:not(.view-home) #records-btn { display: none; }
   body.view-home #theme-btn { left: 14px; }   /* Home button is hidden here → take the corner */
   /* sun ⇄ moon: the sun spins out + the moon spins in when the theme flips */
   #theme-btn .tt { overflow: visible; }
@@ -402,6 +419,7 @@
   body.view-oddoneout    { --accent: #9a3f7d; --accent-2: #82356a; }
   body.view-higherlower  { --accent: #6e7b2f; --accent-2: #5c672a; }
   body.view-rostermaster { --accent: #875327; --accent-2: #714523; }
+  body.view-records { --accent: #6e6656; --accent-2: #5b5445; }   /* agate — sober, no paint */
 
   /* ============ NIGHT MODE ============================================== */
   /* Warm "dark newsprint": near-black warm paper, off-white ink, hairlines
@@ -429,6 +447,7 @@
   :root[data-theme="dark"] body.view-oddoneout    { --accent: #c46da8; --accent-2: #b0578f; }
   :root[data-theme="dark"] body.view-higherlower  { --accent: #a8b85e; --accent-2: #97a74e; }
   :root[data-theme="dark"] body.view-rostermaster { --accent: #c99a62; --accent-2: #b78a52; }
+  :root[data-theme="dark"] body.view-records      { --accent: #a29881; --accent-2: #8f866f; }
   /* hardcoded light surfaces that tokens don't reach */
   [data-theme="dark"] .option + .option { border-top-color: var(--rule); }
   [data-theme="dark"] button { border-color: #4a4234; }
@@ -935,6 +954,7 @@
 
   <button id="home-btn" class="icon-btn left" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><use href="#ico-home"/></svg></button>
   <button id="theme-btn" class="icon-btn left theme" type="button" aria-label="Switch to night mode" title="Night mode"><svg viewBox="0 0 24 24" class="tt" aria-hidden="true"><g class="tt-sun"><circle cx="12" cy="12" r="4.5"/><g class="tt-rays"><line x1="12" y1="1.7" x2="12" y2="4.1"/><line x1="12" y1="19.9" x2="12" y2="22.3"/><line x1="1.7" y1="12" x2="4.1" y2="12"/><line x1="19.9" y1="12" x2="22.3" y2="12"/><line x1="4.6" y1="4.6" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.7" y2="6.3"/><line x1="6.3" y1="17.7" x2="4.6" y2="19.4"/></g></g><path class="tt-moon" data-fill="1" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+  <button id="records-btn" class="icon-btn" type="button" aria-label="Records" title="Records"><svg viewBox="0 0 24 24"><use href="#ico-stats"/></svg></button>
 
   <!-- ===== HOME HUB ===== -->
   <div id="home-view" class="view">
@@ -1014,6 +1034,17 @@
       </button>
     </div>
   </div>
+
+  <!-- ===== RECORDS (the agate page) ===== -->
+  <div id="records-view" class="view" hidden>
+    <header>
+      <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-stats"/></svg></span><span><span class="accent">Rec</span>ords</span></h1>
+      <div class="tagline">The agate page — every number the hub keeps</div>
+    </header>
+    <div class="app">
+      <div id="records-body" class="records" aria-live="polite"></div>
+    </div>
+  </div><!-- /records-view -->
 
   <!-- ===== GAME 1: MYSTERY PLAYER ===== -->
   <div id="mystery-view" class="view" hidden>
@@ -1675,6 +1706,7 @@
   <script src="oddoneout.js"></script>
   <script src="higherlower.js"></script>
   <script src="rostermaster.js"></script>
+  <script src="records.js"></script>
   <script src="app.js"></script>
   <script>
     /* Register the offline service worker (only runs over https / localhost). */
