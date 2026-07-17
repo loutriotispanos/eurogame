@@ -52,6 +52,9 @@
   function $(id) { return document.getElementById(id); }
 
   var mode = "daily";        // "daily" | "endless"
+  var dayKey = todayStr();   // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
+  function dailyLabel() { return isArchive ? "Archive " + dayKey : "Daily"; }
   var lastFocus = null;
   var dayMatchups = [];      // the 10 matchups for today's Daily
   var results = [];          // per-matchup correctness (Daily)
@@ -85,7 +88,7 @@
     return null;
   }
   function seededDayMatchups() {
-    var rnd = mulberry32(hashStr(todayStr() + "#hl"));
+    var rnd = mulberry32(hashStr(dayKey + "#hl"));
     var seq = shuffleSeeded(DAY_MIX.slice(), rnd);
     var used = {}, out = [];
     for (var i = 0; i < PER_DAY; i++) out.push(pickPair(seq[i], rnd, used));
@@ -105,6 +108,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                   // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -167,9 +171,9 @@
   function renderCounter() {
     if (!els.counter) return;
     if (mode === "daily") {
-      if (over) { els.counter.textContent = "Daily · done — " + scoreSoFar() + "/" + PER_DAY; return; }
+      if (over) { els.counter.textContent = dailyLabel() + " · done — " + scoreSoFar() + "/" + PER_DAY; return; }
       var n = Math.min(revealed ? results.length : results.length + 1, PER_DAY);
-      els.counter.textContent = "Daily · matchup " + n + " of " + PER_DAY;
+      els.counter.textContent = dailyLabel() + " · matchup " + n + " of " + PER_DAY;
     } else {
       els.counter.textContent = over ? "Endless · run over — streak " + streak : "Endless · streak " + streak;
     }
@@ -181,6 +185,7 @@
   }
 
   function dailyBannerNote() {
+    if (isArchive) return " That was the " + dayKey + " edition.";
     var s = getDStats();
     if (won) return s.curStreak >= 2 ? " 🔥 " + s.curStreak + "-day streak — see you tomorrow!" : " Come back tomorrow for ten fresh ones. 👋";
     return " Ten new matchups land at midnight — come back for revenge!";
@@ -199,7 +204,7 @@
   }
   function shareText() {
     var rows = results.map(function (r) { return r ? "🟩" : "🟥"; }).join("");
-    return "Higher or Lower 🏀 " + todayStr() + "\n" + scoreSoFar() + "/" + PER_DAY + "\n" + rows +
+    return "Higher or Lower 🏀 " + dayKey + "\n" + scoreSoFar() + "/" + PER_DAY + "\n" + rows +
       (window.ELG ? "\n" + window.ELG.shareURL("higherlower") : "");
   }
   function addShareBtn(actions) {
@@ -228,7 +233,7 @@
   function say(msg) { if (els.sr) els.sr.textContent = msg; }
 
   // --- Interaction -------------------------------------------------------------
-  function saveDaily() { lsSet(K.daily(todayStr()), { results: results.slice(), done: over, won: won }); }
+  function saveDaily() { lsSet(K.daily(dayKey), { results: results.slice(), done: over, won: won }); }
 
   function pick(idx) {
     if (revealed || over || !matchup) return;
@@ -268,7 +273,7 @@
   function dealDaily() {
     dayMatchups = seededDayMatchups();
     over = false; won = false; results = []; dealt = true;
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved && saved.results) {
       results = saved.results.slice();
       if (results.length >= PER_DAY || saved.done) {
@@ -289,6 +294,7 @@
 
   function setMode(m) {
     mode = (m === "endless") ? "endless" : "daily";
+    if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
     [["daily", els.tabDaily], ["endless", els.tabEndless]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -346,7 +352,7 @@
     if (!els.cards || POOL.length < 20) return;
 
     if (els.next) els.next.addEventListener("click", next);
-    if (els.tabDaily) els.tabDaily.addEventListener("click", function () { if (mode !== "daily") setMode("daily"); });
+    if (els.tabDaily) els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
     if (els.tabEndless) els.tabEndless.addEventListener("click", function () { if (mode !== "endless") setMode("endless"); });
     if (els.modeRow) els.modeRow.addEventListener("keydown", onModeKey);
     if (els.infoBtn) els.infoBtn.addEventListener("click", openInfo);
@@ -359,12 +365,13 @@
   }
 
   window.HigherLower = {
-    onShow: function () { if (!dealt) deal(); maybeFirstHelp(); },
+    onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); maybeFirstHelp(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("endless"); },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     _peek: function () {
       var q = matchup && Q[matchup.qkey];
-      return { mode: mode, streak: streak, results: results.slice(), over: over, won: won, revealed: revealed,
+      return { mode: mode, day: dayKey, archive: isArchive, streak: streak, results: results.slice(), over: over, won: won, revealed: revealed,
         matchup: matchup ? { qkey: matchup.qkey, wins: q.wins, aName: matchup.a.name, bName: matchup.b.name, aVal: q.get(matchup.a), bVal: q.get(matchup.b) } : null };
     },
     _deal: deal, _setMode: setMode, _next: next,

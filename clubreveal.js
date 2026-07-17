@@ -70,6 +70,8 @@
   function $(id) { return document.getElementById(id); }
 
   var mode = "daily";                // "daily" | "active" | "legends"
+  var dayKey = todayStr();           // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var club = null, order = [], revealed = 1, guesses = [];
   var over = false, won = false, dealt = false;
   var matches = [], activeIndex = -1;
@@ -100,6 +102,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                   // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -149,6 +152,7 @@
 
   function dailyBannerNote() {
     if (mode !== "daily") return "";
+    if (isArchive) return "<br>That was the " + dayKey + " edition.";
     if (!won) return "<br>A new roster lands at midnight — come back for revenge!";
     var s = getDStats();
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
@@ -161,7 +165,7 @@
     var score = won
       ? "Named after " + revealed + " of " + order.length + (guesses.length ? " · " + guesses.length + (guesses.length === 1 ? " miss" : " misses") : "")
       : "X — it stayed hidden";
-    return "Club Reveal 🏀 " + todayStr() + "\n" + score + "\n" + row +
+    return "Club Reveal 🏀 " + dayKey + "\n" + score + "\n" + row +
       (window.ELG ? "\n" + window.ELG.shareURL("clubreveal") : "");
   }
   function addShareBtn(actions) {
@@ -243,7 +247,7 @@
 
   // --- Game flow ------------------------------------------------------------------
   function saveDaily() {
-    lsSet(K.daily(todayStr()), { club: club, revealed: revealed, guesses: guesses, done: over, won: won });
+    lsSet(K.daily(dayKey), { club: club, revealed: revealed, guesses: guesses, done: over, won: won });
   }
   function revealNext() {
     if (over || revealed >= order.length) return;
@@ -285,10 +289,10 @@
   function dealDaily() {
     var pool = pools().active, clubs = Object.keys(pool).sort();
     if (!clubs.length) { els.counter.textContent = "No rosters available."; return; }
-    club = clubs[hashStr("cv:" + todayStr()) % clubs.length];
-    order = orderRoster(pool[club], hashStr("cv:" + todayStr() + ":" + club));
+    club = clubs[hashStr("cv:" + dayKey) % clubs.length];
+    order = orderRoster(pool[club], hashStr("cv:" + dayKey + ":" + club));
     resetState();
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved && saved.club === club) {
       revealed = Math.min(Math.max(saved.revealed || 1, 1), order.length);
       guesses = (saved.guesses || []).slice(0, MAX);
@@ -312,6 +316,7 @@
 
   function setMode(m) {
     mode = ({ daily: 1, active: 1, legends: 1, both: 1 })[m] ? m : "daily";
+    if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
     [["daily", els.tabDaily], ["active", els.tabActive], ["legends", els.tabLegends], ["both", els.tabBoth]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -402,7 +407,7 @@
     els.reveal.addEventListener("click", revealNext);
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
-    els.tabDaily.addEventListener("click", function () { if (mode !== "daily") setMode("daily"); });
+    els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
     els.tabActive.addEventListener("click", function () { if (mode !== "active") setMode("active"); });
     els.tabLegends.addEventListener("click", function () { if (mode !== "legends") setMode("legends"); });
     if (els.tabBoth) els.tabBoth.addEventListener("click", function () { if (mode !== "both") setMode("both"); });
@@ -417,11 +422,12 @@
   }
 
   window.ClubReveal = {
-    onShow: function () { if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },
+    onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("both"); },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     // internal hooks used by test.js
-    _peek: function () { return { mode: mode, club: club, order: order, revealed: revealed, guesses: guesses, over: over, won: won }; },
+    _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, club: club, order: order, revealed: revealed, guesses: guesses, over: over, won: won }; },
     _deal: deal,
     _setMode: setMode,
     _reveal: revealNext,

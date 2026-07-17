@@ -30,6 +30,8 @@
   function $(id) { return document.getElementById(id); }
 
   var mode = "daily";        // "daily" | "practice"
+  var dayKey = todayStr();   // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var lastFocus = null;      // restored when the how-to modal closes
   var puzzle = null;         // { groups: [ {theme, level, members[]} x4 ] }
   var cells = [];            // 16 tiles in display order: { name, g }
@@ -40,7 +42,7 @@
   var hist = [];             // per-guess group levels, e.g. [[1,3,1,1], …] — the share rows
 
   // --- Puzzle selection ------------------------------------------------------
-  function dailyPuzzle() { return PUZZLES[hashStr(todayStr()) % PUZZLES.length]; }
+  function dailyPuzzle() { return PUZZLES[hashStr(dayKey) % PUZZLES.length]; }
   function buildCells(p, seededOrder) {
     var flat = [];
     p.groups.forEach(function (g, gi) { g.members.forEach(function (name) { flat.push({ name: name, g: gi }); }); });
@@ -63,6 +65,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                                 // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;                 // once per day
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -83,7 +86,7 @@
   }
 
   // --- Rendering -------------------------------------------------------------
-  function modeLabel() { return mode === "daily" ? "Daily" : "Practice"; }
+  function modeLabel() { return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : "Practice"; }
   function isSolved(gi) { return solvedG.indexOf(gi) >= 0; }
 
   function renderSolved() {
@@ -132,6 +135,7 @@
 
   function dailyBannerNote() {          // warm closing line for the Daily banner
     if (mode !== "daily") return "";
+    if (isArchive) return " That was the " + dayKey + " edition.";
     if (!won) return " A new puzzle lands at midnight — come back for revenge!";
     var s = getDStats();
     return s.curStreak >= 2 ? " 🔥 " + s.curStreak + "-day streak — see you tomorrow!"
@@ -143,7 +147,7 @@
       ? hist.map(function (g) { return g.map(function (lv) { return em[lv] || "⬜"; }).join(""); })
       : solvedG.map(function (gi) { var e = em[puzzle.groups[gi].level] || "⬜"; return e + e + e + e; });
     var score = won ? (mistakes === 0 ? "Flawless!" : mistakes + (mistakes === 1 ? " mistake" : " mistakes")) : "X — " + MAX_MIST + " mistakes";
-    return "Connections 🏀 " + todayStr() + "\n" + score + "\n" + rows.join("\n") +
+    return "Connections 🏀 " + dayKey + "\n" + score + "\n" + rows.join("\n") +
       (window.ELG ? "\n" + window.ELG.shareURL("connections") : "");
   }
   function addShareBtn(actions) {
@@ -199,7 +203,7 @@
     renderGrid(); updateButtons();
   }
 
-  function saveDaily() { lsSet(K.daily(todayStr()), { solved: solvedG.slice(), mistakes: mistakes, hist: hist.slice(), done: over, won: won }); }
+  function saveDaily() { lsSet(K.daily(dayKey), { solved: solvedG.slice(), mistakes: mistakes, hist: hist.slice(), done: over, won: won }); }
 
   function submit() {
     if (over || selected.length !== GROUP) return;
@@ -248,9 +252,9 @@
   function resetRound() { selected = []; solvedG = []; mistakes = 0; over = false; won = false; tried = []; hist = []; dealt = true; if (els.banner) els.banner.hidden = true; say(""); }
   function dealDaily() {
     puzzle = dailyPuzzle();
-    cells = buildCells(puzzle, hashStr(todayStr() + "#board"));
+    cells = buildCells(puzzle, hashStr(dayKey + "#board"));
     resetRound();
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved) { solvedG = (saved.solved || []).slice(); mistakes = saved.mistakes || 0; hist = (saved.hist || []).slice(); over = !!saved.done; won = !!saved.won; }
     renderAll();
     if (over) showBanner();
@@ -267,6 +271,7 @@
 
   function setMode(m) {
     mode = (m === "practice") ? "practice" : "daily";
+    if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
     [["daily", els.tabDaily], ["practice", els.tabPractice]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -346,7 +351,7 @@
     if (els.deselect) els.deselect.addEventListener("click", deselectAll);
     if (els.shuffle) els.shuffle.addEventListener("click", shuffleBoard);
     if (els.next) els.next.addEventListener("click", deal);
-    if (els.tabDaily) els.tabDaily.addEventListener("click", function () { if (mode !== "daily") setMode("daily"); });
+    if (els.tabDaily) els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
     if (els.tabPractice) els.tabPractice.addEventListener("click", function () { if (mode !== "practice") setMode("practice"); });
     if (els.modeRow) els.modeRow.addEventListener("keydown", onModeKey);
     if (els.infoBtn) els.infoBtn.addEventListener("click", openInfo);
@@ -359,10 +364,11 @@
   }
 
   window.Connections = {
-    onShow: function () { if (!dealt) deal(); maybeFirstHelp(); },
+    onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); maybeFirstHelp(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("practice"); },
-    _peek: function () { return { mode: mode, solved: solvedG.slice(), mistakes: mistakes, over: over, won: won, groups: puzzle && puzzle.groups }; },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
+    _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, solved: solvedG.slice(), mistakes: mistakes, over: over, won: won, groups: puzzle && puzzle.groups }; },
     _deal: deal,
     _setMode: setMode,
     _shareText: shareText,

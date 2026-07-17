@@ -75,14 +75,16 @@
 
   var GRIDS = window.GRIDS || [];
   var mode = "daily";               // "daily" | "practice"
+  var dayKey = todayStr();          // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var puzzle = null, pIdx = -1, cells = [], left = MAX, wrong = 0;
   var over = false, won = false, dealt = false, selected = -1, used = {};
   var misses = [];                  // per-cell list of names tried that didn't fit
   var cellEls = [];
   var matches = [], activeIndex = -1;
 
-  function modeLabel() { return mode === "daily" ? "Daily" : "Practice"; }
-  function dailyIdx() { return GRIDS.length ? hashStr("grid:" + todayStr()) % GRIDS.length : -1; }
+  function modeLabel() { return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : "Practice"; }
+  function dailyIdx() { return GRIDS.length ? hashStr("grid:" + dayKey) % GRIDS.length : -1; }
   function critAt(i) { return { row: puzzle.rows[Math.floor(i / 3)], col: puzzle.cols[i % 3] }; }
 
   // --- Stats: practice (simple) + daily (streak) -----------------------------
@@ -97,6 +99,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                   // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -166,6 +169,7 @@
 
   function dailyBannerNote() {
     if (mode !== "daily") return "";
+    if (isArchive) return "<br>That was the " + dayKey + " edition.";
     if (!won) return "<br>A fresh grid lands at midnight — come back for revenge!";
     var s = getDStats();
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
@@ -179,7 +183,7 @@
       rows.push(line);
     }
     var score = won ? "9/9" + (wrong ? " · " + wrong + (wrong === 1 ? " miss" : " misses") : " · immaculate") : filledCount() + "/9";
-    return "The Grid 🏀 " + todayStr() + "\n" + score + "\n" + rows.join("\n") +
+    return "The Grid 🏀 " + dayKey + "\n" + score + "\n" + rows.join("\n") +
       (window.ELG ? "\n" + window.ELG.shareURL("thegrid") : "");
   }
   function addShareBtn(actions) {
@@ -283,7 +287,7 @@
     paintAll();
   }
   function saveDaily() {
-    lsSet(K.daily(todayStr()), {
+    lsSet(K.daily(dayKey), {
       puzzle: pIdx,
       cells: cells.map(function (c) { return c && !c.revealed ? c.name : null; }),
       misses: misses, left: left, wrong: wrong, done: over, won: won
@@ -345,7 +349,7 @@
     if (pIdx < 0) { els.counter.textContent = "No grids available."; return; }
     puzzle = GRIDS[pIdx]; dealt = true;
     resetState();
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved && saved.puzzle === pIdx) {
       (saved.cells || []).forEach(function (n, i) { if (n) { cells[i] = { name: n }; used[n] = 1; } });
       if (saved.misses && saved.misses.length === 9) misses = saved.misses;
@@ -369,6 +373,7 @@
 
   function setMode(m) {
     mode = (m === "practice") ? "practice" : "daily";
+    if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
     [["daily", els.tabDaily], ["practice", els.tabPractice]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -457,7 +462,7 @@
     document.addEventListener("click", function (e) { if (e.target !== els.input && els.dropdown && !els.dropdown.contains(e.target)) closeDropdown(); });
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
-    els.tabDaily.addEventListener("click", function () { if (mode !== "daily") setMode("daily"); });
+    els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
     els.tabPractice.addEventListener("click", function () { if (mode !== "practice") setMode("practice"); });
     if (els.modeRow) els.modeRow.addEventListener("keydown", onModeKey);
     if (els.infoBtn) els.infoBtn.addEventListener("click", openInfo);
@@ -470,11 +475,12 @@
   }
 
   window.TheGrid = {
-    onShow: function () { if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },
+    onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("practice"); },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     // internal hooks used by test.js AND build_grids.js (shared predicates)
-    _peek: function () { return { mode: mode, pIdx: pIdx, puzzle: puzzle, cells: cells, misses: misses, left: left, wrong: wrong, over: over, won: won, selected: selected }; },
+    _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, pIdx: pIdx, puzzle: puzzle, cells: cells, misses: misses, left: left, wrong: wrong, over: over, won: won, selected: selected }; },
     _deal: deal,
     _setMode: setMode,
     _select: select,

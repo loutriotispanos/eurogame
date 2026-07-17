@@ -5,19 +5,25 @@
   "use strict";
   function $(id) { return document.getElementById(id); }
 
-  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster", "records"];
-  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view"), higherlower: $("higherlower-view"), rostermaster: $("rostermaster-view"), records: $("records-view") };
+  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster", "records", "archive"];
+  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view"), higherlower: $("higherlower-view"), rostermaster: $("rostermaster-view"), records: $("records-view"), archive: $("archive-view") };
 
-  // mode: "practice" | "daily" (force a mode) | undefined (plain open → resume last mode)
+  // Every in-app navigation pushes a history entry (URL untouched) so the
+  // browser arrows retrace the user's own path.
+  function pushNav(state) { try { if (window.history && window.history.pushState) window.history.pushState(state, "", ""); } catch (e) {} }
+
+  // mode: "practice" | "daily" (force a mode) | "archive:<YYYY-MM-DD>" (replay a
+  // past daily) | undefined (plain open → resume last mode)
   function showView(name, mode) {
     if (VIEWS.indexOf(name) === -1) name = "home";
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
     if (name === "home") { refreshDailyChips(); renderHubStreak(); layoutHome(); }   // state may have changed while playing
-    var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : name === "records" ? window.Records : null;
+    var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : name === "records" ? window.Records : name === "archive" ? window.Archive : null;
     if (api) {
       if (mode === "daily" && api.goDaily) api.goDaily();
       else if (mode === "practice" && api.goPractice) api.goPractice();
+      else if (mode && mode.indexOf("archive:") === 0 && api.goArchive) api.goArchive(mode.slice(8));
       else if (api.onShow) api.onShow();
     }
     if (window.scrollTo) window.scrollTo(0, 0);
@@ -178,10 +184,6 @@
       try { dl.textContent = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" }); }
       catch (e) { dl.textContent = todayStr(); }
     }
-    // Browser back/forward: every in-app navigation pushes a history entry
-    // (URL untouched), so the arrows retrace the user's own path. Games and
-    // Roster Master club boards (which push their own {club} states) included.
-    function pushNav(state) { try { if (window.history && window.history.pushState) window.history.pushState(state, "", ""); } catch (e) {} }
     var cards = document.querySelectorAll(".game-card");
     Array.prototype.forEach.call(cards, function (c) {
       // Plain open: each game resumes its last-used mode (Daily for first-timers).
@@ -191,12 +193,14 @@
     if (hb) hb.addEventListener("click", function () { pushNav({ v: "home" }); showView("home"); });
     var rb = $("records-btn");
     if (rb) rb.addEventListener("click", function () { pushNav({ v: "records" }); showView("records"); });
+    var ab = $("archive-btn");
+    if (ab) ab.addEventListener("click", function () { pushNav({ v: "archive" }); showView("archive"); });
     window.addEventListener("resize", layoutHome);   // no-op while a game is open
     window.addEventListener("hashchange", function () { if (hasChallenge()) showView("mystery"); });
     window.addEventListener("popstate", function (e) {
       if (hasChallenge()) { showView("mystery"); return; }
       var st = e.state || { v: "home" };
-      showView(st.v || "home");
+      showView(st.v || "home", st.archive ? "archive:" + st.archive : undefined);
       if (st.v === "rostermaster" && window.RosterMaster) {   // sub-state: picker vs a club board
         if (st.club) window.RosterMaster._open(st.club, true);
         else window.RosterMaster._back(true);
@@ -248,6 +252,9 @@
   // Test hooks + programmatic refresh (the headless harness drives these directly).
   window.Hub = {
     refresh: function () { refreshDailyChips(); renderHubStreak(); },
+    // The Archive page routes through this: open a game straight into a past
+    // day's daily (the game's goArchive replays that edition, streak-free).
+    _openArchive: function (game, date) { pushNav({ v: game, archive: date }); showView(game, "archive:" + date); },
     _reconcile: reconcileHub, _info: hubInfo, _isTodayDone: isTodayDone,
     _getHub: getHub, _setHub: setHub,
     _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme

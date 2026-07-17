@@ -35,6 +35,8 @@
   function $(id) { return document.getElementById(id); }
 
   var diff = "daily";              // "daily" | "easy" | "medium" | "hard"
+  var dayKey = todayStr();         // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var lineup = null, hiddenPos = null, target = null;
   var guesses = [], over = false, won = false, dealt = false;
   var matches = [], activeIndex = -1, POOL = [];
@@ -47,7 +49,7 @@
     LINEUPS.forEach(function (L) { L.five.forEach(function (p) { add(p.name); }); });
     return pool;
   }
-  function diffLabel() { return diff === "daily" ? "Daily" : diff === "easy" ? "Easy" : diff === "hard" ? "Hard" : "Medium"; }
+  function diffLabel() { return diff === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : diff === "easy" ? "Easy" : diff === "hard" ? "Hard" : "Medium"; }
   // Easy hides the star (fame 1); Medium a 2nd/3rd option; Hard the hardest (4/5).
   function fameBucket() { return diff === "easy" ? [1] : diff === "hard" ? [4, 5] : [2, 3]; }
   function pickHidden(five) {
@@ -55,8 +57,8 @@
     var cands = five.filter(function (p) { return allowed.indexOf(p.fame) >= 0; });
     return (cands.length ? randomFrom(cands) : five[0]).pos;
   }
-  function dailyLineup() { return LINEUPS[hashStr(todayStr()) % LINEUPS.length]; }
-  function dailyHiddenPos(five) { return five[hashStr(todayStr() + "#5") % five.length].pos; }
+  function dailyLineup() { return LINEUPS[hashStr(dayKey) % LINEUPS.length]; }
+  function dailyHiddenPos(five) { return five[hashStr(dayKey + "#5") % five.length].pos; }
 
   // --- Stats: practice (simple) + daily (streak) -----------------------------
   function defaultStats() { return { played: 0, solved: 0, curStreak: 0, maxStreak: 0 }; }
@@ -70,6 +72,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                                 // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;                 // once per day
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -125,6 +128,7 @@
 
   function dailyBannerNote() {          // warm closing line for the Daily banner
     if (diff !== "daily") return "";
+    if (isArchive) return "<br>That was the " + dayKey + " edition.";
     if (!won) return "<br>A new five takes the floor at midnight — come back for revenge!";
     var s = getDStats();
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
@@ -135,7 +139,7 @@
     for (i = 0; i < guesses.length; i++) row += "🟥";
     if (won) row += "🟩";
     var score = won ? (guesses.length + 1) + "/" + MAX : "X/" + MAX;
-    return "Complete the Five 🏀 " + todayStr() + "\n" + score + "\n" + row +
+    return "Complete the Five 🏀 " + dayKey + "\n" + score + "\n" + row +
       (window.ELG ? "\n" + window.ELG.shareURL("completefive") : "");
   }
   function addShareBtn(actions) {
@@ -205,7 +209,7 @@
   }
 
   // --- Game flow -------------------------------------------------------------
-  function saveDaily() { lsSet(K.daily(todayStr()), { guesses: guesses, done: over, won: won }); }
+  function saveDaily() { lsSet(K.daily(dayKey), { guesses: guesses, done: over, won: won }); }
   function submitGuess(name) {
     if (over || !name) return;
     els.input.value = ""; closeDropdown();
@@ -231,7 +235,7 @@
     hiddenPos = dailyHiddenPos(lineup.five);
     setupTarget();
     resetRound();
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved) { (saved.guesses || []).forEach(function (n) { guesses.push(n); }); over = !!saved.done; won = !!saved.won; }
     renderHeader(); renderCourt(); renderGuesses(); closeDropdown(); updateNextBtn();
     if (over) { els.input.disabled = true; showBanner(); updateCounter(); }
@@ -250,6 +254,7 @@
   function giveUp() { if (over || diff === "daily") return; won = false; over = true; finish(); }   // reveal the answer (practice only)
   function setDiff(d) {
     diff = ({ daily: 1, easy: 1, medium: 1, hard: 1 })[d] ? d : "daily";
+    if (diff === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.diff, diff);
     [["daily", els.tabDaily], ["easy", els.tabEasy], ["medium", els.tabMedium], ["hard", els.tabHard]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -340,7 +345,7 @@
     document.addEventListener("click", function (e) { if (e.target !== els.input && els.dropdown && !els.dropdown.contains(e.target)) closeDropdown(); });
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
-    els.tabDaily.addEventListener("click", function () { if (diff !== "daily") setDiff("daily"); });
+    els.tabDaily.addEventListener("click", function () { if (diff !== "daily" || isArchive) setDiff("daily"); });
     els.tabEasy.addEventListener("click", function () { if (diff !== "easy") setDiff("easy"); });
     els.tabMedium.addEventListener("click", function () { if (diff !== "medium") setDiff("medium"); });
     els.tabHard.addEventListener("click", function () { if (diff !== "hard") setDiff("hard"); });
@@ -355,10 +360,11 @@
   }
 
   window.CompleteFive = {
-    onShow: function () { if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },
+    onShow: function () { if (isArchive) setDiff("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setDiff("daily"); },
     goPractice: function () { setDiff("medium"); },
-    _peek: function () { return { team: lineup && lineup.team, hiddenPos: hiddenPos, target: target, diff: diff }; },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setDiff("daily"); },
+    _peek: function () { return { team: lineup && lineup.team, hiddenPos: hiddenPos, target: target, diff: diff, day: dayKey, archive: isArchive }; },
     _deal: deal,
     _setDiff: setDiff,
     _guess: submitGuess,
