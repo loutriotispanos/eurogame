@@ -137,13 +137,15 @@
   }
 
   var mode = "daily";                // "daily" | "easy" | "medium" | "hard"
+  var dayKey = todayStr();           // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var pIdx = -1, start = null, target = null, par = 0;
   var chain = [], left = 0, wrong = 0, misses = [];   // misses = tried-and-failed for the CURRENT chain end
   var over = false, won = false, dealt = false;
   var matches = [], activeIndex = -1;
 
-  function modeLabel() { return mode === "daily" ? "Daily" : mode.charAt(0).toUpperCase() + mode.slice(1); }
-  function dailyIdx() { var m = pools()[3]; return m.length ? m[hashStr("pb:" + todayStr()) % m.length] : -1; }
+  function modeLabel() { return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : mode.charAt(0).toUpperCase() + mode.slice(1); }
+  function dailyIdx() { var m = pools()[3]; return m.length ? m[hashStr("pb:" + dayKey) % m.length] : -1; }
   function end() { return chain[chain.length - 1]; }
   function steps() { return chain.length - 1; }        // links built so far
 
@@ -159,6 +161,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                   // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -238,6 +241,7 @@
   }
   function dailyBannerNote() {
     if (mode !== "daily") return "";
+    if (isArchive) return "<br>That was the " + dayKey + " edition.";
     if (!won) return "<br>A new pair lands at midnight — come back for revenge!";
     var s = getDStats();
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
@@ -250,7 +254,7 @@
     if (!won) row += "⬛";
     var score = "Par " + par + " · " + (won ? "connected in " + steps() : "not connected") +
       (wrong ? " · " + wrong + (wrong === 1 ? " miss" : " misses") : "");
-    return "Path Between 🏀 " + todayStr() + "\n" + score + "\n" + row +
+    return "Path Between 🏀 " + dayKey + "\n" + score + "\n" + row +
       (window.ELG ? "\n" + window.ELG.shareURL("pathbetween") : "");
   }
   function addShareBtn(actions) {
@@ -348,7 +352,7 @@
     return teammates(end()).some(function (n) { return !used[n]; });
   }
   function saveDaily() {
-    lsSet(K.daily(todayStr()), { puzzle: pIdx, chain: chain, left: left, wrong: wrong, done: over, won: won });
+    lsSet(K.daily(dayKey), { puzzle: pIdx, chain: chain, left: left, wrong: wrong, done: over, won: won });
   }
   function finish(deadEnd) {
     over = true;
@@ -402,7 +406,7 @@
     if (i < 0) { els.counter.textContent = "No pairs available."; return; }
     applyPuzzle(i);
     resetState();
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved && saved.puzzle === pIdx && saved.chain && saved.chain[0] === start) {
       chain = saved.chain.slice();
       left = typeof saved.left === "number" ? saved.left : left;
@@ -426,6 +430,7 @@
 
   function setMode(m) {
     mode = ({ daily: 1, easy: 1, medium: 1, hard: 1 })[m] ? m : "daily";
+    if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
     [["daily", els.tabDaily], ["easy", els.tabEasy], ["medium", els.tabMedium], ["hard", els.tabHard]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -515,7 +520,7 @@
     document.addEventListener("click", function (e) { if (e.target !== els.input && els.dropdown && !els.dropdown.contains(e.target)) closeDropdown(); });
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
-    els.tabDaily.addEventListener("click", function () { if (mode !== "daily") setMode("daily"); });
+    els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
     els.tabEasy.addEventListener("click", function () { if (mode !== "easy") setMode("easy"); });
     els.tabMedium.addEventListener("click", function () { if (mode !== "medium") setMode("medium"); });
     els.tabHard.addEventListener("click", function () { if (mode !== "hard") setMode("hard"); });
@@ -530,11 +535,12 @@
   }
 
   window.PathBetween = {
-    onShow: function () { if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },
+    onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("medium"); },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     // internal hooks used by test.js AND build_paths.js (shared teammate graph)
-    _peek: function () { return { mode: mode, pIdx: pIdx, a: start, b: target, par: par, chain: chain, left: left, wrong: wrong, over: over, won: won, misses: misses }; },
+    _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, pIdx: pIdx, a: start, b: target, par: par, chain: chain, left: left, wrong: wrong, over: over, won: won, misses: misses }; },
     _deal: deal,
     _setMode: setMode,
     _guess: submitGuess,

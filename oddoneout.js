@@ -31,6 +31,8 @@
   function $(id) { return document.getElementById(id); }
 
   var mode = "daily";        // "daily" | "practice"
+  var dayKey = todayStr();   // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var lastFocus = null;
   var dayRounds = [];        // the 5 rounds for today's Daily
   var results = [];          // per-round correctness (Daily) — length == rounds answered
@@ -43,7 +45,7 @@
   // --- Round selection -------------------------------------------------------
   function seededDayRounds() {                       // 5 distinct rounds for today
     var idx = []; for (var i = 0; i < ROUNDS.length; i++) idx.push(i);
-    shuffleSeeded(idx, mulberry32(hashStr(todayStr() + "#oo")));
+    shuffleSeeded(idx, mulberry32(hashStr(dayKey + "#oo")));
     return idx.slice(0, PER_DAY).map(function (i) { return ROUNDS[i]; });
   }
   function orderFor(r, seed) {
@@ -64,6 +66,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                   // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -84,7 +87,7 @@
   }
 
   // --- Rendering -------------------------------------------------------------
-  function modeLabel() { return mode === "daily" ? "Daily" : "Practice"; }
+  function modeLabel() { return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : "Practice"; }
   function scoreSoFar() { return results.filter(function (x) { return x; }).length; }
 
   function renderPips() {
@@ -141,6 +144,7 @@
 
   function dailyBannerNote() {
     if (mode !== "daily") return "";
+    if (isArchive) return " That was the " + dayKey + " edition.";
     var s = getDStats();
     if (won) return s.curStreak >= 2 ? " 🔥 " + s.curStreak + "-day streak — see you tomorrow!" : " Come back tomorrow for five fresh ones. 👋";
     return " Five new rounds land at midnight — come back for revenge!";
@@ -169,7 +173,7 @@
   }
   function shareText() {
     var rows = results.map(function (r) { return r ? "🟩" : "🟥"; }).join("");
-    return "Odd One Out 🏀 " + todayStr() + "\n" + scoreSoFar() + "/" + PER_DAY + "\n" + rows +
+    return "Odd One Out 🏀 " + dayKey + "\n" + scoreSoFar() + "/" + PER_DAY + "\n" + rows +
       (window.ELG ? "\n" + window.ELG.shareURL("oddoneout") : "");
   }
   function addShareBtn(actions) {
@@ -182,7 +186,7 @@
   function say(msg) { if (els.sr) els.sr.textContent = msg; if (els.flash) { els.flash.textContent = msg; els.flash.hidden = !msg; } }
 
   // --- Interaction -----------------------------------------------------------
-  function saveDaily() { lsSet(K.daily(todayStr()), { results: results.slice(), done: over, won: won }); }
+  function saveDaily() { lsSet(K.daily(dayKey), { results: results.slice(), done: over, won: won }); }
 
   function pick(name) {
     if (revealed || over || !round) return;
@@ -212,14 +216,14 @@
   function clearRound() { picked = null; revealed = false; if (els.banner) els.banner.hidden = true; if (els.reveal) els.reveal.hidden = true; }
   function dealDailyRound() {
     round = dayRounds[results.length];
-    order = orderFor(round, hashStr(todayStr() + "#" + results.length));
+    order = orderFor(round, hashStr(dayKey + "#" + results.length));
     clearRound();
     renderTiles(); renderReveal(); renderPips(); renderCounter(); updateButtons();
   }
   function dealDaily() {
     dayRounds = seededDayRounds();
     over = false; won = false; results = []; dealt = true;
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved && saved.results) {
       results = saved.results.slice();
       if (saved.done) { over = true; won = !!saved.won; clearRound(); round = dayRounds[PER_DAY - 1]; renderTiles(); renderReveal(); renderPips(); renderCounter(); updateButtons(); renderStats(); showBanner(); return; }
@@ -239,6 +243,7 @@
 
   function setMode(m) {
     mode = (m === "practice") ? "practice" : "daily";
+    if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
     [["daily", els.tabDaily], ["practice", els.tabPractice]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -296,7 +301,7 @@
     if (!els.tiles || !ROUNDS.length) return;
 
     if (els.next) els.next.addEventListener("click", next);
-    if (els.tabDaily) els.tabDaily.addEventListener("click", function () { if (mode !== "daily") setMode("daily"); });
+    if (els.tabDaily) els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
     if (els.tabPractice) els.tabPractice.addEventListener("click", function () { if (mode !== "practice") setMode("practice"); });
     if (els.modeRow) els.modeRow.addEventListener("keydown", onModeKey);
     if (els.infoBtn) els.infoBtn.addEventListener("click", openInfo);
@@ -309,10 +314,11 @@
   }
 
   window.OddOneOut = {
-    onShow: function () { if (!dealt) deal(); maybeFirstHelp(); },
+    onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); maybeFirstHelp(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("practice"); },
-    _peek: function () { return { mode: mode, results: results.slice(), over: over, won: won, revealed: revealed, round: round }; },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
+    _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, results: results.slice(), over: over, won: won, revealed: revealed, round: round }; },
     _deal: deal, _setMode: setMode, _next: next,
     _pick: function (name) { pick(name); },
     _shareText: shareText

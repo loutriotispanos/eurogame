@@ -94,6 +94,7 @@ eval(fs.readFileSync("oddoneout.js", "utf8"));
 eval(fs.readFileSync("higherlower.js", "utf8"));
 eval(fs.readFileSync("rostermaster.js", "utf8"));
 eval(fs.readFileSync("records.js", "utf8"));
+eval(fs.readFileSync("archive.js", "utf8"));
 win.__ELG_NO_WIRE__ = true;   // drive window.Hub directly; skip app.js DOM wiring
 eval(fs.readFileSync("app.js", "utf8"));
 
@@ -1423,6 +1424,49 @@ window.Records._render();
 var recHTML = byId("records-body").innerHTML;
 ok(recHTML.indexOf("Higher or Lower") > 0 && recHTML.indexOf("75%") > 0, "the sheet renders the daily table");
 ok(recHTML.indexOf("gold") > 0, "the sheet renders the Roster Master line");
+
+console.log("Daily archive — replay past editions without touching streaks");
+var hlDBefore = store["elg:hl:dstats"];
+window.HigherLower.goArchive(HY3);
+var ha = window.HigherLower._peek();
+ok(ha.mode === "daily" && ha.archive === true && ha.day === HY3 && ha.results.length === 0, "goArchive deals the past day's daily fresh");
+for (var haI = 0; haI < 10; haI++) { var hap = window.HigherLower._peek(); window.HigherLower._pick(hlWinIdx(hap.matchup)); window.HigherLower._next(); }
+ha = window.HigherLower._peek();
+ok(ha.over === true && ha.won === true, "the archive daily plays to a win");
+ok(JSON.parse(store["elg:hl:daily:" + HY3]).done === true, "archive result saved under its own date key");
+ok(store["elg:hl:dstats"] === hlDBefore, "archive replay leaves daily stats + streak untouched");
+ok(window.HigherLower._shareText().indexOf("Higher or Lower 🏀 " + HY3) === 0, "archive share carries the archive date");
+ok(window.Hub._isTodayDone() === false, "an archive solve does NOT count as today's daily (hub streak safe)");
+window.HigherLower.goDaily();
+ha = window.HigherLower._peek();
+ok(ha.archive === false && ha.day === HTODAY && ha.results.length === 0, "goDaily returns to today's edition");
+
+var pidDBefore = store["elg:pid:dstats"];
+window.PlayerID._setFilter("daily");
+var pidToday = window.PlayerID._peek().name;
+window.PlayerID.goArchive(HY3);
+ok(window.PlayerID._peekDay().archive === true && window.PlayerID._peekDay().day === HY3, "PID enters archive mode for the past date");
+window.PlayerID._guess(window.PlayerID._peek().name);
+ok(window.PlayerID._peekDay().over === true && window.PlayerID._peekDay().won === true, "PID archive daily solved");
+ok(JSON.parse(store["elg:pid:daily:" + HY3]).done === true, "PID archive state saved under the past date");
+ok(store["elg:pid:dstats"] === pidDBefore, "PID daily stats untouched by the archive replay");
+window.PlayerID.goDaily();
+ok(window.PlayerID._peekDay().archive === false && window.PlayerID._peek().name === pidToday, "PID back on today's target");
+
+ok(window.Archive._dates().length === 14 && window.Archive._dates()[0] === HY, "archive lists the last 14 days, yesterday first");
+ok(window.Archive._stateFor("elg:hl:daily:", HY3) === "won", "the finished archive HL daily reads as won");
+ok(window.Archive._stateFor("elg:cn:daily:", window.Archive._dates()[8]) === "ready", "an unplayed date reads as ready");
+window.Archive._render();
+ok(byId("archive-body").children.length === 28, "14 date headings + 14 chip rows rendered");
+window.Hub._openArchive("oddoneout", HY3);
+var oap = window.OddOneOut._peek();
+ok(oap.mode === "daily" && oap.archive === true && oap.day === HY3, "Hub._openArchive routes into the game's archive mode");
+ok(win._pushedState && win._pushedState.v === "oddoneout" && win._pushedState.archive === HY3, "archive navigation pushes a retraceable history entry");
+window.OddOneOut.onShow();
+oap = window.OddOneOut._peek();
+ok(oap.archive === false && oap.day === HTODAY, "re-opening from the hub lands back on today's edition");
+fire(byId("oo-daily"), "click");
+ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way home from an archive replay");
 
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);

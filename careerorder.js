@@ -41,6 +41,8 @@
   function $(id) { return document.getElementById(id); }
 
   var diff = "daily";            // "daily" | "easy" | "medium" | "hard"
+  var dayKey = todayStr();       // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var lastFocus = null;
   var player = null;             // a CAREERS entry
   var segments = [];             // player's clubs, sorted chronologically (correct order)
@@ -54,7 +56,7 @@
 
   // --- Selection -------------------------------------------------------------
   function poolFor(d) { return d === "daily" ? POOLS.daily : POOLS[d] || POOLS.medium; }
-  function dailyPlayer() { var p = POOLS.daily; return p[hashStr(todayStr()) % p.length]; }
+  function dailyPlayer() { var p = POOLS.daily; return p[hashStr(dayKey) % p.length]; }
   function buildSegments(c) { return c.career.slice().sort(function (a, b) { return a.from - b.from; }); }
   function identity(n) { var a = []; for (var i = 0; i < n; i++) a.push(i); return a; }
   function isIdentity(a) { for (var i = 0; i < a.length; i++) if (a[i] !== i) return false; return true; }
@@ -72,6 +74,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                   // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -92,7 +95,7 @@
   }
 
   // --- Rendering -------------------------------------------------------------
-  function diffLabel() { return diff === "daily" ? "Daily" : diff === "easy" ? "Easy" : diff === "hard" ? "Hard" : diff === "medium" ? "Medium" : "Medium"; }
+  function diffLabel() { return diff === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : diff === "easy" ? "Easy" : diff === "hard" ? "Hard" : diff === "medium" ? "Medium" : "Medium"; }
   function correctCount() { var n = 0; for (var i = 0; i < order.length; i++) if (order[i] === i) n++; return n; }
   function renderClue() {
     if (!els.clue) return;
@@ -197,6 +200,7 @@
   }
   function dailyBannerNote() {          // warm closing line for the Daily banner
     if (diff !== "daily") return "";
+    if (isArchive) return "<br>That was the " + dayKey + " edition.";
     if (!won) return "<br>A new career lands at midnight — come back for revenge!";
     var s = getDStats();
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
@@ -207,7 +211,7 @@
     for (i = 0; i < tries; i++) row += "🟥";
     if (won) row += "🟩";
     var score = (won ? (tries + 1) + "/" + MAX : "X/" + MAX) + " · " + segments.length + " clubs";
-    return "Career Order 🏀 " + todayStr() + "\n" + score + "\n" + row +
+    return "Career Order 🏀 " + dayKey + "\n" + score + "\n" + row +
       (window.ELG ? "\n" + window.ELG.shareURL("careerorder") : "");
   }
   function addShareBtn(actions) {
@@ -251,7 +255,7 @@
     var t = order[i]; order[i] = order[j]; order[j] = t;
     renderList(); updateCounter(); updateButtons();
   }
-  function saveDaily() { lsSet(K.daily(todayStr()), { order: order.slice(), tries: tries, confirmed: confirmed.slice(), done: over, won: won }); }
+  function saveDaily() { lsSet(K.daily(dayKey), { order: order.slice(), tries: tries, confirmed: confirmed.slice(), done: over, won: won }); }
 
   function check() {
     if (over) return;
@@ -283,9 +287,9 @@
   function dealDaily() {
     var p = POOLS.daily;
     if (!p.length) { if (els.counter) els.counter.textContent = "No players loaded."; return; }
-    setup(dailyPlayer(), hashStr(todayStr() + "#order"));
+    setup(dailyPlayer(), hashStr(dayKey + "#order"));
     resetRound();
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved && saved.order && saved.order.length === segments.length) {
       order = saved.order.slice(); tries = saved.tries || 0; confirmed = (saved.confirmed || []).slice(); over = !!saved.done; won = !!saved.won;
       if (over) { showYears = true; order = identity(segments.length); confirmed = identity(segments.length); }
@@ -306,6 +310,7 @@
 
   function setDiff(d) {
     diff = ({ daily: 1, easy: 1, medium: 1, hard: 1 })[d] ? d : "daily";
+    if (diff === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.diff, diff);
     [["daily", els.tabDaily], ["easy", els.tabEasy], ["medium", els.tabMedium], ["hard", els.tabHard]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -366,7 +371,7 @@
     if (els.check) els.check.addEventListener("click", check);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
     if (els.next) els.next.addEventListener("click", deal);
-    if (els.tabDaily) els.tabDaily.addEventListener("click", function () { if (diff !== "daily") setDiff("daily"); });
+    if (els.tabDaily) els.tabDaily.addEventListener("click", function () { if (diff !== "daily" || isArchive) setDiff("daily"); });
     if (els.tabEasy) els.tabEasy.addEventListener("click", function () { if (diff !== "easy") setDiff("easy"); });
     if (els.tabMedium) els.tabMedium.addEventListener("click", function () { if (diff !== "medium") setDiff("medium"); });
     if (els.tabHard) els.tabHard.addEventListener("click", function () { if (diff !== "hard") setDiff("hard"); });
@@ -384,10 +389,11 @@
   }
 
   window.CareerOrder = {
-    onShow: function () { if (!dealt) deal(); maybeFirstHelp(); },
+    onShow: function () { if (isArchive) setDiff("daily"); else if (!dealt) deal(); maybeFirstHelp(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setDiff("daily"); },
     goPractice: function () { setDiff("medium"); },
-    _peek: function () { return { diff: diff, name: player && player.name, len: segments.length, order: order.slice(), confirmed: confirmed.slice(), tries: tries, over: over, won: won, correct: segments.map(function (s) { return s.team; }) }; },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setDiff("daily"); },
+    _peek: function () { return { diff: diff, day: dayKey, archive: isArchive, name: player && player.name, len: segments.length, order: order.slice(), confirmed: confirmed.slice(), tries: tries, over: over, won: won, correct: segments.map(function (s) { return s.team; }) }; },
     _deal: deal, _setDiff: setDiff,
     _setOrder: function (arr) { if (arr && arr.length === order.length) { order = arr.slice(); sanitizeConfirmed(); renderList(); } },
     _move: moveRow,

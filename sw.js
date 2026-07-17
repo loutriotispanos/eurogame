@@ -8,10 +8,10 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v62";  /* Records — the agate page: a hub-wide stats sheet (records.js + a home-corner button) aggregating the unified streak, every game's daily record, endless/practice bests and Roster Master recall totals from localStorage. */
+var CACHE = "elg-v63";  /* Daily archive: replay the last 14 days of every daily (archive.js view + goArchive in all ten games — date-seeded re-deals under per-date keys, streak- and stats-free). Also the Records agate page (v62) if you skipped it. */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "oddones.js", "grids.js", "paths.js",
-  "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "oddoneout.js", "higherlower.js", "rostermaster.js", "records.js", "app.js",
+  "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "oddoneout.js", "higherlower.js", "rostermaster.js", "records.js", "archive.js", "app.js",
   "manifest.webmanifest", "icon-192.png", "icon-512.png"
 ];
 

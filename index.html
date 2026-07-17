@@ -242,6 +242,17 @@
   .rec-line { line-height: 1.5; }
   .rec-empty { padding: 12px 2px; color: var(--muted); font-size: 13.5px; }
 
+  /* Archive: recent editions — a chip per game under each dateline */
+  body.view-archive .app { max-width: 720px; }
+  .arch-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0 4px; }
+  .arch-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; padding: 5px 11px; }
+  .arch-chip .arch-st { font-weight: 700; }
+  .arch-chip.won .arch-st { color: var(--green); }
+  .arch-chip.lost .arch-st { color: #a33d33; }
+  .arch-chip.playing .arch-st { color: var(--accent); }
+  .arch-chip.ready .arch-st { color: var(--muted); }
+  [data-theme="dark"] .arch-chip.lost .arch-st { color: #d4738a; }
+
   /* ---------- Mystery board: square cells, Wordle grammar ---------------- */
   .board-wrap { position: relative; }
   .board-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
@@ -311,7 +322,8 @@
   .icon-btn.stats { right: 54px; }
   #theme-btn { left: 52px; }                  /* sits beside Home on a game view */
   #records-btn { right: 14px; }               /* the hub's right corner — home only */
-  body:not(.view-home) #records-btn { display: none; }
+  #archive-btn { right: 54px; }
+  body:not(.view-home) #records-btn, body:not(.view-home) #archive-btn { display: none; }
   body.view-home #theme-btn { left: 14px; }   /* Home button is hidden here → take the corner */
   /* sun ⇄ moon: the sun spins out + the moon spins in when the theme flips */
   #theme-btn .tt { overflow: visible; }
@@ -420,6 +432,7 @@
   body.view-higherlower  { --accent: #6e7b2f; --accent-2: #5c672a; }
   body.view-rostermaster { --accent: #875327; --accent-2: #714523; }
   body.view-records { --accent: #6e6656; --accent-2: #5b5445; }   /* agate — sober, no paint */
+  body.view-archive { --accent: #6e6656; --accent-2: #5b5445; }
 
   /* ============ NIGHT MODE ============================================== */
   /* Warm "dark newsprint": near-black warm paper, off-white ink, hairlines
@@ -448,6 +461,7 @@
   :root[data-theme="dark"] body.view-higherlower  { --accent: #a8b85e; --accent-2: #97a74e; }
   :root[data-theme="dark"] body.view-rostermaster { --accent: #c99a62; --accent-2: #b78a52; }
   :root[data-theme="dark"] body.view-records      { --accent: #a29881; --accent-2: #8f866f; }
+  :root[data-theme="dark"] body.view-archive      { --accent: #a29881; --accent-2: #8f866f; }
   /* hardcoded light surfaces that tokens don't reach */
   [data-theme="dark"] .option + .option { border-top-color: var(--rule); }
   [data-theme="dark"] button { border-color: #4a4234; }
@@ -950,11 +964,19 @@
     <symbol id="ico-freeze" viewBox="0 0 24 24">
       <path d="M12 2 V22 M3.4 7 L20.6 17 M20.6 7 L3.4 17"/>
     </symbol>
+    <symbol id="ico-archive" viewBox="0 0 24 24">
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2"/>
+      <line x1="3.5" y1="9.5" x2="20.5" y2="9.5"/>
+      <line x1="8" y1="2.8" x2="8" y2="6.2"/><line x1="16" y1="2.8" x2="16" y2="6.2"/>
+      <line x1="7.5" y1="13.5" x2="10.5" y2="13.5"/><line x1="13.5" y1="13.5" x2="16.5" y2="13.5"/>
+      <line x1="7.5" y1="17" x2="10.5" y2="17"/>
+    </symbol>
   </defs></svg>
 
   <button id="home-btn" class="icon-btn left" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><use href="#ico-home"/></svg></button>
   <button id="theme-btn" class="icon-btn left theme" type="button" aria-label="Switch to night mode" title="Night mode"><svg viewBox="0 0 24 24" class="tt" aria-hidden="true"><g class="tt-sun"><circle cx="12" cy="12" r="4.5"/><g class="tt-rays"><line x1="12" y1="1.7" x2="12" y2="4.1"/><line x1="12" y1="19.9" x2="12" y2="22.3"/><line x1="1.7" y1="12" x2="4.1" y2="12"/><line x1="19.9" y1="12" x2="22.3" y2="12"/><line x1="4.6" y1="4.6" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.7" y2="6.3"/><line x1="6.3" y1="17.7" x2="4.6" y2="19.4"/></g></g><path class="tt-moon" data-fill="1" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
   <button id="records-btn" class="icon-btn" type="button" aria-label="Records" title="Records"><svg viewBox="0 0 24 24"><use href="#ico-stats"/></svg></button>
+  <button id="archive-btn" class="icon-btn" type="button" aria-label="Archive" title="Archive"><svg viewBox="0 0 24 24"><use href="#ico-archive"/></svg></button>
 
   <!-- ===== HOME HUB ===== -->
   <div id="home-view" class="view">
@@ -1045,6 +1067,18 @@
       <div id="records-body" class="records" aria-live="polite"></div>
     </div>
   </div><!-- /records-view -->
+
+  <!-- ===== ARCHIVE (recent editions) ===== -->
+  <div id="archive-view" class="view" hidden>
+    <header>
+      <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-archive"/></svg></span><span><span class="accent">Arch</span>ive</span></h1>
+      <div class="tagline">Missed a day? The last two weeks of dailies, replayable</div>
+    </header>
+    <div class="app">
+      <div class="rec-empty">Archive games don't count toward streaks or records — they're just for the love of it.</div>
+      <div id="archive-body" class="archive"></div>
+    </div>
+  </div><!-- /archive-view -->
 
   <!-- ===== GAME 1: MYSTERY PLAYER ===== -->
   <div id="mystery-view" class="view" hidden>
@@ -1707,6 +1741,7 @@
   <script src="higherlower.js"></script>
   <script src="rostermaster.js"></script>
   <script src="records.js"></script>
+  <script src="archive.js"></script>
   <script src="app.js"></script>
   <script>
     /* Register the offline service worker (only runs over https / localhost). */

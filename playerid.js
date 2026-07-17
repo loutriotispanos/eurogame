@@ -35,10 +35,12 @@
   function $(id) { return document.getElementById(id); }
 
   var filter = "daily";             // "daily" | "active" | "retired" | "both"
+  var dayKey = todayStr();          // the date the Daily engine is playing (Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var target = null, guesses = [], over = false, won = false, dealt = false;
   var matches = [], activeIndex = -1;
 
-  function filterLabel() { return filter === "daily" ? "Daily" : filter === "active" ? "Active" : filter === "retired" ? "Retired" : "Both"; }
+  function filterLabel() { return filter === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : filter === "active" ? "Active" : filter === "retired" ? "Retired" : "Both"; }
   // careers.js also carries 1-2 club players for The Grid / Path Between now;
   // a guess-from-the-route puzzle needs a route: practice wants >=2 clubs and
   // the Daily sticks to well-travelled paths (>=4) so the trip tells a story.
@@ -47,7 +49,7 @@
   }
   function dailyTarget() {
     var p = CAREERS.filter(function (c) { return c.career.length >= 4; });
-    return p.length ? p[hashStr(todayStr()) % p.length] : null;
+    return p.length ? p[hashStr(dayKey) % p.length] : null;
   }
   // Autocomplete suggests from the matching roster so the answer is always offered.
   function namePool() { return filter === "active" ? PLAYERS : filter === "retired" ? LEGENDS : PLAYERS.concat(LEGENDS); }
@@ -64,6 +66,7 @@
   function getDStats() { return lsGet(K.dstats, null) || defaultDStats(); }
   function recordDaily(winFlag) {
     var s = getDStats();
+    if (isArchive) return s;                                 // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;                 // once per day
     s.played++;
     if (winFlag) { s.solved++; s.curStreak = (s.lastDate === yesterdayStr() && s.lastWon) ? s.curStreak + 1 : 1; if (s.curStreak > s.maxStreak) s.maxStreak = s.curStreak; }
@@ -106,6 +109,7 @@
 
   function dailyBannerNote() {          // warm closing line for the Daily banner
     if (filter !== "daily") return "";
+    if (isArchive) return "<br>That was the " + dayKey + " edition.";
     if (!won) return "<br>A new career lands at midnight — come back for revenge!";
     var s = getDStats();
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
@@ -116,7 +120,7 @@
     for (i = 0; i < guesses.length; i++) row += "🟥";
     if (won) row += "🟩";
     var score = won ? (guesses.length + 1) + "/" + MAX : "X/" + MAX;
-    return "Player ID 🏀 " + todayStr() + "\n" + score + "\n" + row +
+    return "Player ID 🏀 " + dayKey + "\n" + score + "\n" + row +
       (window.ELG ? "\n" + window.ELG.shareURL("playerid") : "");
   }
   function addShareBtn(actions) {
@@ -194,7 +198,7 @@
   }
 
   // --- Game flow -------------------------------------------------------------
-  function saveDaily() { lsSet(K.daily(todayStr()), { target: target.name, guesses: guesses, done: over, won: won }); }
+  function saveDaily() { lsSet(K.daily(dayKey), { target: target.name, guesses: guesses, done: over, won: won }); }
   function submitGuess(name) {
     if (over || !name) return;
     els.input.value = ""; closeDropdown();
@@ -215,7 +219,7 @@
     if (!target) { els.counter.textContent = "No players available."; return; }
     guesses = []; over = false; won = false; dealt = true;
     els.input.value = ""; els.input.disabled = false; els.banner.hidden = true;
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey), null);
     if (saved && saved.target === target.name) {
       (saved.guesses || []).forEach(function (n) { guesses.push(n); });
       over = !!saved.done; won = !!saved.won;
@@ -236,6 +240,7 @@
 
   function setFilter(f) {
     filter = ({ daily: 1, active: 1, retired: 1, both: 1 })[f] ? f : "daily";
+    if (filter === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.filter, filter);
     [["daily", els.tabDaily], ["active", els.tabActive], ["retired", els.tabRetired], ["both", els.tabBoth]].forEach(function (pr) {
       if (!pr[1]) return;
@@ -325,7 +330,7 @@
     els.input.addEventListener("focus", refreshMatches);
     document.addEventListener("click", function (e) { if (e.target !== els.input && els.dropdown && !els.dropdown.contains(e.target)) closeDropdown(); });
     els.next.addEventListener("click", deal);
-    els.tabDaily.addEventListener("click", function () { if (filter !== "daily") setFilter("daily"); });
+    els.tabDaily.addEventListener("click", function () { if (filter !== "daily" || isArchive) setFilter("daily"); });
     els.tabActive.addEventListener("click", function () { if (filter !== "active") setFilter("active"); });
     els.tabRetired.addEventListener("click", function () { if (filter !== "retired") setFilter("retired"); });
     els.tabBoth.addEventListener("click", function () { if (filter !== "both") setFilter("both"); });
@@ -340,11 +345,13 @@
   }
 
   window.PlayerID = {
-    onShow: function () { if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },
+    onShow: function () { if (isArchive) setFilter("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setFilter("daily"); },
     goPractice: function () { setFilter("both"); },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setFilter("daily"); },
     // internal hooks used by the headless test (test.js)
     _peek: function () { return target; },
+    _peekDay: function () { return { day: dayKey, archive: isArchive, over: over, won: won, filter: filter }; },
     _deal: deal,
     _setFilter: setFilter,
     _guess: submitGuess,

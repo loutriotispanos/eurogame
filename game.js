@@ -33,6 +33,8 @@
   var activeIndex = -1;     // highlighted row in the autocomplete dropdown
   var matches = [];         // current autocomplete matches
   var countdownTimer = null;
+  var dayKey = null;                 // the date the Daily engine is playing (set on entering daily; Archive replays a past one)
+  var isArchive = false, pendingArchive = null;
   var dailyDealtFor = null;   // date the in-memory daily target was dealt for (rollover guard)
   var lastFocus = null;       // element to restore focus to when a modal closes
   var hardMode = false;       // when on, autocomplete only offers players that fit all clues
@@ -80,7 +82,7 @@
     for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
     return h >>> 0;
   }
-  function dailyTarget() { return PLAYERS[hashStr(todayStr()) % PLAYERS.length]; }
+  function dailyTarget() { return PLAYERS[hashStr(dayKey || todayStr()) % PLAYERS.length]; }
   function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
   // Legends can be narrowed to a birth-decade "era"; "all" = the whole pool.
   var legendEra = "all";
@@ -190,7 +192,7 @@
   }
 
   function modeLabel() {
-    return mode === "daily" ? "Daily" : mode === "legends" ? "Legends"
+    return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : mode === "legends" ? "Legends"
          : mode === "endless" ? "Endless" : "Practice";
   }
 
@@ -241,12 +243,16 @@
         : "<br>The run ends at <strong>best " + er.best + "</strong> — another go?";
     }
     if (mode === "daily" && !challengeTarget) {
-      var ds = getStats();
-      sub.innerHTML += winFlag
-        ? (ds.curStreak >= 2
-            ? "<br>🔥 <strong>" + ds.curStreak + "-day streak</strong> — see you tomorrow!"
-            : "<br>Come back tomorrow for a new mystery player. 👋")
-        : "<br>A new mystery player lands at midnight — come back for revenge!";
+      if (isArchive) {
+        sub.innerHTML += "<br>That was the " + dayKey + " edition.";
+      } else {
+        var ds = getStats();
+        sub.innerHTML += winFlag
+          ? (ds.curStreak >= 2
+              ? "<br>🔥 <strong>" + ds.curStreak + "-day streak</strong> — see you tomorrow!"
+              : "<br>Come back tomorrow for a new mystery player. 👋")
+          : "<br>A new mystery player lands at midnight — come back for revenge!";
+      }
     }
 
     var actions = document.createElement("div");
@@ -385,7 +391,8 @@
     if (challengeTarget) {
       /* challenge games are transient — nothing recorded */
     } else if (mode === "daily") {
-      streak = recordDaily(won, guesses.length).curStreak;
+      var ds = recordDaily(won, guesses.length);        // no-op for archive replays
+      streak = isArchive ? 0 : ds.curStreak;
     } else if (mode === "endless") {
       run = recordEndless(won, guesses.length).run;
     } else {
@@ -401,13 +408,13 @@
       if (won) { confettiBurst(); playWin(); vibrate([0, 40, 40, 90]); }
       else { playLose(); vibrate(160); }
     }, delay);
-    if (mode === "daily") setTimeout(openStatsAuto, delay + 600);
+    if (mode === "daily" && !isArchive) setTimeout(openStatsAuto, delay + 600);
   }
 
   // --- Per-mode persistence --------------------------------------------------
   // Each mode keeps its own saved game so switching tabs / refreshing resumes it.
   // Daily's answer is derived from the date; Practice & Legends store the target.
-  function savedKey() { return mode === "daily" ? K.daily(todayStr()) : K.game(mode); }
+  function savedKey() { return mode === "daily" ? K.daily(dayKey || todayStr()) : K.game(mode); }
 
   function saveState() {
     if (challengeTarget) return;   // challenge games are transient — never persist / clobber a saved game
@@ -564,6 +571,7 @@
 
   function recordDaily(winFlag, numGuesses) {
     var s = getStats();
+    if (isArchive) return s;                   // archive replays never touch streaks
     if (s.lastDate === todayStr()) return s;   // guard: only once per day
     s.played++;
     if (winFlag) {
@@ -582,7 +590,7 @@
   }
 
   function dailyDoneToday() {
-    var saved = lsGet(K.daily(todayStr()), null);
+    var saved = lsGet(K.daily(dayKey || todayStr()), null);
     return !!(saved && saved.done);
   }
 
@@ -654,7 +662,7 @@
   // --- Share -----------------------------------------------------------------
   function shareText() {
     var emoji = { green: "🟩", yellow: "🟨", grey: "⬛" };
-    var head = "EuroLeague Guesser 🏀 " + (mode === "daily" ? todayStr() : modeLabel());
+    var head = "EuroLeague Guesser 🏀 " + (mode === "daily" ? (dayKey || todayStr()) : modeLabel());
     var score = won ? (guesses.length + "/" + MAX_GUESSES) : ("X/" + MAX_GUESSES);
     var rows = guesses.map(function (g) {
       return evaluate(g).map(function (r) { return emoji[r.state]; }).join("");
@@ -812,7 +820,7 @@
   function openStats() {
     renderStats();
     openModal(els.statsModal, els.statsModal.firstElementChild);
-    if (mode === "daily" && dailyDoneToday()) startCountdown();
+    if (mode === "daily" && !isArchive && dailyDoneToday()) startCountdown();
   }
   function closeStats() { closeModal(els.statsModal); stopCountdown(); }
   // Auto-open after a finished daily — but never over an open modal or a reset board.
@@ -832,6 +840,7 @@
   function setMode(m, fromChallenge) {
     if (!fromChallenge) exitChallenge();   // a real tab switch leaves any active challenge
     mode = (m === "practice" || m === "legends" || m === "endless") ? m : "daily";
+    if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     if (!fromChallenge) lsSet(K.mode, mode);
     var active = tabFor(mode);
     [els.tabDaily, els.tabPractice, els.tabLegends, els.tabEndless].forEach(function (btn) {
@@ -908,7 +917,7 @@
   // If the local date rolled over while the tab stayed open, re-deal today's daily.
   // Safe: re-dealing only replays via restoreState and never calls recordDaily.
   function checkDailyRollover() {
-    if (mode !== "daily" || dailyDealtFor === todayStr()) return;
+    if (mode !== "daily" || isArchive || dailyDealtFor === todayStr()) return;
     closeStats();   // yesterday's countdown / share are now stale
     startGame();
   }
@@ -1102,7 +1111,7 @@
     els.hint.addEventListener("click", onHint);
 
     // `|| challengeTarget` so re-clicking the current tab during a challenge returns to normal play.
-    els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || challengeTarget) setMode("daily"); });
+    els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || challengeTarget || isArchive) setMode("daily"); });
     els.tabPractice.addEventListener("click", function () { if (mode !== "practice" || challengeTarget) setMode("practice"); });
     els.tabLegends.addEventListener("click", function () { if (mode !== "legends" || challengeTarget) setMode("legends"); });
     els.tabEndless.addEventListener("click", function () { if (mode !== "endless" || challengeTarget) setMode("endless"); });
@@ -1171,7 +1180,10 @@
   window.Mystery = {
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("practice"); },
+    goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
+    _peekDay: function () { return { day: dayKey, archive: isArchive, mode: mode, over: over, won: won }; },
     onShow: function () {
+      if (isArchive) setMode("daily");       // a hub open always lands on TODAY's edition
       if (maybeFirstHelp()) return;          // focus stays in the how-to modal
       if (!over && els.input) els.input.focus();
     }
