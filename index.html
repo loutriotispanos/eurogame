@@ -304,7 +304,9 @@
   #co-check:disabled, .cn-actions .cn-primary:disabled {
     background: transparent; color: var(--muted); border-color: var(--rule-2); opacity: 1;
   }
-  #give-up.armed { background: var(--red); border-color: var(--red); color: #fff; }
+  /* An armed give-up is the one place colour paints a button: it's about to do
+     something irreversible, so it stops looking like every other control. */
+  #give-up.armed, #gr-giveup.armed { background: var(--red); border-color: var(--red); color: #fff; }
 
   .counter { color: var(--muted); font-size: var(--t-5); margin: 4px 2px 10px; text-align: center; font-variant-numeric: tabular-nums; }
 
@@ -1732,6 +1734,7 @@
       <p>Fill all <strong>9 cells</strong>. Tap a cell, then name any player who fits <strong>both</strong> its row and its column — e.g. played for <em>Olympiacos</em> <strong>and</strong> is <em>French</em>.</p>
       <ul>
         <li>You get <strong>12 guesses</strong> for the 9 cells — right or wrong, every guess costs one.</li>
+        <li><strong>Give up</strong> fills every empty cell with one answer that would have fitted. On the Daily it asks once before it commits, and records a loss — but it still counts as <em>played</em>, so your hub streak survives.</li>
         <li>Each player can only be used <strong>once</strong> on the board, and most cells have several right answers.</li>
         <li>A player counts for a club if it's anywhere in his career — including short stints and NBA spells.</li>
         <li>Fill the board without a single miss for an <strong>Immaculate</strong> badge. 🤩</li>

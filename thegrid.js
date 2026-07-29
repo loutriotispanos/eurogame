@@ -79,6 +79,7 @@
   var isArchive = false, pendingArchive = null;
   var puzzle = null, pIdx = -1, cells = [], left = MAX, wrong = 0;
   var over = false, won = false, dealt = false, selected = -1, used = {};
+  var giveArmed = false, giveTimer = null;   // daily give-up asks once before it commits
   var misses = [];                  // per-cell list of names tried that didn't fit
   var cellEls = [];
   var matches = [], activeIndex = -1;
@@ -162,8 +163,8 @@
     els.counter.textContent = modeLabel() + " · " + filledCount() + "/9 filled · " + left + (left === 1 ? " guess left — make it count!" : " guesses left");
   }
   function updateNextBtn() {
-    if (els.next) els.next.style.display = (mode === "daily") ? "none" : "";
-    if (els.giveup) els.giveup.style.display = (mode === "daily") ? "none" : "";
+    if (els.next) els.next.style.display = (mode === "daily") ? "none" : "";   // one grid a day
+    if (els.giveup) els.giveup.style.display = "";                             // …but you may concede it
   }
   function flash(msg) { if (els.flash) { els.flash.textContent = msg; els.flash.hidden = !msg; } }
 
@@ -312,6 +313,7 @@
   }
   function submitGuess(name) {
     if (over || selected < 0 || !name) return;
+    disarmGiveUp();                    // playing on withdraws a half-pressed concession
     if (used[name]) { flash("↺ " + name + " is already on the board"); return; }   // free — no guess burned
     els.input.value = ""; closeDropdown();
     var c = critAt(selected);
@@ -333,8 +335,28 @@
     paintAll(); updateCounter();
     if (!over) els.input.focus();
   }
+  function disarmGiveUp() {
+    giveArmed = false;
+    if (giveTimer) { clearTimeout(giveTimer); giveTimer = null; }
+    if (els.giveup) { els.giveup.textContent = "Give up"; els.giveup.classList.remove("armed"); }
+  }
+  // Offered on the daily now. It records the loss and reveals an answer per empty
+  // cell, exactly as running out of guesses does — so it costs you The Grid's own
+  // daily record, but NOT the hub streak: isTodayDone() counts a lost daily as
+  // played, so the cross-game chain survives.
+  //
+  // Daily arms first, because there's no second grid today and the loss is
+  // written immediately. Practice stays a single tap: nothing there is
+  // irreversible, and a confirm on a throwaway grid is just nagging.
   function giveUp() {
-    if (over || mode === "daily") return;
+    if (over) return;
+    if (mode === "daily" && !giveArmed) {
+      giveArmed = true;
+      if (els.giveup) { els.giveup.textContent = "Sure?"; els.giveup.classList.add("armed"); }
+      giveTimer = setTimeout(disarmGiveUp, 3000);
+      return;
+    }
+    disarmGiveUp();
     won = false; finish();
   }
 
@@ -342,6 +364,7 @@
     cells = [null, null, null, null, null, null, null, null, null];
     misses = [[], [], [], [], [], [], [], [], []];
     left = MAX; wrong = 0; over = false; won = false; used = {}; selected = -1;
+    disarmGiveUp();
     els.input.value = ""; els.input.disabled = false; els.banner.hidden = true; flash("");
   }
   function dealDaily() {
@@ -487,6 +510,7 @@
     _setMode: setMode,
     _select: select,
     _submit: submitGuess,
+    _giveUp: giveUp,
     _shareText: shareText,
     _fits: fits,
     _answers: answers,

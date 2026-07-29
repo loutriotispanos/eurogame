@@ -815,7 +815,8 @@ delete store["elg:gr:dstats"]; delete store[grTodayKey()];
 window.TheGrid._setMode("daily");
 var grd = window.TheGrid._peek();
 ok(grd.mode === "daily" && grd.puzzle && grd.over === false, "Daily deals a grid");
-ok(byId("gr-next").style.display === "none" && byId("gr-giveup").style.display === "none", "New-grid + Give-up hidden in Daily");
+ok(byId("gr-next").style.display === "none" && byId("gr-giveup").style.display !== "none",
+   "Daily hides New grid — one a day — but DOES offer Give up");
 var grdAns = grAssignment(grd.puzzle);
 for (var gd = 0; gd < 9; gd++) { window.TheGrid._select(gd); window.TheGrid._submit(grdAns[gd]); }
 ok(window.TheGrid._peek().won === true, "solved the daily grid");
@@ -828,6 +829,37 @@ window.TheGrid.goPractice();
 ok(window.TheGrid._peek().mode === "practice", "TheGrid.goPractice → practice");
 window.TheGrid.goDaily();
 ok(window.TheGrid._peek().mode === "daily", "TheGrid.goDaily → daily");
+
+console.log("The Grid — conceding the daily");
+// A fresh, unplayed daily to concede.
+delete store["elg:gr:dstats"]; delete store[grTodayKey()];
+window.TheGrid._setMode("practice"); window.TheGrid._setMode("daily");
+ok(window.TheGrid._peek().over === false, "a fresh daily to concede");
+// One tap must NOT commit: there's no second grid today and the loss is written
+// immediately, so it asks first.
+window.TheGrid._giveUp();
+ok(window.TheGrid._peek().over === false, "the first tap only arms — it doesn't concede");
+ok(byId("gr-giveup").textContent === "Sure?" && byId("gr-giveup").classList.contains("armed"),
+   "the armed button says so, and goes red");
+// Playing on must withdraw a half-pressed concession.
+var grCon = window.TheGrid._peek(), grConAns = grAssignment(grCon.puzzle);
+window.TheGrid._select(0); window.TheGrid._submit(grConAns[0]);
+ok(byId("gr-giveup").textContent === "Give up" && !byId("gr-giveup").classList.contains("armed"),
+   "making a guess disarms it again");
+// Now concede for real.
+window.TheGrid._giveUp(); window.TheGrid._giveUp();
+var grCon2 = window.TheGrid._peek();
+ok(grCon2.over === true && grCon2.won === false, "two taps concede the daily as a loss");
+ok(JSON.parse(store[grTodayKey()]).done === true, "the conceded daily is saved as finished");
+// The reassuring half: a lost daily still counts as PLAYED, so the cross-game
+// chain survives conceding — only The Grid's own record takes the hit.
+ok(window.Hub._isTodayDone() === true, "conceding still counts as playing today — the hub streak survives");
+// Practice is not irreversible, so it stays a single tap.
+window.TheGrid._setMode("practice");
+ok(window.TheGrid._peek().over === false, "a practice grid to concede");
+window.TheGrid._giveUp();
+ok(window.TheGrid._peek().over === true && window.TheGrid._peek().won === false,
+   "practice concedes on ONE tap — nothing there is irreversible");
 
 console.log("The Grid — how-to modal + first-visit help");
 delete store["elg:gr:seenhelp"];
