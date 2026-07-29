@@ -1,5 +1,5 @@
 /*
- * EuroLeague Guesser — headless regression test.
+ * Euroball — headless regression test.
  *
  *   Run:  node test.js     (exit 0 = all passed, 1 = a failure)
  *
@@ -160,7 +160,7 @@ ok(ms.played >= 1 && ms.wins >= 1 && ms.best === 1, "per-mode stats recorded a 1
 fire(byId("stats-btn"), "click");
 captured = "";
 fire(byId("share-stats"), "click");
-ok(captured.indexOf("EuroLeague Guesser") === 0 && /Practice/.test(captured) && captured.indexOf("1/8") >= 0, "Practice share text correct");
+ok(captured.indexOf("Mystery Player") === 0 && /Practice/.test(captured) && captured.indexOf("1/8") >= 0, "Practice share text correct");
 fire(byId("stats-close"), "click");
 
 console.log("hint (Practice only)");

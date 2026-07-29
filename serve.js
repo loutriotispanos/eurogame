@@ -39,7 +39,7 @@ http.createServer(function (req, res) {
     res.end(data);
   });
 }).listen(PORT, "0.0.0.0", function () {
-  console.log("EuroLeague Guesser served from " + ROOT);
+  console.log("Euroball served from " + ROOT);
   console.log("On this PC:  http://localhost:" + PORT);
   console.log("On your phone (same Wi-Fi): http://<this-PC-LAN-IP>:" + PORT + "  (see ipconfig IPv4 Address)");
 });

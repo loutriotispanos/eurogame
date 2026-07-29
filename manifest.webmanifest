@@ -1,7 +1,7 @@
 {
-  "name": "EuroLeague Guesser",
-  "short_name": "EuroGuess",
-  "description": "Guess the mystery EuroLeague player in 8 tries.",
+  "name": "Euroball — Daily Basketball Puzzles",
+  "short_name": "Euroball",
+  "description": "Eleven daily puzzle games about European basketball. No ads, no tracking, reads offline.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
