@@ -242,6 +242,7 @@
     filter = ({ daily: 1, active: 1, retired: 1, both: 1 })[f] ? f : "daily";
     if (filter === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.filter, filter);
+    if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("playerid", filter);   // keep ?mode= honest
     [["daily", els.tabDaily], ["active", els.tabActive], ["retired", els.tabRetired], ["both", els.tabBoth]].forEach(function (pr) {
       if (!pr[1]) return;
       var sel = pr[0] === filter;
@@ -348,6 +349,7 @@
     onShow: function () { if (isArchive) setFilter("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setFilter("daily"); },
     goPractice: function () { setFilter("both"); },
+    goMode: setFilter,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setFilter("daily"); },
     // internal hooks used by the headless test (test.js)
     _peek: function () { return target; },

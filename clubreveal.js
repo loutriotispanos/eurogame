@@ -301,6 +301,7 @@
     mode = ({ daily: 1, active: 1, legends: 1, both: 1 })[m] ? m : "daily";
     if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
+    if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("clubreveal", mode);   // keep ?mode= honest
     [["daily", els.tabDaily], ["active", els.tabActive], ["legends", els.tabLegends], ["both", els.tabBoth]].forEach(function (pr) {
       if (!pr[1]) return;
       var sel = pr[0] === mode;
@@ -401,6 +402,7 @@
     onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("both"); },
+    goMode: setMode,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     // internal hooks used by test.js
     _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, club: club, order: order, revealed: revealed, guesses: guesses, over: over, won: won }; },
