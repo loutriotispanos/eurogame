@@ -294,13 +294,44 @@
       misses: misses, left: left, wrong: wrong, done: over, won: won
     });
   }
-  function revealRest() {                          // loss/give-up: show one valid answer per empty cell
-    for (var i = 0; i < 9; i++) {
+  // Loss/give-up: one valid answer per empty cell, all distinct.
+  //
+  // This has to MATCH cells to players, not walk them greedily. Neighbouring cells
+  // share most of their answer list — on the Baskonia/Treviso/Unicaja × Khimki
+  // grid, three cells have only {Jorge Garbajosa, Stefan Markovic} between them —
+  // so taking the first free answer each time consumed both on the top two rows
+  // and left the third with nothing, printing "—" as if the puzzle were broken.
+  // A distinct assignment does exist. This is the same bipartite matching
+  // (augmenting paths) that test.js uses to prove one exists for every grid.
+  //
+  // A "—" can still legitimately appear: if the player already placed someone a
+  // remaining cell needed, no full assignment is left. Then it's the truth, not a
+  // bug — and the matching still covers as many cells as can be covered.
+  function revealRest() {
+    var empties = [], pool = [], i;
+    for (i = 0; i < 9; i++) {
       if (cells[i]) continue;
       var c = critAt(i);
-      var opts = answers(c.row, c.col).filter(function (n) { return !used[n]; });
-      cells[i] = { name: opts[0] || "—", revealed: true };
-      if (opts[0]) used[opts[0]] = 1;
+      empties.push(i);
+      pool.push(answers(c.row, c.col).filter(function (n) { return !used[n]; }));
+    }
+    var owner = {};                                  // player name -> index in empties
+    function augment(k, seen) {
+      for (var j = 0; j < pool[k].length; j++) {
+        var nm = pool[k][j];
+        if (seen[nm]) continue;
+        seen[nm] = 1;
+        if (owner[nm] === undefined || augment(owner[nm], seen)) { owner[nm] = k; return true; }
+      }
+      return false;
+    }
+    for (i = 0; i < empties.length; i++) augment(i, {});
+    var pick = {};
+    Object.keys(owner).forEach(function (nm) { pick[owner[nm]] = nm; });
+    for (i = 0; i < empties.length; i++) {
+      var name = pick[i];
+      cells[empties[i]] = { name: name || "—", revealed: true };
+      if (name) used[name] = 1;
     }
   }
   function finish() {
