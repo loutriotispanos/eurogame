@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The hub plus one URL per game. These are ?game= query URLs rather than paths
+     because the site is a single static document; each one now keeps its address
+     and self-canonicalises (see updateHead in app.js), so they're distinct pages
+     as far as a crawler is concerned. Records and Archive are left out: they show
+     nothing but the visitor's own saved scores. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://euroballgames.com/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://euroballgames.com/?game=mystery</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://euroballgames.com/?game=playerid</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=completefive</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=connections</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=careerorder</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=thegrid</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=clubreveal</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=pathbetween</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=oddoneout</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=higherlower</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://euroballgames.com/?game=rostermaster</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+</urlset>

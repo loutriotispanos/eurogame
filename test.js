@@ -66,7 +66,9 @@ var win = {
   location: { origin: "https://elg.test", pathname: "/", search: "", hash: "", href: "https://elg.test/" },
   history: {
     replaceState: function (s, t, url) { win.location.hash = (typeof url === "string" && url.indexOf("#") >= 0) ? url.slice(url.indexOf("#")) : ""; },
-    pushState: function (s) { win._pushedState = s; }
+    // Records the URL too. It used to drop it, which would have let a pushNav that
+    // wrote no URL at all pass the addressable-view tests.
+    pushState: function (s, t, url) { win._pushedState = s; win._pushedURL = typeof url === "string" ? url : null; }
   },
   localStorage: {
     getItem: function (k) { return k in store ? store[k] : null; },
@@ -1408,6 +1410,49 @@ for (var cvK = 3; cvK <= cvClub.length; cvK++) {
 }
 ok(cvFrag !== null, "CV: a partial resolves as soon as it's unique (\"pana\" is enough)");
 ok(byId("cv-flash") && String(byId("cv-flash").id) === "cv-flash", "CV: has a flash line to report misses in");
+
+console.log("Addressable views — every game has its own URL, title and canonical");
+window.Hub._showView("thegrid");
+ok(doc.title === "The Grid 🏀 Euroball", "each game sets its own document title");
+ok(byId("canonical").href === "https://euroballgames.com/?game=thegrid",
+   "the canonical points at the GAME's URL, not the hub — otherwise Google discards all eleven");
+window.Hub._showView("home");
+ok(doc.title.indexOf("Euroball") === 0 && doc.title.indexOf("daily") > 0, "the hub keeps the full masthead title");
+ok(byId("canonical").href === "https://euroballgames.com/", "the hub canonicalises to the apex");
+// Navigating must WRITE the url now; it used to pass "" and keep the address bar
+// on "/" forever, which is why eleven games shared one URL. Driven through
+// _pushNav rather than a real navigation so it can't disturb the games' state.
+ok(window.Hub._urlFor("thegrid").indexOf("?game=thegrid") > 0, "a game's URL carries ?game=");
+ok(window.Hub._urlFor("home").indexOf("?game=") === -1, "the hub's URL carries no query");
+win._pushedURL = "sentinel";
+window.Hub._pushNav({ v: "thegrid" });
+ok(typeof win._pushedURL === "string" && win._pushedURL.indexOf("?game=thegrid") > 0,
+   "navigation writes the view's URL, not an empty string");
+// A challenge link's payload lives in the hash — rewriting the URL would drop it.
+var chHash = win.location.hash;
+win.location.hash = "#c=" + b64urlEncode("l:Nobody");
+win._pushedURL = "sentinel";
+window.Hub._pushNav({ v: "thegrid" });
+ok(win._pushedURL === "", "a challenge link is left alone — its hash is the payload");
+win.location.hash = chHash;
+
+// The crawler files have to agree with the app, or the sitemap advertises URLs
+// that don't open anything.
+var smXML = fs.readFileSync("sitemap.xml", "utf8");
+var smGames = (smXML.match(/\?game=([a-z]+)/g) || []).map(function (s) { return s.slice(6); });
+var appGames = ["mystery", "playerid", "completefive", "connections", "careerorder", "thegrid",
+                "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"];
+ok(smGames.length === appGames.length && appGames.every(function (g) { return smGames.indexOf(g) >= 0; }),
+   "sitemap lists every one of the eleven games, and nothing that isn't one");
+ok(smXML.indexOf("<?xml") === 0 && smXML.indexOf("</urlset>") > 0, "sitemap is well-formed");
+var rbTXT = fs.readFileSync("robots.txt", "utf8");
+ok(/Sitemap:\s*https:\/\/euroballgames\.com\/sitemap\.xml/.test(rbTXT), "robots.txt points crawlers at the sitemap");
+// Relative og:image is silently dropped by strict scrapers (LinkedIn), which is
+// why this waited for the domain.
+ok(/og:image" content="https:\/\/euroballgames\.com\//.test(fbHTML) &&
+   /twitter:image" content="https:\/\/euroballgames\.com\//.test(fbHTML),
+   "og:image and twitter:image are absolute");
+ok(/og:url" content="https:\/\/euroballgames\.com\//.test(fbHTML), "og:url is set");
 
 console.log("Leaving a view takes its dialogs with it");
 // The how-to auto-opens on a game's first visit. Going Back without dismissing it

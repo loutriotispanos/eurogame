@@ -10,7 +10,15 @@
 
   // Every in-app navigation pushes a history entry (URL untouched) so the
   // browser arrows retrace the user's own path.
-  function pushNav(state) { try { if (window.history && window.history.pushState) window.history.pushState(state, "", ""); } catch (e) {} }
+  // Writes the view's URL as well as its state. A challenge link (#c=…) is left
+  // strictly alone — its hash IS the payload, and rewriting the URL would drop it.
+  function pushNav(state) {
+    try {
+      if (!window.history || !window.history.pushState) return;
+      if (hasChallenge()) { window.history.pushState(state, "", ""); return; }
+      window.history.pushState(state, "", urlFor(state && state.v));
+    } catch (e) {}
+  }
 
   // Nothing tied a dialog's lifetime to the view that owns it. The how-to
   // auto-opens on a game's first visit, so going Back without dismissing it left
@@ -29,6 +37,7 @@
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
     closeAllModals();                            // a view's dialogs leave with it
+    updateHead(name);                            // title + self-referencing canonical
     updateFeedbackHref();                        // so the report names the screen they were on
     if (name === "home") { refreshDailyChips(); renderHubStreak(); layoutHome(); }   // state may have changed while playing
     var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : name === "records" ? window.Records : name === "archive" ? window.Archive : null;
@@ -215,6 +224,39 @@
   }
 
   function hasChallenge() { return /[#&]c=/.test(window.location.hash || ""); }
+
+  // --- Addressable views --------------------------------------------------------
+  // Every game now KEEPS its ?game= in the address bar. It used to be stripped on
+  // load so a refresh returned to the lobby, which meant eleven games shared one
+  // URL: nothing to copy, nothing for a search engine to tell apart. The trade is
+  // deliberate — refreshing now reopens the game you were on, because that's what
+  // the URL says.
+  var TITLES = {
+    mystery: "Mystery Player", playerid: "Player ID", completefive: "Complete the Five",
+    connections: "Connections", careerorder: "Career Order", thegrid: "The Grid",
+    clubreveal: "Club Reveal", pathbetween: "Path Between", oddoneout: "Odd One Out",
+    higherlower: "Higher or Lower", rostermaster: "Roster Master",
+    records: "Records", archive: "Archive"
+  };
+  var CANON = "https://euroballgames.com/";
+  function pageTitle(view) {
+    return TITLES[view] ? TITLES[view] + " 🏀 Euroball" : "Euroball 🏀 — daily European basketball puzzles";
+  }
+  // Relative, so it still works on github.io and on a Pages preview build.
+  function urlFor(view) {
+    var base = "";
+    try { base = window.location.pathname || "/"; } catch (e) { base = "/"; }
+    return TITLES[view] ? base + "?game=" + view : base;
+  }
+  // Self-referencing canonical: dedupes the github.io copy against the real
+  // domain, and — crucially — points each game URL at ITSELF rather than at the
+  // hub. A single hardcoded canonical would have told Google to discard all
+  // eleven game URLs, which is the opposite of the point.
+  function updateHead(view) {
+    try { document.title = pageTitle(view); } catch (e) {}
+    var c = $("canonical");
+    if (c) c.href = CANON + (TITLES[view] ? "?game=" + view : "");
+  }
   // Deep link: ?game=<name> opens that game directly (in Practice), e.g. share a game.
   function linkedGame() {
     var m = /[?&]game=([a-z]+)/i.exec(window.location.search || "");
@@ -283,12 +325,12 @@
     });
     var linked = linkedGame();
     var initial = hasChallenge() ? "mystery" : (linked || "home");
-    // A ?game= deep link opens that game ONCE, then we strip it from the URL so a
-    // refresh returns to the lobby (home) instead of re-entering the game. The
-    // replaced entry carries the initial view so Back/Forward stay coherent.
+    // The deep link is now KEPT, normalised to this view's canonical URL, so the
+    // address bar always names what you're looking at and the link survives a
+    // copy-paste. A challenge link keeps its hash untouched.
     try {
       if (window.history && window.history.replaceState)
-        window.history.replaceState({ v: initial }, "", (linked && !hasChallenge()) ? window.location.pathname : "");
+        window.history.replaceState({ v: initial }, "", hasChallenge() ? "" : urlFor(initial));
     } catch (e) {}
     showView(initial);
   }
@@ -404,7 +446,7 @@
     _getHub: getHub, _setHub: setHub,
     _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme,
     _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
-    _copyAddress: copyAddress, _showView: showView
+    _copyAddress: copyAddress, _showView: showView, _pushNav: pushNav, _urlFor: urlFor
   };
 
   // Auto-wire on load, unless a harness asked to drive Hub without DOM wiring.
