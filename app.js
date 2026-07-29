@@ -18,6 +18,7 @@
     if (VIEWS.indexOf(name) === -1) name = "home";
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
+    updateFeedbackHref();                        // so the report names the screen they were on
     if (name === "home") { refreshDailyChips(); renderHubStreak(); layoutHome(); }   // state may have changed while playing
     var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : name === "records" ? window.Records : name === "archive" ? window.Archive : null;
     if (api) {
@@ -231,6 +232,10 @@
     if (rb) rb.addEventListener("click", function () { pushNav({ v: "records" }); showView("records"); });
     var ab = $("archive-btn");
     if (ab) ab.addEventListener("click", function () { pushNav({ v: "archive" }); showView("archive"); });
+    // The colophon's "Send feedback". readVersion is async and refreshes the href
+    // itself once Cache Storage answers, so a slow reply can't leave a stale link.
+    readVersion();
+    updateFeedbackHref();
     window.addEventListener("resize", layoutHome);   // no-op while a game is open
     window.addEventListener("hashchange", function () { if (hasChallenge()) showView("mystery"); });
     window.addEventListener("popstate", function (e) {
@@ -277,12 +282,56 @@
       navigator.clipboard.writeText(text).then(flash, function () { if (legacyCopy(text)) flash(); });
     } else if (legacyCopy(text)) flash();
   }
+  // --- Feedback ---------------------------------------------------------------
+  // Split so the finished address never appears in the page source: a scraper
+  // lifting mailto: addresses out of the HTML finds nothing. test.js enforces it.
+  var FB = ["loutriotispanos", "gmail.com"];
+
+  // Which build the reporter is ACTUALLY on, read from Cache Storage rather than
+  // kept as a constant. The service worker caches under its own CACHE name, so
+  // this reports the version their phone is really running — which for an
+  // offline-first PWA is frequently not the newest one, and is the first thing
+  // worth knowing about a bug report. Nothing extra to remember to bump.
+  var swVersion = "";
+  function readVersion() {
+    try {
+      if (!window.caches || !window.caches.keys) return;
+      window.caches.keys().then(function (keys) {
+        var vs = keys.filter(function (k) { return /^elg-v\d+$/.test(k); })
+          .sort(function (a, b) { return parseInt(a.slice(5), 10) - parseInt(b.slice(5), 10); });
+        if (vs.length) { swVersion = vs[vs.length - 1]; updateFeedbackHref(); }
+      }, function () {});
+    } catch (e) {}
+  }
+
+  function feedbackURL() {
+    var view = "home", theme = "", scr = "", ua = "";
+    try { view = (document.body.className || "").replace(/^view-/, "") || "home"; } catch (e) {}
+    try { theme = getTheme(); } catch (e) {}
+    try { scr = window.screen.width + "x" + window.screen.height; } catch (e) {}
+    try { ua = navigator.userAgent || ""; } catch (e) {}
+    // Signed off with the context that turns "it's broken" into something
+    // reproducible. It sits under a divider so it reads as a footer, and the
+    // sender sees every word of it before deciding to send.
+    var sig = ["Euroball " + (swVersion || "(version unknown)"), "screen: " + view + (theme ? " / " + theme : "")];
+    if (scr) sig.push("display: " + scr);
+    if (ua) sig.push(ua);
+    return "mailto:" + FB[0] + "@" + FB[1] +
+      "?subject=" + encodeURIComponent("Euroball feedback") +
+      "&body=" + encodeURIComponent("\n\n--\n" + sig.join("\n") + "\n");
+  }
+  function updateFeedbackHref() {
+    var fb = $("feedback-link");
+    if (fb) fb.href = feedbackURL();
+  }
+
   window.ELG = {
     copyShare: copyShare,
     shareURL: function (game) {
       try { return window.location.origin + window.location.pathname + "?game=" + game; }
       catch (e) { return "?game=" + game; }
-    }
+    },
+    feedbackURL: feedbackURL
   };
 
   // Test hooks + programmatic refresh (the headless harness drives these directly).
