@@ -1364,14 +1364,39 @@ var coShare = window.CareerOrder._shareText();
 ok(coShare.indexOf("Career Order 🏀 ") === 0 && coShare.indexOf("\n1/3 · ") > 0, "CO share: masthead + first-check score + club count");
 ok(coShare.indexOf("?game=careerorder") > 0, "CO share: deep link");
 
-// The Grid — fill all nine cells with fresh valid answers
+// The Grid — fill all nine cells with fresh valid answers.
+//
+// This has to MATCH cells to players, not walk them greedily. Each player may be
+// used once, and neighbouring cells often share most of their answer list — on
+// the Baskonia/Treviso/Unicaja × Khimki/ASVEL/Center grid, three cells have only
+// {Jorge Garbajosa, Stefan Markovic} between them. Taking the first free answer
+// each time strands the last of those cells, submits undefined and reports 8/9,
+// which looks like a data bug and isn't: a distinct-player assignment does exist.
+// So: standard bipartite matching (augmenting paths) over cells → players.
 window.TheGrid._setMode("daily");
-var grP = window.TheGrid._peek(), grUsed = {};
+var grP = window.TheGrid._peek();
+var grCells = [];
+for (var grC = 0; grC < 9; grC++) {
+  grCells.push(window.TheGrid._answers(grP.puzzle.rows[Math.floor(grC / 3)], grP.puzzle.cols[grC % 3]));
+}
+var grMatch = {};                       // player name -> cell index
+function grAugment(cell, seen) {
+  for (var k = 0; k < grCells[cell].length; k++) {
+    var nm = grCells[cell][k];
+    if (seen[nm]) continue;
+    seen[nm] = 1;
+    if (grMatch[nm] === undefined || grAugment(grMatch[nm], seen)) { grMatch[nm] = cell; return true; }
+  }
+  return false;
+}
+var grCovered = 0;
+for (var grA = 0; grA < 9; grA++) if (grAugment(grA, {})) grCovered++;
+ok(grCovered === 9, "Grid: today's daily admits a distinct player for all nine cells");
+var grPick = {};
+Object.keys(grMatch).forEach(function (nm) { grPick[grMatch[nm]] = nm; });
 for (var grI = 0; grI < 9; grI++) {
   window.TheGrid._select(grI);
-  var grOpts = window.TheGrid._answers(grP.puzzle.rows[Math.floor(grI / 3)], grP.puzzle.cols[grI % 3]).filter(function (n) { return !grUsed[n]; });
-  grUsed[grOpts[0]] = 1;
-  window.TheGrid._submit(grOpts[0]);
+  window.TheGrid._submit(grPick[grI]);
 }
 var grShare = window.TheGrid._shareText();
 ok(grShare.indexOf("The Grid 🏀 ") === 0 && grShare.indexOf("9/9") > 0, "Grid share: masthead + 9/9");

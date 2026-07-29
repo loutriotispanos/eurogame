@@ -189,7 +189,8 @@
     if (over) { els.counter.textContent = diffLabel() + " · " + (won ? "Solved it! 🎉" : "It was: " + segments.map(function (s) { return s.team; }).join(" → ")); return; }
     var left = MAX - tries;
     var extra = confirmed.length ? " · " + confirmed.length + "/" + order.length + " locked in" : "";
-    els.counter.textContent = diffLabel() + " · order earliest → latest · " + left + (left === 1 ? " check left" : " checks left") + extra;
+    // "order earliest → latest" is the tagline verbatim; the counter carries state.
+    els.counter.textContent = diffLabel() + " · " + left + (left === 1 ? " check left" : " checks left") + extra;
   }
   function updateButtons() {
     if (els.check) els.check.disabled = over;

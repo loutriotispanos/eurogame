@@ -105,8 +105,10 @@
   function renderCounter() {
     if (!els.counter) return;
     if (over) { els.counter.textContent = modeLabel() + " · done"; return; }
-    if (mode === "daily") els.counter.textContent = "Daily · round " + (results.length + 1) + " of " + PER_DAY + " — tap the odd one out";
-    else els.counter.textContent = "Practice · which one doesn't belong?";
+    // State only. "tap the odd one out" / "which one doesn't belong?" was the
+    // tagline two lines further up the page, in almost the same words.
+    if (mode === "daily") els.counter.textContent = "Daily · round " + (results.length + 1) + " of " + PER_DAY;
+    else els.counter.textContent = "Practice · round " + (results.length + 1);
   }
   function renderTiles() {
     if (!els.tiles) return;
