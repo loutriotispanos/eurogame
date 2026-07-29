@@ -86,9 +86,19 @@ var W = FW * SS, H = FH * SS;
 function s(v) { return v * SS; }    // final-space value → supersample-space
 
 function pack(r, g, b) { return ((r | 0) << 16) | ((g | 0) << 8) | (b | 0); }
-var WHITE = pack(241, 242, 244), ORANGE = pack(255, 122, 0), MUTED = pack(160, 167, 178);
-var GREEN = pack(76, 154, 82), YELLOW = pack(201, 162, 43), GREY = pack(64, 68, 78);
-var DARK = pack(12, 10, 6), TEXTCOL = [0, WHITE, ORANGE, MUTED];
+// The stylesheet's tokens, mirrored — not a second palette. This card had been
+// left on the pre-newsprint dark panel with the retired #ff7a00 orange, so it
+// looked like a different publication from the site it was advertising.
+var PAPER = pack(247, 243, 234);      // --paper   #f7f3ea
+var INK = pack(29, 26, 20);           // --ink     #1d1a14
+var MUTED = pack(110, 102, 86);       // --muted   #6e6656
+var ACCENT = pack(198, 86, 17);       // --accent  #c65611
+var GREEN = pack(74, 139, 82);        // --green   #4a8b52
+var YELLOW = pack(201, 162, 43);      // --yellow  #c9a22b
+var GREY = pack(217, 208, 189);       // --grey    #d9d0bd
+var ON_GREEN = pack(255, 255, 255);   // .cell.green  glyph — #fff
+var ON_YELLOW = pack(36, 29, 8);      // .cell.yellow glyph — #241d08
+var TEXTCOL = [0, INK, ACCENT, MUTED];
 
 // Text mask: each supersample pixel tagged with a colour id (0 = none).
 var mask = new Uint8Array(W * H);
@@ -106,15 +116,31 @@ function stamp(str, fx, fy, scale, id) {
   }
 }
 
-// Headline lockup (mirrors the app's orange "Euro" + white rest).
-var ST = 11, TLx = 84, TLy = 132;
+// Headline lockup (mirrors the app's accent "Euro" + ink "ball").
+// "EUROBALL" sets on ONE line where "EUROLEAGUE / GUESSER" needed two, so the
+// type goes up from 11 to 16: at 16 the lockup ends at x=836 and the ball starts
+// at x=860, which is as large as it can be set without collision.
+var ST = 16, TLx = 84, TLy = 146;
 stamp("EURO", TLx, TLy, ST, 2);
-stamp("LEAGUE", TLx + textWidth("EURO", ST) + 6 * ST - 5 * ST, TLy, ST, 1); // continue same word, one char gap
-stamp("GUESSER", TLx, TLy + 7 * ST + 22, ST, 1);
-var TAGy = TLy + 2 * (7 * ST) + 22 + 34, TAGs = 4;
-stamp("GUESS THE PLAYER IN 8 TRIES", TLx, TAGy, TAGs, 3);
-var MODES = "DAILY · PRACTICE · LEGENDS · ENDLESS";
+stamp("BALL", TLx + textWidth("EURO", ST) + ST, TLy, ST, 1); // continue same word, one char gap
+var TAGy = TLy + 7 * ST + 34, TAGs = 4;
+stamp("ELEVEN DAILY BASKETBALL PUZZLES", TLx, TAGy, TAGs, 3);
+// Names games rather than one game's modes — the card sells the hub now. No "+N
+// MORE": the font has no "+" and a missing glyph stamps a silent blank.
+var MODES = "MYSTERY PLAYER · THE GRID · CONNECTIONS · PATH BETWEEN · ODD ONE OUT";
 stamp(MODES, TLx, 540, 2, 3);
+
+// A Scotch rule — 3px thick over 1px thin with 6px of daylight, the same device
+// as header::after in the stylesheet. Without it, flat paper left the wordmark
+// floating: the rules ARE the publication's grammar. Set to the lockup's measure
+// (752px) rather than full width, which would run it through the basketball.
+function bar(fx, fy, fw, fh, id) {
+  var X0 = s(fx), Y0 = s(fy), X1 = s(fx + fw), Y1 = s(fy + fh);
+  for (var y = Y0; y < Y1; y++) { var row = y * W; for (var x = X0; x < X1; x++) mask[row + x] = id; }
+}
+var RULEy = TAGy + 7 * TAGs + 26, RULEw = textWidth("EUROBALL", ST);
+bar(TLx, RULEy, RULEw, 3, 1);
+bar(TLx, RULEy + 3 + 6, RULEw, 1, 1);
 
 // Basketball (right side), in supersample space.
 var BX = s(1010), BY = s(238), BR = s(150), SEAM = Math.max(2 * SS, BR * 0.02);
@@ -122,16 +148,21 @@ var OFF = BR * 1.25, ARCR = Math.sqrt(OFF * OFF + BR * BR);
 function ballAt(X, Y) {
   var dx = X - BX, dy = Y - BY, d = Math.sqrt(dx * dx + dy * dy);
   if (d > BR) return -1;
-  if (BR - d <= SEAM) return DARK;
-  if (Math.abs(dx) <= SEAM || Math.abs(dy) <= SEAM) return DARK;
+  // Rim and seams are the PAPER colour, knocked out of a flat accent disc — the
+  // same trick as before, when they were the dark background's colour. A flat
+  // spot-colour shape with the paper showing through is the editorial idiom.
+  if (BR - d <= SEAM) return PAPER;
+  if (Math.abs(dx) <= SEAM || Math.abs(dy) <= SEAM) return PAPER;
   var dl = Math.abs(Math.sqrt((dx + OFF) * (dx + OFF) + dy * dy) - ARCR);
   var dr = Math.abs(Math.sqrt((dx - OFF) * (dx - OFF) + dy * dy) - ARCR);
-  if (dl <= SEAM || dr <= SEAM) return DARK;
-  return ORANGE;
+  if (dl <= SEAM || dr <= SEAM) return PAPER;
+  return ACCENT;
 }
 
 // Results row of guess tiles, each with the app's colour-blind glyph (check / tilde / dot).
-var TS = s(82), TG = s(16), TY = s(412), TX0 = s(84), TR = s(14);
+// TR was 14. The board's cells are border-radius: var(--r) — 2px, "square, like
+// the reference tiles" — so the card's were the last rounded corners left.
+var TS = s(82), TG = s(16), TY = s(412), TX0 = s(84), TR = s(2);
 var TILES = [
   { fill: GREEN, mark: "check" }, { fill: YELLOW, mark: "tilde" }, { fill: GREY, mark: "dot" },
   { fill: YELLOW, mark: "tilde" }, { fill: GREEN, mark: "check" }
@@ -149,7 +180,9 @@ function tileAt(X, Y) {
     var dy = (Y < y + TR) ? (y + TR - Y) : (Y > y + TS - TR ? Y - (y + TS - TR) : 0);
     if (dx * dx + dy * dy > TR * TR) continue;             // outside the rounded corner
     var u = (X - x) / TS, v = (Y - y) / TS, t = 0.085;      // glyph in normalised tile space
-    var ink = (TILES[i].fill === YELLOW || TILES[i].fill === GREEN) ? DARK : WHITE;
+    // Each cell's own glyph colour, straight from .cell.green / .cell.yellow;
+    // the grey cell has no override, so it inherits the board's ink.
+    var ink = TILES[i].fill === GREEN ? ON_GREEN : (TILES[i].fill === YELLOW ? ON_YELLOW : INK);
     if (TILES[i].mark === "check") {
       var d = Math.min(segDist(u, v, 0.26, 0.52, 0.44, 0.70), segDist(u, v, 0.44, 0.70, 0.76, 0.30));
       if (d <= t) return ink;
@@ -163,20 +196,13 @@ function tileAt(X, Y) {
   return -1;
 }
 
-// Background: app's dark panel with a soft top-centre glow.
-var GX = W * 0.5, GY = -H * 0.08, RG2 = (W * 0.62) * (W * 0.62);
-function grad(X, Y) {
-  var tt = Y / H;
-  var br = 24 + (14 - 24) * tt, bg = 26 + (15 - 26) * tt, bb = 32 + (19 - 32) * tt;
-  var dx = X - GX, dy = Y - GY, a = 1 - (dx * dx + dy * dy) / RG2; if (a < 0) a = 0; a = a * a * 0.85;
-  return pack(br + (32 - br) * a, bg + (36 - bg) * a, bb + (47 - bb) * a);
-}
-
+// Background: flat paper. There was a dark panel with a soft top-centre glow
+// here; the stylesheet says it outright — "flat. newsprint has no glow".
 function colorAt(X, Y) {
   var m = mask[Y * W + X]; if (m) return TEXTCOL[m];
   if (Y >= TY && Y < TY + TS) { var t = tileAt(X, Y); if (t !== -1) return t; }   // tiles row band
   if (X > BX - BR && X < BX + BR && Y > BY - BR && Y < BY + BR) { var b = ballAt(X, Y); if (b !== -1) return b; }
-  return grad(X, Y);
+  return PAPER;
 }
 
 // Render + box-downsample (SSxSS average) → final RGBA.
