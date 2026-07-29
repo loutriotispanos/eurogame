@@ -16,7 +16,7 @@
     try {
       if (!window.history || !window.history.pushState) return;
       if (hasChallenge()) { window.history.pushState(state, "", ""); return; }
-      window.history.pushState(state, "", urlFor(state && state.v));
+      window.history.pushState(state, "", urlFor(state && state.v, state && state.mode));
     } catch (e) {}
   }
 
@@ -36,15 +36,22 @@
     if (VIEWS.indexOf(name) === -1) name = "home";
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
+    curView = name;
     closeAllModals();                            // a view's dialogs leave with it
-    updateHead(name);                            // title + self-referencing canonical
+    // Provisional: when no mode was asked for, the game resumes its last one and
+    // reports back through modeURL, which refines the title and URL.
+    updateHead(name, isMode(name, mode) ? mode : null);
     updateFeedbackHref();                        // so the report names the screen they were on
     if (name === "home") { refreshDailyChips(); renderHubStreak(); layoutHome(); }   // state may have changed while playing
     var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : name === "records" ? window.Records : name === "archive" ? window.Archive : null;
     if (api) {
-      if (mode === "daily" && api.goDaily) api.goDaily();
+      if (mode && mode.indexOf("archive:") === 0 && api.goArchive) api.goArchive(mode.slice(8));
+      else if (mode === "daily" && api.goDaily) api.goDaily();
+      // Any other real mode of this game — legends, endless, easy, retired…
+      else if (isMode(name, mode) && api.goMode) api.goMode(mode);
+      // "practice" stays a concept the hub can ask for even where it isn't a
+      // literal mode: Player ID calls it "both", Higher or Lower calls it "endless".
       else if (mode === "practice" && api.goPractice) api.goPractice();
-      else if (mode && mode.indexOf("archive:") === 0 && api.goArchive) api.goArchive(mode.slice(8));
       else if (api.onShow) api.onShow();
     }
     if (window.scrollTo) window.scrollTo(0, 0);
@@ -239,23 +246,75 @@
     records: "Records", archive: "Archive"
   };
   var CANON = "https://euroballgames.com/";
-  function pageTitle(view) {
-    return TITLES[view] ? TITLES[view] + " 🏀 Euroball" : "Euroball 🏀 — daily European basketball puzzles";
+
+  // Modes are addressable too (?game=thegrid&mode=practice). The lists live here
+  // because the strings are NOT uniform across games — daily/practice,
+  // daily/endless, daily/easy/medium/hard, daily/active/retired/both — and an
+  // unknown one must be ignored rather than handed to a game that would choke on
+  // it. Roster Master is absent on purpose: it has no modes, it has a chosen club.
+  var MODES = {
+    mystery: ["daily", "practice", "legends", "endless"],
+    playerid: ["daily", "active", "retired", "both"],
+    completefive: ["daily", "easy", "medium", "hard"],
+    connections: ["daily", "practice"],
+    careerorder: ["daily", "easy", "medium", "hard"],
+    thegrid: ["daily", "practice"],
+    clubreveal: ["daily", "active", "legends", "both"],
+    pathbetween: ["daily", "easy", "medium", "hard"],
+    oddoneout: ["daily", "practice"],
+    higherlower: ["daily", "endless"]
+  };
+  function isMode(view, mode) { return !!(mode && MODES[view] && MODES[view].indexOf(mode) >= 0); }
+  function linkedMode(view) {
+    var m = /[?&]mode=([a-z]+)/i.exec(window.location.search || "");
+    var mode = m && m[1].toLowerCase();
+    return isMode(view, mode) ? mode : null;
+  }
+  function pageTitle(view, mode) {
+    if (!TITLES[view]) return "Euroball 🏀 — daily European basketball puzzles";
+    // "Daily" is the default reading of a game, so it doesn't earn a suffix.
+    var label = (isMode(view, mode) && mode !== "daily") ? mode.charAt(0).toUpperCase() + mode.slice(1) : "";
+    return TITLES[view] + (label ? " · " + label : "") + " 🏀 Euroball";
   }
   // Relative, so it still works on github.io and on a Pages preview build.
-  function urlFor(view) {
+  function urlFor(view, mode) {
     var base = "";
     try { base = window.location.pathname || "/"; } catch (e) { base = "/"; }
-    return TITLES[view] ? base + "?game=" + view : base;
+    if (!TITLES[view]) return base;
+    return base + "?game=" + view + (isMode(view, mode) ? "&mode=" + mode : "");
   }
   // Self-referencing canonical: dedupes the github.io copy against the real
   // domain, and — crucially — points each game URL at ITSELF rather than at the
   // hub. A single hardcoded canonical would have told Google to discard all
   // eleven game URLs, which is the opposite of the point.
-  function updateHead(view) {
-    try { document.title = pageTitle(view); } catch (e) {}
+  function updateHead(view, mode) {
+    try { document.title = pageTitle(view, mode); } catch (e) {}
     var c = $("canonical");
+    // The canonical deliberately DROPS the mode. Every mode of a game serves the
+    // same HTML, so ~32 self-canonicalising mode URLs would be 32 duplicates
+    // competing with each other for the same content — the classic faceted-
+    // navigation mistake. A mode is a state OF the game's page, not a page. The
+    // sitemap lists the eleven games only, for the same reason.
     if (c) c.href = CANON + (TITLES[view] ? "?game=" + view : "");
+  }
+
+  // Called by every game whenever its mode changes — a tab click, the keyboard
+  // arrows, or restoring the last-used mode — so the address can never disagree
+  // with what's on screen. replaceState, not push: flicking between tabs
+  // shouldn't stack up Back entries.
+  //
+  // The curView guard is load-bearing. Every game's init ends with
+  // setMode(lsGet(...)), so at page load all ten fire this while invisible; without
+  // the guard the last one to initialise would stamp its mode on the URL.
+  var curView = "home";
+  function modeURL(view, mode) {
+    if (!isMode(view, mode) || view !== curView) return;
+    updateHead(view, mode);
+    try {
+      if (hasChallenge()) return;
+      if (window.history && window.history.replaceState)
+        window.history.replaceState({ v: view, mode: mode }, "", urlFor(view, mode));
+    } catch (e) {}
   }
   // Deep link: ?game=<name> opens that game directly (in Practice), e.g. share a game.
   function linkedGame() {
@@ -317,7 +376,7 @@
     window.addEventListener("popstate", function (e) {
       if (hasChallenge()) { showView("mystery"); return; }
       var st = e.state || { v: "home" };
-      showView(st.v || "home", st.archive ? "archive:" + st.archive : undefined);
+      showView(st.v || "home", st.archive ? "archive:" + st.archive : (st.mode || undefined));
       if (st.v === "rostermaster" && window.RosterMaster) {   // sub-state: picker vs a club board
         if (st.club) window.RosterMaster._open(st.club, true);
         else window.RosterMaster._back(true);
@@ -325,14 +384,15 @@
     });
     var linked = linkedGame();
     var initial = hasChallenge() ? "mystery" : (linked || "home");
+    var initialMode = linked ? linkedMode(linked) : null;
     // The deep link is now KEPT, normalised to this view's canonical URL, so the
     // address bar always names what you're looking at and the link survives a
     // copy-paste. A challenge link keeps its hash untouched.
     try {
       if (window.history && window.history.replaceState)
-        window.history.replaceState({ v: initial }, "", hasChallenge() ? "" : urlFor(initial));
+        window.history.replaceState({ v: initial, mode: initialMode }, "", hasChallenge() ? "" : urlFor(initial, initialMode));
     } catch (e) {}
-    showView(initial);
+    showView(initial, initialMode || undefined);
   }
 
   // --- Share plumbing ----------------------------------------------------------
@@ -433,7 +493,10 @@
       try { return window.location.origin + window.location.pathname + "?game=" + game; }
       catch (e) { return "?game=" + game; }
     },
-    feedbackURL: feedbackURL
+    feedbackURL: feedbackURL,
+    // Every game calls this from its mode setter. On ELG rather than Hub because
+    // Hub is the test surface; this one is real plumbing the games depend on.
+    modeURL: modeURL
   };
 
   // Test hooks + programmatic refresh (the headless harness drives these directly).
@@ -446,7 +509,8 @@
     _getHub: getHub, _setHub: setHub,
     _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme,
     _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
-    _copyAddress: copyAddress, _showView: showView, _pushNav: pushNav, _urlFor: urlFor
+    _copyAddress: copyAddress, _showView: showView, _pushNav: pushNav, _urlFor: urlFor,
+    _isMode: isMode, _pageTitle: pageTitle, _modes: MODES
   };
 
   // Auto-wire on load, unless a harness asked to drive Hub without DOM wiring.

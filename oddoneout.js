@@ -247,6 +247,7 @@
     mode = (m === "practice") ? "practice" : "daily";
     if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
+    if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("oddoneout", mode);   // keep ?mode= honest
     [["daily", els.tabDaily], ["practice", els.tabPractice]].forEach(function (pr) {
       if (!pr[1]) return;
       var sel = pr[0] === mode;
@@ -319,6 +320,7 @@
     onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); maybeFirstHelp(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("practice"); },
+    goMode: setMode,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, results: results.slice(), over: over, won: won, revealed: revealed, round: round }; },
     _deal: deal, _setMode: setMode, _next: next,

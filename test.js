@@ -65,7 +65,10 @@ var win = {
   // URL stub so challenge links (#c=…) can be built and parsed.
   location: { origin: "https://elg.test", pathname: "/", search: "", hash: "", href: "https://elg.test/" },
   history: {
-    replaceState: function (s, t, url) { win.location.hash = (typeof url === "string" && url.indexOf("#") >= 0) ? url.slice(url.indexOf("#")) : ""; },
+    replaceState: function (s, t, url) {
+      win.location.hash = (typeof url === "string" && url.indexOf("#") >= 0) ? url.slice(url.indexOf("#")) : "";
+      win._replacedURL = typeof url === "string" ? url : null;   // so mode-URL rewrites are observable
+    },
     // Records the URL too. It used to drop it, which would have let a pushNav that
     // wrote no URL at all pass the addressable-view tests.
     pushState: function (s, t, url) { win._pushedState = s; win._pushedURL = typeof url === "string" ? url : null; }
@@ -1453,6 +1456,44 @@ ok(/og:image" content="https:\/\/euroballgames\.com\//.test(fbHTML) &&
    /twitter:image" content="https:\/\/euroballgames\.com\//.test(fbHTML),
    "og:image and twitter:image are absolute");
 ok(/og:url" content="https:\/\/euroballgames\.com\//.test(fbHTML), "og:url is set");
+
+console.log("Mode URLs — daily / practice / legends / easy … are all addressable");
+// The mode map must not LIE: every mode it lists has to be one the game will take.
+var MODE_APIS = {
+  mystery: window.Mystery, playerid: window.PlayerID, completefive: window.CompleteFive,
+  connections: window.Connections, careerorder: window.CareerOrder, thegrid: window.TheGrid,
+  clubreveal: window.ClubReveal, pathbetween: window.PathBetween, oddoneout: window.OddOneOut,
+  higherlower: window.HigherLower
+};
+var mdGames = Object.keys(window.Hub._modes);
+ok(mdGames.length === 10, "ten games have modes");
+ok(mdGames.filter(function (g) { return typeof (MODE_APIS[g] || {}).goMode !== "function"; }).length === 0,
+   "every one of them exposes goMode — app.js can open an arbitrary mode without reaching for a test hook");
+ok(!window.Hub._modes.rostermaster, "Roster Master is absent: it has a chosen club, not modes");
+ok(window.Hub._urlFor("thegrid", "practice").indexOf("?game=thegrid&mode=practice") > 0, "a mode URL carries game + mode");
+ok(window.Hub._urlFor("thegrid", "legends").indexOf("mode=") === -1, "a mode belonging to another game is dropped");
+ok(window.Hub._isMode("higherlower", "endless") && !window.Hub._isMode("higherlower", "practice"),
+   "validation is per game — Higher or Lower has endless, not practice");
+ok(window.Hub._pageTitle("thegrid", "practice") === "The Grid · Practice 🏀 Euroball", "the title names the mode");
+ok(window.Hub._pageTitle("thegrid", "daily") === "The Grid 🏀 Euroball", "daily earns no suffix, it's the default reading");
+// Every listed mode really switches the game, so the map can't drift from reality.
+window.Hub._showView("higherlower");
+window.HigherLower.goMode("endless");
+ok(window.HigherLower._peek().mode === "endless", "goMode actually switches the game");
+// The SEO call: ~32 mode URLs serve identical HTML, so they must NOT
+// self-canonicalise, or they compete with each other as duplicates.
+window.Hub._showView("thegrid");
+window.ELG.modeURL("thegrid", "practice");
+ok(byId("canonical").href === "https://euroballgames.com/?game=thegrid",
+   "the canonical DROPS the mode — a mode is a state of one page, not a page of its own");
+ok(doc.title === "The Grid · Practice 🏀 Euroball", "…while the title still reflects it");
+ok(typeof win._replacedURL === "string" && win._replacedURL.indexOf("mode=practice") > 0,
+   "a mode change rewrites the address, so a copied link matches the screen");
+// Load-bearing: every game's init calls its mode setter while invisible, so
+// without this guard the last game to load would stamp its mode on the URL.
+win._replacedURL = "sentinel";
+window.ELG.modeURL("connections", "practice");
+ok(win._replacedURL === "sentinel", "a background game's mode change does NOT touch the URL");
 
 console.log("Leaving a view takes its dialogs with it");
 // The how-to auto-opens on a game's first visit. Going Back without dismissing it

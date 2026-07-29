@@ -256,6 +256,7 @@
     diff = ({ daily: 1, easy: 1, medium: 1, hard: 1 })[d] ? d : "daily";
     if (diff === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.diff, diff);
+    if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("completefive", diff);   // keep ?mode= honest
     [["daily", els.tabDaily], ["easy", els.tabEasy], ["medium", els.tabMedium], ["hard", els.tabHard]].forEach(function (pr) {
       if (!pr[1]) return;
       var sel = pr[0] === diff;
@@ -363,6 +364,7 @@
     onShow: function () { if (isArchive) setDiff("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setDiff("daily"); },
     goPractice: function () { setDiff("medium"); },
+    goMode: setDiff,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setDiff("daily"); },
     _peek: function () { return { team: lineup && lineup.team, hiddenPos: hiddenPos, target: target, diff: diff, day: dayKey, archive: isArchive }; },
     _deal: deal,

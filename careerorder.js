@@ -313,6 +313,7 @@
     diff = ({ daily: 1, easy: 1, medium: 1, hard: 1 })[d] ? d : "daily";
     if (diff === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.diff, diff);
+    if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("careerorder", diff);   // keep ?mode= honest
     [["daily", els.tabDaily], ["easy", els.tabEasy], ["medium", els.tabMedium], ["hard", els.tabHard]].forEach(function (pr) {
       if (!pr[1]) return;
       var sel = pr[0] === diff;
@@ -393,6 +394,7 @@
     onShow: function () { if (isArchive) setDiff("daily"); else if (!dealt) deal(); maybeFirstHelp(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setDiff("daily"); },
     goPractice: function () { setDiff("medium"); },
+    goMode: setDiff,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setDiff("daily"); },
     _peek: function () { return { diff: diff, day: dayKey, archive: isArchive, name: player && player.name, len: segments.length, order: order.slice(), confirmed: confirmed.slice(), tries: tries, over: over, won: won, correct: segments.map(function (s) { return s.team; }) }; },
     _deal: deal, _setDiff: setDiff,

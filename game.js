@@ -846,6 +846,7 @@
     mode = (m === "practice" || m === "legends" || m === "endless") ? m : "daily";
     if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     if (!fromChallenge) lsSet(K.mode, mode);
+    if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("mystery", mode);   // keep ?mode= honest
     var active = tabFor(mode);
     [els.tabDaily, els.tabPractice, els.tabLegends, els.tabEndless].forEach(function (btn) {
       var sel = (btn === active);
@@ -1186,6 +1187,7 @@
   window.Mystery = {
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("practice"); },
+    goMode: setMode,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     _peekDay: function () { return { day: dayKey, archive: isArchive, mode: mode, over: over, won: won }; },
     onShow: function () {

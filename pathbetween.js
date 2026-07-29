@@ -414,6 +414,7 @@
     mode = ({ daily: 1, easy: 1, medium: 1, hard: 1 })[m] ? m : "daily";
     if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.mode, mode);
+    if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("pathbetween", mode);   // keep ?mode= honest
     [["daily", els.tabDaily], ["easy", els.tabEasy], ["medium", els.tabMedium], ["hard", els.tabHard]].forEach(function (pr) {
       if (!pr[1]) return;
       var sel = pr[0] === mode;
@@ -513,6 +514,7 @@
     onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("medium"); },
+    goMode: setMode,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     // internal hooks used by test.js AND build_paths.js (shared teammate graph)
     _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, pIdx: pIdx, a: start, b: target, par: par, chain: chain, left: left, wrong: wrong, over: over, won: won, misses: misses }; },
