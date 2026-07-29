@@ -664,7 +664,9 @@
   // --- Share -----------------------------------------------------------------
   function shareText() {
     var emoji = { green: "🟩", yellow: "🟨", grey: "⬛" };
-    var head = "EuroLeague Guesser 🏀 " + (mode === "daily" ? (dayKey || todayStr()) : modeLabel());
+    // Names the GAME, like the other ten shares do. This one carried the site
+    // name because it was the site once, back when there was only one game.
+    var head = "Mystery Player 🏀 " + (mode === "daily" ? (dayKey || todayStr()) : modeLabel());
     var score = won ? (guesses.length + "/" + MAX_GUESSES) : ("X/" + MAX_GUESSES);
     var rows = guesses.map(function (g) {
       return evaluate(g).map(function (r) { return emoji[r.state]; }).join("");

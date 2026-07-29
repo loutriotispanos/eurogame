@@ -106,14 +106,18 @@ function stamp(str, fx, fy, scale, id) {
   }
 }
 
-// Headline lockup (mirrors the app's orange "Euro" + white rest).
-var ST = 11, TLx = 84, TLy = 132;
+// Headline lockup (mirrors the app's accent "Euro" + ink "ball").
+// "EUROBALL" sets on ONE line where "EUROLEAGUE / GUESSER" needed two, so the
+// type goes up from 11 to 16: at 16 the lockup ends at x=836 and the ball starts
+// at x=860, which is as large as it can be set without collision.
+var ST = 16, TLx = 84, TLy = 146;
 stamp("EURO", TLx, TLy, ST, 2);
-stamp("LEAGUE", TLx + textWidth("EURO", ST) + 6 * ST - 5 * ST, TLy, ST, 1); // continue same word, one char gap
-stamp("GUESSER", TLx, TLy + 7 * ST + 22, ST, 1);
-var TAGy = TLy + 2 * (7 * ST) + 22 + 34, TAGs = 4;
-stamp("GUESS THE PLAYER IN 8 TRIES", TLx, TAGy, TAGs, 3);
-var MODES = "DAILY · PRACTICE · LEGENDS · ENDLESS";
+stamp("BALL", TLx + textWidth("EURO", ST) + ST, TLy, ST, 1); // continue same word, one char gap
+var TAGy = TLy + 7 * ST + 34, TAGs = 4;
+stamp("ELEVEN DAILY BASKETBALL PUZZLES", TLx, TAGy, TAGs, 3);
+// Names games rather than one game's modes — the card sells the hub now. No "+N
+// MORE": the font has no "+" and a missing glyph stamps a silent blank.
+var MODES = "MYSTERY PLAYER · THE GRID · CONNECTIONS · PATH BETWEEN · ODD ONE OUT";
 stamp(MODES, TLx, 540, 2, 3);
 
 // Basketball (right side), in supersample space.
