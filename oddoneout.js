@@ -8,7 +8,7 @@
 
   var ROUNDS = window.ODDONES || [];
   var PER_DAY = 5;           // rounds in a Daily
-  var PASS = 4;              // Daily "solved" (✓) at 4/5 or better
+  var PASS = 3;              // Daily "solved" (✓) at 3/5 or better
 
   var K = {
     mode: "elg:oo:mode", stats: "elg:oo:stats", dstats: "elg:oo:dstats",

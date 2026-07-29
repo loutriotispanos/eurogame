@@ -142,7 +142,6 @@
   var pIdx = -1, start = null, target = null, par = 0;
   var chain = [], left = 0, wrong = 0, misses = [];   // misses = tried-and-failed for the CURRENT chain end
   var over = false, won = false, dealt = false;
-  var matches = [], activeIndex = -1;
 
   function modeLabel() { return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : mode.charAt(0).toUpperCase() + mode.slice(1); }
   function dailyIdx() { var m = pools()[3]; return m.length ? m[hashStr("pb:" + dayKey) % m.length] : -1; }
@@ -299,50 +298,33 @@
     els.banner.hidden = false;
   }
 
-  // --- Autocomplete (careers pool minus the chain) ------------------------------
-  function closeDropdown() {
-    els.dropdown.hidden = true; els.dropdown.innerHTML = ""; matches = []; activeIndex = -1;
-    els.input.setAttribute("aria-expanded", "false"); els.input.removeAttribute("aria-activedescendant");
+  // --- Guess resolution (no suggestions — pure recall) --------------------------
+  // There was an autocomplete here and it handed the game over: two letters listed
+  // candidate players, so you read the link off a menu instead of recalling it.
+  // Now the typed text stands on its own — an exact name, or a partial only one
+  // player matches (a surname is usually enough). Anything else is REPORTED and
+  // costs nothing, because only a resolved name ever reaches submitGuess, so a
+  // typo can never burn one of your guesses.
+  //
+  // The chain is deliberately NOT filtered out of the pool: naming someone already
+  // in it should get submitGuess's "already in your chain", not "no such player".
+  function resolve(text) {
+    var raw = String(text == null ? "" : text).trim(), q = norm(raw);
+    if (!q) return null;
+    var pool = CAREERS.map(function (c) { return c.name; });
+    var exact = pool.filter(function (n) { return norm(n) === q; });
+    if (exact.length) return { name: exact[0] };
+    var hits = pool.filter(function (n) { return norm(n).indexOf(q) !== -1; });
+    if (!hits.length) return { miss: "✗ No player called “" + raw + "” in our data" };
+    if (hits.length > 1) return { miss: "↔ " + hits.length + " players match “" + raw + "” — type more of the name" };
+    return { name: hits[0] };
   }
-  function optionHTML(name) {
-    return "<span class='opt-avatar' style='background:" + avatarColor(name) + "'>" + initials(name) + "</span>" +
-      "<span class='opt-name'>" + name + "</span>";
-  }
-  function renderDropdown() {
-    els.dropdown.innerHTML = "";
-    if (!matches.length) {
-      if (els.input.value.trim()) {
-        var q = els.input.value.trim();
-        var empty = document.createElement("div"); empty.className = "dropdown-empty";
-        empty.textContent = chain.some(function (n) { return norm(n) === norm(q); })
-          ? "Already in your chain — each player counts once" : "No player found — try another spelling";
-        els.dropdown.appendChild(empty); els.dropdown.hidden = false; els.input.setAttribute("aria-expanded", "true");
-      } else closeDropdown();
-      return;
-    }
-    matches.forEach(function (name, i) {
-      var item = document.createElement("div");
-      item.className = "option" + (i === activeIndex ? " active" : "");
-      item.id = "pb-opt-" + i; item.setAttribute("role", "option");
-      item.setAttribute("aria-selected", i === activeIndex ? "true" : "false");
-      item.innerHTML = optionHTML(name);
-      item.addEventListener("pointerdown", function (e) { e.preventDefault(); submitGuess(name); });
-      els.dropdown.appendChild(item);
-    });
-    els.dropdown.hidden = false; els.input.setAttribute("aria-expanded", "true");
-    els.input.setAttribute("aria-activedescendant", activeIndex >= 0 ? "pb-opt-" + activeIndex : "");
-  }
-  function refreshMatches() {
-    if (over) { closeDropdown(); return; }
-    var q = norm(els.input.value.trim());
-    if (!q) { closeDropdown(); return; }
-    var used = {};
-    chain.forEach(function (n) { used[n] = 1; });
-    matches = CAREERS.map(function (c) { return c.name; })
-      .filter(function (n) { return !used[n] && norm(n).indexOf(q) !== -1; })
-      .slice(0, 8);
-    activeIndex = matches.length ? 0 : -1;
-    renderDropdown();
+  function submitTyped() {
+    if (over) return;
+    var r = resolve(els.input.value);
+    if (!r) return;
+    if (r.miss) { flash(r.miss); return; }
+    submitGuess(r.name);
   }
 
   // --- Game flow -----------------------------------------------------------------
@@ -356,7 +338,7 @@
   }
   function finish(deadEnd) {
     over = true;
-    els.input.disabled = true; closeDropdown();
+    els.input.disabled = true;
     if (mode === "daily") { recordDaily(won); saveDaily(); } else record(won);
     renderChain(); renderStats(); updateCounter(); showBanner(deadEnd);
     if (els.sr) els.sr.textContent = won ? "Connected in " + steps() + " steps!" : "Not connected. The round is over.";
@@ -364,7 +346,7 @@
   function submitGuess(name) {
     if (over || !name || !universe()[name]) return;
     if (chain.indexOf(name) >= 0) { flash("↺ " + name + " is already in your chain"); return; }   // free — no guess burned
-    els.input.value = ""; closeDropdown();
+    els.input.value = "";
     var l = link(end(), name);
     left--;
     if (l) {
@@ -413,7 +395,7 @@
       wrong = saved.wrong || 0;
       over = !!saved.done; won = !!saved.won;
     }
-    renderChain(); renderMisses(); closeDropdown(); updateButtons();
+    renderChain(); renderMisses(); updateButtons();
     if (over) { els.input.disabled = true; showBanner(); updateCounter(); }
     else { updateCounter(); els.input.focus(); }
   }
@@ -425,7 +407,7 @@
     if (pool.length > 1 && i === pIdx) i = pool[(pool.indexOf(i) + 1) % pool.length];
     applyPuzzle(i);
     resetState();
-    renderChain(); renderMisses(); updateCounter(); updateButtons(); closeDropdown(); els.input.focus();
+    renderChain(); renderMisses(); updateCounter(); updateButtons(); els.input.focus();
   }
 
   function setMode(m) {
@@ -476,12 +458,8 @@
 
   // --- Events / init -----------------------------------------------------------------
   function onKeyDown(e) {
-    if (els.dropdown.hidden) return;
-    if (!matches.length) { if (e.key === "Escape") closeDropdown(); return; }
-    if (e.key === "ArrowDown") { e.preventDefault(); activeIndex = (activeIndex + 1) % matches.length; renderDropdown(); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); activeIndex = (activeIndex - 1 + matches.length) % matches.length; renderDropdown(); }
-    else if (e.key === "Enter") { e.preventDefault(); if (activeIndex >= 0 && matches[activeIndex]) submitGuess(matches[activeIndex]); }
-    else if (e.key === "Escape") closeDropdown();
+    if (e.key === "Enter") { e.preventDefault(); submitTyped(); }
+    else if (e.key === "Escape") { els.input.value = ""; flash(""); }
   }
   function onModeKey(e) {
     var order = ["daily", "easy", "medium", "hard"], i = order.indexOf(mode), n = order.length, next = null;
@@ -505,7 +483,7 @@
   }
 
   function init() {
-    els.input = $("pb-input"); els.dropdown = $("pb-dropdown"); els.chain = $("pb-chain");
+    els.input = $("pb-input"); els.chain = $("pb-chain");
     els.counter = $("pb-counter"); els.banner = $("pb-banner"); els.flash = $("pb-flash");
     els.guesses = $("pb-guesses"); els.next = $("pb-next"); els.giveup = $("pb-giveup");
     els.stats = $("pb-stats"); els.sr = $("pb-sr"); els.modeRow = $("pb-modes");
@@ -514,10 +492,7 @@
     els.infoBtn = $("pb-info-btn"); els.infoModal = $("pb-info-modal"); els.infoClose = $("pb-info-close");
     if (!els.input || !PATHS.length || !CAREERS.length) return;
 
-    els.input.addEventListener("input", refreshMatches);
     els.input.addEventListener("keydown", onKeyDown);
-    els.input.addEventListener("focus", refreshMatches);
-    document.addEventListener("click", function (e) { if (e.target !== els.input && els.dropdown && !els.dropdown.contains(e.target)) closeDropdown(); });
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
     els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
@@ -544,6 +519,7 @@
     _deal: deal,
     _setMode: setMode,
     _guess: submitGuess,
+    _resolve: resolve,
     _shareText: shareText,
     _link: link,
     _teammates: teammates,

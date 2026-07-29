@@ -46,11 +46,15 @@ var doc = {
   _listeners: {},
   getElementById: function (id) { return byKey[id] || mk(id); },
   querySelector: function (sel) { return byKey["sel:" + sel] || mk("sel:" + sel); },
-  querySelectorAll: function () { return []; },
+  // Answers ".modal-overlay" for real, so app.js's closeAllModals is actually
+  // exercised. Returning [] for everything made that a silent no-op — the test
+  // would have passed with the function body deleted.
+  querySelectorAll: function (sel) { return sel === ".modal-overlay" ? overlays.slice() : []; },
   createElement: function (tag) { return new El(tag); },
   addEventListener: function (t, fn) { (doc._listeners[t] = doc._listeners[t] || []).push(fn); }
 };
-["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal", "oo-info-modal", "hl-info-modal", "rm-info-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); }); // modals start hidden + need a dialog child
+var overlays = [];   // every .modal-overlay, for doc.querySelectorAll above
+["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal", "oo-info-modal", "hl-info-modal", "rm-info-modal", "feedback-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); overlays.push(m); }); // modals start hidden + need a dialog child
 
 var store = {}, captured = "", reduceMotion = false;
 var win = {
@@ -938,14 +942,17 @@ ok(window.PathBetween._link("Kostas Sloukas", "Evan Fournier") == null, "same cl
 })();
 
 console.log("Path Between game");
-var pbInput = byId("pb-input"), pbDd = byId("pb-dropdown");
+var pbInput = byId("pb-input");
+// Types the name and presses Enter — how it's played now the suggestion list is
+// gone. Returns whether a GUESS WAS CONSUMED, not whether the chain advanced: a
+// non-teammate is a real guess that costs one and simply doesn't link. Anything
+// the resolver refuses (typo, ambiguous) leaves the count alone, so a resolver
+// that quietly swallows a valid name fails here instead of looking like a pass.
 function pbSubmit(name) {
-  pbInput.value = name; fire(pbInput, "input");
-  var opt = null;
-  pbDd.children.forEach(function (c) { if (!opt && (c._html || "").indexOf(">" + name + "</span>") >= 0) opt = c; });
-  if (!opt) return false;
-  fire(opt, "pointerdown", { preventDefault: function () {} });
-  return true;
+  var before = window.PathBetween._peek().left;
+  pbInput.value = name;
+  fire(pbInput, "keydown", { key: "Enter", preventDefault: function () {} });
+  return window.PathBetween._peek().left < before;
 }
 delete store["elg:pb:stats"];
 window.PathBetween._setMode("easy");
@@ -957,13 +964,13 @@ ok(pbRoute && pbRoute.length === pb.par + 1 && pbRoute[0] === pb.a && pbRoute[pb
    "_route returns a shortest chain A→…→B");
 var pbAdjA = {}; window.PathBetween._teammates(pb.a).forEach(function (n) { pbAdjA[n] = 1; });
 var pbBad = window.CAREERS.map(function (c) { return c.name; }).filter(function (n) { return n !== pb.a && n !== pb.b && !pbAdjA[n]; })[0];
-ok(pbSubmit(pbBad), "submitted a non-teammate through the dropdown");
+ok(pbSubmit(pbBad), "submitted a non-teammate by typing it");
 var pb1 = window.PathBetween._peek();
 ok(pb1.left === 4 && pb1.wrong === 1 && pb1.chain.length === 1 && pb1.misses.indexOf(pbBad) >= 0,
    "a miss burns a guess, chain unchanged, miss remembered");
 window.PathBetween._guess(pb.a);
 ok(window.PathBetween._peek().left === 4, "re-guessing a player already in the chain costs nothing");
-ok(pbSubmit(pbRoute[1]), "linked the first hop through the dropdown");
+ok(pbSubmit(pbRoute[1]), "linked the first hop by typing the name and pressing Enter");
 var pb2 = window.PathBetween._peek();
 ok(pb2.chain.length === 2 && pb2.chain[1] === pbRoute[1] && pb2.left === 3 && pb2.misses.length === 0,
    "a valid link extends the chain (costs a guess, clears the miss list)");
@@ -1367,6 +1374,49 @@ window.Hub._sendMail();
 ok(win.location.href.indexOf("mailto:") === 0, "feedback: \"Open mail app\" still offers the prefilled message");
 ok(win.location.href === window.ELG.feedbackURL(), "feedback: both entry points resolve to the same message");
 win.location.href = fbHref;
+
+console.log("No suggestions in Path Between / Club Reveal — typed names resolve");
+// The dropdown used to name every candidate, which in these two games is close to
+// printing the answer. Typing has to be forgiving instead: the guarantee that
+// matters is that anything the resolver can't pin down costs you NOTHING.
+window.PathBetween._setMode("easy");
+var pbR = window.PathBetween._peek(), pbTarget = window.PathBetween._route(pbR.a, pbR.b)[1];
+ok(window.PathBetween._resolve("") === null, "PB: empty input resolves to nothing at all");
+ok(!!window.PathBetween._resolve("qzxwvy").miss, "PB: an unknown name is reported, not guessed");
+ok(!!window.PathBetween._resolve("a").miss, "PB: an ambiguous fragment is reported, not guessed at");
+ok(window.PathBetween._resolve(pbTarget).name === pbTarget, "PB: an exact name resolves");
+// Shortest prefix the resolver itself considers unambiguous — a surname is
+// usually enough, and this asserts the mechanism without hardcoding a spelling.
+var pbFrag = null;
+for (var pbK = 3; pbK <= pbTarget.length; pbK++) {
+  var pbTry = window.PathBetween._resolve(pbTarget.slice(0, pbK));
+  if (pbTry && pbTry.name === pbTarget) { pbFrag = pbTarget.slice(0, pbK); break; }
+}
+ok(pbFrag !== null, "PB: a partial resolves as soon as it's unique");
+var pbLeftBefore = window.PathBetween._peek().left;
+ok(pbSubmit("qzxwvy") === false && window.PathBetween._peek().left === pbLeftBefore,
+   "PB: a typo costs no guess — only a resolved name reaches the board");
+
+window.ClubReveal._setMode("active");
+var cvClub = window.ClubReveal._peek().club;
+ok(!!window.ClubReveal._resolve("qzxwvy").miss, "CV: an unknown club is reported, not guessed");
+ok(window.ClubReveal._resolve(cvClub).name === cvClub, "CV: an exact club name resolves");
+var cvFrag = null;
+for (var cvK = 3; cvK <= cvClub.length; cvK++) {
+  var cvTry = window.ClubReveal._resolve(cvClub.slice(0, cvK));
+  if (cvTry && cvTry.name === cvClub) { cvFrag = cvClub.slice(0, cvK); break; }
+}
+ok(cvFrag !== null, "CV: a partial resolves as soon as it's unique (\"pana\" is enough)");
+ok(byId("cv-flash") && String(byId("cv-flash").id) === "cv-flash", "CV: has a flash line to report misses in");
+
+console.log("Leaving a view takes its dialogs with it");
+// The how-to auto-opens on a game's first visit. Going Back without dismissing it
+// used to leave the dialog floating over the hub, game gone, modal still there.
+byId("oo-info-modal").hidden = false;
+byId("feedback-modal").hidden = false;
+window.Hub._showView("home");
+ok(byId("oo-info-modal").hidden === true, "going back to the hub closes a how-to left open");
+ok(byId("feedback-modal").hidden === true, "…and every other dialog with it");
 
 // Higher or Lower — replay a perfect daily
 window.HigherLower._setMode("daily");

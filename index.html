@@ -1491,13 +1491,15 @@
       <div id="cv-banner" class="banner" hidden></div>
       <div id="cv-list" class="cv-list" aria-label="Revealed players"></div>
       <div id="cv-guesses" class="pid-guesses"></div>
+      <div id="cv-flash" class="gr-flash" role="status" aria-live="polite" hidden></div>
       <div class="controls">
+        <!-- No suggestion list any more: pure recall. The combobox roles went with
+             it, and autocomplete is a deliberately unknown token — Chrome ignores
+             "off" on a field it reads as a name and offers the user's own, which is
+             the same trap Roster Master hit. -->
         <div class="search">
-          <input id="cv-input" type="text" autocomplete="off" spellcheck="false"
-                 placeholder="Name the club…"
-                 role="combobox" aria-expanded="false" aria-controls="cv-dropdown"
-                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Name the club" />
-          <div id="cv-dropdown" class="dropdown" role="listbox" aria-label="Club suggestions" hidden></div>
+          <input id="cv-input" type="text" autocomplete="cv-guess" spellcheck="false"
+                 placeholder="Which club is this?" aria-label="Type the club you think it is" />
         </div>
         <button id="cv-reveal" type="button">Reveal next</button>
         <button id="cv-giveup" type="button">Give up</button>
@@ -1529,11 +1531,9 @@
       <div id="pb-guesses" class="pid-guesses"></div>
       <div class="controls">
         <div class="search">
-          <input id="pb-input" type="text" autocomplete="off" spellcheck="false"
-                 placeholder="Name a teammate…"
-                 role="combobox" aria-expanded="false" aria-controls="pb-dropdown"
-                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Name a teammate of your current player" />
-          <div id="pb-dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
+          <!-- Pure recall — see the note on cv-input for the autocomplete token. -->
+          <input id="pb-input" type="text" autocomplete="pb-guess" spellcheck="false"
+                 placeholder="Who links from here?" aria-label="Type a teammate of your current player" />
         </div>
         <button id="pb-giveup" type="button">Give up</button>
         <button id="pb-next" type="button">New pair</button>
@@ -1632,6 +1632,7 @@
       <p>Two players, one hidden chain. Get from <strong>start</strong> to <strong>target</strong> by naming players who were <strong>teammates</strong> — each name must have shared a club, in the same seasons, with the player before him.</p>
       <ul>
         <li><strong>Par</strong> is the shortest chain that exists. You get <strong>par + 3 guesses</strong> — right or wrong, every guess costs one.</li>
+        <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type a name and press Enter; a surname is enough when it's unique, and accents don't matter. A name we can't place isn't a guess and costs you nothing.</li>
         <li>The <strong>career lines</strong> under your current player and the target are your map: find where two paths crossed.</li>
         <li>Each player can appear in the chain only <strong>once</strong> — don't route yourself into a dead end.</li>
         <li>NBA stints count too — some of the best routes go through the League. 😉</li>
@@ -1656,7 +1657,7 @@
       </ul>
       <h3>Game modes</h3>
       <ul>
-        <li><strong>Daily</strong> — five rounds, the same for everyone. Four or more right = solved. Keeps your hub streak alive.</li>
+        <li><strong>Daily</strong> — five rounds, the same for everyone. Three or more right = solved. Keeps your hub streak alive.</li>
         <li><strong>Practice</strong> — endless rounds; chase your best streak.</li>
       </ul>
       <p class="modal-note">Facts are judged by the data we store — players, careers and Final Four lineups — the same pool as Connections.</p>
@@ -1674,7 +1675,7 @@
       </ul>
       <h3>Game modes</h3>
       <ul>
-        <li><strong>Daily</strong> — ten matchups, the same for everyone. Eight or more right = solved. Keeps your hub streak alive.</li>
+        <li><strong>Daily</strong> — ten matchups, the same for everyone. Seven or more right = solved. Keeps your hub streak alive.</li>
         <li><strong>Endless</strong> — one wrong answer ends the run. How long can you ride your gut?</li>
       </ul>
       <p class="modal-note">Heights, birth years and numbers come from our database — the same facts the other games play by.</p>
@@ -1705,6 +1706,7 @@
       <ul>
         <li><strong>Reveal next</strong> shows another player, free — but the fewer names you need, the better the win.</li>
         <li>You get <strong>3 guesses</strong>. A wrong guess also forces the next name out.</li>
+        <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type the club and press Enter; part of the name is enough when it's unique ("pana" will do). A club we can't place isn't a guess and costs you nothing.</li>
         <li>Naming it from the first name or two is scout's-eye territory. 🤯</li>
       </ul>
       <h3>Game modes</h3>
