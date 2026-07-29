@@ -74,7 +74,6 @@
   var isArchive = false, pendingArchive = null;
   var club = null, order = [], revealed = 1, guesses = [];
   var over = false, won = false, dealt = false;
-  var matches = [], activeIndex = -1;
 
   // Practice rounds for a mode: Active = current rosters, Legends = retired greats,
   // Both = the union (each round is one OR the other; a club can appear as both).
@@ -201,48 +200,32 @@
     els.banner.hidden = false;
   }
 
-  // --- Autocomplete (clubs of the current mode) ----------------------------------
-  function closeDropdown() {
-    els.dropdown.hidden = true; els.dropdown.innerHTML = ""; matches = []; activeIndex = -1;
-    els.input.setAttribute("aria-expanded", "false"); els.input.removeAttribute("aria-activedescendant");
+  // --- Guess resolution (no suggestions — pure recall) --------------------------
+  // The autocomplete listed the clubs of the current mode, which in a game about
+  // naming the club is close to printing the answer: twenty-odd options, and the
+  // first letter narrowed it to one or two. Gone. The typed text now resolves on
+  // its own — exact, or a partial only one club matches, so "pana" is enough —
+  // and anything else is reported without costing a guess.
+  function flash(msg) { if (els.flash) { els.flash.textContent = msg; els.flash.hidden = !msg; } }
+  function resolve(text) {
+    var raw = String(text == null ? "" : text).trim(), q = norm(raw);
+    if (!q) return null;
+    var pool = clubNames();
+    var exact = pool.filter(function (n) { return norm(n) === q; });
+    if (exact.length) return { name: exact[0] };
+    var hits = pool.filter(function (n) { return norm(n).indexOf(q) !== -1; });
+    if (!hits.length) return { miss: "✗ No club called “" + raw + "” in this round" };
+    if (hits.length > 1) return { miss: "↔ " + hits.length + " clubs match “" + raw + "” — type more of the name" };
+    return { name: hits[0] };
   }
-  function optionHTML(name) {
-    return "<span class='opt-avatar' style='background:" + avatarColor(name) + "'>" + initials(name) + "</span>" +
-      "<span class='opt-name'>" + name + "</span>";
-  }
-  function renderDropdown() {
-    els.dropdown.innerHTML = "";
-    if (!matches.length) {
-      if (els.input.value.trim()) {
-        var q = els.input.value.trim();
-        var empty = document.createElement("div"); empty.className = "dropdown-empty";
-        empty.textContent = guesses.some(function (g) { return norm(g) === norm(q); })
-          ? "Already guessed — try another club" : "No club found — try another spelling";
-        els.dropdown.appendChild(empty); els.dropdown.hidden = false; els.input.setAttribute("aria-expanded", "true");
-      } else closeDropdown();
-      return;
-    }
-    matches.forEach(function (name, i) {
-      var item = document.createElement("div");
-      item.className = "option" + (i === activeIndex ? " active" : "");
-      item.id = "cv-opt-" + i; item.setAttribute("role", "option");
-      item.setAttribute("aria-selected", i === activeIndex ? "true" : "false");
-      item.innerHTML = optionHTML(name);
-      item.addEventListener("pointerdown", function (e) { e.preventDefault(); submitGuess(name); });
-      els.dropdown.appendChild(item);
-    });
-    els.dropdown.hidden = false; els.input.setAttribute("aria-expanded", "true");
-    els.input.setAttribute("aria-activedescendant", activeIndex >= 0 ? "cv-opt-" + activeIndex : "");
-  }
-  function refreshMatches() {
-    if (over) { closeDropdown(); return; }
-    var q = norm(els.input.value.trim());
-    if (!q) { closeDropdown(); return; }
-    var guessed = {};
-    guesses.forEach(function (g) { guessed[g] = 1; });
-    matches = clubNames().filter(function (n) { return !guessed[n] && norm(n).indexOf(q) !== -1; }).slice(0, 8);
-    activeIndex = matches.length ? 0 : -1;
-    renderDropdown();
+  function submitTyped() {
+    if (over) return;
+    var r = resolve(els.input.value);
+    if (!r) return;
+    if (r.miss) { flash(r.miss); return; }        // a typo is not a guess
+    if (guesses.some(function (g) { return g === r.name; })) { flash("↺ You've already tried " + r.name); return; }
+    flash("");
+    submitGuess(r.name);
   }
 
   // --- Game flow ------------------------------------------------------------------
@@ -258,7 +241,7 @@
   }
   function finish() {
     over = true;
-    els.input.disabled = true; closeDropdown();
+    els.input.disabled = true; flash("");
     if (mode === "daily") { recordDaily(won); saveDaily(); } else record(won);
     renderStats(); updateCounter(); updateButtons(); showBanner();
     if (els.sr) els.sr.textContent = (won ? "Correct! " : "Out of guesses. ") + "It was " + club + ".";
@@ -266,7 +249,7 @@
   function submitGuess(name) {
     if (over || !name) return;
     if (guesses.some(function (g) { return g === name; })) return;   // repeat costs nothing
-    els.input.value = ""; closeDropdown();
+    els.input.value = "";
     if (name === club) { won = true; finish(); return; }
     guesses.push(name);
     if (revealed < order.length) revealed++;          // a miss forces the next name out
@@ -298,7 +281,7 @@
       guesses = (saved.guesses || []).slice(0, MAX);
       over = !!saved.done; won = !!saved.won;
     }
-    renderList(); renderGuesses(); closeDropdown(); updateButtons();
+    renderList(); renderGuesses(); flash(""); updateButtons();
     if (over) { els.input.disabled = true; showBanner(); updateCounter(); }
     else { updateCounter(); els.input.focus(); }
   }
@@ -311,7 +294,7 @@
     club = rounds[i].club;
     order = orderRoster(rounds[i].list, (Math.random() * 4294967296) >>> 0);
     resetState();
-    renderList(); renderGuesses(); updateCounter(); updateButtons(); closeDropdown(); els.input.focus();
+    renderList(); renderGuesses(); updateCounter(); updateButtons(); flash(""); els.input.focus();
   }
 
   function setMode(m) {
@@ -362,12 +345,8 @@
 
   // --- Events / init -----------------------------------------------------------------
   function onKeyDown(e) {
-    if (els.dropdown.hidden) return;
-    if (!matches.length) { if (e.key === "Escape") closeDropdown(); return; }
-    if (e.key === "ArrowDown") { e.preventDefault(); activeIndex = (activeIndex + 1) % matches.length; renderDropdown(); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); activeIndex = (activeIndex - 1 + matches.length) % matches.length; renderDropdown(); }
-    else if (e.key === "Enter") { e.preventDefault(); if (activeIndex >= 0 && matches[activeIndex]) submitGuess(matches[activeIndex]); }
-    else if (e.key === "Escape") closeDropdown();
+    if (e.key === "Enter") { e.preventDefault(); submitTyped(); }
+    else if (e.key === "Escape") { els.input.value = ""; flash(""); }
   }
   function onModeKey(e) {
     var order_ = ["daily", "active", "legends", "both"], i = order_.indexOf(mode), n = order_.length, next = null;
@@ -391,7 +370,7 @@
   }
 
   function init() {
-    els.input = $("cv-input"); els.dropdown = $("cv-dropdown"); els.list = $("cv-list");
+    els.input = $("cv-input"); els.flash = $("cv-flash"); els.list = $("cv-list");
     els.counter = $("cv-counter"); els.banner = $("cv-banner"); els.guesses = $("cv-guesses");
     els.reveal = $("cv-reveal"); els.next = $("cv-next"); els.giveup = $("cv-giveup");
     els.stats = $("cv-stats"); els.sr = $("cv-sr"); els.modeRow = $("cv-modes");
@@ -400,10 +379,7 @@
     els.infoBtn = $("cv-info-btn"); els.infoModal = $("cv-info-modal"); els.infoClose = $("cv-info-close");
     if (!els.input || !PLAYERS.length) return;
 
-    els.input.addEventListener("input", refreshMatches);
     els.input.addEventListener("keydown", onKeyDown);
-    els.input.addEventListener("focus", refreshMatches);
-    document.addEventListener("click", function (e) { if (e.target !== els.input && els.dropdown && !els.dropdown.contains(e.target)) closeDropdown(); });
     els.reveal.addEventListener("click", revealNext);
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
@@ -432,6 +408,7 @@
     _setMode: setMode,
     _reveal: revealNext,
     _guess: submitGuess,
+    _resolve: resolve,
     _shareText: shareText,
     _recog: recog,
     _pools: pools

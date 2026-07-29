@@ -1,13 +1,13 @@
 /* Higher or Lower — two EuroLeague players, one rotating question: who is taller,
  * who is older, whose jersey number is higher? Tap your answer, the values are
  * revealed. Endless: one wrong answer ends the run — chase your best streak.
- * Daily: ten date-seeded matchups (same for everyone), 8+ right = solved, feeds
+ * Daily: ten date-seeded matchups (same for everyone), 7+ right = solved, feeds
  * the hub streak. Zero data files — reads window.PLAYERS + window.LEGENDS
  * directly. Exposes window.HigherLower. */
 (function () {
   "use strict";
 
-  var PER_DAY = 10, PASS = 8;
+  var PER_DAY = 10, PASS = 7;   // 7/10 or better solves it, 6 or fewer is a loss
 
   // Pool: every distinct player/legend whose height, birth year AND number we
   // hold — all three questions must be answerable for any pool member.

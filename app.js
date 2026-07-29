@@ -12,12 +12,23 @@
   // browser arrows retrace the user's own path.
   function pushNav(state) { try { if (window.history && window.history.pushState) window.history.pushState(state, "", ""); } catch (e) {} }
 
+  // Nothing tied a dialog's lifetime to the view that owns it. The how-to
+  // auto-opens on a game's first visit, so going Back without dismissing it left
+  // the modal floating over the hub — the game underneath was gone, the dialog
+  // wasn't. Closing them here covers every modal, including ones added later,
+  // and runs BEFORE the view's onShow so a fresh auto-open still works.
+  function closeAllModals() {
+    var open = document.querySelectorAll(".modal-overlay");
+    for (var i = 0; i < open.length; i++) open[i].hidden = true;
+  }
+
   // mode: "practice" | "daily" (force a mode) | "archive:<YYYY-MM-DD>" (replay a
   // past daily) | undefined (plain open → resume last mode)
   function showView(name, mode) {
     if (VIEWS.indexOf(name) === -1) name = "home";
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
+    closeAllModals();                            // a view's dialogs leave with it
     updateFeedbackHref();                        // so the report names the screen they were on
     if (name === "home") { refreshDailyChips(); renderHubStreak(); layoutHome(); }   // state may have changed while playing
     var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : name === "records" ? window.Records : name === "archive" ? window.Archive : null;
@@ -393,7 +404,7 @@
     _getHub: getHub, _setHub: setHub,
     _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme,
     _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
-    _copyAddress: copyAddress
+    _copyAddress: copyAddress, _showView: showView
   };
 
   // Auto-wire on load, unless a harness asked to drive Hub without DOM wiring.
