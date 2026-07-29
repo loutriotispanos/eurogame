@@ -803,7 +803,7 @@ var grl2 = window.TheGrid._peek();
 ok(grl2.over === true && grl2.won === false && grl2.left === 0, "12 misses end the game (loss)");
 ok(grl2.cells.every(function (c) { return !!c; }), "loss reveals an answer in every empty cell");
 
-console.log("The Grid — Give up (practice only)");
+console.log("The Grid — Give up in practice");
 window.TheGrid._deal();
 ok(byId("gr-giveup").style.display !== "none", "Give up shown in practice");
 fire(byId("gr-giveup"), "click");
@@ -920,7 +920,8 @@ delete store["elg:cv:dstats"]; delete store[cvTodayKey()];
 window.ClubReveal._setMode("daily");
 var cvd = window.ClubReveal._peek();
 ok(cvd.club && cvd.revealed === 1 && cvd.over === false, "Daily deals a club");
-ok(byId("cv-next").style.display === "none" && byId("cv-giveup").style.display === "none", "New-club + Give-up hidden in Daily");
+ok(byId("cv-next").style.display === "none" && byId("cv-giveup").style.display !== "none",
+   "Daily hides New club — one a day — but DOES offer Give up");
 window.ClubReveal._setMode("active");
 window.ClubReveal._setMode("daily");
 ok(window.ClubReveal._peek().club === cvd.club, "Daily is deterministic (same club on re-deal)");
@@ -931,6 +932,19 @@ ok(cvds.solved >= 1 && cvds.curStreak >= 1 && cvds.lastDate, "daily win recorded
 window.ClubReveal._setMode("active");
 window.ClubReveal._setMode("daily");
 ok(window.ClubReveal._peek().over === true && window.ClubReveal._peek().won === true, "returning to Daily restores the finished round");
+
+console.log("Club Reveal — conceding the daily");
+delete store["elg:cv:dstats"]; delete store[cvTodayKey()];
+window.ClubReveal._setMode("active"); window.ClubReveal._setMode("daily");
+ok(window.ClubReveal._peek().over === false, "a fresh daily to concede");
+fire(byId("cv-giveup"), "click");
+ok(window.ClubReveal._peek().over === false, "the first tap only arms — it doesn't concede");
+ok(byId("cv-giveup").textContent === "Sure?" && byId("cv-giveup").classList.contains("armed"), "the armed button says so");
+window.ClubReveal._guess("Definitely Not A Club");     // playing on withdraws it
+ok(byId("cv-giveup").textContent === "Give up" && !byId("cv-giveup").classList.contains("armed"), "guessing disarms it again");
+fire(byId("cv-giveup"), "click"); fire(byId("cv-giveup"), "click");
+ok(window.ClubReveal._peek().over === true && window.ClubReveal._peek().won === false, "two taps concede the daily as a loss");
+ok(window.Hub._isTodayDone() === true, "conceding still counts as playing today — the hub streak survives");
 window.ClubReveal.goPractice();
 ok(window.ClubReveal._peek().mode === "both", "ClubReveal.goPractice → Both");
 window.ClubReveal.goDaily();
@@ -1045,7 +1059,8 @@ delete store["elg:pb:dstats"]; delete store[pbTodayKey()];
 window.PathBetween._setMode("daily");
 var pbd = window.PathBetween._peek();
 ok(pbd.mode === "daily" && pbd.par === 3 && pbd.over === false, "Daily deals a par-3 pair");
-ok(byId("pb-next").style.display === "none" && byId("pb-giveup").style.display === "none", "New-pair + Give-up hidden in Daily");
+ok(byId("pb-next").style.display === "none" && byId("pb-giveup").style.display !== "none",
+   "Daily hides New pair — one a day — but DOES offer Give up");
 window.PathBetween._setMode("medium");
 window.PathBetween._setMode("daily");
 ok(window.PathBetween._peek().a === pbd.a && window.PathBetween._peek().b === pbd.b, "Daily is deterministic (same pair on re-deal)");
@@ -1056,9 +1071,27 @@ var pbds = JSON.parse(store["elg:pb:dstats"]);
 ok(pbds.solved >= 1 && pbds.curStreak >= 1 && pbds.lastDate, "daily win recorded with streak");
 var pbSaved = JSON.parse(store[pbTodayKey()]);
 ok(pbSaved.done === true && pbSaved.won === true, "daily state saved in the shape the hub chip reads");
+
 window.PathBetween._setMode("medium");
 window.PathBetween._setMode("daily");
 ok(window.PathBetween._peek().over === true && window.PathBetween._peek().won === true, "returning to Daily restores the finished pair");
+
+// After the win flow, deliberately: conceding overwrites today's saved daily, so
+// running it earlier stole the state the restore check above depends on.
+console.log("Path Between — conceding the daily");
+delete store["elg:pb:dstats"]; delete store[pbTodayKey()];
+window.PathBetween._setMode("medium"); window.PathBetween._setMode("daily");
+ok(window.PathBetween._peek().over === false, "a fresh daily to concede");
+fire(byId("pb-giveup"), "click");
+ok(window.PathBetween._peek().over === false, "the first tap only arms — it doesn't concede");
+ok(byId("pb-giveup").textContent === "Sure?" && byId("pb-giveup").classList.contains("armed"), "the armed button says so");
+var pbCon = window.PathBetween._peek();
+window.PathBetween._guess(window.PathBetween._route(pbCon.a, pbCon.b)[1]);   // playing on withdraws it
+ok(byId("pb-giveup").textContent === "Give up" && !byId("pb-giveup").classList.contains("armed"), "guessing disarms it again");
+fire(byId("pb-giveup"), "click"); fire(byId("pb-giveup"), "click");
+ok(window.PathBetween._peek().over === true && window.PathBetween._peek().won === false, "two taps concede the daily as a loss");
+ok(JSON.parse(store[pbTodayKey()]).done === true, "the conceded daily is saved as finished");
+ok(window.Hub._isTodayDone() === true, "conceding still counts as playing today — the hub streak survives");
 
 console.log("Path Between — how-to modal + first-visit help");
 delete store["elg:pb:seenhelp"];
