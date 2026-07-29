@@ -287,11 +287,11 @@
   button:active { background: rgba(29, 26, 20, .07); }
   button:disabled { opacity: .4; cursor: default; }
   #new-game, #pid-next, #c5-next, #cv-next, #pb-next, #co-check, .cn-actions .cn-primary,
-  .banner-actions button, .share-btn {
+  .banner-actions button, .share-btn, #feedback-copy {
     background: var(--pill-bg); color: var(--paper); border-color: var(--pill-bg);
   }
   #new-game:hover, #pid-next:hover, #c5-next:hover, #cv-next:hover, #pb-next:hover, #co-check:hover:not(:disabled),
-  .cn-actions .cn-primary:hover:not(:disabled), .banner-actions button:hover, .share-btn:hover {
+  .cn-actions .cn-primary:hover:not(:disabled), .banner-actions button:hover, .share-btn:hover, #feedback-copy:hover {
     background: var(--pill-bg-hi); border-color: var(--pill-bg-hi);
   }
   /* An unavailable primary steps back to an outline rather than fading to mud. */
@@ -420,6 +420,14 @@
     text-decoration: underline; text-underline-offset: 2px;
   }
   .colophon-link:hover { color: var(--ink); }
+  /* The address is set as text by app.js at open time, so it still never appears
+     in the served HTML. user-select: all makes one tap take the whole thing. */
+  .fb-addr {
+    margin: 16px 0; text-align: center; overflow-wrap: anywhere;
+    font-size: var(--t-3); font-weight: 700; color: var(--ink); user-select: all;
+  }
+  .fb-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .fb-actions button { flex: 1 1 140px; }
 
   /* ---------- corner buttons + modals ------------------------------------ */
   .icon-btn {
@@ -1788,6 +1796,24 @@
     Published for the love of European basketball · No ads, no tracking, no account · Reads offline
     · <a id="feedback-link" class="colophon-link" rel="nofollow">Send feedback</a>
   </footer>
+
+  <!-- Feedback. A modal rather than a bare mailto: a mailto only goes anywhere if
+       the OS has a default mail app registered, and plenty of machines (Gmail in
+       a browser tab) have none — the click then fails silently, which is exactly
+       what happened. Showing the address means there is always a way through. -->
+  <div id="feedback-modal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Send feedback" tabindex="-1">
+      <button id="feedback-close" class="modal-close" type="button" aria-label="Close">&times;</button>
+      <h2>Send feedback</h2>
+      <p>Found a wrong roster, a bug, or an idea for a game? All of it helps.</p>
+      <p class="fb-addr" id="feedback-addr"></p>
+      <div class="fb-actions">
+        <button id="feedback-copy" type="button">Copy address</button>
+        <button id="feedback-mail" type="button">Open mail app</button>
+      </div>
+      <p class="modal-note">"Open mail app" prefills the version you're running and which screen you were on, so a bug can be traced — nothing is sent until you send it. If no mail app opens, copy the address instead.</p>
+    </div>
+  </div>
 
   <div id="toast" class="toast-wrap" aria-live="polite"></div>
 

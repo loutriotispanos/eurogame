@@ -240,7 +240,25 @@
     // sits at the bottom of a hub built to fill the viewport, so on a phone the
     // link was below the fold. A button navigates rather than carrying an href.
     var fbb = $("feedback-btn");
-    if (fbb) fbb.addEventListener("click", sendFeedback);
+    if (fbb) fbb.addEventListener("click", openFeedback);
+    // The colophon link keeps its mailto href (so right-click → copy still works)
+    // but opens the modal on a plain click, same as the icon.
+    var fbl = $("feedback-link");
+    if (fbl) fbl.addEventListener("click", function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      openFeedback();
+    });
+    var fbc = $("feedback-copy");
+    if (fbc) fbc.addEventListener("click", function () { copyAddress(fbc); });
+    var fbm = $("feedback-mail");
+    if (fbm) fbm.addEventListener("click", sendMail);
+    var fbx = $("feedback-close");
+    if (fbx) fbx.addEventListener("click", closeFeedback);
+    var fbo = $("feedback-modal");
+    if (fbo) fbo.addEventListener("click", function (e) { if (e && e.target === fbo) closeFeedback(); });
+    document.addEventListener("keydown", function (e) {
+      if (e && e.key === "Escape" && fbo && fbo.hidden === false) closeFeedback();
+    });
     window.addEventListener("resize", layoutHome);   // no-op while a game is open
     window.addEventListener("hashchange", function () { if (hasChallenge()) showView("mystery"); });
     window.addEventListener("popstate", function (e) {
@@ -329,11 +347,31 @@
     var fb = $("feedback-link");
     if (fb) fb.href = feedbackURL();
   }
-  // The corner button navigates instead of carrying an href. Named + exposed on
-  // window.Hub because the harness runs with __ELG_NO_WIRE__, so a click test
-  // would fire at an unwired button and silently pass on a broken handler.
-  function sendFeedback() {
+  // Navigating straight to the mailto was the whole bug: mailto: resolves only if
+  // the OS has a default mail app, and a machine whose mail lives in a browser tab
+  // has none — so the click did nothing, silently, with no way to tell. The modal
+  // always shows the address, so there is a way through either way.
+  function sendMail() {
     try { window.location.href = feedbackURL(); } catch (e) {}
+  }
+  var fbLastFocus = null;
+  function openFeedback() {
+    var ov = $("feedback-modal");
+    if (!ov) { sendMail(); return; }          // no modal in the DOM → old behaviour
+    var addr = $("feedback-addr");
+    if (addr) addr.textContent = FB[0] + "@" + FB[1];   // written on open, never in the source
+    fbLastFocus = document.activeElement;
+    ov.hidden = false;
+    var c = $("feedback-copy");
+    if (c && c.focus) c.focus();
+  }
+  // The route that works no matter what the OS has installed, so it gets a test.
+  function copyAddress(btn) { copyShare(FB[0] + "@" + FB[1], btn || $("feedback-copy")); }
+  function closeFeedback() {
+    var ov = $("feedback-modal");
+    if (ov) ov.hidden = true;
+    if (fbLastFocus && fbLastFocus.focus) fbLastFocus.focus();
+    fbLastFocus = null;
   }
 
   window.ELG = {
@@ -354,7 +392,8 @@
     _reconcile: reconcileHub, _info: hubInfo, _isTodayDone: isTodayDone,
     _getHub: getHub, _setHub: setHub,
     _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme,
-    _sendFeedback: sendFeedback
+    _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
+    _copyAddress: copyAddress
   };
 
   // Auto-wire on load, unless a harness asked to drive Hub without DOM wiring.
