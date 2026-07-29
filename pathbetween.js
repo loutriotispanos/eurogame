@@ -142,6 +142,7 @@
   var pIdx = -1, start = null, target = null, par = 0;
   var chain = [], left = 0, wrong = 0, misses = [];   // misses = tried-and-failed for the CURRENT chain end
   var over = false, won = false, dealt = false;
+  var giveArmed = false, giveTimer = null;   // the daily asks once before it commits
 
   function modeLabel() { return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : mode.charAt(0).toUpperCase() + mode.slice(1); }
   function dailyIdx() { var m = pools()[3]; return m.length ? m[hashStr("pb:" + dayKey) % m.length] : -1; }
@@ -229,7 +230,7 @@
   }
   function updateButtons() {
     if (els.next) els.next.style.display = (mode === "daily") ? "none" : "";
-    if (els.giveup) els.giveup.style.display = (mode === "daily") ? "none" : "";
+    if (els.giveup) els.giveup.style.display = "";   // offered on the daily too, to concede it
   }
   function flash(msg) { if (els.flash) { els.flash.textContent = msg; els.flash.hidden = !msg; } }
 
@@ -345,6 +346,7 @@
   }
   function submitGuess(name) {
     if (over || !name || !universe()[name]) return;
+    disarmGiveUp();                    // playing on withdraws a half-pressed concession
     if (chain.indexOf(name) >= 0) { flash("↺ " + name + " is already in your chain"); return; }   // free — no guess burned
     els.input.value = "";
     var l = link(end(), name);
@@ -369,13 +371,32 @@
     updateCounter();
     if (!over) els.input.focus();
   }
+  function disarmGiveUp() {
+    giveArmed = false;
+    if (giveTimer) { clearTimeout(giveTimer); giveTimer = null; }
+    if (els.giveup) { els.giveup.textContent = "Give up"; els.giveup.classList.remove("armed"); }
+  }
+  // Conceding the daily records the loss and reveals the answer, exactly as
+  // running out of guesses does. It costs this game its own daily record but
+  // NOT the hub streak: isTodayDone() counts a lost daily as played.
+  //
+  // Daily arms first (there is no second pair today); practice stays one tap,
+  // where nothing is irreversible.
   function giveUp() {
-    if (over || mode === "daily") return;
+    if (over) return;
+    if (mode === "daily" && !giveArmed) {
+      giveArmed = true;
+      if (els.giveup) { els.giveup.textContent = "Sure?"; els.giveup.classList.add("armed"); }
+      giveTimer = setTimeout(disarmGiveUp, 3000);
+      return;
+    }
+    disarmGiveUp();
     won = false; finish();
   }
 
   function resetState() {
     chain = [start]; left = par + SLACK; wrong = 0; misses = []; over = false; won = false;
+    disarmGiveUp();
     els.input.value = ""; els.input.disabled = false; els.banner.hidden = true; flash("");
   }
   function applyPuzzle(i) {

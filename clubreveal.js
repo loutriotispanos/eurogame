@@ -74,6 +74,7 @@
   var isArchive = false, pendingArchive = null;
   var club = null, order = [], revealed = 1, guesses = [];
   var over = false, won = false, dealt = false;
+  var giveArmed = false, giveTimer = null;   // the daily asks once before it commits
 
   // Practice rounds for a mode: Active = current rosters, Legends = retired greats,
   // Both = the union (each round is one OR the other; a club can appear as both).
@@ -145,7 +146,7 @@
   }
   function updateButtons() {
     if (els.next) els.next.style.display = (mode === "daily") ? "none" : "";
-    if (els.giveup) els.giveup.style.display = (mode === "daily") ? "none" : "";
+    if (els.giveup) els.giveup.style.display = "";   // offered on the daily too, to concede it
     if (els.reveal) els.reveal.disabled = over || revealed >= order.length;
   }
 
@@ -248,6 +249,7 @@
   }
   function submitGuess(name) {
     if (over || !name) return;
+    disarmGiveUp();                    // playing on withdraws a half-pressed concession
     if (guesses.some(function (g) { return g === name; })) return;   // repeat costs nothing
     els.input.value = "";
     if (name === club) { won = true; finish(); return; }
@@ -260,13 +262,32 @@
     if (els.sr) els.sr.textContent = "Not " + name + ". " + (MAX - guesses.length) + " guesses left.";
     els.input.focus();
   }
+  function disarmGiveUp() {
+    giveArmed = false;
+    if (giveTimer) { clearTimeout(giveTimer); giveTimer = null; }
+    if (els.giveup) { els.giveup.textContent = "Give up"; els.giveup.classList.remove("armed"); }
+  }
+  // Conceding the daily records the loss and reveals the answer, exactly as
+  // running out of guesses does. It costs this game its own daily record but
+  // NOT the hub streak: isTodayDone() counts a lost daily as played.
+  //
+  // Daily arms first (there is no second club today); practice stays one tap,
+  // where nothing is irreversible.
   function giveUp() {
-    if (over || mode === "daily") return;
+    if (over) return;
+    if (mode === "daily" && !giveArmed) {
+      giveArmed = true;
+      if (els.giveup) { els.giveup.textContent = "Sure?"; els.giveup.classList.add("armed"); }
+      giveTimer = setTimeout(disarmGiveUp, 3000);
+      return;
+    }
+    disarmGiveUp();
     won = false; finish();
   }
 
   function resetState() {
     revealed = 1; guesses = []; over = false; won = false; dealt = true;
+    disarmGiveUp();
     els.input.value = ""; els.input.disabled = false; els.banner.hidden = true;
   }
   function dealDaily() {
