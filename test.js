@@ -1343,13 +1343,29 @@ ok(fbHTML.indexOf('id="feedback-btn"') > 0, "feedback: the corner button is in t
 ok(fbHTML.indexOf('id="ico-feedback"') > 0, "feedback: its sprite icon is defined");
 ok(/#feedback-btn \{ left: var\(--corner-2\)/.test(fbHTML), "feedback: the button takes the free LEFT slot, not a 3rd right-hand icon");
 ok(fbHTML.indexOf("body:not(.view-home) #feedback-btn") > 0, "feedback: the button is home-only");
-// Drive the handler through the Hub hook, not a click: this file sets
-// __ELG_NO_WIRE__, so firing at the button would hit an element with no listener
+// Drive the handlers through Hub hooks, not clicks: this file sets
+// __ELG_NO_WIRE__, so firing at a button would hit an element with no listener
 // and pass no matter how broken the handler was.
+//
+// The bug this replaces: the button navigated straight to the mailto, and a
+// mailto resolves to NOTHING on a machine with no default mail app — a silent
+// dead end. So the modal must always put the address on screen.
+ok(fbHTML.indexOf('id="feedback-modal"') > 0, "feedback: the modal is in the markup");
+window.Hub._openFeedback();
+ok(byId("feedback-modal").hidden === false, "feedback: the button opens the modal");
+ok(byId("feedback-addr").textContent === "loutriotispanos@gmail.com",
+   "feedback: the modal shows the address, so there's a way through with no mail app");
+// Copy has to work on its own — it's the one route that doesn't depend on the OS
+// having a mail app, which is the failure this whole modal exists to survive.
+captured = "";
+window.Hub._copyAddress(byId("feedback-copy"));
+ok(captured === "loutriotispanos@gmail.com", "feedback: Copy address reaches the clipboard without any mail app");
+window.Hub._closeFeedback();
+ok(byId("feedback-modal").hidden === true, "feedback: the modal closes again");
 var fbHref = win.location.href;                       // restored below — later tests read location
-window.Hub._sendFeedback();
-ok(win.location.href.indexOf("mailto:") === 0, "feedback: the corner button opens the mail composer");
-ok(win.location.href === window.ELG.feedbackURL(), "feedback: the button and the link resolve to the same message");
+window.Hub._sendMail();
+ok(win.location.href.indexOf("mailto:") === 0, "feedback: \"Open mail app\" still offers the prefilled message");
+ok(win.location.href === window.ELG.feedbackURL(), "feedback: both entry points resolve to the same message");
 win.location.href = fbHref;
 
 // Higher or Lower — replay a perfect daily
