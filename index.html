@@ -439,6 +439,12 @@
   #records-btn { right: var(--corner); }      /* the hub's right corner — home only */
   #archive-btn { right: var(--corner-2); }
   body:not(.view-home) #records-btn, body:not(.view-home) #archive-btn { display: none; }
+  /* Feedback sits on the LEFT, beside the theme toggle, not as a third icon on
+     the right: at 375px a third right-hand icon reaches the centred masthead.
+     Home hides #home-btn, so this slot is free — two icons a side, not one and
+     three. Home only, because it's the one screen that isn't mid-game. */
+  #feedback-btn { left: var(--corner-2); }
+  body:not(.view-home) #feedback-btn { display: none; }
   body.view-home #theme-btn { left: var(--corner); }  /* Home button is hidden here → take the corner */
   /* sun ⇄ moon: the sun spins out + the moon spins in when the theme flips */
   #theme-btn .tt { overflow: visible; }
@@ -1116,12 +1122,17 @@
       <line x1="7.5" y1="13.5" x2="10.5" y2="13.5"/><line x1="13.5" y1="13.5" x2="16.5" y2="13.5"/>
       <line x1="7.5" y1="17" x2="10.5" y2="17"/>
     </symbol>
+    <symbol id="ico-feedback" viewBox="0 0 24 24">
+      <rect x="2.8" y="5" width="18.4" height="14" rx="2"/>
+      <path d="M3.4 6.6 12 13.1 20.6 6.6"/>
+    </symbol>
   </defs></svg>
 
   <button id="home-btn" class="icon-btn left" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24"><use href="#ico-home"/></svg></button>
   <button id="theme-btn" class="icon-btn left theme" type="button" aria-label="Switch to night mode" title="Night mode"><svg viewBox="0 0 24 24" class="tt" aria-hidden="true"><g class="tt-sun"><circle cx="12" cy="12" r="4.5"/><g class="tt-rays"><line x1="12" y1="1.7" x2="12" y2="4.1"/><line x1="12" y1="19.9" x2="12" y2="22.3"/><line x1="1.7" y1="12" x2="4.1" y2="12"/><line x1="19.9" y1="12" x2="22.3" y2="12"/><line x1="4.6" y1="4.6" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.4" y2="19.4"/><line x1="19.4" y1="4.6" x2="17.7" y2="6.3"/><line x1="6.3" y1="17.7" x2="4.6" y2="19.4"/></g></g><path class="tt-moon" data-fill="1" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
   <button id="records-btn" class="icon-btn" type="button" aria-label="Records" title="Records"><svg viewBox="0 0 24 24"><use href="#ico-stats"/></svg></button>
   <button id="archive-btn" class="icon-btn" type="button" aria-label="Archive" title="Archive"><svg viewBox="0 0 24 24"><use href="#ico-archive"/></svg></button>
+  <button id="feedback-btn" class="icon-btn left" type="button" aria-label="Send feedback" title="Send feedback"><svg viewBox="0 0 24 24"><use href="#ico-feedback"/></svg></button>
 
   <!-- ===== HOME HUB ===== -->
   <div id="home-view" class="view">

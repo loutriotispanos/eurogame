@@ -1337,6 +1337,21 @@ var fbHTML = fs.readFileSync("index.html", "utf8");
 ok(fbHTML.indexOf('id="feedback-link"') > 0, "feedback: the colophon link is in the markup");
 ok(fbHTML.indexOf("loutriotispanos@gmail.com") === -1, "feedback: the address is NOT in the page source (scraper guard)");
 
+// The corner icon — the entry point people actually find, since the colophon is
+// below the fold on a hub built to fill the viewport.
+ok(fbHTML.indexOf('id="feedback-btn"') > 0, "feedback: the corner button is in the markup");
+ok(fbHTML.indexOf('id="ico-feedback"') > 0, "feedback: its sprite icon is defined");
+ok(/#feedback-btn \{ left: var\(--corner-2\)/.test(fbHTML), "feedback: the button takes the free LEFT slot, not a 3rd right-hand icon");
+ok(fbHTML.indexOf("body:not(.view-home) #feedback-btn") > 0, "feedback: the button is home-only");
+// Drive the handler through the Hub hook, not a click: this file sets
+// __ELG_NO_WIRE__, so firing at the button would hit an element with no listener
+// and pass no matter how broken the handler was.
+var fbHref = win.location.href;                       // restored below — later tests read location
+window.Hub._sendFeedback();
+ok(win.location.href.indexOf("mailto:") === 0, "feedback: the corner button opens the mail composer");
+ok(win.location.href === window.ELG.feedbackURL(), "feedback: the button and the link resolve to the same message");
+win.location.href = fbHref;
+
 // Higher or Lower — replay a perfect daily
 window.HigherLower._setMode("daily");
 for (var shI = 0; shI < 10; shI++) { var shp = window.HigherLower._peek(); window.HigherLower._pick(hlWinIdx(shp.matchup)); window.HigherLower._next(); }
