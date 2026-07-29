@@ -203,9 +203,11 @@
       els.counter.textContent = label + " · " + (won ? "Solved! 🎉" : "So close — the answer's below") + runNote;
       return;
     }
+    // "Guess 3 of 8" already says how many are left, so only the last one gets
+    // a second clause.
     var left = MAX_GUESSES - guesses.length;
     els.counter.textContent = label + " · Guess " + (guesses.length + 1) +
-      " of " + MAX_GUESSES + " · " + (left === 1 ? "last one — make it count!" : left + " left") + runNote;
+      " of " + MAX_GUESSES + (left === 1 ? " · last one — make it count!" : "") + runNote;
   }
 
   // Graded titles: the fewer guesses, the bigger the fireworks (8 = buzzer-beater).
@@ -965,7 +967,9 @@
   // Lightweight DOM confetti, no deps; skipped under reduce-motion.
   function confettiBurst() {
     if (reducedMotion() || !document.body) return;
-    var colors = ["#ff7a00", "#ff8d24", "#4c9a52", "#c9a22b", "#f1f2f4"];
+    // The publication's own inks — the old first two were a generic web orange
+    // that belonged to no other element on the page.
+    var colors = ["#c65611", "#a94a0e", "#4a8b52", "#c9a22b", "#fffdf7"];
     var box = document.createElement("div");
     box.className = "confetti";
     for (var i = 0; i < 44; i++) {

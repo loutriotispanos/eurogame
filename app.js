@@ -33,23 +33,59 @@
   // The tile grid fills the whole viewport below the header. Pick the column
   // count that gives the largest (most square) tiles for the current viewport
   // and tile count, so adding games shrinks the tiles instead of causing scroll.
-  var HOME_GAP = 14;   // keep in sync with the .game-cards gap in index.html
+  //
+  // Squareness alone isn't enough. On a 375px phone the old scoring chose four
+  // columns of 76px, and "Complete the Five" cannot be set in that at any
+  // legible size — the title pushed its track 5px past the viewport. So a tile
+  // has a floor in BOTH directions: narrower than MIN_TILE_W and it can't hold a
+  // game's name, shorter than ROW_MIN and it can't hold a name plus a status
+  // line. ROW_MIN is also the row floor in the stylesheet, which is what lets a
+  // genuinely cramped viewport scroll a little instead of squashing every tile
+  // into an unreadable strip.
+  var MIN_TILE_W = 104;
+  var ROW_MIN = 58;    // keep in step with the minmax() row floor in .game-cards
   function layoutHome() {
     var grid = document.querySelector("#home-view .game-cards");
     if (!grid || els.home.hidden) return;
     var n = grid.children.length;
     var W = grid.clientWidth, H = grid.clientHeight;
     if (!n || !W || !H) return;
-    var best = 1, bestSize = 0;
+    // Read the gap instead of restating it; the copy here and the one in the
+    // stylesheet had already drifted apart (14 vs 12).
+    var gap = 12;
+    try { var g = parseFloat(window.getComputedStyle(grid).columnGap); if (g >= 0) gap = g; } catch (e) {}
+    var best = 0, bestFits = false, bestSize = -1;
     for (var c = 1; c <= n; c++) {
       var r = Math.ceil(n / c);
-      var tw = (W - HOME_GAP * (c - 1)) / c;
-      var th = (H - HOME_GAP * (r - 1)) / r;
-      var size = Math.min(tw, th);            // the square that fits the cell
-      if (size > bestSize) { bestSize = size; best = c; }
+      var tw = (W - gap * (c - 1)) / c;
+      if (c > 1 && tw < MIN_TILE_W) continue;            // too narrow to read
+      var th = Math.max(ROW_MIN, (H - gap * (r - 1)) / r);
+      var fits = (r * th + gap * (r - 1)) <= H + 0.5;    // …without the page scrolling
+      var size = Math.min(tw, th);
+      // Fitting beats size; size beats everything else. Two layouts within 5% of
+      // each other count as a tie, and a tie goes to the one with more columns —
+      // fewer rows, and a fuller last row. (At 1100px the six-column pack scores
+      // 0.4% under the five-column one, and five columns leaves a single tile
+      // marooned in row three.)
+      var better;
+      if (!best) better = true;
+      else if (fits !== bestFits) better = fits;
+      else if (size > bestSize * 1.05) better = true;
+      else if (size >= bestSize * 0.95) better = (c > best);
+      else better = false;
+      if (better) { best = c; bestFits = fits; bestSize = size; }
     }
+    if (!best) best = 1;                                 // narrower than one tile
+    var rows = Math.ceil(n / best);
     grid.style.setProperty("--home-cols", best);
-    grid.style.setProperty("--home-rows", Math.ceil(n / best));
+    grid.style.setProperty("--home-rows", rows);
+    // Publish the tile box the pack settled on. A tile can't size its own
+    // padding off container-query units — a container is not allowed to query
+    // itself, so cqmin inside .game-card silently falls back to the viewport and
+    // a 58px tile was getting 16px of padding top and bottom. The packer already
+    // knows the answer, so it says it out loud instead.
+    grid.style.setProperty("--home-tile-w", ((W - gap * (best - 1)) / best).toFixed(2) + "px");
+    grid.style.setProperty("--home-tile-h", Math.max(ROW_MIN, (H - gap * (rows - 1)) / rows).toFixed(2) + "px");
     // Centre a partial last row: tracks are half columns (each card spans 2),
     // so nudging the row's first tile right by (cols - remainder) half-tracks
     // centres the whole row; the rest auto-flow after it.

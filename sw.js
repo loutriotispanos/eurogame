@@ -8,7 +8,7 @@
  * Note: service workers only run over HTTPS (or localhost) — not over a plain
  * http:// LAN address. So offline install works on the hosted (https) site.
  */
-var CACHE = "elg-v63";  /* Daily archive: replay the last 14 days of every daily (archive.js view + goArchive in all ten games — date-seeded re-deals under per-date keys, streak- and stats-free). Also the Records agate page (v62) if you skipped it. */
+var CACHE = "elg-v64";  /* Typographic pass over the whole sheet: one type scale (--t-*) with tracking in em, one red and one green instead of five near-shades, 2px corners everywhere, and night mode re-inked from those tokens rather than forty hand-patched overrides. Fixes the tab underline (a 999px button radius was bending it into a swash), the emoji in the search field and colophon, the hub pack squashing tiles below a legible size on small phones, Connections' square tiles, the mid-word masthead splits (Rec|ords, Connect|ions), and grid heads breaking to "PANATHIN / AIKOS". Also fills in career timelines for 52 players who had none (49 rostered legends + 3 actives), which re-deals the generated Grid, Path Between, Connections and Odd One Out sets. */
 var ASSETS = [
   "./", "index.html", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "oddones.js", "grids.js", "paths.js",
   "game.js", "playerid.js", "completefive.js", "connections.js", "careerorder.js", "thegrid.js", "clubreveal.js", "pathbetween.js", "oddoneout.js", "higherlower.js", "rostermaster.js", "records.js", "archive.js", "app.js",

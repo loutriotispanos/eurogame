@@ -124,7 +124,9 @@
   function updateCounter() {
     if (!els.counter) return;
     if (over) { els.counter.textContent = modeLabel() + " · " + (won ? "Solved it! 🎉" : "So close — all groups revealed"); return; }
-    els.counter.textContent = modeLabel() + " · find the four groups of four";
+    // Report progress, not the rules — "find the four groups of four" is already
+    // the tagline two lines above this.
+    els.counter.textContent = modeLabel() + " · " + solvedG.length + " of 4 groups found";
   }
   function updateButtons() {
     if (els.submit) els.submit.disabled = over || selected.length !== GROUP;
