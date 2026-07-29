@@ -236,6 +236,11 @@
     // itself once Cache Storage answers, so a slow reply can't leave a stale link.
     readVersion();
     updateFeedbackHref();
+    // …and the corner icon, which is the one people actually find: the colophon
+    // sits at the bottom of a hub built to fill the viewport, so on a phone the
+    // link was below the fold. A button navigates rather than carrying an href.
+    var fbb = $("feedback-btn");
+    if (fbb) fbb.addEventListener("click", sendFeedback);
     window.addEventListener("resize", layoutHome);   // no-op while a game is open
     window.addEventListener("hashchange", function () { if (hasChallenge()) showView("mystery"); });
     window.addEventListener("popstate", function (e) {
@@ -324,6 +329,12 @@
     var fb = $("feedback-link");
     if (fb) fb.href = feedbackURL();
   }
+  // The corner button navigates instead of carrying an href. Named + exposed on
+  // window.Hub because the harness runs with __ELG_NO_WIRE__, so a click test
+  // would fire at an unwired button and silently pass on a broken handler.
+  function sendFeedback() {
+    try { window.location.href = feedbackURL(); } catch (e) {}
+  }
 
   window.ELG = {
     copyShare: copyShare,
@@ -342,7 +353,8 @@
     _openArchive: function (game, date) { pushNav({ v: game, archive: date }); showView(game, "archive:" + date); },
     _reconcile: reconcileHub, _info: hubInfo, _isTodayDone: isTodayDone,
     _getHub: getHub, _setHub: setHub,
-    _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme
+    _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme,
+    _sendFeedback: sendFeedback
   };
 
   // Auto-wire on load, unless a harness asked to drive Hub without DOM wiring.
