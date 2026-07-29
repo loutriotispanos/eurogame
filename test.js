@@ -830,6 +830,38 @@ ok(window.TheGrid._peek().mode === "practice", "TheGrid.goPractice → practice"
 window.TheGrid.goDaily();
 ok(window.TheGrid._peek().mode === "daily", "TheGrid.goDaily → daily");
 
+console.log("The Grid — every grid can actually be completed, and the reveal proves it");
+// The bug this guards: revealRest used to take the first free answer per cell, in
+// order. Neighbouring cells share most of their answer list — on the
+// Baskonia/Treviso/Unicaja × Khimki grid three cells hold only {Garbajosa,
+// Markovic} between them — so the top two rows ate both and the third printed
+// "—", which looks like a broken puzzle to the player.
+function grFullAssignment(puzzle) {         // max bipartite matching, cells -> players
+  var pool = [];
+  for (var i = 0; i < 9; i++) pool.push(window.TheGrid._answers(puzzle.rows[Math.floor(i / 3)], puzzle.cols[i % 3]));
+  var owner = {};
+  function augment(k, seen) {
+    for (var j = 0; j < pool[k].length; j++) {
+      var nm = pool[k][j];
+      if (seen[nm]) continue;
+      seen[nm] = 1;
+      if (owner[nm] === undefined || augment(owner[nm], seen)) { owner[nm] = k; return true; }
+    }
+    return false;
+  }
+  var n = 0;
+  for (var k = 0; k < 9; k++) if (augment(k, {})) n++;
+  return n;
+}
+// Not just today's grid: EVERY grid must admit nine distinct players, or it can't
+// be finished at all and the generator has shipped an impossible puzzle.
+var grBadGrids = [];
+for (var gAll = 0; gAll < window.GRIDS.length; gAll++) {
+  if (grFullAssignment(window.GRIDS[gAll]) !== 9) grBadGrids.push(gAll);
+}
+ok(grBadGrids.length === 0, "all " + window.GRIDS.length + " grids admit nine distinct players" +
+   (grBadGrids.length ? " — impossible: " + grBadGrids.join(",") : ""));
+
 console.log("The Grid — conceding the daily");
 // A fresh, unplayed daily to concede.
 delete store["elg:gr:dstats"]; delete store[grTodayKey()];
@@ -851,6 +883,13 @@ window.TheGrid._giveUp(); window.TheGrid._giveUp();
 var grCon2 = window.TheGrid._peek();
 ok(grCon2.over === true && grCon2.won === false, "two taps concede the daily as a loss");
 ok(JSON.parse(store[grTodayKey()]).done === true, "the conceded daily is saved as finished");
+// The screenshot bug: conceding revealed 8 of 9 and printed "—" in the last cell.
+var grRevealed = window.TheGrid._peek().cells;
+ok(grRevealed.filter(function (c) { return c && c.name && c.name !== "—"; }).length === 9,
+   "every empty cell reveals a real player — no stranded “—”");
+var grNames = grRevealed.map(function (c) { return c && c.name; });
+ok(grNames.filter(Boolean).length === new Set(grNames.filter(Boolean)).size,
+   "…and the nine revealed players are all different");
 // The reassuring half: a lost daily still counts as PLAYED, so the cross-game
 // chain survives conceding — only The Grid's own record takes the hit.
 ok(window.Hub._isTodayDone() === true, "conceding still counts as playing today — the hub streak survives");
