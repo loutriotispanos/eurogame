@@ -412,6 +412,14 @@
     border-top: 1px solid var(--rule);
   }
   footer strong { color: var(--ink); }
+  /* The only text link on the sheet, so it states its own affordance: underlined,
+     because colour never carries meaning here and a link sitting in running text
+     has nothing else to identify it. href is set in app.js — see feedbackURL. */
+  .colophon-link {
+    color: var(--muted); cursor: pointer;
+    text-decoration: underline; text-underline-offset: 2px;
+  }
+  .colophon-link:hover { color: var(--ink); }
 
   /* ---------- corner buttons + modals ------------------------------------ */
   .icon-btn {
@@ -974,7 +982,8 @@
     100% { transform: translateY(102vh) rotate(600deg); opacity: .85; }
   }
   button:focus-visible, [role="tab"]:focus-visible, [role="option"]:focus-visible,
-  select:focus-visible, .icon-btn:focus-visible, .modal-close:focus-visible, [role="tabpanel"]:focus-visible {
+  select:focus-visible, .icon-btn:focus-visible, .modal-close:focus-visible, [role="tabpanel"]:focus-visible,
+  .colophon-link:focus-visible {
     outline: 2px solid var(--accent); outline-offset: 2px;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -1766,6 +1775,7 @@
     Rosters are current to the <strong>2025–26 EuroLeague season</strong>; transfers since then are not reflected.<br />
     293 players · 20 clubs · 173 retired legends · compiled from official club rosters, Wikipedia, FIBA and Proballers.<br />
     Published for the love of European basketball · No ads, no tracking, no account · Reads offline
+    · <a id="feedback-link" class="colophon-link" rel="nofollow">Send feedback</a>
   </footer>
 
   <div id="toast" class="toast-wrap" aria-live="polite"></div>

@@ -1318,6 +1318,25 @@ clearToday();
 ok(window.ELG && typeof window.ELG.copyShare === "function", "app.js exposes the shared clipboard plumbing (window.ELG)");
 ok(window.ELG.shareURL("thegrid").indexOf("?game=thegrid") > 0, "ELG.shareURL builds a ?game= deep link");
 
+console.log("Send feedback — the colophon's mailto, assembled at runtime");
+var fbURL = window.ELG.feedbackURL();
+ok(fbURL.indexOf("mailto:loutriotispanos@gmail.com?") === 0, "feedback: mailto to the assembled address");
+ok(fbURL.indexOf("subject=" + encodeURIComponent("Euroball feedback")) > 0, "feedback: prefilled subject");
+var fbBody = decodeURIComponent(fbURL.split("&body=")[1] || "");
+ok(fbBody.indexOf("\n\n--\n") === 0, "feedback: the message area comes first, diagnostics below a divider");
+ok(fbBody.indexOf("Euroball ") > 0, "feedback: signed off with the app name");
+// No Cache Storage in the harness, which is also every non-HTTPS visit: the
+// version has to degrade to a readable string rather than "undefined".
+ok(fbBody.indexOf("(version unknown)") > 0, "feedback: version degrades gracefully without Cache Storage");
+var fbView = (document.body.className || "").replace(/^view-/, "");
+ok(fbBody.indexOf("screen: " + fbView) > 0, "feedback: names the view the reporter was actually on");
+// The address is split in app.js precisely so it never reaches the served HTML.
+// getElementById in this harness invents any id asked of it, so the markup has
+// to be checked as TEXT — a DOM assertion here would pass on an empty file.
+var fbHTML = fs.readFileSync("index.html", "utf8");
+ok(fbHTML.indexOf('id="feedback-link"') > 0, "feedback: the colophon link is in the markup");
+ok(fbHTML.indexOf("loutriotispanos@gmail.com") === -1, "feedback: the address is NOT in the page source (scraper guard)");
+
 // Higher or Lower — replay a perfect daily
 window.HigherLower._setMode("daily");
 for (var shI = 0; shI < 10; shI++) { var shp = window.HigherLower._peek(); window.HigherLower._pick(hlWinIdx(shp.matchup)); window.HigherLower._next(); }
