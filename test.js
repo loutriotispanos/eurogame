@@ -1758,6 +1758,44 @@ for (var cvK = 3; cvK <= cvClub.length; cvK++) {
 ok(cvFrag !== null, "CV: a partial resolves as soon as it's unique (\"pana\" is enough)");
 ok(byId("cv-flash") && String(byId("cv-flash").id) === "cv-flash", "CV: has a flash line to report misses in");
 
+console.log("Common Club — suggestions, without turning the 22 clubs into a menu");
+// The pool here IS the answer space, so this list carries two safeguards that
+// Path Between's doesn't need: nothing until you type, and tried clubs drop out.
+window.ClubReveal._setMode("active");
+var ccS = window.ClubReveal._peek();
+var ccInput = byId("cv-input");
+function ccType(t) { ccInput.value = t; window.ClubReveal._refresh(); return window.ClubReveal._matches(); }
+ok(ccType("").length === 0 && byId("cv-dropdown").hidden === true,
+   "empty input shows nothing — the 22 clubs are never a browsable menu");
+var ccP = ccType("pana");
+ok(ccP.length === 1 && ccP[0] === "Panathinaikos", "\"pana\" narrows to one club");
+ok(window.ClubReveal._active() === 0, "the match is pre-highlighted, so Enter just works");
+ok(ccType("a").length > 1, "a broad letter offers several, and says nothing about which is right");
+ok(ccType("a").every(function (c) { return cvAnswers.indexOf(c) >= 0; }), "every suggestion is an answerable club");
+// The load-bearing one: the list must not be filtered down to the right answer.
+var ccBroad = ccType("a");
+ok(ccBroad.length === 1 || ccBroad.some(function (c) { return c !== ccS.club; }),
+   "the list is not filtered to the answer — wrong clubs are offered too");
+// A tried club leaves the list, and the empty state says which kind of nothing.
+var ccWrong = cvAnswers.filter(function (c) { return c !== ccS.club; })[0];
+window.ClubReveal._guess(ccWrong);
+ok(ccType(ccWrong).length === 0, "a club already tried is not suggested again");
+ok(byId("cv-dropdown").hidden === false && /already tried/i.test(byId("cv-dropdown").firstChild.textContent),
+   "…and the list says so, rather than claiming no such club");
+ok(ccType("qzxwvy").length === 0 && /no club by that name/i.test(byId("cv-dropdown").firstChild.textContent),
+   "an unknown club gets its own wording");
+// Retyping a tried club must still reach the resolver, which reports it for free.
+ok(window.ClubReveal._resolve(ccWrong).name === ccWrong,
+   "the RESOLVER still knows a tried club, so retyping it reports \"already tried\" and costs nothing");
+// Keyboard, and Escape keeping the text.
+ccType("a");
+window.ClubReveal._keydown({ key: "ArrowDown", preventDefault: function () {} });
+ok(window.ClubReveal._active() === 1, "ArrowDown moves the highlight");
+window.ClubReveal._keydown({ key: "Escape", preventDefault: function () {} });
+ok(byId("cv-dropdown").hidden === true && ccInput.value === "a", "Escape closes the list but keeps what you typed");
+window.ClubReveal._guess(ccS.club);
+ok(ccType("pana").length === 0 && byId("cv-dropdown").hidden === true, "no suggestions once the round is over");
+
 console.log("Path Between — the suggestion list is a spelling aid, not a hint");
 // The whole reason this list is allowed back: it matches on NAME across every
 // player we hold, and says NOTHING about which of them actually links from the
