@@ -163,7 +163,7 @@
      only say where they differ. */
   .kicker, .dateline, .modes button, .row.head .cell, .rec-sect, .rec-head,
   .modal h3, .stat-lbl, .stat-mode, .toast-h, .hs-lbl, .hs-meta, .gc-daily,
-  .pid-stats, .c5-pos, .hl-vs, .rm-chip-meta, .rm-ghead, .gr-head, .pb-meta {
+  .pid-stats, .c5-pos, .hl-vs, .rm-chip-meta, .rm-ghead, .gr-head, .pb-meta, .fb-label {
     font-family: var(--font-sans); font-weight: 700; font-size: var(--t-7);
     line-height: 1; letter-spacing: var(--track-label); text-transform: uppercase;
   }
@@ -293,12 +293,18 @@
   button:active { background: rgba(29, 26, 20, .07); }
   button:disabled { opacity: .4; cursor: default; }
   #new-game, #pid-next, #c5-next, #cv-next, #pb-next, #co-check, .cn-actions .cn-primary,
-  .banner-actions button, .share-btn, #feedback-copy {
+  .banner-actions button, .share-btn, #feedback-send, #feedback-copy {
     background: var(--pill-bg); color: var(--paper); border-color: var(--pill-bg);
   }
   #new-game:hover, #pid-next:hover, #c5-next:hover, #cv-next:hover, #pb-next:hover, #co-check:hover:not(:disabled),
-  .cn-actions .cn-primary:hover:not(:disabled), .banner-actions button:hover, .share-btn:hover, #feedback-copy:hover {
+  .cn-actions .cn-primary:hover:not(:disabled), .banner-actions button:hover, .share-btn:hover,
+  #feedback-send:hover:not(:disabled), #feedback-copy:hover {
     background: var(--pill-bg-hi); border-color: var(--pill-bg-hi);
+  }
+  /* Mid-send the primary steps back to an outline, same as #co-check, rather than
+     fading an ink pill to mud. */
+  #feedback-send:disabled {
+    background: transparent; color: var(--muted); border-color: var(--rule-2); opacity: 1;
   }
   /* An unavailable primary steps back to an outline rather than fading to mud. */
   #co-check:disabled, .cn-actions .cn-primary:disabled {
@@ -436,8 +442,41 @@
     margin: 16px 0; text-align: center; overflow-wrap: anywhere;
     font-size: var(--t-3); font-weight: 700; color: var(--ink); user-select: all;
   }
-  .fb-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .fb-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
   .fb-actions button { flex: 1 1 140px; }
+  /* The two fields. They borrow the search input's grammar exactly — same
+     hairline, same ink focus ring — so the sheet keeps one idea of what a text
+     field is, rather than growing a second one for this modal. */
+  .fb-label { display: block; color: var(--muted); margin: 15px 0 6px; }
+  .fb-field {
+    display: block; width: 100%; padding: 10px 12px;
+    font-family: inherit; font-size: var(--t-4);       /* 16px — stops iOS zooming on focus */
+    color: var(--ink); background: var(--card);
+    border: 1px solid var(--rule); border-radius: var(--r); outline: none;
+    transition: border-color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
+  }
+  .fb-field::placeholder { color: var(--faint); }
+  .fb-field:focus { border-color: var(--ink); box-shadow: 0 1px 0 var(--ink); }
+  .fb-field:disabled { opacity: .55; }
+  .fb-area { resize: vertical; min-height: 104px; line-height: var(--lh-prose); }
+  /* Honeypot. Moved off-screen rather than display:none, because the bots worth
+     catching skip fields that are display:none but still fill this one. */
+  .fb-bot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .fb-msg {
+    margin: 14px 0 0; font-size: var(--t-5); font-weight: 700; line-height: var(--lh-prose);
+  }
+  .fb-msg.err  { color: var(--red-ink); }
+  .fb-msg.good { color: var(--green); }
+  .fb-msg[hidden] { display: none; }
+  /* The small print under a form, set as small print. NB: .modal-note carries no
+     rules of its own anywhere on the sheet — it inherits .modal p — so this is
+     scoped to the id rather than fixing the class and restyling eleven how-tos. */
+  #feedback-note, #feedback-fallback .modal-note {
+    margin-top: 14px; color: var(--muted); font-size: var(--t-6); line-height: var(--lh-prose);
+  }
+  /* The fallback is a second route grafted on after a failure, so it gets the
+     hairline that separates sections everywhere else on the sheet. */
+  #feedback-fallback { margin-top: 18px; border-top: 1px solid var(--rule); }
 
   /* ---------- corner buttons + modals ------------------------------------ */
   .icon-btn {
@@ -975,15 +1014,24 @@
   .gr-cell:disabled { cursor: default; }
   .gr-flash { text-align: center; font-size: var(--t-6); font-weight: 700; color: var(--red-ink); margin: 8px 2px 0; }
 
-  /* ---------- Club Reveal ---------------------------------------------------- */
+  /* ---------- Common Club ---------------------------------------------------- */
+  /* Two names, set as the two halves of one question. The names carry the weight
+     — bigger than the old roster rows, because there are two of them now rather
+     than a list — and the connector between them is agate, so it reads as a
+     caption on the pair and not as a third player. No rank column: nothing is
+     ordered any more. */
   .cv-list { width: 100%; max-width: 520px; min-width: 0; margin: 8px auto 4px; display: flex; flex-direction: column; }
   .cv-list:empty { display: none; }
-  .cv-row { display: flex; align-items: baseline; gap: 12px; padding: 9px 4px; border-bottom: 1px solid var(--rule); animation: cv-in .18s var(--ease) both; }
+  .cv-row { display: flex; align-items: baseline; gap: 12px; padding: 11px 4px; border-bottom: 1px solid var(--rule); animation: cv-in .18s var(--ease) both; }
   .cv-row:first-child { border-top: 1px solid var(--rule); }
   @keyframes cv-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-  .cv-rank { flex: none; min-width: 22px; text-align: right; color: var(--muted); font-size: var(--t-6); font-weight: 800; font-variant-numeric: tabular-nums; }
-  .cv-name { font-weight: 700; font-size: var(--t-5); line-height: var(--lh-ui); }
-  .cv-meta { margin-left: auto; color: var(--muted); font-size: var(--t-6); flex: none; }
+  .cv-name { font-weight: 700; font-size: var(--t-4); line-height: var(--lh-ui); }
+  .cv-meta { margin-left: auto; color: var(--muted); font-size: var(--t-6); flex: none; text-align: right; }
+  .cv-join {
+    padding: 7px 4px; color: var(--accent); border-bottom: 1px solid var(--rule);
+    font-family: var(--font-sans); font-weight: 700; font-size: var(--t-7);
+    line-height: 1; letter-spacing: var(--track-label); text-transform: uppercase;
+  }
 
   /* ---------- Path Between ---------------------------------------------------- */
   .pb-chain { width: 100%; max-width: 560px; min-width: 0; margin: 8px auto 4px; display: flex; flex-direction: column; }
@@ -1200,8 +1248,8 @@
       </button>
       <button class="game-card" type="button" data-game="clubreveal">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-clubreveal"/></svg></span>
-        <span class="gc-text"><span class="gc-title">Club Reveal</span>
-          <span class="gc-desc">A roster appears name by name, benchwarmers first — name the club in as few reveals as you can.</span></span>
+        <span class="gc-text"><span class="gc-title">Common Club</span>
+          <span class="gc-desc">Two players, exactly one club in common — name it in three guesses.</span></span>
         <span class="gc-daily" hidden></span>
       </button>
       <button class="game-card" type="button" data-game="pathbetween">
@@ -1485,8 +1533,8 @@
   <div id="clubreveal-view" class="view" hidden>
     <header>
       <button id="cv-info-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">i</button>
-      <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-clubreveal"/></svg></span><span><span class="accent">Club</span> Reveal</span></h1>
-      <div class="tagline">Whose roster is this? The fewer names you need, the better</div>
+      <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-clubreveal"/></svg></span><span><span class="accent">Common</span> Club</span></h1>
+      <div class="tagline">Two players, one club in common — name it</div>
     </header>
     <div class="app">
       <div class="modes" id="cv-modes" role="tablist" aria-label="Game mode">
@@ -1499,7 +1547,7 @@
       <div id="cv-counter" class="counter" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="cv-sr" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="cv-banner" class="banner" hidden></div>
-      <div id="cv-list" class="cv-list" aria-label="Revealed players"></div>
+      <div id="cv-list" class="cv-list" aria-label="The two players"></div>
       <div id="cv-guesses" class="pid-guesses"></div>
       <div id="cv-flash" class="gr-flash" role="status" aria-live="polite" hidden></div>
       <div class="controls">
@@ -1509,11 +1557,10 @@
              the same trap Roster Master hit. -->
         <div class="search">
           <input id="cv-input" type="text" autocomplete="cv-guess" spellcheck="false"
-                 placeholder="Which club is this?" aria-label="Type the club you think it is" />
+                 placeholder="Which club did both play for?" aria-label="Type the club they have in common" />
         </div>
-        <button id="cv-reveal" type="button">Reveal next</button>
         <button id="cv-giveup" type="button">Give up</button>
-        <button id="cv-next" type="button">New club</button>
+        <button id="cv-next" type="button">New pair</button>
       </div>
     </div>
   </div><!-- /clubreveal-view -->
@@ -1541,9 +1588,22 @@
       <div id="pb-guesses" class="pid-guesses"></div>
       <div class="controls">
         <div class="search">
-          <!-- Pure recall — see the note on cv-input for the autocomplete token. -->
+          <!-- The suggestion list is back, but note what it lists: EVERY player we
+               hold whose name matches, minus the ones already in your chain. It
+               never marks which of them actually links from here, so it helps you
+               spell "Spanoulis" without answering the question. (That was true of
+               the list removed in v69 too — the removal was aimed at Common Club,
+               where the menu really was the answer set, and took this one with it.)
+
+               autocomplete is a deliberately unknown token, not "off": Chrome
+               ignores "off" on a field it reads as a name and offers the user's
+               own contact details instead. -->
           <input id="pb-input" type="text" autocomplete="pb-guess" spellcheck="false"
-                 placeholder="Who links from here?" aria-label="Type a teammate of your current player" />
+                 placeholder="Who links from here?"
+                 role="combobox" aria-expanded="false" aria-controls="pb-dropdown"
+                 aria-autocomplete="list" aria-haspopup="listbox"
+                 aria-label="Type a teammate of your current player" />
+          <div id="pb-dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
         </div>
         <button id="pb-giveup" type="button">Give up</button>
         <button id="pb-next" type="button">New pair</button>
@@ -1642,7 +1702,7 @@
       <p>Two players, one hidden chain. Get from <strong>start</strong> to <strong>target</strong> by naming players who were <strong>teammates</strong> — each name must have shared a club, in the same seasons, with the player before him.</p>
       <ul>
         <li><strong>Par</strong> is the shortest chain that exists. You get <strong>par + 3 guesses</strong> — right or wrong, every guess costs one.</li>
-        <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type a name and press Enter; a surname is enough when it's unique, and accents don't matter. A name we can't place isn't a guess and costs you nothing.</li>
+        <li><strong>Names suggest themselves as you type</strong> — arrows and Enter to pick, or just type it out. It's there so you don't have to spell Spanoulis; it lists <em>every</em> player we hold whose name matches and <strong>never says which of them actually links</strong>, so the puzzle is still yours to solve. A surname is enough when it's unique, and accents don't matter. A name we can't place isn't a guess and costs you nothing.</li>
         <li><strong>Give up</strong> reveals a shortest route. On the Daily it asks once before it commits, and records a loss — but it still counts as <em>played</em>, so your hub streak survives.</li>
         <li>The <strong>career lines</strong> under your current player and the target are your map: find where two paths crossed.</li>
         <li>Each player can appear in the chain only <strong>once</strong> — don't route yourself into a dead end.</li>
@@ -1710,23 +1770,24 @@
   </div>
 
   <div id="cv-info-modal" class="modal-overlay" hidden>
-    <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Club Reveal" tabindex="-1">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Common Club" tabindex="-1">
       <button id="cv-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
       <h2>How to play</h2>
-      <p>A club's roster appears <strong>one name at a time — benchwarmers first, stars last</strong>. Name the club as early as you dare.</p>
+      <p>Two players. Their careers cross at <strong>exactly one club</strong> — name it.</p>
       <ul>
-        <li><strong>Reveal next</strong> shows another player, free — but the fewer names you need, the better the win.</li>
-        <li>You get <strong>3 guesses</strong>. A wrong guess also forces the next name out.</li>
+        <li>You get <strong>3 guesses</strong>, and the fewer you use the better the win.</li>
+        <li><strong>They did not have to be teammates.</strong> Both wore the shirt; it may have been twenty years apart. (Overlapping years are <em>Path Between</em>'s game.)</li>
+        <li><strong>There is only ever one right answer.</strong> A pair is only used if it shares one single club out of every club we hold — so if you can think of two, one of them isn't in our data.</li>
+        <li>The answer is always a <strong>EuroLeague club or a club with real retired greats</strong> — never a player's stop in Australia or the NBA, even though we know about those.</li>
         <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type the club and press Enter; part of the name is enough when it's unique ("pana" will do). A club we can't place isn't a guess and costs you nothing.</li>
         <li><strong>Give up</strong> names the club for you. On the Daily it asks once before it commits, and records a loss — but it still counts as <em>played</em>, so your hub streak survives.</li>
-        <li>Naming it from the first name or two is scout's-eye territory. 🤯</li>
       </ul>
       <h3>Game modes</h3>
       <ul>
-        <li><strong>Daily</strong> — same club, same reveal order for everyone, once a day. Keep your streak alive.</li>
-        <li><strong>Active</strong> — random 2025–26 rosters, as many as you like.</li>
-        <li><strong>Legends</strong> — name the club from its <em>retired greats</em> instead.</li>
-        <li><strong>Both</strong> — a mix: each round is either a current roster or a set of legends.</li>
+        <li><strong>Daily</strong> — the same pair for everyone, once a day. One of the two is always a <em>Final Four starter</em>, so there's a name to hold on to. Keep your streak alive.</li>
+        <li><strong>Active</strong> — both players are in the 2025–26 EuroLeague.</li>
+        <li><strong>Legends</strong> — both are retired greats.</li>
+        <li><strong>Both</strong> — any pair at all, including a legend beside a current player. The deep cuts live here: no famous name is guaranteed.</li>
       </ul>
     </div>
   </div>
@@ -1812,21 +1873,47 @@
     · <a id="feedback-link" class="colophon-link" rel="nofollow">Send feedback</a>
   </footer>
 
-  <!-- Feedback. A modal rather than a bare mailto: a mailto only goes anywhere if
-       the OS has a default mail app registered, and plenty of machines (Gmail in
-       a browser tab) have none — the click then fails silently, which is exactly
-       what happened. Showing the address means there is always a way through. -->
+  <!-- Feedback. Now a form you can actually type into. Both earlier versions asked
+       the reporter to write the mail themselves: the bare mailto resolved to
+       NOTHING on a machine with no default mail app (a silent dead end — the
+       original bug), and the modal that replaced it only showed an address, which
+       still meant leaving the site to say anything. The form POSTs to a
+       no-backend relay, so Send sends from any machine. The mailto survives
+       below as the fallback, revealed only when a send genuinely can't go
+       through — offline, relay down — so nothing typed is ever lost. -->
   <div id="feedback-modal" class="modal-overlay" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-label="Send feedback" tabindex="-1">
       <button id="feedback-close" class="modal-close" type="button" aria-label="Close">&times;</button>
       <h2>Send feedback</h2>
       <p>Found a wrong roster, a bug, or an idea for a game? All of it helps.</p>
-      <p class="fb-addr" id="feedback-addr"></p>
-      <div class="fb-actions">
-        <button id="feedback-copy" type="button">Copy address</button>
-        <button id="feedback-mail" type="button">Open mail app</button>
+      <form id="feedback-form" novalidate>
+        <label class="fb-label" for="feedback-name">Your name</label>
+        <input id="feedback-name" class="fb-field" type="text" maxlength="60" autocomplete="name"
+               placeholder="Optional — so I know who to thank" />
+        <label class="fb-label" for="feedback-text">Your feedback</label>
+        <textarea id="feedback-text" class="fb-field fb-area" maxlength="2000" rows="5"
+                  placeholder="What went wrong, or what you'd like to see"></textarea>
+        <!-- A bot fills every field it finds; a person never sees this one, so
+             anything that arrives with it ticked is dropped before the POST. -->
+        <label class="fb-bot" aria-hidden="true">Leave this empty
+          <input id="feedback-bot" type="checkbox" tabindex="-1" /></label>
+        <p class="fb-msg" id="feedback-msg" role="status" hidden></p>
+        <div class="fb-actions">
+          <button id="feedback-send" type="submit">Send</button>
+          <button id="feedback-cancel" type="button">Cancel</button>
+        </div>
+      </form>
+      <p class="modal-note" id="feedback-note">Your version and which screen you were on are attached, so a bug can be traced — nothing else, and no account. Sent via web3forms.com, so it works without a mail app.</p>
+      <!-- Hidden until the POST can't happen at all, so the ordinary path stays
+           two fields and a button. -->
+      <div id="feedback-fallback" hidden>
+        <p class="fb-addr" id="feedback-addr"></p>
+        <div class="fb-actions">
+          <button id="feedback-copy" type="button">Copy address</button>
+          <button id="feedback-mail" type="button">Open mail app</button>
+        </div>
+        <p class="modal-note">"Open mail app" carries what you typed, plus the version and screen. If no mail app opens, copy the address and paste the message into webmail.</p>
       </div>
-      <p class="modal-note">"Open mail app" prefills the version you're running and which screen you were on, so a bug can be traced — nothing is sent until you send it. If no mail app opens, copy the address instead.</p>
     </div>
   </div>
 
@@ -1921,6 +2008,7 @@
     </div>
   </div>
 
+  <script src="clubs.js"></script>
   <script src="players.js"></script>
   <script src="legends.js"></script>
   <script src="careers.js"></script>

@@ -19,7 +19,7 @@
     { id: "connections",  name: "Connections",       d: "elg:cn:dstats" },
     { id: "careerorder",  name: "Career Order",      d: "elg:co:dstats" },
     { id: "thegrid",      name: "The Grid",          d: "elg:gr:dstats" },
-    { id: "clubreveal",   name: "Club Reveal",       d: "elg:cv:dstats" },
+    { id: "clubreveal",   name: "Common Club",       d: "elg:cv:dstats" },
     { id: "pathbetween",  name: "Path Between",      d: "elg:pb:dstats" },
     { id: "oddoneout",    name: "Odd One Out",       d: "elg:oo:dstats" },
     { id: "higherlower",  name: "Higher or Lower",   d: "elg:hl:dstats" }

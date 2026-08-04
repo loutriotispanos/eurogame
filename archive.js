@@ -15,7 +15,7 @@
     { id: "connections",  name: "Connections",       k: "elg:cn:daily:" },
     { id: "careerorder",  name: "Career Order",      k: "elg:co:daily:" },
     { id: "thegrid",      name: "The Grid",          k: "elg:gr:daily:" },
-    { id: "clubreveal",   name: "Club Reveal",       k: "elg:cv:daily:" },
+    { id: "clubreveal",   name: "Common Club",       k: "elg:cv:daily:" },
     { id: "pathbetween",  name: "Path Between",      k: "elg:pb:daily:" },
     { id: "oddoneout",    name: "Odd One Out",       k: "elg:oo:daily:" },
     { id: "higherlower",  name: "Higher or Lower",   k: "elg:hl:daily:" }

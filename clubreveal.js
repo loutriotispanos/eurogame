@@ -1,11 +1,31 @@
-/* Club Reveal — whose roster is this? Names appear one at a time (least
- * recognisable first) and you name the club in as few reveals as possible.
- * 3 wrong guesses lose; a wrong guess also forces the next name out.
- * Modes: Daily (date-seeded club + reveal order, same for everyone, streak) +
- * Active (random current roster) / Legends (guess the club from its retired
- * greats). NO data file of its own — rosters come from players.js/legends.js,
- * and "recognisability" is derived from careers.js/lineups.js membership
- * (well-travelled players and F4 starters are the famous ones → revealed last).
+/* Common Club — two players, exactly one club in common. Name it.
+ *
+ * Was "Club Reveal", which revealed a roster name by name and asked which club
+ * it was. Same question, better puzzle: you now get TWO players whose career
+ * paths cross at precisely one club, and that club is the answer. 3 wrong
+ * guesses lose; the score is how few guesses it took.
+ *
+ * THE GUARANTEE — one right answer. A pair only becomes a puzzle if it shares
+ * exactly one club across EVERY club in careers.js (465 of them), not merely
+ * one of the answerable ones. Checking only the answerable ones would be the
+ * easy mistake: two players who also crossed at some second-division club still
+ * have two crossings, and a player who remembers the obscure one is right.
+ *
+ * That's also why names go through clubs.js first — "Paris-Levallois" and
+ * "Levallois Metropolitans" are one club, and left unmerged, Poirier+Prepelic
+ * would ship as "sole shared club: Real Madrid" while the two of them also
+ * shared Levallois. Two puzzles hang on that today.
+ *
+ * Eras do NOT have to overlap: both merely wore the shirt. (Overlapping stints
+ * are Path Between's business — that game is about teammates.)
+ *
+ * Modes: Daily (date-seeded, anchored on a Final Four starter so it's always
+ * gettable, streak) + Active (both current) / Legends (both retired) / Both
+ * (any pair, including a legend paired with a current player).
+ *
+ * NO data file of its own: pairs are derived from careers.js at deal time,
+ * indexed by club so only one club's members are ever paired up (~2ms) rather
+ * than all 108,000 combinations (~90ms, a visible hitch on a phone).
  * Self-contained IIFE; exposes window.ClubReveal. */
 (function () {
   "use strict";
@@ -16,6 +36,10 @@
   var LINEUPS = window.LINEUPS || [];
   var MAX = 3;                       // wrong guesses allowed
 
+  // Keys stay on the cv: namespace — records.js and archive.js read these
+  // prefixes, and there's no reason to churn them for a rename. The daily save
+  // validates the PAIR it holds, so a save left by the old roster game simply
+  // fails to match and the day starts fresh.
   var K = {
     mode: "elg:cv:mode", stats: "elg:cv:stats", dstats: "elg:cv:dstats",
     seen: "elg:cv:seenhelp",
@@ -30,65 +54,124 @@
   function todayStr() { return dateStr(new Date()); }
   function yesterdayStr() { var d = new Date(); d.setDate(d.getDate() - 1); return dateStr(d); }
   function hashStr(s) { var h = 2166136261 >>> 0; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
-  function seededShuffle(arr, seed) {          // deterministic Fisher–Yates
-    var a = arr.slice(), s = seed >>> 0;
-    function rnd() { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; }
-    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
-    return a;
+
+  function canon(t) { return window.CLUBS ? window.CLUBS.canonical(t) : t; }
+
+  // --- The answer set ----------------------------------------------------------
+  // Clubs a fan could fairly be asked to name: the current EuroLeague twenty,
+  // plus clubs with a real retired-legend contingent (CSKA, Treviso). careers.js
+  // knows 465 clubs including Paffoni Omegna and the Phoenix Suns — asking for
+  // those would be a memory test, not a puzzle. Every mode shares this one set,
+  // so the answer space never shifts under the player.
+  var ANSWERS = null, ANSWER_SET = null;
+  function answerClubs() {
+    if (ANSWERS) return ANSWERS;
+    var seen = {}, legCount = {};
+    PLAYERS.forEach(function (p) { seen[canon(p.team)] = 1; });
+    LEGENDS.forEach(function (p) { var c = canon(p.team); legCount[c] = (legCount[c] || 0) + 1; });
+    Object.keys(legCount).forEach(function (c) { if (legCount[c] >= 4) seen[c] = 1; });
+    ANSWERS = Object.keys(seen).sort();
+    ANSWER_SET = seen;
+    return ANSWERS;
   }
 
-  function initials(name) { var p = String(name).trim().split(/\s+/); return ((p[0] || "")[0] || "") + ((p[1] || "")[0] || ""); }
-  function avatarColor(name) { var h = 0; for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0; return "hsl(" + (h % 360) + ",45%,42%)"; }
-
-  // --- Pools + recognisability -------------------------------------------------
-  var POOLS = null;                  // { active: {club: [player,...]}, legends: {...} }
-  function pools() {
-    if (POOLS) return POOLS;
-    var act = {}, leg = {};
-    PLAYERS.forEach(function (p) { (act[p.team] = act[p.team] || []).push(p); });
-    LEGENDS.forEach(function (p) { (leg[p.team] = leg[p.team] || []).push(p); });
-    // a Legends round needs enough names to be a game
-    Object.keys(leg).forEach(function (c) { if (leg[c].length < 4) delete leg[c]; });
-    POOLS = { active: act, legends: leg };
-    return POOLS;
+  // --- Players, as club sets ---------------------------------------------------
+  var UNI = null, BY_NAME = null;
+  function universe() {
+    if (UNI) return UNI;
+    UNI = []; BY_NAME = {};
+    CAREERS.forEach(function (c) {
+      var set = {}, list = [];
+      c.career.forEach(function (s) {
+        var k = canon(s.team);
+        if (!set[k]) { set[k] = 1; list.push(k); }     // one stint or three, it's one club
+      });
+      var p = { name: c.name, nat: c.nationality || "", pos: c.position || "", active: !!c.active, clubs: list, set: set };
+      UNI.push(p); BY_NAME[c.name] = p;
+    });
+    return UNI;
   }
-  var RECOG = null;                  // name → fame-ish score (careers + F4 fives)
-  function recog(name) {
-    if (!RECOG) {
-      RECOG = {};
-      CAREERS.forEach(function (c) { RECOG[c.name] = (RECOG[c.name] || 0) + 2; });
-      LINEUPS.forEach(function (L) { L.five.forEach(function (p) { RECOG[p.name] = (RECOG[p.name] || 0) + 2; }); });
+  function byName(n) { universe(); return BY_NAME[n] || null; }
+
+  // club → the players who played there, for answerable clubs only
+  var MEMBERS = null;
+  function members() {
+    if (MEMBERS) return MEMBERS;
+    MEMBERS = {};
+    answerClubs();
+    universe().forEach(function (p) {
+      p.clubs.forEach(function (c) { if (ANSWER_SET[c]) (MEMBERS[c] = MEMBERS[c] || []).push(p); });
+    });
+    return MEMBERS;
+  }
+
+  // A Final Four starter is, by definition, a name a EuroLeague fan has met.
+  // The Daily requires one of the two to be one, so the puzzle always has an
+  // anchor; practice drops the requirement and gets the deep cuts.
+  var FAMOUS = null;
+  function famous(name) {
+    if (!FAMOUS) { FAMOUS = {}; LINEUPS.forEach(function (L) { L.five.forEach(function (p) { FAMOUS[p.name] = 1; }); }); }
+    return !!FAMOUS[name];
+  }
+
+  // --- The core guarantee -------------------------------------------------------
+  // Returns the pair's ONLY shared club, or null if they share none or several.
+  // Checked across every club either player ever had, which is what makes the
+  // answer unique rather than merely plausible.
+  function soleSharedClub(a, b) {
+    var found = null;
+    for (var i = 0; i < a.clubs.length; i++) {
+      if (!b.set[a.clubs[i]]) continue;
+      if (found) return null;                 // a second crossing → two right answers
+      found = a.clubs[i];
     }
-    return RECOG[name] || 0;
+    return found;
   }
-  // Obscure names first, stars last — the ramp that makes early guesses brave.
-  function orderRoster(list, seed) {
-    return seededShuffle(list, seed).sort(function (a, b) { return recog(a.name) - recog(b.name); });
+
+  function fits(m, a, b) {
+    if (m === "active") return a.active && b.active;
+    if (m === "legends") return !a.active && !b.active;
+    return true;                              // daily / both: any era, mixed included
+  }
+  var PCACHE = {};
+  // Only pairs INSIDE one club are considered — two members of a club always
+  // share it, so this asks the cheap question (do they share anything ELSE?)
+  // instead of scanning every pair of careers.
+  function pairsFor(clubName, m, anchored) {
+    var key = m + "|" + (anchored ? 1 : 0) + "|" + clubName;
+    if (PCACHE[key]) return PCACHE[key];
+    var list = members()[clubName] || [], out = [];
+    for (var i = 0; i < list.length; i++) for (var j = i + 1; j < list.length; j++) {
+      var a = list[i], b = list[j];
+      if (!fits(m, a, b)) continue;
+      if (anchored && !famous(a.name) && !famous(b.name)) continue;
+      if (soleSharedClub(a, b) !== clubName) continue;
+      out.push([a, b]);
+    }
+    PCACHE[key] = out;
+    return out;
+  }
+  // Walks forward from a starting club so a club with no pairs for this mode
+  // (Legends has nothing at Dubai BC) is skipped deterministically rather than
+  // dealing an empty round.
+  function pickClub(m, anchored, start) {
+    var all = answerClubs(), n = all.length;
+    for (var k = 0; k < n; k++) {
+      var c = all[(start + k) % n], ps = pairsFor(c, m, anchored);
+      if (ps.length) return { club: c, pairs: ps };
+    }
+    return null;
   }
 
   var els = {};
   function $(id) { return document.getElementById(id); }
 
-  var mode = "daily";                // "daily" | "active" | "legends"
+  var mode = "daily";                // "daily" | "active" | "legends" | "both"
   var dayKey = todayStr();           // the date the Daily engine is playing (Archive replays a past one)
   var isArchive = false, pendingArchive = null;
-  var club = null, order = [], revealed = 1, guesses = [];
+  var club = null, pair = null, guesses = [];
   var over = false, won = false, dealt = false;
   var giveArmed = false, giveTimer = null;   // the daily asks once before it commits
-
-  // Practice rounds for a mode: Active = current rosters, Legends = retired greats,
-  // Both = the union (each round is one OR the other; a club can appear as both).
-  function roundsFor(m) {
-    var p = pools(), out = [];
-    if (m !== "legends") Object.keys(p.active).forEach(function (c) { out.push({ club: c, list: p.active[c] }); });
-    if (m === "legends" || m === "both") Object.keys(p.legends).forEach(function (c) { out.push({ club: c, list: p.legends[c] }); });
-    return out;
-  }
-  function clubNames() {              // dropdown pool for the current mode (no impossible guesses)
-    var seen = {};
-    roundsFor(mode === "daily" ? "active" : mode).forEach(function (r) { seen[r.club] = 1; });
-    return Object.keys(seen).sort();
-  }
 
   // --- Stats: practice (simple) + daily (streak) -------------------------------
   function defaultStats() { return { played: 0, solved: 0, curStreak: 0, maxStreak: 0 }; }
@@ -123,49 +206,57 @@
   }
 
   // --- Rendering ----------------------------------------------------------------
-  function renderList() {
+  function meta(p) { return [p.nat, p.pos].filter(function (x) { return x; }).join(" · "); }
+  function renderPair() {
     els.list.innerHTML = "";
-    for (var i = 0; i < revealed && i < order.length; i++) {
-      var p = order[i];
+    if (!pair) return;
+    [pair[0], null, pair[1]].forEach(function (p) {
+      if (!p) {                                // the connector, between the two names
+        var j = document.createElement("div"); j.className = "cv-join";
+        j.textContent = "one club in common";
+        els.list.appendChild(j);
+        return;
+      }
       var row = document.createElement("div"); row.className = "cv-row";
-      var rank = document.createElement("span"); rank.className = "cv-rank"; rank.textContent = String(i + 1);
       var nm = document.createElement("span"); nm.className = "cv-name"; nm.textContent = p.name;
-      var meta = document.createElement("span"); meta.className = "cv-meta"; meta.textContent = p.position || "";
-      row.appendChild(rank); row.appendChild(nm); row.appendChild(meta);
+      var mt = document.createElement("span"); mt.className = "cv-meta"; mt.textContent = meta(p);
+      row.appendChild(nm); row.appendChild(mt);
       els.list.appendChild(row);
-    }
+    });
   }
   function renderGuesses() {
     els.guesses.innerHTML = "";
     guesses.forEach(function (g) { var d = document.createElement("div"); d.className = "pid-wrong"; d.textContent = "✗ " + g; els.guesses.appendChild(d); });
   }
+  function scoreLine() {
+    return guesses.length === 0 ? "first guess" : guesses.length + (guesses.length === 1 ? " miss" : " misses");
+  }
   function updateCounter() {
-    if (over) { els.counter.textContent = won ? "Solved with " + revealed + (revealed === 1 ? " name! 🎉" : " names! 🎉") : "It was " + club; return; }
+    if (over) { els.counter.textContent = won ? "Solved — " + scoreLine() + "! 🎉" : "It was " + club; return; }
     var left = MAX - guesses.length;
     els.counter.textContent = left + (left === 1 ? " guess left — make it count!" : " guesses left");
   }
   function updateButtons() {
     if (els.next) els.next.style.display = (mode === "daily") ? "none" : "";
-    if (els.giveup) els.giveup.style.display = "";   // offered on the daily too, to concede it
-    if (els.reveal) els.reveal.disabled = over || revealed >= order.length;
+    // Offered on the daily too, to concede it — but never after the round is
+    // settled, where it was a dead button sitting under a finished banner.
+    if (els.giveup) els.giveup.style.display = over ? "none" : "";
   }
 
   function dailyBannerNote() {
     if (mode !== "daily") return "";
     if (isArchive) return "<br>That was the " + dayKey + " edition.";
-    if (!won) return "<br>A new roster lands at midnight — come back for revenge!";
+    if (!won) return "<br>A new pair lands at midnight — come back for revenge!";
     var s = getDStats();
     return s.curStreak >= 2 ? "<br>🔥 <strong>" + s.curStreak + "-day streak</strong> — see you tomorrow!"
-                            : "<br>Come back tomorrow for a new roster. 👋";
+                            : "<br>Come back tomorrow for a new pair. 👋";
   }
   function shareText() {
     var row = "", i;
-    for (i = 0; i < revealed; i++) row += "🟦";
-    row += won ? "🟩" : "🟥";
-    var score = won
-      ? "Named after " + revealed + " of " + order.length + (guesses.length ? " · " + guesses.length + (guesses.length === 1 ? " miss" : " misses") : "")
-      : "X — it stayed hidden";
-    return "Club Reveal 🏀 " + dayKey + "\n" + score + "\n" + row +
+    for (i = 0; i < guesses.length; i++) row += "🟥";
+    if (won) row += "🟩";
+    var score = won ? (guesses.length === 0 ? "Named it first guess" : "Named it after " + scoreLine()) : "X — it stayed hidden";
+    return "Common Club 🏀 " + dayKey + "\n" + score + "\n" + row +
       (window.ELG ? "\n" + window.ELG.shareURL("clubreveal") : "");
   }
   function addShareBtn(actions) {
@@ -180,42 +271,54 @@
     els.banner.innerHTML = "";
     var title = document.createElement("div"); title.className = "banner-title";
     title.textContent = won
-      ? (revealed === 1 ? "🤯 One name — scout's eye!" : revealed <= 3 ? "🎯 Sharp — just " + revealed + " names" : "🏆 Got it!")
-      : "😔 The roster kept its secret…";
+      ? (guesses.length === 0 ? "🤯 First guess — scout's eye!" : guesses.length === 1 ? "🎯 Sharp — one miss" : "🏆 Got it!")
+      : "😔 That crossing stayed hidden…";
     var sub = document.createElement("div"); sub.className = "banner-sub";
-    sub.innerHTML = "<span class='pname'>" + club + "</span> — " + (won ? "named after " + revealed + " of " + order.length + " players" +
-      (guesses.length ? ", " + guesses.length + (guesses.length === 1 ? " miss" : " misses") : ", no misses") + "." : "that was the club.") +
-      dailyBannerNote();
+    // Naming the shared club is the answer; naming WHEN each of them was there is
+    // the satisfying part, and it's the thing a player can't look up in the UI.
+    var when = pair ? stintLine(pair[0]) + " · " + stintLine(pair[1]) : "";
+    sub.innerHTML = "<span class='pname'>" + club + "</span> — " +
+      (won ? "named after " + scoreLine() + "." : "that was the club.") +
+      (when ? "<br>" + when : "") + dailyBannerNote();
     var actions = document.createElement("div"); actions.className = "banner-actions";
     var btn = document.createElement("button"); btn.type = "button";
     if (mode === "daily") { btn.textContent = "Practice mode"; btn.addEventListener("click", function () { setMode("both"); }); }
-    else { btn.textContent = "Next club"; btn.addEventListener("click", deal); }
+    else { btn.textContent = "Next pair"; btn.addEventListener("click", deal); }
     actions.appendChild(btn);
     if (mode === "daily") addShareBtn(actions);
     els.banner.appendChild(title); els.banner.appendChild(sub); els.banner.appendChild(actions);
     if (mode !== "daily") {
       var hint = document.createElement("div"); hint.className = "banner-hint";
-      hint.textContent = "or just press Space for the next club";
+      hint.textContent = "or just press Space for the next pair";
       els.banner.appendChild(hint);
     }
     els.banner.hidden = false;
   }
+  // "Mike James 2021–" — every stint that player had at the answer club, so a
+  // solved puzzle teaches something rather than just closing.
+  function stintLine(p) {
+    var src = null;
+    CAREERS.forEach(function (c) { if (c.name === p.name) src = c; });
+    if (!src) return p.name;
+    var spans = src.career.filter(function (s) { return canon(s.team) === club; })
+      .map(function (s) { return s.from + "–" + (s.to == null ? "" : String(s.to).slice(2)); });
+    return p.name + " " + spans.join(", ");
+  }
 
   // --- Guess resolution (no suggestions — pure recall) --------------------------
-  // The autocomplete listed the clubs of the current mode, which in a game about
-  // naming the club is close to printing the answer: twenty-odd options, and the
-  // first letter narrowed it to one or two. Gone. The typed text now resolves on
-  // its own — exact, or a partial only one club matches, so "pana" is enough —
-  // and anything else is reported without costing a guess.
+  // The autocomplete listed the answerable clubs, which in a game about naming
+  // the club is close to printing the answer. Gone. Typed text resolves on its
+  // own — exact, or a partial only one club matches, so "pana" is enough — and
+  // anything else is reported without costing a guess.
   function flash(msg) { if (els.flash) { els.flash.textContent = msg; els.flash.hidden = !msg; } }
   function resolve(text) {
     var raw = String(text == null ? "" : text).trim(), q = norm(raw);
     if (!q) return null;
-    var pool = clubNames();
+    var pool = answerClubs();
     var exact = pool.filter(function (n) { return norm(n) === q; });
     if (exact.length) return { name: exact[0] };
     var hits = pool.filter(function (n) { return norm(n).indexOf(q) !== -1; });
-    if (!hits.length) return { miss: "✗ No club called “" + raw + "” in this round" };
+    if (!hits.length) return { miss: "✗ No club called “" + raw + "” in this game" };
     if (hits.length > 1) return { miss: "↔ " + hits.length + " clubs match “" + raw + "” — type more of the name" };
     return { name: hits[0] };
   }
@@ -231,14 +334,10 @@
 
   // --- Game flow ------------------------------------------------------------------
   function saveDaily() {
-    lsSet(K.daily(dayKey), { club: club, revealed: revealed, guesses: guesses, done: over, won: won });
-  }
-  function revealNext() {
-    if (over || revealed >= order.length) return;
-    revealed++;
-    renderList(); updateCounter(); updateButtons();
-    if (mode === "daily") saveDaily();
-    if (els.sr) els.sr.textContent = order[revealed - 1].name + " revealed.";
+    lsSet(K.daily(dayKey), {
+      a: pair ? pair[0].name : null, b: pair ? pair[1].name : null,
+      club: club, guesses: guesses, done: over, won: won
+    });
   }
   function finish() {
     over = true;
@@ -254,8 +353,7 @@
     els.input.value = "";
     if (name === club) { won = true; finish(); return; }
     guesses.push(name);
-    if (revealed < order.length) revealed++;          // a miss forces the next name out
-    renderGuesses(); renderList();
+    renderGuesses();
     if (guesses.length >= MAX) { won = false; finish(); return; }
     if (mode === "daily") saveDaily();
     updateCounter(); updateButtons();
@@ -271,7 +369,7 @@
   // running out of guesses does. It costs this game its own daily record but
   // NOT the hub streak: isTodayDone() counts a lost daily as played.
   //
-  // Daily arms first (there is no second club today); practice stays one tap,
+  // Daily arms first (there is no second pair today); practice stays one tap,
   // where nothing is irreversible.
   function giveUp() {
     if (over) return;
@@ -286,36 +384,47 @@
   }
 
   function resetState() {
-    revealed = 1; guesses = []; over = false; won = false; dealt = true;
+    guesses = []; over = false; won = false; dealt = true;
     disarmGiveUp();
     els.input.value = ""; els.input.disabled = false; els.banner.hidden = true;
   }
   function dealDaily() {
-    var pool = pools().active, clubs = Object.keys(pool).sort();
-    if (!clubs.length) { els.counter.textContent = "No rosters available."; return; }
-    club = clubs[hashStr("cv:" + dayKey) % clubs.length];
-    order = orderRoster(pool[club], hashStr("cv:" + dayKey + ":" + club));
+    var seed = "cc:" + dayKey;
+    var picked = pickClub("both", true, hashStr(seed) % answerClubs().length);
+    if (!picked) { els.counter.textContent = "No pairs available."; return; }
+    club = picked.club;
+    pair = picked.pairs[hashStr(seed + ":" + club) % picked.pairs.length];
     resetState();
+    // Only restores a save that holds THIS pair — a save left by the old roster
+    // game, or by a different day, can't accidentally match.
     var saved = lsGet(K.daily(dayKey), null);
-    if (saved && saved.club === club) {
-      revealed = Math.min(Math.max(saved.revealed || 1, 1), order.length);
+    if (saved && saved.club === club && saved.a === pair[0].name && saved.b === pair[1].name) {
       guesses = (saved.guesses || []).slice(0, MAX);
       over = !!saved.done; won = !!saved.won;
     }
-    renderList(); renderGuesses(); flash(""); updateButtons();
+    renderPair(); renderGuesses(); flash(""); updateButtons();
     if (over) { els.input.disabled = true; showBanner(); updateCounter(); }
     else { updateCounter(); els.input.focus(); }
   }
   function deal() {
     if (mode === "daily") { dealDaily(); return; }
-    var rounds = roundsFor(mode);
-    if (!rounds.length) { els.counter.textContent = "No rosters for this mode."; return; }
-    var i = Math.floor(Math.random() * rounds.length);
-    if (rounds.length > 1 && rounds[i].club === club) i = (i + 1) % rounds.length;
-    club = rounds[i].club;
-    order = orderRoster(rounds[i].list, (Math.random() * 4294967296) >>> 0);
+    var all = answerClubs(), n = all.length;
+    var picked = null, prev = club;
+    // Two passes: the first refuses to repeat the club just played, the second
+    // accepts it rather than dealing nothing when a mode has only one club left.
+    for (var attempt = 0; attempt < 2 && !picked; attempt++) {
+      for (var k = 0; k < n; k++) {
+        var c = all[(Math.floor(Math.random() * n) + k) % n];
+        if (attempt === 0 && c === prev) continue;
+        var ps = pairsFor(c, mode, false);
+        if (ps.length) { picked = { club: c, pairs: ps }; break; }
+      }
+    }
+    if (!picked) { els.counter.textContent = "No pairs for this mode."; return; }
+    club = picked.club;
+    pair = picked.pairs[Math.floor(Math.random() * picked.pairs.length)];
     resetState();
-    renderList(); renderGuesses(); updateCounter(); updateButtons(); flash(""); els.input.focus();
+    renderPair(); renderGuesses(); updateCounter(); updateButtons(); flash(""); els.input.focus();
   }
 
   function setMode(m) {
@@ -394,15 +503,14 @@
   function init() {
     els.input = $("cv-input"); els.flash = $("cv-flash"); els.list = $("cv-list");
     els.counter = $("cv-counter"); els.banner = $("cv-banner"); els.guesses = $("cv-guesses");
-    els.reveal = $("cv-reveal"); els.next = $("cv-next"); els.giveup = $("cv-giveup");
+    els.next = $("cv-next"); els.giveup = $("cv-giveup");
     els.stats = $("cv-stats"); els.sr = $("cv-sr"); els.modeRow = $("cv-modes");
     els.tabDaily = $("cv-daily"); els.tabActive = $("cv-active"); els.tabLegends = $("cv-legends"); els.tabBoth = $("cv-both");
     els.view = $("clubreveal-view");
     els.infoBtn = $("cv-info-btn"); els.infoModal = $("cv-info-modal"); els.infoClose = $("cv-info-close");
-    if (!els.input || !PLAYERS.length) return;
+    if (!els.input || !CAREERS.length) return;
 
     els.input.addEventListener("keydown", onKeyDown);
-    els.reveal.addEventListener("click", revealNext);
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
     els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
@@ -426,15 +534,18 @@
     goMode: setMode,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     // internal hooks used by test.js
-    _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, club: club, order: order, revealed: revealed, guesses: guesses, over: over, won: won }; },
+    _peek: function () { return { mode: mode, day: dayKey, archive: isArchive, club: club, pair: pair, guesses: guesses, over: over, won: won }; },
     _deal: deal,
     _setMode: setMode,
-    _reveal: revealNext,
     _guess: submitGuess,
     _resolve: resolve,
     _shareText: shareText,
-    _recog: recog,
-    _pools: pools
+    _famous: famous,
+    _answerClubs: answerClubs,
+    _members: members,
+    _pairsFor: pairsFor,
+    _soleShared: soleSharedClub,
+    _byName: byName
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
