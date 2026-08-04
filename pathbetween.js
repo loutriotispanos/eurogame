@@ -31,29 +31,11 @@
   function initials(name) { var p = String(name).trim().split(/\s+/); return ((p[0] || "")[0] || "") + ((p[1] || "")[0] || ""); }
   function avatarColor(name) { var h = 0; for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0; return "hsl(" + (h % 360) + ",45%,42%)"; }
 
-  // --- Club aliases: the same club stored under different names --------------
-  // careers.js keeps the name each source used ("Elan Chalon" vs "Chalon"),
-  // which would silently drop teammate edges. Merge KNOWN same-club variants
-  // only — lookalikes like Virtus/Fortitudo Bologna or FC Barcelona B are
-  // genuinely different teams and stay apart.
-  var ALIAS = {
-    "Antibes Sharks": "Antibes",
-    "Elan Chalon": "Chalon",
-    "CB Estudiantes": "Estudiantes",            // Madrid (Bahia Blanca stays separate)
-    "Joventut Badalona": "Joventut",
-    "JSF Nanterre": "Nanterre",
-    "Nanterre 92": "Nanterre",
-    "Paris-Levallois": "Metropolitans 92",       // one franchise, three era names
-    "Levallois Metropolitans": "Metropolitans 92",
-    "Buducnost Podgorica": "Buducnost",
-    "Baxi Manresa": "Manresa",
-    "Aquila Basket Trento": "Trento",
-    "Benetton Treviso": "Treviso",
-    "Pallacanestro Varese": "Varese",
-    "Union Olimpija": "Olimpija Ljubljana",
-    "Wollongong Hawks": "Illawarra Hawks"
-  };
-  function club(team) { return ALIAS[team] || team; }
+  // --- Club aliases -----------------------------------------------------------
+  // The map moved to clubs.js when Common Club started depending on it too: two
+  // copies drifting apart would break that game's one-right-answer guarantee
+  // without breaking anything here, which is the worst way to find out.
+  function club(team) { return window.CLUBS ? window.CLUBS.canonical(team) : team; }
 
   var INF = 9999;
   function yrs(from, to) { return to == null ? from + "–" : from + "–" + String(to).slice(2); }
@@ -143,6 +125,7 @@
   var chain = [], left = 0, wrong = 0, misses = [];   // misses = tried-and-failed for the CURRENT chain end
   var over = false, won = false, dealt = false;
   var giveArmed = false, giveTimer = null;   // the daily asks once before it commits
+  var matches = [], activeIndex = -1;        // the suggestion list
 
   function modeLabel() { return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : mode.charAt(0).toUpperCase() + mode.slice(1); }
   function dailyIdx() { var m = pools()[3]; return m.length ? m[hashStr("pb:" + dayKey) % m.length] : -1; }
@@ -299,16 +282,75 @@
     els.banner.hidden = false;
   }
 
-  // --- Guess resolution (no suggestions — pure recall) --------------------------
-  // There was an autocomplete here and it handed the game over: two letters listed
-  // candidate players, so you read the link off a menu instead of recalling it.
-  // Now the typed text stands on its own — an exact name, or a partial only one
-  // player matches (a surname is usually enough). Anything else is REPORTED and
-  // costs nothing, because only a resolved name ever reaches submitGuess, so a
-  // typo can never burn one of your guesses.
+  // --- Suggestions (every player we hold, minus the chain) ----------------------
+  // What this list does NOT do is say which of these players links from your
+  // current end. It matches on NAME only, over all of careers.js, so it's a
+  // spelling aid for Balkan and Greek surnames — the puzzle, which is working out
+  // who the link is, is untouched.
   //
-  // The chain is deliberately NOT filtered out of the pool: naming someone already
-  // in it should get submitGuess's "already in your chain", not "no such player".
+  // v69 removed this along with Common Club's club list. That was the right call
+  // there (a menu of twenty-two clubs IS the answer set) and an overcorrection
+  // here, so it's back.
+  function closeDropdown() {
+    if (!els.dropdown) return;
+    els.dropdown.hidden = true; els.dropdown.innerHTML = ""; matches = []; activeIndex = -1;
+    els.input.setAttribute("aria-expanded", "false"); els.input.removeAttribute("aria-activedescendant");
+  }
+  function optionHTML(name) {
+    return "<span class='opt-avatar' style='background:" + avatarColor(name) + "'>" + initials(name) + "</span>" +
+      "<span class='opt-name'>" + name + "</span>";
+  }
+  function renderDropdown() {
+    if (!els.dropdown) return;
+    els.dropdown.innerHTML = "";
+    if (!matches.length) {
+      var q = els.input.value.trim();
+      if (q) {
+        // Says WHICH kind of nothing it is: a name we don't hold reads very
+        // differently from one you've already used.
+        var empty = document.createElement("div"); empty.className = "dropdown-empty";
+        empty.textContent = chain.some(function (n) { return norm(n) === norm(q); })
+          ? "Already in your chain — each player counts once" : "No player found — try another spelling";
+        els.dropdown.appendChild(empty); els.dropdown.hidden = false; els.input.setAttribute("aria-expanded", "true");
+      } else closeDropdown();
+      return;
+    }
+    matches.forEach(function (name, i) {
+      var item = document.createElement("div");
+      item.className = "option" + (i === activeIndex ? " active" : "");
+      item.id = "pb-opt-" + i; item.setAttribute("role", "option");
+      item.setAttribute("aria-selected", i === activeIndex ? "true" : "false");
+      item.innerHTML = optionHTML(name);
+      item.addEventListener("pointerdown", function (e) { e.preventDefault(); submitGuess(name); });
+      els.dropdown.appendChild(item);
+    });
+    els.dropdown.hidden = false; els.input.setAttribute("aria-expanded", "true");
+    els.input.setAttribute("aria-activedescendant", activeIndex >= 0 ? "pb-opt-" + activeIndex : "");
+  }
+  function refreshMatches() {
+    if (!els.dropdown) return;
+    if (over) { closeDropdown(); return; }
+    var q = norm(els.input.value.trim());
+    if (!q) { closeDropdown(); return; }
+    var used = {};
+    chain.forEach(function (n) { used[n] = 1; });
+    matches = CAREERS.map(function (c) { return c.name; })
+      .filter(function (n) { return !used[n] && norm(n).indexOf(q) !== -1; })
+      .slice(0, 8);
+    activeIndex = matches.length ? 0 : -1;
+    renderDropdown();
+  }
+
+  // --- Guess resolution ---------------------------------------------------------
+  // Still here, and still the path Enter takes when no suggestion is highlighted
+  // (list dismissed with Escape, a pasted name, a full name typed straight
+  // through). An exact name, or a partial only one player matches. Anything else
+  // is REPORTED and costs nothing, because only a resolved name ever reaches
+  // submitGuess, so a typo can never burn one of your guesses.
+  //
+  // The chain is deliberately NOT filtered out of the pool here: naming someone
+  // already in it should get submitGuess's "already in your chain", not "no such
+  // player". (The suggestion list DOES filter them, and says so in its own words.)
   function resolve(text) {
     var raw = String(text == null ? "" : text).trim(), q = norm(raw);
     if (!q) return null;
@@ -339,7 +381,7 @@
   }
   function finish(deadEnd) {
     over = true;
-    els.input.disabled = true;
+    els.input.disabled = true; closeDropdown();
     if (mode === "daily") { recordDaily(won); saveDaily(); } else record(won);
     renderChain(); renderStats(); updateCounter(); showBanner(deadEnd);
     if (els.sr) els.sr.textContent = won ? "Connected in " + steps() + " steps!" : "Not connected. The round is over.";
@@ -348,7 +390,7 @@
     if (over || !name || !universe()[name]) return;
     disarmGiveUp();                    // playing on withdraws a half-pressed concession
     if (chain.indexOf(name) >= 0) { flash("↺ " + name + " is already in your chain"); return; }   // free — no guess burned
-    els.input.value = "";
+    els.input.value = ""; closeDropdown();
     var l = link(end(), name);
     left--;
     if (l) {
@@ -397,7 +439,7 @@
   function resetState() {
     chain = [start]; left = par + SLACK; wrong = 0; misses = []; over = false; won = false;
     disarmGiveUp();
-    els.input.value = ""; els.input.disabled = false; els.banner.hidden = true; flash("");
+    els.input.value = ""; els.input.disabled = false; els.banner.hidden = true; flash(""); closeDropdown();
   }
   function applyPuzzle(i) {
     pIdx = i;
@@ -480,6 +522,15 @@
 
   // --- Events / init -----------------------------------------------------------------
   function onKeyDown(e) {
+    // The list, when it's open, owns the arrows and Enter.
+    if (els.dropdown && !els.dropdown.hidden) {
+      if (e.key === "ArrowDown" && matches.length) { e.preventDefault(); activeIndex = (activeIndex + 1) % matches.length; renderDropdown(); return; }
+      if (e.key === "ArrowUp" && matches.length) { e.preventDefault(); activeIndex = (activeIndex - 1 + matches.length) % matches.length; renderDropdown(); return; }
+      if (e.key === "Enter" && activeIndex >= 0 && matches[activeIndex]) { e.preventDefault(); submitGuess(matches[activeIndex]); return; }
+      // Escape dismisses the list but KEEPS what you typed — clearing the field as
+      // well would punish reaching for the keyboard shortcut.
+      if (e.key === "Escape") { e.preventDefault(); closeDropdown(); return; }
+    }
     if (e.key === "Enter") { e.preventDefault(); submitTyped(); }
     else if (e.key === "Escape") { els.input.value = ""; flash(""); }
   }
@@ -505,7 +556,7 @@
   }
 
   function init() {
-    els.input = $("pb-input"); els.chain = $("pb-chain");
+    els.input = $("pb-input"); els.dropdown = $("pb-dropdown"); els.chain = $("pb-chain");
     els.counter = $("pb-counter"); els.banner = $("pb-banner"); els.flash = $("pb-flash");
     els.guesses = $("pb-guesses"); els.next = $("pb-next"); els.giveup = $("pb-giveup");
     els.stats = $("pb-stats"); els.sr = $("pb-sr"); els.modeRow = $("pb-modes");
@@ -515,6 +566,9 @@
     if (!els.input || !PATHS.length || !CAREERS.length) return;
 
     els.input.addEventListener("keydown", onKeyDown);
+    els.input.addEventListener("input", refreshMatches);
+    els.input.addEventListener("focus", refreshMatches);
+    document.addEventListener("click", function (e) { if (e.target !== els.input && els.dropdown && !els.dropdown.contains(e.target)) closeDropdown(); });
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
     els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
@@ -544,6 +598,12 @@
     _guess: submitGuess,
     _resolve: resolve,
     _shareText: shareText,
+    // the suggestion list, so a test can pin what it does and doesn't give away
+    _refresh: refreshMatches,
+    _closeDropdown: closeDropdown,
+    _matches: function () { return matches.slice(); },
+    _active: function () { return activeIndex; },
+    _keydown: onKeyDown,
     _link: link,
     _teammates: teammates,
     _bfs: bfs,

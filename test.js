@@ -83,6 +83,7 @@ global.window = win; global.document = doc;
 try { Object.defineProperty(globalThis, "navigator", { value: {}, configurable: true, writable: true }); } catch (e) {}
 try { navigator.clipboard = { writeText: function (t) { captured = t; return Promise.resolve(); } }; } catch (e) {}
 
+eval(fs.readFileSync("clubs.js", "utf8"));      // club-name canonicalisation, shared by Common Club + Path Between
 eval(fs.readFileSync("players.js", "utf8"));
 eval(fs.readFileSync("legends.js", "utf8"));
 eval(fs.readFileSync("careers.js", "utf8"));
@@ -912,36 +913,93 @@ ok(byId("gr-info-modal").hidden === false, "info button re-opens it manually");
 fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
 ok(byId("gr-info-modal").hidden === true, "Escape closes it");
 
-console.log("Club Reveal — pools + reveal order");
-var cvPools = window.ClubReveal._pools();
-ok(Object.keys(cvPools.active).length >= 18, "active pool has all current clubs (" + Object.keys(cvPools.active).length + ")");
-ok(Object.keys(cvPools.active).every(function (c) { return cvPools.active[c].length >= 6; }), "every current roster has at least 6 players");
-ok(Object.keys(cvPools.legends).length >= 10, "legends pool has enough clubs (" + Object.keys(cvPools.legends).length + ")");
-ok(Object.keys(cvPools.legends).every(function (c) { return cvPools.legends[c].length >= 4; }), "every legends club has at least 4 names");
+console.log("Common Club — one right answer, verified independently");
+// The whole game rests on "these two share exactly one club". These checks
+// rebuild each player's club set straight from careers.js and clubs.js rather
+// than calling the game's soleSharedClub, so the guarantee is verified by
+// something other than the code that makes the claim. (The Grid taught this
+// lesson the hard way: a test that shares the product's algorithm can only
+// confirm the algorithm agrees with itself.)
+function cvSets() {
+  var out = {};
+  window.CAREERS.forEach(function (c) {
+    var s = {};
+    c.career.forEach(function (st) { s[window.CLUBS.canonical(st.team)] = 1; });
+    out[c.name] = s;
+  });
+  return out;
+}
+var CVSETS = cvSets();
+function cvSharedIndependently(nameA, nameB) {
+  var a = CVSETS[nameA], b = CVSETS[nameB], both = [];
+  Object.keys(a).forEach(function (c) { if (b[c]) both.push(c); });
+  return both.sort();
+}
+var cvAnswers = window.ClubReveal._answerClubs();
+ok(cvAnswers.length >= 20, "answer set is the askable clubs only (" + cvAnswers.length + " of 465 in careers.js)");
+ok(cvAnswers.indexOf("Panathinaikos") >= 0 && cvAnswers.indexOf("Phoenix Suns") === -1,
+   "…EuroLeague clubs are answerable, a player's NBA stop is not");
 
-console.log("Club Reveal — game flow");
+// Every puzzle the game can ever deal, checked pair by pair.
+var cvTotal = 0, cvBadShared = [], cvBadAnswer = [], cvSelf = 0;
+cvAnswers.forEach(function (c) {
+  window.ClubReveal._pairsFor(c, "both", false).forEach(function (pr) {
+    cvTotal++;
+    if (pr[0].name === pr[1].name) cvSelf++;
+    var shared = cvSharedIndependently(pr[0].name, pr[1].name);
+    if (shared.length !== 1) { if (cvBadShared.length < 3) cvBadShared.push(pr[0].name + " + " + pr[1].name + " share " + shared.join("/")); }
+    else if (shared[0] !== c) { if (cvBadAnswer.length < 3) cvBadAnswer.push(pr[0].name + " + " + pr[1].name + " -> " + shared[0] + " not " + c); }
+  });
+});
+ok(cvTotal >= 2000, "the pair pool is deep enough to never repeat (" + cvTotal + " puzzles)");
+ok(cvSelf === 0, "no puzzle pairs a player with himself");
+ok(cvBadShared.length === 0, "EVERY puzzle's two players share exactly ONE club" + (cvBadShared.length ? " — e.g. " + cvBadShared[0] : ""));
+ok(cvBadAnswer.length === 0, "…and that one club is the answer the game will accept" + (cvBadAnswer.length ? " — e.g. " + cvBadAnswer[0] : ""));
+
+// The alias map, pinned to what it actually does rather than what it might.
+// Only ONE franchise currently has two spellings live in careers.js, so these
+// are the two pairs canonicalisation rejects: both would otherwise ship claiming
+// a single shared club while quietly sharing Levallois as well. If a roster
+// update ever files a player under a second spelling, this is the test that
+// should start caring.
+ok(window.CLUBS.canonical("Paris-Levallois") === "Metropolitans 92" &&
+   window.CLUBS.canonical("Levallois Metropolitans") === "Metropolitans 92",
+   "clubs.js folds all three Levallois-era names into one club");
+ok(window.CLUBS.canonical("Real Madrid") === "Real Madrid", "…and leaves an unaliased club alone");
+ok(cvSharedIndependently("Vincent Poirier", "Klemen Prepelic").length === 2,
+   "Poirier + Prepelic really do share TWO clubs once the aliases are folded in");
+var cvInPool = {};
+cvAnswers.forEach(function (c) {
+  window.ClubReveal._pairsFor(c, "both", false).forEach(function (pr) { cvInPool[pr[0].name + "|" + pr[1].name] = c; });
+});
+ok(!cvInPool["Vincent Poirier|Klemen Prepelic"] && !cvInPool["Klemen Prepelic|Vincent Poirier"],
+   "…so that pair is kept OUT of the pool, instead of shipping as \"the answer is Real Madrid\"");
+ok(!cvInPool["Klemen Prepelic|Neal Sako"] && !cvInPool["Neal Sako|Klemen Prepelic"],
+   "…and so is Prepelic + Sako, the other pair the alias map catches");
+
+console.log("Common Club — game flow");
 delete store["elg:cv:stats"];
 window.ClubReveal._setMode("active");
 var cv = window.ClubReveal._peek();
-ok(cv.club && cv.order.length >= 6 && cv.revealed === 1 && cv.over === false, "a club is dealt with one name showing");
-ok(window.ClubReveal._recog(cv.order[0].name) <= window.ClubReveal._recog(cv.order[cv.order.length - 1].name),
-   "reveal order is obscure-first (first name no more famous than last)");
-window.ClubReveal._reveal();
-ok(window.ClubReveal._peek().revealed === 2, "Reveal next shows another name (free)");
-var cvWrong = Object.keys(cvPools.active).filter(function (c) { return c !== cv.club; });
+ok(!!cv.club && !!cv.pair && cv.pair.length === 2 && cv.over === false, "a pair is dealt, both players showing at once");
+ok(cvSharedIndependently(cv.pair[0].name, cv.pair[1].name).join() === cv.club, "the dealt pair's sole shared club is the answer");
+ok(cv.pair[0].active === true && cv.pair[1].active === true, "Active mode deals two current players");
+ok(byId("cv-list").children.length === 3, "both names render, with the connector between them");
+var cvWrong = cvAnswers.filter(function (c) { return c !== cv.club; });
 window.ClubReveal._guess(cvWrong[0]);
 var cv2 = window.ClubReveal._peek();
-ok(cv2.guesses.length === 1 && cv2.revealed === 3 && cv2.over === false, "a wrong guess burns a life AND forces a reveal");
+ok(cv2.guesses.length === 1 && cv2.over === false, "a wrong guess burns a life");
+ok(byId("cv-list").children.length === 3, "…and reveals nothing — there is nothing left to reveal");
 window.ClubReveal._guess(cvWrong[0]);
 ok(window.ClubReveal._peek().guesses.length === 1, "repeating the same wrong club costs nothing");
 window.ClubReveal._guess(cv.club);
 var cv3 = window.ClubReveal._peek();
-ok(cv3.over === true && cv3.won === true, "naming the club wins");
+ok(cv3.over === true && cv3.won === true, "naming the shared club wins");
 ok(JSON.parse(store["elg:cv:stats"]).solved >= 1, "practice win recorded");
 fireDoc("keydown", { key: " ", code: "Space", target: doc.body, preventDefault: function () {} });
-ok(window.ClubReveal._peek().over === false, "Space deals the next club when practice game over");
+ok(window.ClubReveal._peek().over === false, "Space deals the next pair when practice game over");
 var cvL = window.ClubReveal._peek();
-var cvLwrong = Object.keys(cvPools.active).filter(function (c) { return c !== cvL.club; });
+var cvLwrong = cvAnswers.filter(function (c) { return c !== cvL.club; });
 window.ClubReveal._guess(cvLwrong[0]); window.ClubReveal._guess(cvLwrong[1]); window.ClubReveal._guess(cvLwrong[2]);
 var cvL2 = window.ClubReveal._peek();
 ok(cvL2.over === true && cvL2.won === false, "three wrong guesses lose");
@@ -950,29 +1008,65 @@ fire(byId("cv-giveup"), "click");
 ok(window.ClubReveal._peek().over === true && window.ClubReveal._peek().won === false, "Give up ends the round (loss)");
 window.ClubReveal._setMode("legends");
 var cvLeg = window.ClubReveal._peek();
-ok(cvPools.legends[cvLeg.club] && cvPools.legends[cvLeg.club].some(function (p) { return p.name === cvLeg.order[0].name; }),
-   "Legends mode deals a club's retired greats");
+ok(cvLeg.pair[0].active === false && cvLeg.pair[1].active === false, "Legends mode deals two retired players");
+// Mixed pairs are the point of Both: they only became legal once eras stopped
+// having to overlap, and they're most of the pool.
+var cvMixed = 0, cvBothTotal = 0;
+cvAnswers.forEach(function (c) {
+  window.ClubReveal._pairsFor(c, "both", false).forEach(function (pr) {
+    cvBothTotal++;
+    if (pr[0].active !== pr[1].active) cvMixed++;
+  });
+});
+ok(cvMixed > 0, "Both mode can pair a legend with a current player (" + cvMixed + " of " + cvBothTotal + ")");
+var cvActOnly = 0;
+cvAnswers.forEach(function (c) { window.ClubReveal._pairsFor(c, "active", false).forEach(function (pr) { if (!pr[0].active || !pr[1].active) cvActOnly++; }); });
+ok(cvActOnly === 0, "the Active filter never lets a retired player through");
 
-console.log("Club Reveal — Daily");
+console.log("Common Club — Daily");
 function cvTodayKey() { var d = new Date(); function p(n) { return n < 10 ? "0" + n : "" + n; } return "elg:cv:daily:" + d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
 delete store["elg:cv:dstats"]; delete store[cvTodayKey()];
 window.ClubReveal._setMode("daily");
 var cvd = window.ClubReveal._peek();
-ok(cvd.club && cvd.revealed === 1 && cvd.over === false, "Daily deals a club");
+ok(!!cvd.club && !!cvd.pair && cvd.over === false, "Daily deals a pair");
+ok(cvSharedIndependently(cvd.pair[0].name, cvd.pair[1].name).join() === cvd.club, "today's daily has exactly one right answer");
+// A daily is a streak, so it must always have a name the player has heard of.
+// Asserted over the whole anchored pool, not just today's puzzle: one day's pair
+// can easily contain a famous player by luck, so checking only today would pass
+// even with the anchor deleted.
+ok(window.ClubReveal._famous(cvd.pair[0].name) || window.ClubReveal._famous(cvd.pair[1].name),
+   "the Daily is anchored on a Final Four starter, so it's always gettable");
+var cvAnchorMiss = 0, cvAnchorTotal = 0;
+cvAnswers.forEach(function (c) {
+  window.ClubReveal._pairsFor(c, "both", true).forEach(function (pr) {
+    cvAnchorTotal++;
+    if (!window.ClubReveal._famous(pr[0].name) && !window.ClubReveal._famous(pr[1].name)) cvAnchorMiss++;
+  });
+});
+ok(cvAnchorTotal > 500, "the anchored pool is big enough for years of dailies (" + cvAnchorTotal + ")");
+ok(cvAnchorMiss === 0, "EVERY pair the Daily can draw has a Final Four starter in it (" + cvAnchorMiss + " without)");
+// …and the anchor is a real restriction, i.e. practice genuinely reaches deeper.
+var cvUnanchored = 0;
+cvAnswers.forEach(function (c) { cvUnanchored += window.ClubReveal._pairsFor(c, "both", false).length; });
+ok(cvUnanchored > cvAnchorTotal, "practice draws from a strictly wider pool than the Daily (" + cvUnanchored + " vs " + cvAnchorTotal + ")");
 ok(byId("cv-next").style.display === "none" && byId("cv-giveup").style.display !== "none",
-   "Daily hides New club — one a day — but DOES offer Give up");
+   "Daily hides New pair — one a day — but DOES offer Give up");
 window.ClubReveal._setMode("active");
 window.ClubReveal._setMode("daily");
-ok(window.ClubReveal._peek().club === cvd.club, "Daily is deterministic (same club on re-deal)");
+var cvd2 = window.ClubReveal._peek();
+ok(cvd2.club === cvd.club && cvd2.pair[0].name === cvd.pair[0].name && cvd2.pair[1].name === cvd.pair[1].name,
+   "Daily is deterministic — same club AND same pair on re-deal");
 window.ClubReveal._guess(cvd.club);
 ok(window.ClubReveal._peek().won === true, "solved the daily");
-var cvds = JSON.parse(store["elg:cv:dstats"]);
-ok(cvds.solved >= 1 && cvds.curStreak >= 1 && cvds.lastDate, "daily win recorded with streak");
+// Parsed defensively: if a regression stops the daily recording at all, that
+// should read as a failed assertion, not a JSON crash that kills the whole file.
+var cvds = JSON.parse(store["elg:cv:dstats"] || "null") || {};
+ok(cvds.solved >= 1 && cvds.curStreak >= 1 && !!cvds.lastDate, "daily win recorded with streak");
 window.ClubReveal._setMode("active");
 window.ClubReveal._setMode("daily");
 ok(window.ClubReveal._peek().over === true && window.ClubReveal._peek().won === true, "returning to Daily restores the finished round");
 
-console.log("Club Reveal — conceding the daily");
+console.log("Common Club — conceding the daily");
 delete store["elg:cv:dstats"]; delete store[cvTodayKey()];
 window.ClubReveal._setMode("active"); window.ClubReveal._setMode("daily");
 ok(window.ClubReveal._peek().over === false, "a fresh daily to concede");
@@ -990,10 +1084,23 @@ window.ClubReveal.goDaily();
 ok(window.ClubReveal._peek().mode === "daily", "ClubReveal.goDaily → daily");
 window.ClubReveal._setMode("both");
 var cvB = window.ClubReveal._peek();
-ok(!!(cvPools.active[cvB.club] || cvPools.legends[cvB.club]), "Both mode deals from either pool");
-ok(cvB.over === false && cvB.revealed === 1, "Both round starts fresh with one name");
+ok(cvAnswers.indexOf(cvB.club) >= 0, "Both mode's answer is still an askable club");
+ok(cvB.over === false && cvB.pair.length === 2, "Both round starts fresh with a new pair");
 
-console.log("Club Reveal — how-to modal + first-visit help");
+// The old roster game left saves of a different shape under the same key. They
+// must not half-restore into this one — a stale guess list on a fresh pair would
+// silently cost the player a life.
+console.log("Common Club — a save from the old roster game can't leak in");
+delete store["elg:cv:dstats"];
+window.ClubReveal._setMode("daily");
+var cvStale = window.ClubReveal._peek();
+store[cvTodayKey()] = JSON.stringify({ club: cvStale.club, revealed: 4, guesses: ["Real Madrid", "Partizan"], done: true, won: true });
+window.ClubReveal._setMode("active"); window.ClubReveal._setMode("daily");
+var cvFresh = window.ClubReveal._peek();
+ok(cvFresh.over === false && cvFresh.guesses.length === 0, "an old-shape save for the same club is ignored, not half-applied");
+delete store[cvTodayKey()];
+
+console.log("Common Club — how-to modal + first-visit help");
 delete store["elg:cv:seenhelp"];
 window.ClubReveal.onShow();
 ok(byId("cv-info-modal").hidden === false, "first onShow auto-opens the how-to");
@@ -1415,7 +1522,7 @@ window.Hub._setHub({ cur: 4, best: 9, last: HY3, freeze: false, freezeAt: 0 });
 ok(window.Hub._info().cur === 0, "a lapsed streak shows 0 until you play again");
 clearToday();
 store["elg:cv:daily:" + HTODAY] = JSON.stringify({ club: "x", revealed: 3, guesses: [], done: true, won: false });
-ok(window.Hub._isTodayDone() === true, "a finished Club Reveal daily counts toward the hub streak");
+ok(window.Hub._isTodayDone() === true, "a finished Common Club daily counts toward the hub streak");
 
 console.log("night mode toggle");
 delete store["elg:theme"];
@@ -1465,12 +1572,15 @@ ok(fbHTML.indexOf("body:not(.view-home) #feedback-btn") > 0, "feedback: the butt
 //
 // The bug this replaces: the button navigated straight to the mailto, and a
 // mailto resolves to NOTHING on a machine with no default mail app — a silent
-// dead end. So the modal must always put the address on screen.
+// dead end. So the mail route is never the first one offered, and the address is
+// always reachable when it is.
 ok(fbHTML.indexOf('id="feedback-modal"') > 0, "feedback: the modal is in the markup");
 window.Hub._openFeedback();
 ok(byId("feedback-modal").hidden === false, "feedback: the button opens the modal");
 ok(byId("feedback-addr").textContent === "loutriotispanos@gmail.com",
-   "feedback: the modal shows the address, so there's a way through with no mail app");
+   "feedback: the address is written in at open time, so it's never in the source");
+ok(byId("feedback-fallback").hidden === true,
+   "feedback: the mail fallback stays hidden until a send actually fails");
 // Copy has to work on its own — it's the one route that doesn't depend on the OS
 // having a mail app, which is the failure this whole modal exists to survive.
 captured = "";
@@ -1484,10 +1594,140 @@ ok(win.location.href.indexOf("mailto:") === 0, "feedback: \"Open mail app\" stil
 ok(win.location.href === window.ELG.feedbackURL(), "feedback: both entry points resolve to the same message");
 win.location.href = fbHref;
 
-console.log("No suggestions in Path Between / Club Reveal — typed names resolve");
-// The dropdown used to name every candidate, which in these two games is close to
-// printing the answer. Typing has to be forgiving instead: the guarantee that
-// matters is that anything the resolver can't pin down costs you NOTHING.
+console.log("Feedback form — a field you can type in, POSTed to the relay");
+// Both earlier versions made the reporter compose the mail themselves. Now the
+// modal takes a name and a message and sends them, so the tests have to prove a
+// real POST happens — and, just as important, that every way it can fail still
+// leaves a route out and the typed words intact.
+ok(fbHTML.indexOf('id="feedback-form"') > 0, "form: the modal holds a real form");
+ok(fbHTML.indexOf('id="feedback-name"') > 0, "form: there's a name field");
+ok(fbHTML.indexOf('id="feedback-text"') > 0, "form: there's a feedback field");
+ok(/for="feedback-name"/.test(fbHTML) && /for="feedback-text"/.test(fbHTML), "form: both fields carry a real <label for>");
+ok(/id="feedback-send"[^>]*type="submit"/.test(fbHTML), "form: Send submits the form, so Enter works too");
+ok(fbHTML.indexOf('id="feedback-bot"') > 0, "form: a honeypot field is present");
+// display:none is the honeypot that doesn't work — the bots worth catching skip
+// those and fill an off-screen one.
+ok(/\.fb-bot \{[^}]*left: -9999px/.test(fbHTML), "form: the honeypot is off-screen, not display:none");
+ok(fbHTML.indexOf("loutriotispanos@gmail.com") === -1, "form: adding the relay did NOT put the address back in the source");
+ok(window.ELG.feedbackURL().indexOf("mailto:") === 0, "form: the mailto still exists as the fallback");
+
+// A fake fetch, so the payload can be inspected instead of hitting the network.
+// Resolves synchronously (this harness has no event loop between assertions).
+function thenable(v, rejected) {
+  return { then: function (onOk, onErr) {
+    var fn = rejected ? onErr : onOk;
+    if (!fn) return thenable(v, rejected);
+    try { return thenable(fn(v), false); } catch (e) { return thenable(e, true); }
+  } };
+}
+var fbSent = null, fbMode = "ok";      // ok | refuse | http | network
+win.fetch = function (url, opts) {
+  fbSent = { url: url, opts: opts, body: JSON.parse(opts.body) };
+  if (fbMode === "network") return thenable(new Error("offline"), true);
+  if (fbMode === "http") return thenable({ ok: false, status: 500 });
+  var payload = { success: fbMode !== "refuse" };
+  return thenable({ ok: true, json: function () { return thenable(payload); } });
+};
+function fbFill(name, text) { byId("feedback-name").value = name; byId("feedback-text").value = text; }
+function fbReset() { fbSent = null; byId("feedback-msg").className = ""; byId("feedback-fallback").hidden = true; }
+
+// An empty message is the one thing refused outright — the name is optional
+// because rejecting a good bug report over a missing name loses the report.
+fbReset(); fbFill("", "   ");
+window.Hub._sendFeedback();
+ok(fbSent === null, "form: an empty message is never POSTed");
+ok(/err/.test(byId("feedback-msg").className), "form: …and says so in red");
+ok(byId("feedback-fallback").hidden === true, "form: a validation refusal is not a failure — no fallback shown");
+
+// The state this actually ships in: no key pasted in yet. It must SAY so rather
+// than pretend to send — and hand over the mail route.
+ok(window.Hub._hasRelay() === false, "form: ships with no relay key (paste one in to switch sending on)");
+fbReset(); fbFill("Panagiotis", "The Grid printed a dash on the last cell");
+window.Hub._sendFeedback();
+ok(fbSent === null, "form: with no key configured, nothing is POSTed");
+ok(byId("feedback-fallback").hidden === false, "form: …the mail fallback is revealed instead");
+ok(/err/.test(byId("feedback-msg").className), "form: …and it admits sending isn't switched on");
+// Falling back must not cost the reporter their words.
+var fbMailto = decodeURIComponent(window.ELG.feedbackURL().split("&body=")[1] || "");
+ok(fbMailto.indexOf("The Grid printed a dash on the last cell") === 0, "form: the fallback mailto carries the typed message");
+ok(fbMailto.indexOf("from: Panagiotis") > 0, "form: …and the typed name, in the signature block");
+
+window.Hub._setKey("test-access-key-0000");
+ok(window.Hub._hasRelay() === true, "form: pasting a key switches sending on");
+ok(window.Hub._endpoint.indexOf("https://") === 0, "form: the relay is posted to over https");
+
+fbReset(); fbMode = "ok"; fbFill("Panagiotis", "Baskonia's roster is out of date");
+window.Hub._sendFeedback();
+// Guarded, every one of them: a regression that stops POSTing at all should be
+// REPORTED as a failure, not crash the file on a null and take the rest of the
+// suite with it.
+var sb = (fbSent && fbSent.body) || {};
+ok(fbSent && fbSent.url === window.Hub._endpoint, "form: Send POSTs to the relay");
+ok(!!fbSent && fbSent.opts.method === "POST", "form: …as a POST");
+ok(sb.access_key === "test-access-key-0000", "form: …with the access key");
+ok(sb.name === "Panagiotis", "form: …the name");
+ok(sb.message === "Baskonia's roster is out of date", "form: …the message");
+// The diagnostics were the good part of the old mailto; losing them in the move
+// to a form would make every report unreproducible again.
+ok(sb.version === "(version unknown)", "form: …the build the reporter is actually running");
+ok(typeof sb.screen === "string" && sb.screen.length > 0, "form: …and which screen they were on");
+ok(/good/.test(byId("feedback-msg").className), "form: a sent message is confirmed in green");
+ok(byId("feedback-text").value === "", "form: the message field is cleared, so a stray second Send sends nothing");
+ok(byId("feedback-name").value === "Panagiotis", "form: the name is left, since it's still theirs");
+ok(byId("feedback-fallback").hidden === true, "form: no fallback offered — it worked");
+
+// The name is optional in practice, not just in the placeholder.
+fbReset(); fbFill("", "no name on this one");
+window.Hub._sendFeedback();
+ok(!!fbSent && fbSent.body.message === "no name on this one", "form: a message with no name still sends");
+ok(!!fbSent && fbSent.body.name === "(no name given)", "form: …and arrives labelled rather than blank");
+
+// Every failure mode: network down, HTTP error, and a 200 that says success:false
+// (a bad key or the spam filter). All three are failures, and a 200 body has to be
+// read — trusting the status code alone would report a refusal as sent.
+["network", "http", "refuse"].forEach(function (mode) {
+  fbReset(); fbMode = mode; fbFill("Panagiotis", "draft worth keeping: " + mode);
+  window.Hub._sendFeedback();
+  ok(/err/.test(byId("feedback-msg").className), "form: a " + mode + " failure is reported as a failure");
+  ok(byId("feedback-fallback").hidden === false, "form: …the mail route is offered");
+  ok(byId("feedback-note").hidden === true, "form: …and it stops advertising the relay that just failed");
+  ok(byId("feedback-text").value === "draft worth keeping: " + mode, "form: …and the typed words stay on screen");
+  ok(store["elg:fbdraft"] === JSON.stringify("draft worth keeping: " + mode), "form: …and are stashed, surviving a closed tab");
+});
+ok(byId("feedback-send").disabled === false, "form: Send is re-enabled after a failure, so it can be retried");
+
+// The honeypot: swallowed silently. Telling a bot it was caught teaches it.
+fbReset(); fbMode = "ok"; fbFill("Panagiotis", "buy cheap watches");
+byId("feedback-bot").checked = true;
+window.Hub._sendFeedback();
+ok(fbSent === null, "form: a ticked honeypot is dropped before the POST");
+ok(/good/.test(byId("feedback-msg").className), "form: …and told it succeeded, so it learns nothing");
+byId("feedback-bot").checked = false;
+
+// A second report shouldn't retype the name, and an unsent draft shouldn't die
+// with the modal — Escape and a stray tap on the overlay both close it.
+fbReset(); fbMode = "ok"; fbFill("Panagiotis", "half-written thought");
+window.Hub._closeFeedback();
+ok(store["elg:fbdraft"] === JSON.stringify("half-written thought"), "form: closing the modal keeps an unsent draft");
+byId("feedback-name").value = ""; byId("feedback-text").value = "";
+window.Hub._openFeedback();
+ok(byId("feedback-name").value === "Panagiotis", "form: re-opening remembers the name");
+ok(byId("feedback-text").value === "half-written thought", "form: …and restores the unsent draft");
+ok(byId("feedback-fallback").hidden === true, "form: …with a previous failure's fallback cleared away");
+ok(byId("feedback-note").hidden === false, "form: …and the relay note restored");
+// Leave no state behind: later tests read the same location, store and fields.
+fbMode = "ok"; fbFill("", "");
+window.Hub._sendFeedback();               // clears elg:fbdraft the honest way
+window.Hub._setKey("");
+delete win.fetch;
+window.Hub._closeFeedback();
+win.location.href = fbHref;
+
+console.log("Typed names resolve — Path Between / Common Club");
+// Common Club has no suggestion list, because a menu of its twenty-two clubs IS
+// the answer set. Path Between's list is back (see the block below), but typing
+// still has to stand on its own for a pasted or fully-typed name. The guarantee
+// that matters either way: anything the resolver can't pin down costs NOTHING.
 window.PathBetween._setMode("easy");
 var pbR = window.PathBetween._peek(), pbTarget = window.PathBetween._route(pbR.a, pbR.b)[1];
 ok(window.PathBetween._resolve("") === null, "PB: empty input resolves to nothing at all");
@@ -1517,6 +1757,66 @@ for (var cvK = 3; cvK <= cvClub.length; cvK++) {
 }
 ok(cvFrag !== null, "CV: a partial resolves as soon as it's unique (\"pana\" is enough)");
 ok(byId("cv-flash") && String(byId("cv-flash").id) === "cv-flash", "CV: has a flash line to report misses in");
+
+console.log("Path Between — the suggestion list is a spelling aid, not a hint");
+// The whole reason this list is allowed back: it matches on NAME across every
+// player we hold, and says NOTHING about which of them actually links from the
+// current end. If it ever narrows to legal teammates, it has become the answer
+// and these tests should fail loudly.
+window.PathBetween._setMode("easy");
+var pbS = window.PathBetween._peek();
+var pbInput = byId("pb-input");
+function pbType(text) { pbInput.value = text; window.PathBetween._refresh(); return window.PathBetween._matches(); }
+
+var pbAll = window.CAREERS.map(function (c) { return c.name; });
+ok(pbType("").length === 0 && byId("pb-dropdown").hidden === true, "empty input shows no list at all");
+var pbHits = pbType("an");
+ok(pbHits.length > 0 && byId("pb-dropdown").hidden === false, "typing opens the list (" + pbHits.length + " shown)");
+ok(pbHits.length <= 8, "the list is capped at 8 so it can't become a browsable index");
+ok(window.PathBetween._active() === 0, "the first suggestion is pre-highlighted, so Enter just works");
+// The load-bearing assertion: what's offered is name matches, NOT legal links.
+var pbNameMatches = pbAll.filter(function (n) { return n.toLowerCase().indexOf("an") !== -1; });
+ok(pbHits.every(function (n) { return pbNameMatches.indexOf(n) >= 0; }), "every suggestion is a genuine name match");
+var pbLegal = pbNameMatches.filter(function (n) { return !!window.PathBetween._link(pbS.a, n); });
+var pbOffered = pbHits.filter(function (n) { return !!window.PathBetween._link(pbS.a, n); });
+ok(pbNameMatches.length > pbLegal.length, "…and most name matches are NOT legal links (" + pbLegal.length + " of " + pbNameMatches.length + ")");
+ok(pbHits.length > pbOffered.length, "…so the list is mostly dead ends — it does not shortlist the answer");
+// Deliberately over-broad prefix: if suggestions were filtered to teammates, a
+// two-letter query could only ever return teammates. It returns far more.
+ok(pbHits.some(function (n) { return !window.PathBetween._link(pbS.a, n); }),
+   "at least one suggestion links to nothing — proof the list isn't filtered by legality");
+
+// Already-used names are dropped, and the empty state says why rather than
+// claiming the player doesn't exist.
+window.PathBetween._guess(window.PathBetween._route(pbS.a, pbS.b)[1]);
+var pbUsed = window.PathBetween._peek().chain[1];
+ok(pbType(pbUsed).length === 0, "a player already in the chain is not suggested again");
+ok(byId("pb-dropdown").hidden === false && /already in your chain/i.test(byId("pb-dropdown").firstChild.textContent),
+   "…and the list says he's used, not that he doesn't exist");
+ok(pbType("qzxwvy").length === 0 && /no player found/i.test(byId("pb-dropdown").firstChild.textContent),
+   "an unknown name gets its own wording, distinct from the used-player one");
+
+// Keyboard: arrows move the highlight, Enter commits it, Escape dismisses the
+// list but must NOT wipe what was typed.
+pbType("an");
+var pbFirst = window.PathBetween._matches()[0];
+window.PathBetween._keydown({ key: "ArrowDown", preventDefault: function () {} });
+ok(window.PathBetween._active() === 1, "ArrowDown moves the highlight");
+window.PathBetween._keydown({ key: "ArrowUp", preventDefault: function () {} });
+ok(window.PathBetween._active() === 0 && window.PathBetween._matches()[0] === pbFirst, "ArrowUp moves it back");
+window.PathBetween._keydown({ key: "Escape", preventDefault: function () {} });
+ok(byId("pb-dropdown").hidden === true && pbInput.value === "an", "Escape closes the list but keeps what you typed");
+// With the list dismissed, Enter falls through to the typed resolver.
+pbInput.value = "qzxwvy";
+var pbLeftEsc = window.PathBetween._peek().left;
+window.PathBetween._keydown({ key: "Enter", preventDefault: function () {} });
+ok(window.PathBetween._peek().left === pbLeftEsc, "with the list closed, Enter still resolves typed text (and a typo still costs nothing)");
+// A settled round has nothing to suggest.
+window.PathBetween._setMode("easy");
+var pbFin = window.PathBetween._peek();
+window.PathBetween._guess(pbFin.b);          // straight to the target or a miss; either way play on
+while (!window.PathBetween._peek().over) window.PathBetween._guess(pbAll[Math.floor(pbAll.length / 2)]);
+ok(pbType("an").length === 0 && byId("pb-dropdown").hidden === true, "no suggestions once the round is over");
 
 console.log("Addressable views — every game has its own URL, title and canonical");
 window.Hub._showView("thegrid");
@@ -1693,12 +1993,20 @@ ok(grShare.indexOf("The Grid 🏀 ") === 0 && grShare.indexOf("9/9") > 0, "Grid 
 ok(grShare.split("\n").length === 6 && (grShare.split("🟩").length - 1) === 9, "Grid share: three rows of three green cells");
 ok(grShare.indexOf("?game=thegrid") > 0, "Grid share: deep link");
 
-// Club Reveal — name it off the very first name
+// Common Club — named first guess, so the row is a single green square
 window.ClubReveal._setMode("daily");
 window.ClubReveal._guess(window.ClubReveal._peek().club);
 var cvShare = window.ClubReveal._shareText();
-ok(cvShare.indexOf("Club Reveal 🏀 ") === 0 && cvShare.indexOf("Named after 1 of ") > 0, "CV share: masthead + reveal count");
-ok(cvShare.indexOf("🟦🟩") > 0 && cvShare.indexOf("?game=clubreveal") > 0, "CV share: reveal pip + green + deep link");
+ok(cvShare.indexOf("Common Club 🏀 ") === 0, "CC share: masthead carries the new name");
+ok(cvShare.indexOf("Named it first guess") > 0, "CC share: scored on guesses, not reveals");
+ok(cvShare.indexOf("🟩") > 0 && cvShare.indexOf("🟥") === -1, "CC share: a clean win is one green square, no misses");
+ok(cvShare.indexOf("?game=clubreveal") > 0, "CC share: deep link (the internal id is deliberately unchanged)");
+// …and a miss shows as a red square before the green one.
+window.ClubReveal._setMode("both");
+var ccP = window.ClubReveal._peek();
+window.ClubReveal._guess(window.ClubReveal._answerClubs().filter(function (c) { return c !== ccP.club; })[0]);
+window.ClubReveal._guess(ccP.club);
+ok(window.ClubReveal._shareText().indexOf("🟥🟩") > 0, "CC share: one miss then the answer reads 🟥🟩");
 
 // Path Between — walk the shortest route
 window.PathBetween._setMode("daily");

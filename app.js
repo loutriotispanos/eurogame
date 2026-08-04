@@ -241,7 +241,7 @@
   var TITLES = {
     mystery: "Mystery Player", playerid: "Player ID", completefive: "Complete the Five",
     connections: "Connections", careerorder: "Career Order", thegrid: "The Grid",
-    clubreveal: "Club Reveal", pathbetween: "Path Between", oddoneout: "Odd One Out",
+    clubreveal: "Common Club", pathbetween: "Path Between", oddoneout: "Odd One Out",
     higherlower: "Higher or Lower", rostermaster: "Roster Master",
     records: "Records", archive: "Archive"
   };
@@ -360,6 +360,20 @@
       if (e && e.preventDefault) e.preventDefault();
       openFeedback();
     });
+    // The form is the route now. Listening for submit rather than the button's
+    // click means Enter in the fields works for free, and only one handler can run
+    // per attempt.
+    var fbf = $("feedback-form");
+    if (fbf) fbf.addEventListener("submit", function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      sendFeedback();
+    });
+    // Typing is the signal that a complaint is being acted on, so a stale message
+    // — the empty-field scolding, or a send that failed — clears itself.
+    var fbt = $("feedback-text");
+    if (fbt) fbt.addEventListener("input", function () { if (!fbSending) fbSay("", ""); });
+    var fbcx = $("feedback-cancel");
+    if (fbcx) fbcx.addEventListener("click", closeFeedback);
     var fbc = $("feedback-copy");
     if (fbc) fbc.addEventListener("click", function () { copyAddress(fbc); });
     var fbm = $("feedback-mail");
@@ -423,6 +437,21 @@
   // lifting mailto: addresses out of the HTML finds nothing. test.js enforces it.
   var FB = ["loutriotispanos", "gmail.com"];
 
+  // The relay that makes "Send" actually send. This site has no backend — it's
+  // static files on Pages — so a typed message needs somewhere to go, and asking
+  // the reporter to write the mail themselves is what kept failing: a mailto
+  // resolves to nothing at all on a machine with no default mail app.
+  //
+  // Web3Forms is a form-to-email endpoint: paste the access key from
+  // web3forms.com (they email you one; no account) and posts land in the inbox.
+  // The key is PUBLIC by design and safe in the source — it names the
+  // destination inbox without revealing the address, so the scraper guard above
+  // survives intact. Until it's set, the form says so and offers the mailto
+  // instead of pretending to have sent something.
+  var FB_KEY = "";
+  var FB_ENDPOINT = "https://api.web3forms.com/submit";
+  function hasRelay() { return typeof FB_KEY === "string" && FB_KEY.length > 10; }
+
   // Which build the reporter is ACTUALLY on, read from Cache Storage rather than
   // kept as a constant. The service worker caches under its own CACHE name, so
   // this reports the version their phone is really running — which for an
@@ -440,21 +469,34 @@
     } catch (e) {}
   }
 
+  // The context that turns "it's broken" into something reproducible. Gathered
+  // once here so the POST and the mailto fallback can never disagree about what
+  // they're reporting.
+  function diagnostics() {
+    var d = { version: swVersion || "(version unknown)", view: "home", theme: "", display: "", ua: "" };
+    try { d.view = (document.body.className || "").replace(/^view-/, "") || "home"; } catch (e) {}
+    try { d.theme = getTheme(); } catch (e) {}
+    try { d.display = window.screen.width + "x" + window.screen.height; } catch (e) {}
+    try { d.ua = navigator.userAgent || ""; } catch (e) {}
+    return d;
+  }
+  function fieldValue(id) {
+    var el = $(id);
+    return (el && typeof el.value === "string") ? el.value.replace(/^\s+|\s+$/g, "") : "";
+  }
+
   function feedbackURL() {
-    var view = "home", theme = "", scr = "", ua = "";
-    try { view = (document.body.className || "").replace(/^view-/, "") || "home"; } catch (e) {}
-    try { theme = getTheme(); } catch (e) {}
-    try { scr = window.screen.width + "x" + window.screen.height; } catch (e) {}
-    try { ua = navigator.userAgent || ""; } catch (e) {}
-    // Signed off with the context that turns "it's broken" into something
-    // reproducible. It sits under a divider so it reads as a footer, and the
-    // sender sees every word of it before deciding to send.
-    var sig = ["Euroball " + (swVersion || "(version unknown)"), "screen: " + view + (theme ? " / " + theme : "")];
-    if (scr) sig.push("display: " + scr);
-    if (ua) sig.push(ua);
+    var d = diagnostics(), name = fieldValue("feedback-name"), msg = fieldValue("feedback-text");
+    // The diagnostics sit under a divider so they read as a footer, and the
+    // sender sees every word of them before deciding to send. Whatever was typed
+    // into the form rides along, so falling back to mail loses nothing.
+    var sig = ["Euroball " + d.version, "screen: " + d.view + (d.theme ? " / " + d.theme : "")];
+    if (d.display) sig.push("display: " + d.display);
+    if (d.ua) sig.push(d.ua);
+    if (name) sig.unshift("from: " + name);
     return "mailto:" + FB[0] + "@" + FB[1] +
       "?subject=" + encodeURIComponent("Euroball feedback") +
-      "&body=" + encodeURIComponent("\n\n--\n" + sig.join("\n") + "\n");
+      "&body=" + encodeURIComponent(msg + "\n\n--\n" + sig.join("\n") + "\n");
   }
   function updateFeedbackHref() {
     var fb = $("feedback-link");
@@ -462,27 +504,124 @@
   }
   // Navigating straight to the mailto was the whole bug: mailto: resolves only if
   // the OS has a default mail app, and a machine whose mail lives in a browser tab
-  // has none — so the click did nothing, silently, with no way to tell. The modal
-  // always shows the address, so there is a way through either way.
+  // has none — so the click did nothing, silently, with no way to tell. It's kept
+  // as the fallback for a send that can't go out, never as the first route.
   function sendMail() {
     try { window.location.href = feedbackURL(); } catch (e) {}
   }
+  // The route that works no matter what the OS has installed, so it gets a test.
+  function copyAddress(btn) { copyShare(FB[0] + "@" + FB[1], btn || $("feedback-copy")); }
+
+  function fbSay(text, kind) {
+    var m = $("feedback-msg");
+    if (!m) return;
+    m.textContent = text || "";
+    m.className = "fb-msg" + (kind ? " " + kind : "");
+    m.hidden = !text;
+  }
+  // Reveals the mail route. Only ever called after a send has actually failed —
+  // offline, relay down, or no key configured — because the lesson of the silent
+  // mailto is that there must always be a second way out, not that it goes first.
+  function fbFallback() {
+    var f = $("feedback-fallback");
+    if (f) f.hidden = false;
+    // Stop advertising the route that just failed — "sent via a relay" reads as a
+    // contradiction directly above "that didn't get through".
+    var n = $("feedback-note");
+    if (n) n.hidden = true;
+    updateFeedbackHref();               // carries whatever is in the fields
+  }
+  var fbSending = false;
+  function sendFeedback() {
+    if (fbSending) return;
+    var msg = fieldValue("feedback-text"), name = fieldValue("feedback-name");
+    if (!msg) { fbSay("Add a few words first — the name is optional, this isn't.", "err"); focusField("feedback-text"); return; }
+    var bot = $("feedback-bot");
+    if (bot && bot.checked) { fbSay("Thanks — that's landed.", "good"); return; }   // honeypot: swallowed, never sent
+    lsSet("elg:fbname", name);          // so a second report doesn't retype it
+    if (!hasRelay() || !window.fetch) {
+      fbSay("Sending isn't switched on yet. Mail it instead — the message is already prefilled.", "err");
+      fbFallback();
+      return;
+    }
+    var d = diagnostics(), btn = $("feedback-send");
+    fbSending = true;
+    if (btn) { btn.disabled = true; btn.textContent = "Sending…"; }
+    fbSay("", "");
+    var done = function (okd) {
+      fbSending = false;
+      if (btn) { btn.disabled = false; btn.textContent = "Send"; }
+      if (okd) {
+        lsSet("elg:fbdraft", "");
+        var t = $("feedback-text");
+        if (t) t.value = "";
+        fbSay("Thanks — that's landed. It's read by a person, not a queue.", "good");
+      } else {
+        // Keep the text exactly where it is and stash it, so a failed send
+        // survives both the modal closing and the tab closing.
+        lsSet("elg:fbdraft", msg);
+        fbSay("That didn't get through — you may be offline. Your words are saved; mail them instead.", "err");
+        fbFallback();
+      }
+    };
+    try {
+      window.fetch(FB_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          access_key: FB_KEY,
+          subject: "Euroball feedback" + (name ? " from " + name : ""),
+          from_name: "Euroball",
+          name: name || "(no name given)",
+          message: msg,
+          version: d.version,
+          screen: d.view + (d.theme ? " / " + d.theme : ""),
+          display: d.display,
+          user_agent: d.ua
+        })
+      }).then(function (res) {
+        if (!res || !res.ok) { done(false); return; }
+        // A 200 with success:false is still a refusal (bad key, spam filter), so
+        // the body decides — not the status code.
+        var after = function (body) { done(!body || body.success !== false); };
+        if (res.json) res.json().then(after, function () { after(null); });
+        else after(null);
+      }, function () { done(false); });
+    } catch (e) { done(false); }
+  }
+  function focusField(id) {
+    var el = $(id);
+    if (el && el.focus) { try { el.focus(); } catch (e) {} }
+  }
+
   var fbLastFocus = null;
   function openFeedback() {
     var ov = $("feedback-modal");
     if (!ov) { sendMail(); return; }          // no modal in the DOM → old behaviour
     var addr = $("feedback-addr");
     if (addr) addr.textContent = FB[0] + "@" + FB[1];   // written on open, never in the source
+    var f = $("feedback-fallback");
+    if (f) f.hidden = true;                   // a previous failure doesn't haunt a fresh open
+    var n = $("feedback-note");
+    if (n) n.hidden = false;
+    fbSay("", "");
+    var n = $("feedback-name");
+    if (n && !n.value) n.value = lsGet("elg:fbname", "") || "";
+    var t = $("feedback-text");
+    if (t && !t.value) t.value = lsGet("elg:fbdraft", "") || "";
     fbLastFocus = document.activeElement;
     ov.hidden = false;
-    var c = $("feedback-copy");
-    if (c && c.focus) c.focus();
+    // Straight to the message: the name is optional and often already filled, and
+    // the point of the modal is the sentence they came to write.
+    focusField("feedback-text");
   }
-  // The route that works no matter what the OS has installed, so it gets a test.
-  function copyAddress(btn) { copyShare(FB[0] + "@" + FB[1], btn || $("feedback-copy")); }
   function closeFeedback() {
     var ov = $("feedback-modal");
     if (ov) ov.hidden = true;
+    // Unsent words are kept. Closing the modal by accident — Escape, a stray tap
+    // on the overlay — used to cost nothing because there was nothing to lose;
+    // now there is.
+    lsSet("elg:fbdraft", fieldValue("feedback-text"));
     if (fbLastFocus && fbLastFocus.focus) fbLastFocus.focus();
     fbLastFocus = null;
   }
@@ -510,7 +649,11 @@
     _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme,
     _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
     _copyAddress: copyAddress, _showView: showView, _pushNav: pushNav, _urlFor: urlFor,
-    _isMode: isMode, _pageTitle: pageTitle, _modes: MODES
+    _isMode: isMode, _pageTitle: pageTitle, _modes: MODES,
+    // The form. _setKey lets the harness drive both branches — with a relay
+    // configured and without — since the shipped key is empty until it's pasted in.
+    _sendFeedback: sendFeedback, _hasRelay: hasRelay, _endpoint: FB_ENDPOINT,
+    _setKey: function (k) { FB_KEY = k; }
   };
 
   // Auto-wire on load, unless a harness asked to drive Hub without DOM wiring.

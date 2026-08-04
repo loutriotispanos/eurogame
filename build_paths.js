@@ -31,6 +31,7 @@ global.document = {
   createElement: function () { return {}; },
   querySelector: function () { return null; }
 };
+eval(fs.readFileSync("clubs.js", "utf8"));   // pathbetween.js reads its club aliases from here
 eval(fs.readFileSync("careers.js", "utf8"));
 window.PATHS = [];                        // not built yet — pathbetween.js only needs careers
 eval(fs.readFileSync("pathbetween.js", "utf8"));
