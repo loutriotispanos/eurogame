@@ -172,6 +172,7 @@
   var club = null, pair = null, guesses = [];
   var over = false, won = false, dealt = false;
   var giveArmed = false, giveTimer = null;   // the daily asks once before it commits
+  var matches = [], activeIndex = -1;        // the suggestion list
 
   // --- Stats: practice (simple) + daily (streak) -------------------------------
   function defaultStats() { return { played: 0, solved: 0, curStreak: 0, maxStreak: 0 }; }
@@ -305,12 +306,73 @@
     return p.name + " " + spans.join(", ");
   }
 
-  // --- Guess resolution (no suggestions — pure recall) --------------------------
-  // The autocomplete listed the answerable clubs, which in a game about naming
-  // the club is close to printing the answer. Gone. Typed text resolves on its
-  // own — exact, or a partial only one club matches, so "pana" is enough — and
-  // anything else is reported without costing a guess.
   function flash(msg) { if (els.flash) { els.flash.textContent = msg; els.flash.hidden = !msg; } }
+
+  // --- Suggestions --------------------------------------------------------------
+  // This list needed more thought than Path Between's. There, the pool is 466
+  // player names — a needle in a haystack, and the list is plainly just a spelling
+  // aid. Here the pool IS the answer space: 22 clubs. v69 removed it for exactly
+  // that reason.
+  //
+  // What settles it is that the list never says which of the matches the two
+  // players actually shared, and any EuroLeague follower can already recite the
+  // twenty-two. So what it really removes is the spelling of "Crvena Zvezda" and
+  // "Anadolu Efes", not the deduction. Two safeguards keep it honest: nothing
+  // appears until you type, so it can't be browsed as a menu of the answer space,
+  // and clubs you've already tried drop out.
+  function closeDropdown() {
+    if (!els.dropdown) return;
+    els.dropdown.hidden = true; els.dropdown.innerHTML = ""; matches = []; activeIndex = -1;
+    els.input.setAttribute("aria-expanded", "false"); els.input.removeAttribute("aria-activedescendant");
+  }
+  function renderDropdown() {
+    if (!els.dropdown) return;
+    els.dropdown.innerHTML = "";
+    if (!matches.length) {
+      var raw = els.input.value.trim();
+      if (raw) {
+        var empty = document.createElement("div"); empty.className = "dropdown-empty";
+        // "Already tried" reads very differently from "no such club" — one of them
+        // is the player's own memory failing, the other is ours.
+        empty.textContent = guesses.some(function (g) { return norm(g).indexOf(norm(raw)) !== -1; })
+          ? "Already tried that one" : "No club by that name";
+        els.dropdown.appendChild(empty); els.dropdown.hidden = false; els.input.setAttribute("aria-expanded", "true");
+      } else closeDropdown();
+      return;
+    }
+    matches.forEach(function (name, i) {
+      var item = document.createElement("div");
+      item.className = "option" + (i === activeIndex ? " active" : "");
+      item.id = "cv-opt-" + i; item.setAttribute("role", "option");
+      item.setAttribute("aria-selected", i === activeIndex ? "true" : "false");
+      var nm = document.createElement("span"); nm.className = "opt-name"; nm.textContent = name;
+      item.appendChild(nm);                       // no avatar: these are clubs, not people
+      item.addEventListener("pointerdown", function (e) { e.preventDefault(); submitGuess(name); });
+      els.dropdown.appendChild(item);
+    });
+    els.dropdown.hidden = false; els.input.setAttribute("aria-expanded", "true");
+    els.input.setAttribute("aria-activedescendant", activeIndex >= 0 ? "cv-opt-" + activeIndex : "");
+  }
+  function refreshMatches() {
+    if (!els.dropdown) return;
+    if (over) { closeDropdown(); return; }
+    var q = norm(els.input.value.trim());
+    if (!q) { closeDropdown(); return; }          // never a browsable index of the 22
+    matches = answerClubs().filter(function (n) {
+      return guesses.indexOf(n) < 0 && norm(n).indexOf(q) !== -1;
+    }).slice(0, 8);
+    activeIndex = matches.length ? 0 : -1;
+    renderDropdown();
+  }
+
+  // --- Guess resolution ---------------------------------------------------------
+  // Still the path Enter takes with no suggestion highlighted. Typed text resolves
+  // on its own — exact, or a partial only one club matches, so "pana" is enough —
+  // and anything else is reported without costing a guess.
+  //
+  // The pool here is NOT filtered by what's been guessed, unlike the list above:
+  // retyping a club you already tried should get "you've already tried" from
+  // submitTyped, not "no such club".
   function resolve(text) {
     var raw = String(text == null ? "" : text).trim(), q = norm(raw);
     if (!q) return null;
@@ -341,7 +403,7 @@
   }
   function finish() {
     over = true;
-    els.input.disabled = true; flash("");
+    els.input.disabled = true; flash(""); closeDropdown();
     if (mode === "daily") { recordDaily(won); saveDaily(); } else record(won);
     renderStats(); updateCounter(); updateButtons(); showBanner();
     if (els.sr) els.sr.textContent = (won ? "Correct! " : "Out of guesses. ") + "It was " + club + ".";
@@ -350,7 +412,7 @@
     if (over || !name) return;
     disarmGiveUp();                    // playing on withdraws a half-pressed concession
     if (guesses.some(function (g) { return g === name; })) return;   // repeat costs nothing
-    els.input.value = "";
+    els.input.value = ""; closeDropdown();
     if (name === club) { won = true; finish(); return; }
     guesses.push(name);
     renderGuesses();
@@ -386,7 +448,7 @@
   function resetState() {
     guesses = []; over = false; won = false; dealt = true;
     disarmGiveUp();
-    els.input.value = ""; els.input.disabled = false; els.banner.hidden = true;
+    els.input.value = ""; els.input.disabled = false; els.banner.hidden = true; closeDropdown();
   }
   function dealDaily() {
     var seed = "cc:" + dayKey;
@@ -476,6 +538,14 @@
 
   // --- Events / init -----------------------------------------------------------------
   function onKeyDown(e) {
+    if (els.dropdown && !els.dropdown.hidden) {
+      if (e.key === "ArrowDown" && matches.length) { e.preventDefault(); activeIndex = (activeIndex + 1) % matches.length; renderDropdown(); return; }
+      if (e.key === "ArrowUp" && matches.length) { e.preventDefault(); activeIndex = (activeIndex - 1 + matches.length) % matches.length; renderDropdown(); return; }
+      if (e.key === "Enter" && activeIndex >= 0 && matches[activeIndex]) { e.preventDefault(); submitGuess(matches[activeIndex]); return; }
+      // Escape dismisses the list and KEEPS what was typed; a second Escape clears
+      // the field, which is what it always did.
+      if (e.key === "Escape") { e.preventDefault(); closeDropdown(); return; }
+    }
     if (e.key === "Enter") { e.preventDefault(); submitTyped(); }
     else if (e.key === "Escape") { els.input.value = ""; flash(""); }
   }
@@ -501,7 +571,7 @@
   }
 
   function init() {
-    els.input = $("cv-input"); els.flash = $("cv-flash"); els.list = $("cv-list");
+    els.input = $("cv-input"); els.dropdown = $("cv-dropdown"); els.flash = $("cv-flash"); els.list = $("cv-list");
     els.counter = $("cv-counter"); els.banner = $("cv-banner"); els.guesses = $("cv-guesses");
     els.next = $("cv-next"); els.giveup = $("cv-giveup");
     els.stats = $("cv-stats"); els.sr = $("cv-sr"); els.modeRow = $("cv-modes");
@@ -511,6 +581,9 @@
     if (!els.input || !CAREERS.length) return;
 
     els.input.addEventListener("keydown", onKeyDown);
+    els.input.addEventListener("input", refreshMatches);
+    els.input.addEventListener("focus", refreshMatches);
+    document.addEventListener("click", function (e) { if (e.target !== els.input && els.dropdown && !els.dropdown.contains(e.target)) closeDropdown(); });
     els.next.addEventListener("click", deal);
     if (els.giveup) els.giveup.addEventListener("click", giveUp);
     els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || isArchive) setMode("daily"); });
@@ -540,6 +613,11 @@
     _guess: submitGuess,
     _resolve: resolve,
     _shareText: shareText,
+    _refresh: refreshMatches,
+    _closeDropdown: closeDropdown,
+    _matches: function () { return matches.slice(); },
+    _active: function () { return activeIndex; },
+    _keydown: onKeyDown,
     _famous: famous,
     _answerClubs: answerClubs,
     _members: members,

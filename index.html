@@ -1551,13 +1551,23 @@
       <div id="cv-guesses" class="pid-guesses"></div>
       <div id="cv-flash" class="gr-flash" role="status" aria-live="polite" hidden></div>
       <div class="controls">
-        <!-- No suggestion list any more: pure recall. The combobox roles went with
-             it, and autocomplete is a deliberately unknown token — Chrome ignores
-             "off" on a field it reads as a name and offers the user's own, which is
-             the same trap Roster Master hit. -->
+        <!-- The suggestion list took an argument, because unlike Path Between's
+             466 names, this pool IS the answer space: 22 clubs. It's allowed
+             because it never says which of the matches the two players shared, and
+             any follower can already recite the twenty-two — so it removes the
+             spelling of "Crvena Zvezda", not the deduction. Nothing shows until
+             you type, so it can't be browsed as a menu of the answers.
+
+             autocomplete is a deliberately unknown token, not "off": Chrome
+             ignores "off" on a field it reads as a name and offers the user's own
+             contact details, which is the trap Roster Master hit. -->
         <div class="search">
           <input id="cv-input" type="text" autocomplete="cv-guess" spellcheck="false"
-                 placeholder="Which club did both play for?" aria-label="Type the club they have in common" />
+                 placeholder="Which club did both play for?"
+                 role="combobox" aria-expanded="false" aria-controls="cv-dropdown"
+                 aria-autocomplete="list" aria-haspopup="listbox"
+                 aria-label="Type the club they have in common" />
+          <div id="cv-dropdown" class="dropdown" role="listbox" aria-label="Club suggestions" hidden></div>
         </div>
         <button id="cv-giveup" type="button">Give up</button>
         <button id="cv-next" type="button">New pair</button>
@@ -1779,7 +1789,7 @@
         <li><strong>They did not have to be teammates.</strong> Both wore the shirt; it may have been twenty years apart. (Overlapping years are <em>Path Between</em>'s game.)</li>
         <li><strong>There is only ever one right answer.</strong> A pair is only used if it shares one single club out of every club we hold — so if you can think of two, one of them isn't in our data.</li>
         <li>The answer is always a <strong>EuroLeague club or a club with real retired greats</strong> — never a player's stop in Australia or the NBA, even though we know about those.</li>
-        <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type the club and press Enter; part of the name is enough when it's unique ("pana" will do). A club we can't place isn't a guess and costs you nothing.</li>
+        <li><strong>Clubs suggest themselves as you type</strong> — arrows and Enter to pick, or type it out; part of the name is enough when it's unique ("pana" will do). The list only spells the club for you, it <strong>never says which one they shared</strong>, and clubs you've already tried drop out of it. A club we can't place isn't a guess and costs you nothing.</li>
         <li><strong>Give up</strong> names the club for you. On the Daily it asks once before it commits, and records a loss — but it still counts as <em>played</em>, so your hub streak survives.</li>
       </ul>
       <h3>Game modes</h3>
