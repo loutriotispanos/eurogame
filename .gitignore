@@ -7,3 +7,6 @@ _*.html
 # Windows cruft
 Thumbs.db
 desktop.ini
+
+# Playwright MCP scratch output
+.playwright-mcp/

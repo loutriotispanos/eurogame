@@ -1,7 +1,7 @@
 {
   "name": "Euroball — Daily Basketball Puzzles",
   "short_name": "Euroball",
-  "description": "Eleven daily puzzle games about European basketball. No ads, no tracking, reads offline.",
+  "description": "Eleven daily puzzle games about European basketball. No ads, no cookies, no sign-up, reads offline.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
