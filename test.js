@@ -404,6 +404,30 @@ ok(window.LINEUPS.every(function (L) { var f = {}; L.five.forEach(function (p) {
 var c5seasons = {}; window.LINEUPS.forEach(function (L) { c5seasons[L.season] = 1; });
 ok(window.LINEUPS.filter(function (L) { return L.champion; }).length === Object.keys(c5seasons).length, "exactly one champion per season");
 ok(window.LINEUPS.every(function (L) { var p = {}; L.five.forEach(function (x) { p[x.pos] = 1; }); return Object.keys(p).length === 5; }), "every five has 5 distinct positions");
+// A lineup must not contradict careers.js: whoever careers.js knows must have a
+// stint at that club that STARTS BEFORE the F4 season (season 2021 = 2020-21, so
+// from <= 2020). from == season is how the one real data bug looked (Shved was
+// filed CSKA from 2021 — he joined the summer AFTER the Cologne F4), so it only
+// passes for verified mid-season joiners.
+(function () {
+  var MIDSEASON = { "Gabriel Lundberg@2021 CSKA Moscow": 1,   // joined Feb 2021, started the 3rd-place game
+                    "Daniel Theis@2025 AS Monaco": 1 };       // joined Feb 2025 from the NBA
+  var CB = {}; window.CAREERS.forEach(function (c) { CB[c.name] = c; });
+  var bad = [];
+  window.LINEUPS.forEach(function (L) {
+    L.five.forEach(function (p) {
+      var c = CB[p.name];
+      if (!c) return;                                        // not in careers.js — nothing to contradict
+      var fits = c.career.some(function (e) {
+        if (window.CLUBS.canonical(e.team) !== window.CLUBS.canonical(L.team)) return false;
+        if (e.to !== null && e.to < L.season - 1) return false;
+        return e.from <= L.season - 1 || (e.from === L.season && MIDSEASON[p.name + "@" + L.season + " " + L.team]);
+      });
+      if (!fits) bad.push(p.name + " in the " + L.season + " " + L.team + " five");
+    });
+  });
+  ok(bad.length === 0, "no lineup contradicts careers.js club years" + (bad.length ? " — " + bad.join("; ") : ""));
+})();
 
 console.log("Complete the Five game");
 var c5In = byId("c5-input"), c5Dd = byId("c5-dropdown");
