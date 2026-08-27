@@ -41,14 +41,20 @@
   // with his current-roster and Final-Four clubs. Every offered name is then
   // accurately answerable, and cells still have several right answers.
   var UNIVERSE = null;
+  // Careers keep era-accurate club names ("Tau Ceramica"), criteria use the
+  // modern one ("Baskonia") — clubs.js is the shared map that says they're the
+  // same club, so the 2000s greats answer today's criterion. Registered under
+  // BOTH names: canonical for the criteria, raw so nothing that matched before
+  // stops matching.
+  var canonClub = (window.CLUBS && window.CLUBS.canonical) ? window.CLUBS.canonical : function (t) { return t; };
   function universe() {
     if (UNIVERSE) return UNIVERSE;
     var u = {};
     CAREERS.forEach(function (c) {
       var e = u[c.name] = { name: c.name, nat: c.nationality, pos: c.position, clubs: {} };
-      c.career.forEach(function (s) { e.clubs[s.team] = 1; });
+      c.career.forEach(function (s) { e.clubs[s.team] = 1; e.clubs[canonClub(s.team)] = 1; });
     });
-    function addClub(name, team) { if (u[name]) u[name].clubs[team] = 1; }
+    function addClub(name, team) { if (u[name]) { u[name].clubs[team] = 1; u[name].clubs[canonClub(team)] = 1; } }
     PLAYERS.forEach(function (p) { addClub(p.name, p.team); });
     LEGENDS.forEach(function (p) { addClub(p.name, p.team); });
     LINEUPS.forEach(function (L) { L.five.forEach(function (p) { addClub(p.name, L.team); }); });

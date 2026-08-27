@@ -36,6 +36,7 @@ eval(fs.readFileSync("players.js", "utf8"));
 eval(fs.readFileSync("legends.js", "utf8"));
 eval(fs.readFileSync("careers.js", "utf8"));
 eval(fs.readFileSync("lineups.js", "utf8"));
+eval(fs.readFileSync("clubs.js", "utf8"));   // same-club era names (Tau Ceramica = Baskonia) — thegrid.js folds them via CLUBS.canonical, and the generator must share that definition or the two disagree
 window.GRIDS = [];                       // not built yet — thegrid.js only needs the data
 eval(fs.readFileSync("thegrid.js", "utf8"));
 const G = window.TheGrid;

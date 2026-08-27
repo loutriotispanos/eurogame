@@ -68,6 +68,23 @@ const TEAM_FIX = {
   // folded onto the spelling already used elsewhere in this file so one real
   // club never splits into two nodes (matters for The Grid / Path Between).
   "Brose Baskets": "Brose Bamberg",
+  // Baskonia's later sponsor eras, folded to the modern name (the 1997-2009 "Tau
+  // Ceramica" era stays its own display name — clubs.js merges the lineage for
+  // The Grid / Path Between / Common Club).
+  "Caja Laboral": "Baskonia",
+  "Laboral Kutxa": "Baskonia",
+  "ALBA Berlin": "Alba Berlin",
+  "Neptunas Klaipeda": "Neptunas",
+  "La Laguna Tenerife": "CB Canarias",          // same club, sponsor name
+  "Iberostar Tenerife": "CB Canarias",          // same club, earlier sponsor name
+  "Scandone Avellino": "Avellino",
+  "Tofas Bursa": "Tofas",
+  "Rytas Vilnius": "Lietuvos Rytas",            // club renamed 2019, one node
+  "Spartak Saint Petersburg": "Spartak St. Petersburg",  // pre-existing split, both were live
+  "Shanxi Loongs": "Shanxi Brave Dragons",      // CBA franchise renamed ~2023
+  "MoraBanc Andorra": "Andorra",
+  "Zagreb": "KK Zagreb",
+  "Nevezis Kedainiai": "Nevezis",
   "Sevilla": "CB Sevilla",
   "Stefanel Milano": "Olimpia Milano",
   "BC Khimki": "Khimki",
