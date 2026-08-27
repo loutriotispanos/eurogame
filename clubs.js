@@ -11,14 +11,18 @@
  *                   club when it really shares two, i.e. a puzzle whose
  *                   "only right answer" isn't.
  *
- * Measured, not assumed: of the fifteen entries below, only the Metropolitans 92
- * franchise currently has TWO forms live in careers.js (Poirier is filed under
- * "Paris-Levallois", Prepelic under "Levallois Metropolitans"). Merging them
- * rejects exactly 2 pairs that would otherwise ship as one-answer puzzles —
- * Poirier+Prepelic and Prepelic+Sako, both of which would have claimed a single
- * shared club while quietly sharing a second. The other thirteen entries are
- * defensive: only one of their two spellings appears today, and they cost
- * nothing until a roster update introduces the other.
+ * Measured, not assumed: three franchises currently have TWO forms live in
+ * careers.js. Metropolitans 92 (Poirier is filed under "Paris-Levallois",
+ * Prepelic under "Levallois Metropolitans") — merging them rejects exactly 2
+ * pairs that would otherwise ship as one-answer puzzles, Poirier+Prepelic and
+ * Prepelic+Sako. Baskonia (the 2000s legends are filed era-accurately under
+ * "Tau Ceramica" — Scola, Splitter, Oberto, Garbajosa — while every later
+ * career says "Baskonia"), which The Grid also leans on: without the merge a
+ * Baskonia criterion can't see the Tau-era greats, which is a big part of why
+ * its Baskonia cells felt thin. And CB Sevilla ("Caja San Fernando" is the same
+ * club's sponsor-era name). The remaining entries are defensive: only one of
+ * their spellings appears today, and they cost nothing until a roster update
+ * introduces the other.
  *
  * This lives in its own file rather than inside either game because two copies
  * drifting apart would break Common Club's guarantee silently — Path Between
@@ -38,6 +42,10 @@
     "Nanterre 92": "Nanterre",
     "Paris-Levallois": "Metropolitans 92",       // one franchise, three era names
     "Levallois Metropolitans": "Metropolitans 92",
+    "Tau Ceramica": "Baskonia",                  // one club, four sponsor eras
+    "Caja Laboral": "Baskonia",
+    "Laboral Kutxa": "Baskonia",
+    "Caja San Fernando": "CB Sevilla",
     "Buducnost Podgorica": "Buducnost",
     "Baxi Manresa": "Manresa",
     "Aquila Basket Trento": "Trento",
