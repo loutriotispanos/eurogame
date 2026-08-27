@@ -1639,9 +1639,19 @@ ok(fbSent === null, "form: an empty message is never POSTed");
 ok(/err/.test(byId("feedback-msg").className), "form: …and says so in red");
 ok(byId("feedback-fallback").hidden === true, "form: a validation refusal is not a failure — no fallback shown");
 
-// The state this actually ships in: no key pasted in yet. It must SAY so rather
-// than pretend to send — and hand over the mail route.
-ok(window.Hub._hasRelay() === false, "form: ships with no relay key (paste one in to switch sending on)");
+// The state this ships in NOW: a real key, pasted in 2026-08-27. For the three
+// weeks after v75 it shipped empty, so every Send answered "sending isn't
+// switched on yet" and handed over the mail route — the form was never broken,
+// it was never on. The literal is asserted in the source so a truncated paste
+// or a stray re-blanking is caught here, not by the next reporter.
+ok(window.Hub._hasRelay() === true, "form: ships WITH a relay key — Send actually sends");
+ok(/var FB_KEY = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";/.test(fs.readFileSync("app.js", "utf8")),
+   "form: …and the key in the source is a whole Web3Forms key, not a placeholder or a partial paste");
+
+// The unswitched-on state stays tested — it is one lost key away from coming
+// back. It must SAY so rather than pretend to send, and hand over the mail route.
+window.Hub._setKey("");
+ok(window.Hub._hasRelay() === false, "form: blanking the key switches sending off again");
 fbReset(); fbFill("Panagiotis", "The Grid printed a dash on the last cell");
 window.Hub._sendFeedback();
 ok(fbSent === null, "form: with no key configured, nothing is POSTed");
@@ -1937,7 +1947,10 @@ BP.PAGES.forEach(function (p) {
   // The strongest check in this block: rebuild from the CURRENT index.html and
   // compare. If someone edits the app and forgets `node build_pages.js`, eleven
   // pages quietly keep serving the old app — this is what says so.
-  if (h !== BP.buildPage(bpShell, p)) bpDrift.push(p.slug);
+  // Compared ending-blind: core.autocrlf=true materialises a fresh checkout
+  // with CRLF while the builder joins its inserted sections with \n, so the
+  // raw bytes would flag all eleven pages as drifted when nothing real changed.
+  if (h.replace(/\r\n/g, "\n") !== BP.buildPage(bpShell, p).replace(/\r\n/g, "\n")) bpDrift.push(p.slug);
   var t = (h.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "";
   var d = (h.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
   bpTitles[t] = (bpTitles[t] || 0) + 1;

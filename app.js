@@ -548,7 +548,7 @@
   // destination inbox without revealing the address, so the scraper guard above
   // survives intact. Until it's set, the form says so and offers the mailto
   // instead of pretending to have sent something.
-  var FB_KEY = "";
+  var FB_KEY = "0a2e9025-08d8-45a5-be6e-607bcccf7746";
   var FB_ENDPOINT = "https://api.web3forms.com/submit";
   function hasRelay() { return typeof FB_KEY === "string" && FB_KEY.length > 10; }
 
