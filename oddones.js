@@ -51,7 +51,7 @@ window.ODDONES = [
   {"names":["Rodions Kurucs","Timothe Luwawu-Cabarrot","Jose Calderon","Timofey Mozgov"],"odd":"Jose Calderon","theme":"played for Brooklyn Nets","axis":"club"},
   {"names":["Mantas Kalnietis","Juani Marcos","Luca Vildoza","Leandro Bolmaro"],"odd":"Mantas Kalnietis","theme":"represent Argentina","axis":"nat"},
   {"names":["Stratos Perperoglou","Mbaye Ndiaye","Errick McCollum","Tyrese Rice"],"odd":"Mbaye Ndiaye","theme":"played for Panionios","axis":"club"},
-  {"names":["Tornike Shengelia","Will Clyburn","Dimitris Diamantidis","Daniel Hackett"],"odd":"Dimitris Diamantidis","theme":"started at the 2021 CSKA Moscow Final Four","axis":"f4"},
+  {"names":["Tornike Shengelia","Will Clyburn","Dimitris Diamantidis","Gabriel Lundberg"],"odd":"Dimitris Diamantidis","theme":"started at the 2021 CSKA Moscow Final Four","axis":"f4"},
   {"names":["Sergii Gladyr","Drew Nicholas","Alex Len","Joel Bolomboy"],"odd":"Drew Nicholas","theme":"represent Ukraine","axis":"nat"},
   {"names":["Terry Tarpey","Kyle Hines","Chima Moneke","Clement Frisch"],"odd":"Kyle Hines","theme":"played for Denain-Voltaire","axis":"club"},
   {"names":["Yankuba Sima","Shaquielle McKissic","Omer Yurtseven","Andres Nocioni"],"odd":"Andres Nocioni","theme":"wore #77","axis":"number"},

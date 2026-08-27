@@ -268,9 +268,9 @@ const RAW = [
     { name: "Shavon Shields", pos: "SF", fame: 3 }, { name: "Zach LeDay", pos: "PF", fame: 5 },
     { name: "Kyle Hines", pos: "C", fame: 2 } ] },
   { team: "CSKA Moscow", season: 2021, champion: false, five: [
-    { name: "Alexey Shved", pos: "PG", fame: 1 }, { name: "Daniel Hackett", pos: "SG", fame: 4 },
-    { name: "Will Clyburn", pos: "SF", fame: 2 }, { name: "Tornike Shengelia", pos: "PF", fame: 3 },
-    { name: "Nikola Milutinov", pos: "C", fame: 5 } ] }
+    { name: "Daniel Hackett", pos: "PG", fame: 3 }, { name: "Gabriel Lundberg", pos: "SG", fame: 5 },
+    { name: "Will Clyburn", pos: "SF", fame: 1 }, { name: "Tornike Shengelia", pos: "PF", fame: 2 },
+    { name: "Johannes Voigtmann", pos: "C", fame: 4 } ] }
 ];
 
 // --- Validate + canonicalise ----------------------------------------------
