@@ -79,7 +79,12 @@ for (const name in U) {
 // grids stay on-theme — answer players may still carry NBA/other clubs in their
 // careers, those just aren't used as row/column headers.
 const TEAMS = window.TEAMS || {};
-const CLUBS = Object.keys(clubCount).filter(c => TEAMS[c] && clubCount[c] >= 6).sort();
+// Alias-source names (Tau Ceramica → Baskonia) stay valid as ANSWERS but must
+// not become criteria of their own: post-merge, a board pairing "Tau Ceramica"
+// with "Baskonia" is the same club twice, two near-identical criteria
+// competing for the same players under the each-player-once rule.
+const canonicalOnly = c => !window.CLUBS || window.CLUBS.canonical(c) === c;
+const CLUBS = Object.keys(clubCount).filter(c => TEAMS[c] && canonicalOnly(c) && clubCount[c] >= 6).sort();
 const NATS = Object.keys(natCount).filter(n => natCount[n] >= 6).sort();
 const POSITIONS = ["Guard", "Forward", "Center"];
 console.log("candidates: " + CLUBS.length + " EuroLeague clubs, " + NATS.length + " nationalities");
