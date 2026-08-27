@@ -1859,19 +1859,26 @@ ok(pbType("an").length === 0 && byId("pb-dropdown").hidden === true, "no suggest
 console.log("Addressable views — every game has its own URL, title and canonical");
 window.Hub._showView("thegrid");
 ok(doc.title === "The Grid 🏀 Euroball", "each game sets its own document title");
-ok(byId("canonical").href === "https://euroballgames.com/?game=thegrid",
-   "the canonical points at the GAME's URL, not the hub — otherwise Google discards all eleven");
+ok(byId("canonical").href === "https://euroballgames.com/the-grid/",
+   "the canonical points at the GAME's own page, not the hub — otherwise Google discards all eleven");
 window.Hub._showView("home");
 ok(doc.title.indexOf("Euroball") === 0 && doc.title.indexOf("daily") > 0, "the hub keeps the full masthead title");
 ok(byId("canonical").href === "https://euroballgames.com/", "the hub canonicalises to the apex");
 // Navigating must WRITE the url now; it used to pass "" and keep the address bar
 // on "/" forever, which is why eleven games shared one URL. Driven through
 // _pushNav rather than a real navigation so it can't disturb the games' state.
-ok(window.Hub._urlFor("thegrid").indexOf("?game=thegrid") > 0, "a game's URL carries ?game=");
-ok(window.Hub._urlFor("home").indexOf("?game=") === -1, "the hub's URL carries no query");
+ok(window.Hub._urlFor("thegrid").indexOf("/the-grid/") >= 0, "a game's URL is its own directory");
+ok(window.Hub._urlFor("thegrid").indexOf("?game=") === -1,
+   "…and the old query form is gone from what we WRITE (it's still read — see the legacy test below)");
+ok(window.Hub._urlFor("home").indexOf("?game=") === -1 && window.Hub._urlFor("home").indexOf("-") === -1,
+   "the hub's URL carries no query and no slug");
+// Records and Archive keep the query form on purpose: no page is generated for
+// them, and a path with no file behind it would 404 on refresh.
+ok(window.Hub._urlFor("records").indexOf("?game=records") > 0,
+   "a viewer-only page keeps the query form — nothing was generated at a path for it");
 win._pushedURL = "sentinel";
 window.Hub._pushNav({ v: "thegrid" });
-ok(typeof win._pushedURL === "string" && win._pushedURL.indexOf("?game=thegrid") > 0,
+ok(typeof win._pushedURL === "string" && win._pushedURL.indexOf("/the-grid/") >= 0,
    "navigation writes the view's URL, not an empty string");
 // A challenge link's payload lives in the hash — rewriting the URL would drop it.
 var chHash = win.location.hash;
@@ -1884,11 +1891,17 @@ win.location.hash = chHash;
 // The crawler files have to agree with the app, or the sitemap advertises URLs
 // that don't open anything.
 var smXML = fs.readFileSync("sitemap.xml", "utf8");
-var smGames = (smXML.match(/\?game=([a-z]+)/g) || []).map(function (s) { return s.slice(6); });
+var smSlugs = (smXML.match(/<loc>https:\/\/euroballgames\.com\/([a-z0-9-]+)\/<\/loc>/g) || [])
+  .map(function (s) { return s.replace(/^<loc>https:\/\/euroballgames\.com\//, "").replace(/\/<\/loc>$/, ""); });
 var appGames = ["mystery", "playerid", "completefive", "connections", "careerorder", "thegrid",
                 "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"];
-ok(smGames.length === appGames.length && appGames.every(function (g) { return smGames.indexOf(g) >= 0; }),
+var appSlugs = appGames.map(function (g) { return window.Hub._slugs[g]; });
+ok(smSlugs.length === appSlugs.length && appSlugs.every(function (s) { return smSlugs.indexOf(s) >= 0; }),
    "sitemap lists every one of the eleven games, and nothing that isn't one");
+// The <loc>s only — the file's own comment explains the old ?game= URLs, and
+// matching the whole document would fail on the explanation rather than the data.
+ok((smXML.match(/<loc>[^<]*<\/loc>/g) || []).every(function (l) { return l.indexOf("?game=") === -1; }),
+   "…and no longer advertises the query URLs, which would be a second live address per game");
 ok(smXML.indexOf("<?xml") === 0 && smXML.indexOf("</urlset>") > 0, "sitemap is well-formed");
 var rbTXT = fs.readFileSync("robots.txt", "utf8");
 ok(/Sitemap:\s*https:\/\/euroballgames\.com\/sitemap\.xml/.test(rbTXT), "robots.txt points crawlers at the sitemap");
@@ -1898,6 +1911,157 @@ ok(/og:image" content="https:\/\/euroballgames\.com\//.test(fbHTML) &&
    /twitter:image" content="https:\/\/euroballgames\.com\//.test(fbHTML),
    "og:image and twitter:image are absolute");
 ok(/og:url" content="https:\/\/euroballgames\.com\//.test(fbHTML), "og:url is set");
+
+console.log("Generated game pages — a real file per game, not one document eleven times");
+var BP = require("./build_pages.js");
+var bpShell = fs.readFileSync("index.html", "utf8");
+ok(BP.PAGES.length === appGames.length, "build_pages covers every game");
+ok(BP.PAGES.every(function (p) { return appGames.indexOf(p.view) >= 0; }),
+   "…and every page names a view the app actually has");
+ok(BP.PAGES.every(function (p) { return window.Hub._slugs[p.view] === p.slug; }),
+   "the generator and the router agree on every slug — they are two copies of one fact");
+var bpSlugSet = {};
+BP.PAGES.forEach(function (p) { bpSlugSet[p.slug] = (bpSlugSet[p.slug] || 0) + 1; });
+ok(Object.keys(bpSlugSet).every(function (s) { return bpSlugSet[s] === 1; }),
+   "slugs are unique — two games sharing a directory would overwrite each other");
+ok(window.Hub._slugs.clubreveal === "common-club",
+   "the renamed game's ADDRESS says common-club while its view id stays clubreveal — storage keys must not move");
+
+// Each page must exist, be about its own game, and carry nothing that 404s.
+var bpMissing = [], bpDrift = [], bpBadHead = [], bpUnrooted = [], bpBadLd = [];
+var bpTitles = {}, bpDescs = {};
+BP.PAGES.forEach(function (p) {
+  var f = p.slug + "/index.html";
+  if (!fs.existsSync(f)) { bpMissing.push(p.slug); return; }
+  var h = fs.readFileSync(f, "utf8");
+  // The strongest check in this block: rebuild from the CURRENT index.html and
+  // compare. If someone edits the app and forgets `node build_pages.js`, eleven
+  // pages quietly keep serving the old app — this is what says so.
+  if (h !== BP.buildPage(bpShell, p)) bpDrift.push(p.slug);
+  var t = (h.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "";
+  var d = (h.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
+  bpTitles[t] = (bpTitles[t] || 0) + 1;
+  bpDescs[d] = (bpDescs[d] || 0) + 1;
+  if (h.indexOf('<link id="canonical" rel="canonical" href="https://euroballgames.com/' + p.slug + '/" />') === -1) bpBadHead.push(p.slug);
+  if (h.indexOf('window.__ELG_VIEW__ = "' + p.view + '"') === -1) bpBadHead.push(p.slug + ":view");
+  if (h.indexOf('window.__ELG_ROOT__ = "../"') === -1) bpBadHead.push(p.slug + ":root");
+  if (h.indexOf('data-seo-view="' + p.view + '"') === -1) bpBadHead.push(p.slug + ":copy");
+  // Anything still resolved from the document would resolve one directory too
+  // deep and 404. These are the exact forms index.html uses.
+  if (/<script src="[a-z0-9_]+\.js"/.test(h)) bpUnrooted.push(p.slug + ":js");
+  if (/href="manifest\.webmanifest"/.test(h)) bpUnrooted.push(p.slug + ":manifest");
+  if (/href="icon-\d+\.png"/.test(h)) bpUnrooted.push(p.slug + ":icon");
+  // The worker's URL is resolved from __ELG_ROOT__ at parse time rather than
+  // written literally — a bare register("sw.js") would be resolved after app.js
+  // has rewritten the address, and 404 one directory down.
+  if (h.indexOf('new URL((window.__ELG_ROOT__ || "./") + "sw.js"') === -1) bpUnrooted.push(p.slug + ":sw");
+  if (/<a class="game-card" href="(?!\.\.\/)/.test(h)) bpUnrooted.push(p.slug + ":tiles");
+  var blocks = h.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g) || [];
+  var faqs = 0;
+  blocks.forEach(function (b) {
+    var body = b.replace(/^<script[^>]*>/, "").replace(/<\/script>$/, "");
+    try {
+      var o = JSON.parse(body);
+      if (o["@type"] === "FAQPage") faqs = o.mainEntity.length;
+    } catch (e) { bpBadLd.push(p.slug); }
+  });
+  if (faqs < 3) bpBadLd.push(p.slug + ":faq");
+});
+ok(bpMissing.length === 0, "every game has a built page on disk" + (bpMissing.length ? " — missing " + bpMissing.join(", ") : ""));
+ok(bpDrift.length === 0,
+   "no page has drifted from index.html — re-run `node build_pages.js`" + (bpDrift.length ? " (stale: " + bpDrift.join(", ") + ")" : ""));
+ok(bpBadHead.length === 0, "each page canonicalises to itself and boots its own game" + (bpBadHead.length ? " — " + bpBadHead.join(", ") : ""));
+ok(bpUnrooted.length === 0,
+   "nothing is left resolving from the document — a bare relative ref one directory down is a 404" + (bpUnrooted.length ? " — " + bpUnrooted.join(", ") : ""));
+ok(bpBadLd.length === 0, "JSON-LD parses on every page and each carries a real FAQ" + (bpBadLd.length ? " — " + bpBadLd.join(", ") : ""));
+ok(Object.keys(bpTitles).length === BP.PAGES.length, "eleven distinct <title>s — duplicates are what the old query URLs served");
+ok(Object.keys(bpDescs).length === BP.PAGES.length, "…and eleven distinct meta descriptions");
+
+// The hub has to REACH them. Buttons don't link, and the sitemap alone leaves the
+// pages orphaned as far as any crawler that walks the site is concerned.
+var tileHrefs = (fbHTML.match(/<a class="game-card" href="([^"]+)"/g) || [])
+  .map(function (s) { return s.replace(/^.*href="/, "").replace(/"$/, ""); });
+ok(tileHrefs.length === appGames.length, "every hub tile is an <a href>, not a <button>");
+ok(appGames.every(function (g) { return tileHrefs.indexOf(window.Hub._slugs[g] + "/") >= 0; }),
+   "…and each one points at that game's generated page");
+ok(fbHTML.indexOf('<button class="game-card"') === -1, "no tile is left as a button");
+
+// The service worker's copy of the slug list, which is a third place the same
+// fact is written down.
+var swJS = fs.readFileSync("sw.js", "utf8");
+var swPages = ((swJS.match(/var PAGES = \[([\s\S]*?)\];/) || [])[1] || "").match(/"([a-z0-9-]+)\/"/g) || [];
+swPages = swPages.map(function (s) { return s.replace(/[",\/]/g, ""); });
+ok(swPages.length === appGames.length && appGames.every(function (g) { return swPages.indexOf(window.Hub._slugs[g]) >= 0; }),
+   "the service worker precaches every generated page, so an offline reload lands back on the same game");
+
+// Old links must never break. They are in the sitemap Google already crawled.
+win.__ELG_VIEW__ = undefined;
+var oldSearch = win.location.search;
+win.location.search = "?game=thegrid";
+ok(window.Hub._linkedGame() === "thegrid", "a legacy ?game= link still opens the right game");
+win.location.search = "";
+win.__ELG_VIEW__ = "pathbetween";
+ok(window.Hub._linkedGame() === "pathbetween", "a generated page states which game it is, with nothing to parse");
+win.__ELG_VIEW__ = undefined;
+win.location.search = oldSearch;
+
+// The built title has to SURVIVE the boot. app.js used to compose a short tab
+// title and stamp it over whatever the document arrived with, so the keyword
+// title written for the search result was gone before Google rendered the page.
+var seoTitle0 = doc.title;
+doc.title = "The Grid — the daily EuroLeague basketball grid game | Euroball";
+window.Hub._readSeoTitle();
+win.__ELG_VIEW__ = "thegrid";
+window.Hub._showView("thegrid");
+ok(doc.title === "The Grid — the daily EuroLeague basketball grid game | Euroball",
+   "a generated page keeps the title it was built with — the one written to be a search result");
+window.ELG.modeURL("thegrid", "practice");
+ok(doc.title === "The Grid · Practice 🏀 Euroball",
+   "…but a real mode hands back to the composed title, which has something the built one can't say");
+window.Hub._showView("home");
+ok(doc.title.indexOf("daily European basketball puzzles") > 0, "…and the hub is unaffected");
+win.__ELG_VIEW__ = undefined;
+doc.title = seoTitle0;
+window.Hub._readSeoTitle();
+
+// The standing copy belongs to one game and leaves with it.
+//
+// Registered by hand, because the harness's querySelector INVENTS an element for
+// any selector it doesn't know (see mk) — so asking it for ".seo-copy" always
+// returns something, and a test that merely read `.hidden` off that would pass
+// with showSeoCopy deleted. Giving the stub a real data-seo-view is what makes
+// the assertions below about the app rather than about the mock.
+var seoEl = mk("sel:.seo-copy");
+seoEl.setAttribute("data-seo-view", "thegrid");
+seoEl.hidden = true;
+window.Hub._showView("thegrid");
+ok(seoEl.hidden === false, "the standing copy is visible on the game it describes");
+window.Hub._showView("home");
+ok(seoEl.hidden === true, "…and is taken away on the way out, so it can't sit under the lobby");
+window.Hub._showView("pathbetween");
+ok(seoEl.hidden === true, "…and stays away on a DIFFERENT game — it describes one of them, not all eleven");
+delete byKey["sel:.seo-copy"];
+// index.html itself carries none: the hub is packed to fill the viewport exactly
+// so it never scrolls, and prose under it would undo that.
+ok(fbHTML.indexOf('class="seo-copy"') === -1, "the hub carries no standing copy — it is built not to scroll");
+
+console.log("Analytics — counted, but not tracked");
+ok(/static\.cloudflareinsights\.com/.test(fbHTML), "the page can report anonymous counts");
+ok(/CF_BEACON_TOKEN = ""/.test(fbHTML), "ships with no token — pasting one in is what switches it on");
+ok(/location\.hostname !== "euroballgames\.com"/.test(fbHTML),
+   "host-gated: a local session and the github.io mirror stay out of the numbers");
+// What the VISITOR is promised: the footer line and the three descriptions. The
+// comment above the beacon discusses the old "no tracking" wording on purpose, so
+// this reads the copy rather than the whole file.
+var claims = [(fbHTML.match(/Published for the love[^<]*/) || [""])[0]]
+  .concat((fbHTML.match(/(?:name="description"|property="og:description"|name="twitter:description") content="[^"]*"/g) || []));
+ok(claims.length === 4, "the promise appears in the footer and all three descriptions");
+ok(claims.every(function (c) { return c.indexOf("no tracking") === -1; }),
+   "…and none of them still says 'no tracking' — the honest claim is the specific one");
+ok(claims.filter(function (c) { return /no cookies/.test(c); }).length === 4,
+   "…they all say 'no cookies' instead, which is exactly true of a cookieless beacon");
+ok(/if \(url\.origin !== self\.location\.origin\) return;/.test(swJS),
+   "the worker leaves cross-origin requests alone — it would otherwise answer the beacon with index.html");
 
 console.log("Mode URLs — daily / practice / legends / easy … are all addressable");
 // The mode map must not LIE: every mode it lists has to be one the game will take.
@@ -1912,7 +2076,8 @@ ok(mdGames.length === 10, "ten games have modes");
 ok(mdGames.filter(function (g) { return typeof (MODE_APIS[g] || {}).goMode !== "function"; }).length === 0,
    "every one of them exposes goMode — app.js can open an arbitrary mode without reaching for a test hook");
 ok(!window.Hub._modes.rostermaster, "Roster Master is absent: it has a chosen club, not modes");
-ok(window.Hub._urlFor("thegrid", "practice").indexOf("?game=thegrid&mode=practice") > 0, "a mode URL carries game + mode");
+ok(window.Hub._urlFor("thegrid", "practice").indexOf("/the-grid/?mode=practice") >= 0,
+   "a mode is a query ON the game's page — the page says which game, the query says which state");
 ok(window.Hub._urlFor("thegrid", "legends").indexOf("mode=") === -1, "a mode belonging to another game is dropped");
 ok(window.Hub._isMode("higherlower", "endless") && !window.Hub._isMode("higherlower", "practice"),
    "validation is per game — Higher or Lower has endless, not practice");
@@ -1926,7 +2091,7 @@ ok(window.HigherLower._peek().mode === "endless", "goMode actually switches the 
 // self-canonicalise, or they compete with each other as duplicates.
 window.Hub._showView("thegrid");
 window.ELG.modeURL("thegrid", "practice");
-ok(byId("canonical").href === "https://euroballgames.com/?game=thegrid",
+ok(byId("canonical").href === "https://euroballgames.com/the-grid/",
    "the canonical DROPS the mode — a mode is a state of one page, not a page of its own");
 ok(doc.title === "The Grid · Practice 🏀 Euroball", "…while the title still reflects it");
 ok(typeof win._replacedURL === "string" && win._replacedURL.indexOf("mode=practice") > 0,

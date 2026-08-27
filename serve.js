@@ -27,7 +27,12 @@ const TYPES = {
 
 http.createServer(function (req, res) {
   var rel = decodeURIComponent(req.url.split("?")[0]);
-  if (rel === "/") rel = "/index.html";
+  // Directory index. GitHub Pages serves <dir>/index.html for a path ending in a
+  // slash, and since build_pages.js started writing a directory per game
+  // (/the-grid/ and friends) this server has to do the same or every one of the
+  // eleven pages 404s locally while working perfectly in production — the worst
+  // shape a difference between dev and live can take.
+  if (rel.charAt(rel.length - 1) === "/") rel += "index.html";
   var file = path.join(ROOT, path.normalize(rel));
   if (file.indexOf(ROOT) !== 0) { res.writeHead(403); return res.end("forbidden"); }
   fs.readFile(file, function (err, data) {

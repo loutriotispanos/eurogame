@@ -30,6 +30,16 @@
     for (var i = 0; i < open.length; i++) open[i].hidden = true;
   }
 
+  // A generated game page carries one standing prose section, written for that
+  // game (build_pages.js). It ships VISIBLE in the served HTML — the entire point
+  // is to be there for something that never runs a script — and this only ever
+  // takes it away, once the visitor has navigated off the game it describes. The
+  // hub has no such section, so on index.html this does nothing at all.
+  function showSeoCopy(name) {
+    var seo = document.querySelector(".seo-copy");
+    if (seo) seo.hidden = (seo.getAttribute("data-seo-view") !== name);
+  }
+
   // mode: "practice" | "daily" (force a mode) | "archive:<YYYY-MM-DD>" (replay a
   // past daily) | undefined (plain open → resume last mode)
   function showView(name, mode) {
@@ -38,6 +48,7 @@
     document.body.className = "view-" + name;
     curView = name;
     closeAllModals();                            // a view's dialogs leave with it
+    showSeoCopy(name);                           // …and so does the standing copy under it
     // Provisional: when no mode was asked for, the game resumes its last one and
     // reports back through modeURL, which refines the title and URL.
     updateHead(name, isMode(name, mode) ? mode : null);
@@ -247,6 +258,42 @@
   };
   var CANON = "https://euroballgames.com/";
 
+  // Each game's own directory, written by build_pages.js. These replaced
+  // ?game=<view> as the address of a game, because a query string over one
+  // shared document was exactly the problem: eleven URLs served byte-identical
+  // HTML and were told apart only by script, so a crawler saw one thin page
+  // eleven times. Now each slug is a real file with its own <head> and its own
+  // prose, and this map is what keeps the router pointing at them.
+  //
+  // The keys are still the ORIGINAL view ids — every localStorage key, every
+  // saved daily and every old ?game= link speaks them, and renaming those to
+  // match the slugs would strand real people's streaks. clubreveal → common-club
+  // is where the two visibly disagree: the game was renamed in v76 and the
+  // address a person reads should say what it is called now, while the storage
+  // key must not move.
+  //
+  // Records and Archive are deliberately ABSENT. They show nothing but the
+  // visitor's own saved scores, so they are not worth indexing and have no
+  // generated page — and a view with no file behind it must keep the query form,
+  // or a refresh on a path that doesn't exist would 404.
+  var SLUGS = {
+    mystery: "mystery-player", playerid: "player-id", completefive: "complete-the-five",
+    connections: "connections", careerorder: "career-order", thegrid: "the-grid",
+    clubreveal: "common-club", pathbetween: "path-between", oddoneout: "odd-one-out",
+    higherlower: "higher-or-lower", rostermaster: "roster-master"
+  };
+
+  // Where the site root is, as an absolute path. Each document declares its own
+  // depth (window.__ELG_ROOT__ — "./" on the hub, "../" on a generated game
+  // page) and this resolves that against the current URL, so the answer is "/"
+  // on euroballgames.com and "/eurogame/" on the github.io mirror WITHOUT either
+  // being hardcoded. That is the whole reason the mirror still works off one
+  // build; hardcoding "/" here would break every link on it.
+  function siteRoot() {
+    var rel = (typeof window.__ELG_ROOT__ === "string" && window.__ELG_ROOT__) || "./";
+    try { return new URL(rel, window.location.href).pathname; } catch (e) { return "/"; }
+  }
+
   // Modes are addressable too (?game=thegrid&mode=practice). The lists live here
   // because the strings are NOT uniform across games — daily/practice,
   // daily/endless, daily/easy/medium/hard, daily/active/retired/both — and an
@@ -276,26 +323,53 @@
     var label = (isMode(view, mode) && mode !== "daily") ? mode.charAt(0).toUpperCase() + mode.slice(1) : "";
     return TITLES[view] + (label ? " · " + label : "") + " 🏀 Euroball";
   }
-  // Relative, so it still works on github.io and on a Pages preview build.
+  // Built off siteRoot(), so it still works on github.io and on a Pages preview
+  // build. A game gets its directory; the two viewer-only views (Records,
+  // Archive) keep the query form because no file exists at a path for them.
+  //
+  // Mode stays a QUERY on top of the path — ?mode=practice — and not a second
+  // directory, for the same reason it is left out of the canonical: all ~32 mode
+  // URLs serve the same document, so they are states of a page, not pages. Only
+  // things worth being a page get a path.
   function urlFor(view, mode) {
-    var base = "";
-    try { base = window.location.pathname || "/"; } catch (e) { base = "/"; }
-    if (!TITLES[view]) return base;
-    return base + "?game=" + view + (isMode(view, mode) ? "&mode=" + mode : "");
+    var root = siteRoot();
+    if (!TITLES[view]) return root;
+    var q = isMode(view, mode) ? "?mode=" + mode : "";
+    if (SLUGS[view]) return root + SLUGS[view] + "/" + q;
+    return root + "?game=" + view + (isMode(view, mode) ? "&mode=" + mode : "");
   }
   // Self-referencing canonical: dedupes the github.io copy against the real
   // domain, and — crucially — points each game URL at ITSELF rather than at the
   // hub. A single hardcoded canonical would have told Google to discard all
   // eleven game URLs, which is the opposite of the point.
+  // The title a generated page was BUILT with, read before anything overwrites
+  // it. It is not the same kind of string as the one pageTitle composes: that
+  // one is for a browser tab and is deliberately short, this one was written to
+  // be a search result and carries what the game is actually about ("The Grid —
+  // the daily EuroLeague basketball grid game"). Without this, app.js replaced
+  // the second with the first the moment it booted, and since Google renders the
+  // page before reading it, the built title would never have been the one seen.
+  var SEO_TITLE = "";
+  function readSeoTitle() { try { SEO_TITLE = document.title || ""; } catch (e) { SEO_TITLE = ""; } }
+  readSeoTitle();
+
   function updateHead(view, mode) {
-    try { document.title = pageTitle(view, mode); } catch (e) {}
+    var t = pageTitle(view, mode);
+    // Keep the built title while we are on the game that page is about — but
+    // hand back to the composed one as soon as a real mode is showing, because
+    // then the tab has something to say that the built title cannot ("· Practice").
+    if (SEO_TITLE && view === window.__ELG_VIEW__ && !(isMode(view, mode) && mode !== "daily")) t = SEO_TITLE;
+    try { document.title = t; } catch (e) {}
     var c = $("canonical");
     // The canonical deliberately DROPS the mode. Every mode of a game serves the
     // same HTML, so ~32 self-canonicalising mode URLs would be 32 duplicates
     // competing with each other for the same content — the classic faceted-
     // navigation mistake. A mode is a state OF the game's page, not a page. The
     // sitemap lists the eleven games only, for the same reason.
-    if (c) c.href = CANON + (TITLES[view] ? "?game=" + view : "");
+    // Always the LIVE domain, never siteRoot() — the canonical's job is to point
+    // the github.io mirror and any preview build at the one real address, so it
+    // is the single URL here that must not be relative.
+    if (c) c.href = CANON + (SLUGS[view] ? SLUGS[view] + "/" : TITLES[view] ? "?game=" + view : "");
   }
 
   // Called by every game whenever its mode changes — a tab click, the keyboard
@@ -316,8 +390,19 @@
         window.history.replaceState({ v: view, mode: mode }, "", urlFor(view, mode));
     } catch (e) {}
   }
-  // Deep link: ?game=<name> opens that game directly (in Practice), e.g. share a game.
+  // Which game this document is. Two ways in, in priority order:
+  //
+  //   1. __ELG_VIEW__ — a generated page stating what it is. No parsing, and it
+  //      cannot disagree with the prose baked into that file.
+  //   2. ?game=<view> — the OLD address of every game, and the reason this
+  //      branch stays forever. Those links are out in the world, in the sitemap
+  //      Google already crawled, and in people's bookmarks. They still open the
+  //      right game; boot then rewrites the address to the new path, which
+  //      quietly consolidates the old URL onto the new one instead of leaving
+  //      two live addresses for one game.
   function linkedGame() {
+    var v = window.__ELG_VIEW__;
+    if (typeof v === "string" && VIEWS.indexOf(v) > 0) return v;
     var m = /[?&]game=([a-z]+)/i.exec(window.location.search || "");
     var g = m && m[1].toLowerCase();
     return (g && VIEWS.indexOf(g) > 0) ? g : null;   // any view except "home"
@@ -336,7 +421,22 @@
     var cards = document.querySelectorAll(".game-card");
     Array.prototype.forEach.call(cards, function (c) {
       // Plain open: each game resumes its last-used mode (Daily for first-timers).
-      c.addEventListener("click", function () { var v = c.getAttribute("data-game"); pushNav({ v: v }); showView(v); });
+      //
+      // The tile is a real <a href="the-grid/"> now, so this has to say which
+      // clicks it is taking. An ordinary click is handled in-app — no reload, no
+      // flash, the SPA behaviour people already have. A MODIFIED click is left
+      // entirely alone, because ctrl/cmd/shift/middle-click mean "not here", and
+      // swallowing them is the classic way a scripted link ends up feeling
+      // broken. Letting them through costs nothing: the href they follow is a
+      // real page that opens on the same game.
+      c.addEventListener("click", function (e) {
+        if (e.defaultPrevented) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
+        var v = c.getAttribute("data-game");
+        pushNav({ v: v });
+        showView(v);
+      });
     });
     var hb = $("home-btn");
     if (hb) hb.addEventListener("click", function () { pushNav({ v: "home" }); showView("home"); });
@@ -650,6 +750,10 @@
     _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
     _copyAddress: copyAddress, _showView: showView, _pushNav: pushNav, _urlFor: urlFor,
     _isMode: isMode, _pageTitle: pageTitle, _modes: MODES,
+    _slugs: SLUGS, _siteRoot: siteRoot, _titles: TITLES, _canon: CANON, _linkedGame: linkedGame,
+    // The built title is captured once, at load. The harness needs to restate it
+    // to drive both branches, since in tests the document is always index.html.
+    _readSeoTitle: readSeoTitle,
     // The form. _setKey lets the harness drive both branches — with a relay
     // configured and without — since the shipped key is empty until it's pasted in.
     _sendFeedback: sendFeedback, _hasRelay: hasRelay, _endpoint: FB_ENDPOINT,
