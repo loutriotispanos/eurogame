@@ -186,6 +186,98 @@ const SEASON_RETURN = [
   {"name":"Scottie Wilbekin","team":"Besiktas","nationality":"USA","position":"Guard","height":188,"birthYear":1993,"number":12},
 ];
 
+// Players new to the database for 2026-27 (researched in batches; careers
+// live in build_careers.js under "2026-27 new arrivals").
+const SEASON_ADD = [
+  // batch 6 (2026-09-24): the last ten
+  {"name":"Nikola Tanaskovic","team":"Partizan","nationality":"Serbia","position":"Center","height":204,"birthYear":1997,"number":10},
+  {"name":"Maksym Shulga","team":"Real Madrid","nationality":"Ukraine","position":"Forward","height":193,"birthYear":2002,"number":2},
+  {"name":"Mario Saint-Supery","team":"Valencia","nationality":"Spain","position":"Guard","height":191,"birthYear":2006,"number":5},
+  {"name":"Alvaro Cardenas","team":"Valencia","nationality":"Spain","position":"Guard","height":185,"birthYear":2002,"number":7},
+  {"name":"Gonzalo Corbalan","team":"Valencia","nationality":"Argentina","position":"Forward","height":193,"birthYear":2002,"number":20},
+  {"name":"Rasheed Bello","team":"Virtus Bologna","nationality":"USA","position":"Guard","height":184,"birthYear":2003,"number":0},
+  {"name":"Davide Casarin","team":"Virtus Bologna","nationality":"Italy","position":"Guard","height":196,"birthYear":2003,"number":7},
+  {"name":"Tommaso Baldasso","team":"Virtus Bologna","nationality":"Italy","position":"Guard","height":192,"birthYear":1998,"number":11},
+  {"name":"Bo Klintman","team":"Virtus Bologna","nationality":"Sweden","position":"Forward","height":206,"birthYear":2003,"number":34},
+  {"name":"Kaodirichi Akobundu-Ehiogu","team":"Zalgiris Kaunas","nationality":"Nigeria","position":"Center","height":208,"birthYear":1999,"number":2},
+  // batch 5 (2026-09-24), incl. two 2006-born players with real senior minutes (user OK)
+  {"name":"Yagiz Aksu","team":"Besiktas","nationality":"Turkey","position":"Guard","height":192,"birthYear":2006,"number":10},
+  {"name":"Marc-Owen Fodzo Dada","team":"ASVEL","nationality":"France","position":"Guard","height":188,"birthYear":2006,"number":1},
+  {"name":"Berk Ugurlu","team":"Besiktas","nationality":"Turkey","position":"Guard","height":192,"birthYear":1996,"number":6},
+  {"name":"Ignas Sargiunas","team":"Fenerbahce","nationality":"Lithuania","position":"Guard","height":194,"birthYear":1999,"number":43},
+  {"name":"Agustin Ubal","team":"FC Barcelona","nationality":"Uruguay","position":"Guard","height":198,"birthYear":2003,"number":10},
+  {"name":"Mathis Dossou-Yovo","team":"ASVEL","nationality":"France","position":"Center","height":208,"birthYear":2000,"number":12},
+  {"name":"Nikolaos Plotas","team":"Olympiacos","nationality":"Greece","position":"Guard","height":195,"birthYear":2004,"number":9},
+  {"name":"Antonis Karagiannidis","team":"Olympiacos","nationality":"Greece","position":"Center","height":206,"birthYear":2002,"number":29},
+  {"name":"Eleftherios Mantzoukas","team":"Panathinaikos","nationality":"Greece","position":"Forward","height":207,"birthYear":2003,"number":72},
+  {"name":"Dimitris Moraitis","team":"Panathinaikos","nationality":"Greece","position":"Guard","height":194,"birthYear":1999,"number":6},
+  {"name":"Maozinha Pereira","team":"Paris Basketball","nationality":"Brazil","position":"Forward","height":203,"birthYear":2000,"number":45},
+  // batch 4 (2026-09-24)
+  {"name":"RJ Cole","team":"Olimpia Milano","nationality":"USA","position":"Guard","height":185,"birthYear":1999,"number":2},
+  {"name":"Jason Burnell","team":"Olimpia Milano","nationality":"USA","position":"Forward","height":201,"birthYear":1997,"number":0},
+  {"name":"Umoja Gibson","team":"FC Barcelona","nationality":"USA","position":"Guard","height":183,"birthYear":1998,"number":1},
+  {"name":"Justin Minaya","team":"FC Barcelona","nationality":"USA","position":"Guard","height":196,"birthYear":1999,"number":24},
+  {"name":"Olek Balcerowski","team":"FC Barcelona","nationality":"Poland","position":"Center","height":216,"birthYear":2000,"number":22},
+  {"name":"Austin Wiley","team":"Bayern Munich","nationality":"USA","position":"Center","height":208,"birthYear":1999,"number":50},
+  {"name":"Tobias Jensen","team":"Bayern Munich","nationality":"Denmark","position":"Guard","height":198,"birthYear":2004,"number":8},
+  {"name":"Sertac Sanli","team":"Fenerbahce","nationality":"Turkey","position":"Center","height":213,"birthYear":1991,"number":5},
+  {"name":"Damion Baugh","team":"Baskonia","nationality":"USA","position":"Guard","height":191,"birthYear":2000,"number":12},
+  {"name":"Kevin Kokila","team":"Virtus Bologna","nationality":"France","position":"Center","height":204,"birthYear":2001,"number":3},
+  {"name":"Yves Pons","team":"ASVEL","nationality":"France","position":"Forward","height":198,"birthYear":1999,"number":35},
+  {"name":"Both Gach","team":"ASVEL","nationality":"USA","position":"Forward","height":201,"birthYear":1999,"number":14},
+  {"name":"Tyson Etienne","team":"Paris Basketball","nationality":"USA","position":"Guard","height":185,"birthYear":1999,"number":9},
+  {"name":"Mouhamadou Gueye","team":"Valencia","nationality":"USA","position":"Forward","height":206,"birthYear":1998,"number":16},
+  {"name":"Marek Blazevic","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Center","height":211,"birthYear":2001,"number":22},
+  // batch 3 (2026-09-24)
+  {"name":"Santi Yusta","team":"Anadolu Efes","nationality":"Spain","position":"Forward","height":201,"birthYear":1997,"number":4},
+  {"name":"Daron Russell","team":"Anadolu Efes","nationality":"USA","position":"Guard","height":180,"birthYear":1998,"number":11},
+  {"name":"Khadeen Carrington","team":"Hapoel Tel Aviv","nationality":"Trinidad and Tobago","position":"Guard","height":193,"birthYear":1995,"number":5},
+  {"name":"Eugene German","team":"Hapoel Tel Aviv","nationality":"USA","position":"Guard","height":183,"birthYear":1997,"number":1},
+  {"name":"Keaton Wallace","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":191,"birthYear":1999,"number":17},
+  {"name":"Kyle Allman","team":"Partizan","nationality":"USA","position":"Guard","height":193,"birthYear":1997,"number":0},
+  {"name":"Ethan Thompson","team":"Partizan","nationality":"USA","position":"Forward","height":196,"birthYear":1999,"number":5},
+  {"name":"Conor Morgan","team":"Besiktas","nationality":"Canada","position":"Center","height":206,"birthYear":1994,"number":9},
+  {"name":"Daquan Jeffries","team":"Besiktas","nationality":"USA","position":"Forward","height":196,"birthYear":1997,"number":2},
+  {"name":"Anthony Brown","team":"Besiktas","nationality":"USA","position":"Forward","height":201,"birthYear":1992,"number":21},
+  {"name":"David DeJulius","team":"Besiktas","nationality":"USA","position":"Guard","height":183,"birthYear":1999,"number":5},
+  {"name":"Tremont Waters","team":"ASVEL","nationality":"USA","position":"Guard","height":178,"birthYear":1998,"number":51},
+  {"name":"Hugo Besson","team":"ASVEL","nationality":"France","position":"Guard","height":194,"birthYear":2001,"number":25},
+  {"name":"Trent Frazier","team":"Virtus Bologna","nationality":"USA","position":"Guard","height":188,"birthYear":1998,"number":1},
+  {"name":"Marcus Carr","team":"Virtus Bologna","nationality":"Canada","position":"Guard","height":188,"birthYear":1999,"number":2},
+  // batch 2 (2026-09-24)
+  {"name":"Alize Johnson","team":"Paris Basketball","nationality":"USA","position":"Forward","height":203,"birthYear":1996,"number":24},
+  {"name":"Tyrese Martin","team":"FC Barcelona","nationality":"USA","position":"Forward","height":198,"birthYear":1999,"number":2},
+  {"name":"Stanley Umude","team":"FC Barcelona","nationality":"USA","position":"Forward","height":198,"birthYear":1999,"number":3},
+  {"name":"Tosan Evbuomwan","team":"FC Barcelona","nationality":"United Kingdom","position":"Forward","height":203,"birthYear":2001,"number":20},
+  {"name":"Olivier Nkamhoua","team":"FC Barcelona","nationality":"Finland","position":"Forward","height":203,"birthYear":2000,"number":13},
+  {"name":"DJ Stewart","team":"Baskonia","nationality":"USA","position":"Forward","height":196,"birthYear":1999,"number":3},
+  {"name":"A.J. Lawson","team":"Baskonia","nationality":"Canada","position":"Forward","height":200,"birthYear":2000,"number":1},
+  {"name":"Marjon Beauchamp","team":"Bayern Munich","nationality":"USA","position":"Forward","height":201,"birthYear":2000,"number":3},
+  {"name":"Wendell Moore","team":"Virtus Bologna","nationality":"USA","position":"Guard","height":196,"birthYear":2001,"number":8},
+  {"name":"Patrick Baldwin","team":"Crvena Zvezda","nationality":"USA","position":"Forward","height":208,"birthYear":2002,"number":24},
+  {"name":"Jacob Toppin","team":"Hapoel Tel Aviv","nationality":"USA","position":"Forward","height":206,"birthYear":2000,"number":0},
+  {"name":"Marcus Bingham","team":"Fenerbahce","nationality":"USA","position":"Center","height":213,"birthYear":2000,"number":1},
+  {"name":"Davion Mintz","team":"Dubai BC","nationality":"USA","position":"Guard","height":193,"birthYear":1998,"number":6},
+  {"name":"TyTy Washington Jr.","team":"ASVEL","nationality":"USA","position":"Guard","height":191,"birthYear":2001,"number":3},
+  {"name":"Devon Dotson","team":"Besiktas","nationality":"USA","position":"Guard","height":185,"birthYear":1999,"number":1},
+  // batch 1 (2026-09-24): the best-known veterans
+  {"name":"Dario Saric","team":"Anadolu Efes","nationality":"Croatia","position":"Forward","height":208,"birthYear":1994,"number":5},
+  {"name":"Jonas Valanciunas","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Center","height":211,"birthYear":1992,"number":17},
+  {"name":"Guerschon Yabusele","team":"Panathinaikos","nationality":"France","position":"Forward","height":203,"birthYear":1995,"number":28},
+  {"name":"Ante Zizic","team":"Besiktas","nationality":"Croatia","position":"Center","height":210,"birthYear":1997,"number":41},
+  {"name":"Furkan Korkmaz","team":"Besiktas","nationality":"Turkey","position":"Forward","height":201,"birthYear":1997,"number":30},
+  {"name":"Patty Mills","team":"ASVEL","nationality":"Australia","position":"Guard","height":188,"birthYear":1988,"number":8},
+  {"name":"Jae Crowder","team":"ASVEL","nationality":"USA","position":"Forward","height":198,"birthYear":1990,"number":99},
+  {"name":"T.J. Warren","team":"Paris Basketball","nationality":"USA","position":"Forward","height":203,"birthYear":1993,"number":1},
+  {"name":"Chris Duarte","team":"Baskonia","nationality":"Dominican Republic","position":"Forward","height":196,"birthYear":1997,"number":5},
+  {"name":"Jaylen Nowell","team":"Besiktas","nationality":"USA","position":"Guard","height":193,"birthYear":1999,"number":24},
+  {"name":"Johnny Juzang","team":"Fenerbahce","nationality":"USA","position":"Forward","height":201,"birthYear":2001,"number":9},
+  {"name":"Damian Jones","team":"Real Madrid","nationality":"USA","position":"Center","height":211,"birthYear":1995,"number":30},
+  {"name":"Olivier Sarr","team":"Real Madrid","nationality":"France","position":"Center","height":208,"birthYear":1999,"number":33},
+  {"name":"Amir Coffey","team":"Hapoel Tel Aviv","nationality":"USA","position":"Guard","height":201,"birthYear":1997,"number":7},
+  {"name":"Garrison Mathews","team":"Olimpia Milano","nationality":"USA","position":"Guard","height":196,"birthYear":1996,"number":24},
+];
+
 const SEASON_MOVE = {
   "Mike James":      { team: "Anadolu Efes", number: 55 },   // from AS Monaco
   "Matthew Strazel": { team: "Anadolu Efes", number: 32 },   // from AS Monaco
@@ -280,6 +372,7 @@ for (const p of all) {
 }
 for (const a of ROSTER_ADD) if (!SEASON_REMOVE.has(a.name.toLowerCase())) all.push({ ...a, ...SEASON_MOVE[a.name] });
 for (const a of SEASON_RETURN) all.push(a);
+for (const a of SEASON_ADD) all.push(a);
 
 // Validate teams; collect unknowns.
 const unknownTeams = new Set();

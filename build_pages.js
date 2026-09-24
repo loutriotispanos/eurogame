@@ -75,7 +75,7 @@ var PAGES = [
       ["Why only two guesses?", "Because the career path is a very strong clue once you read it properly. Two guesses keeps it a test of recognition rather than a process of elimination."],
       ["Do NBA years show up in the path?", "Yes. Many European careers pass through the NBA, and those stints appear in the timeline like any other club — often they are the clue that fixes the era for you."],
       ["What is the difference between Active, Non-active and Both?", "Active draws only from players on a 2026–27 EuroLeague roster. Non-active draws from players no longer on a current roster, retired greats included. Both mixes them, which is the hardest because the era is no longer a hint."],
-      ["How many careers are in the game?", "531 full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2026–27 EuroLeague rosters."]
+      ["How many careers are in the game?", "612 full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2026–27 EuroLeague rosters."]
     ]
   },
   {
@@ -132,7 +132,7 @@ var PAGES = [
       ["How do I play without dragging?", "Every club has ▲ and ▼ buttons beside it that move it one place. The whole puzzle is solvable with those alone, which also makes it keyboard- and screen-reader-friendly."],
       ["What happens when a club locks green?", "It is in the right place. It stays green through later checks unless you move it again, so each check narrows the problem instead of resetting it."],
       ["Do loan spells and NBA years count as separate stops?", "Yes. Anything recorded as a distinct stint in the career database appears as its own club, in the order it happened."],
-      ["How many careers can appear?", "85 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 531-career database the rest of the site plays by."]
+      ["How many careers can appear?", "85 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 612-career database the rest of the site plays by."]
     ]
   },
   {
@@ -235,7 +235,7 @@ var PAGES = [
     title: "Roster Master — name every 2026-27 EuroLeague roster | Euroball",
     desc: "The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good.",
     h1: "Roster Master — all twenty rosters, from memory",
-    intro: "The big one, and the only game here with no daily. Twenty clubs, 213 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
+    intro: "The big one, and the only game here with no daily. Twenty clubs, 294 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
     how: [
       "Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
       "Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.",
@@ -244,7 +244,7 @@ var PAGES = [
     ],
     faq: [
       ["Why is there no autocomplete?", "Because the game is recall. Every other game on the site offers a name list so you do not have to spell Spanoulis; here a list would let you walk the roster instead of remembering it, which is the entire puzzle."],
-      ["How current are the rosters?", "They are the 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season. Some newly arrived players are still being added, and transfers made after that check are not reflected."],
+      ["How current are the rosters?", "They are the 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season. Transfers made after that check are not reflected."],
       ["Does Roster Master affect my hub streak?", "No. It has no daily, so it sits outside the streak entirely. Your best score per club is kept on the Records page."],
       ["What happens if I clear a board by accident?", "You lose the filled slots but not your record. The best percentage stays on the club card, and a gold ★ once earned is permanent."]
     ]
