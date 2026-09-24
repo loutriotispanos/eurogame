@@ -100,7 +100,7 @@
   function renderClue() {
     if (!els.clue) return;
     if (!player) { els.clue.textContent = ""; return; }
-    var meta = [player.position, player.nationality, player.active ? "active" : "retired"].filter(Boolean).join(" · ");
+    var meta = [player.position, player.nationality, player.active ? "active" : "non-active"].filter(Boolean).join(" · ");
     els.clue.innerHTML = "<span class='co-name'>" + player.name + "</span><span class='co-meta'>" + meta + "</span>";
   }
   function renderList() {

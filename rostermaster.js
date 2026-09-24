@@ -18,10 +18,10 @@
   // artwork, so the roundels stay generic (colour + initials is safe ground).
   var CLUB_META = {
     "Anadolu Efes":     { code: "EFS", bg: "#003268", fg: "#ffffff" },
-    "AS Monaco":        { code: "MCO", bg: "#e51b22", fg: "#ffffff" },
     "ASVEL":            { code: "ASV", bg: "#58585a", fg: "#ffffff" },
     "Baskonia":         { code: "BAS", bg: "#002a5c", fg: "#ffffff" },
     "Bayern Munich":    { code: "MUN", bg: "#dc052d", fg: "#ffffff" },
+    "Besiktas":         { code: "BJK", bg: "#000000", fg: "#ffffff" },
     "Crvena Zvezda":    { code: "CZV", bg: "#e2231a", fg: "#ffffff" },
     "Dubai BC":         { code: "DUB", bg: "#101820", fg: "#c9a22b" },
     "FC Barcelona":     { code: "BAR", bg: "#154284", fg: "#ffffff" },

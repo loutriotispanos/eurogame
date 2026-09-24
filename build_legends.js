@@ -86,10 +86,26 @@ if (fs.existsSync("legends_extra.json")) {
   console.log("Merged legends_extra.json:", extra.length, "researched legends");
 }
 
+// Players who left a current roster at a season change (written by
+// build_players.js — run it first). They join the non-current pool.
+if (fs.existsSync("former_players.json")) {
+  const former = JSON.parse(fs.readFileSync("former_players.json", "utf8"));
+  for (const p of former) all.push(p);
+  console.log("Merged former_players.json:", former.length, "season leavers");
+}
+
+// A non-active player back on a current roster (players.js — build_players.js
+// runs first) is no longer non-active: drop him from this pool.
+global.window = {};
+require("./players.js");
+const ACTIVE = new Set(window.PLAYERS.map(p => p.name.toLowerCase()));
+
 const seen = new Map();
 const dropped = [];
+for (const p of all) if (ACTIVE.has(p.name.toLowerCase())) p.returned = true;
 for (const p of all) {
   if (EXCLUDE_NAMES[p.name]) { dropped.push(p.name + " (alias excluded)"); continue; }
+  if (p.returned) { dropped.push(p.name + " (back on a current roster)"); continue; }
   const key = p.name.toLowerCase();
   if (seen.has(key)) { dropped.push(p.name + " (" + p.team + " dup of " + seen.get(key).team + ")"); continue; }
   seen.set(key, p);

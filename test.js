@@ -134,8 +134,8 @@ function submitByName(name) {
 }
 
 console.log("data + init");
-ok(window.PLAYERS && window.PLAYERS.length === 293, "293 players loaded");
-ok(window.LEGENDS && window.LEGENDS.length === 230, "230 legends loaded");
+ok(window.PLAYERS && window.PLAYERS.length === 213, "213 players loaded");
+ok(window.LEGENDS && window.LEGENDS.length === 318, "318 legends loaded");
 ok(window.LEGENDS.every(function (p) { return ["Guard", "Forward", "Center"].indexOf(p.position) >= 0; }), "all legend positions valid");
 ok(window.LEGENDS.every(function (p) { return window.TEAMS[p.team]; }), "every legend team resolves in TEAMS");
 ok(window.TEAMS["AS Monaco"] && window.TEAMS["AS Monaco"].country === "France", "AS Monaco counts as France (plays in the French league)");
@@ -147,7 +147,7 @@ ok(byId("counter").textContent.indexOf("Daily") === 0, "counter shows Daily on l
 
 console.log("search: basic / accent-insensitive / not-found");
 freshPractice();
-ok(countOpts("lyles") > 0, "basic search matches");
+ok(countOpts("campazzo") > 0, "basic search matches");
 var nm = window.PLAYERS[0].name, accented = nm.slice(0, 1) + "́" + nm.slice(1);
 ok(countOpts(accented) > 0, "diacritic-insensitive search matches " + JSON.stringify(accented));
 input.value = "zzzzzzz"; fire(input, "input");
@@ -376,7 +376,7 @@ ok(window.PlayerID._peek().name === dt.name && byId("pid-banner").hidden === fal
 
 console.log("avatar dropdown");
 freshPractice();
-input.value = "lyl"; fire(input, "input");
+input.value = "camp"; fire(input, "input");
 var opt0 = byId("dropdown").children[0];
 ok(opt0 && (opt0._html || "").indexOf("opt-avatar") >= 0, "Mystery dropdown renders initials avatars");
 window.PlayerID._setFilter("both");
@@ -990,16 +990,19 @@ ok(window.CLUBS.canonical("Paris-Levallois") === "Metropolitans 92" &&
    window.CLUBS.canonical("Levallois Metropolitans") === "Metropolitans 92",
    "clubs.js folds all three Levallois-era names into one club");
 ok(window.CLUBS.canonical("Real Madrid") === "Real Madrid", "…and leaves an unaliased club alone");
-ok(cvSharedIndependently("Vincent Poirier", "Klemen Prepelic").length === 2,
-   "Poirier + Prepelic really do share TWO clubs once the aliases are folded in");
+ok(cvSharedIndependently("Klemen Prepelic", "Neal Sako").length === 2,
+   "Prepelic + Sako really do share TWO clubs once the aliases are folded in");
 var cvInPool = {};
 cvAnswers.forEach(function (c) {
   window.ClubReveal._pairsFor(c, "both", false).forEach(function (pr) { cvInPool[pr[0].name + "|" + pr[1].name] = c; });
 });
-ok(!cvInPool["Vincent Poirier|Klemen Prepelic"] && !cvInPool["Klemen Prepelic|Vincent Poirier"],
-   "…so that pair is kept OUT of the pool, instead of shipping as \"the answer is Real Madrid\"");
 ok(!cvInPool["Klemen Prepelic|Neal Sako"] && !cvInPool["Neal Sako|Klemen Prepelic"],
-   "…and so is Prepelic + Sako, the other pair the alias map catches");
+   "…so that pair is kept OUT of the pool, instead of shipping with a single answer");
+// Poirier + Prepelic was the other pinned pair; Poirier left the roster data in
+// the 2026-27 update, so it's only checked while he's still in careers.js.
+if (CVSETS["Vincent Poirier"])
+  ok(!cvInPool["Vincent Poirier|Klemen Prepelic"] && !cvInPool["Klemen Prepelic|Vincent Poirier"],
+     "…and so is Poirier + Prepelic, the other pair the alias map catches");
 
 console.log("Common Club — game flow");
 delete store["elg:cv:stats"];

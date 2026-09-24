@@ -320,7 +320,7 @@
   function pageTitle(view, mode) {
     if (!TITLES[view]) return "Euroball 🏀 — daily European basketball puzzles";
     // "Daily" is the default reading of a game, so it doesn't earn a suffix.
-    var label = (isMode(view, mode) && mode !== "daily") ? mode.charAt(0).toUpperCase() + mode.slice(1) : "";
+    var label = (isMode(view, mode) && mode !== "daily") ? (mode === "legends" || mode === "retired" ? "Non-active" : mode.charAt(0).toUpperCase() + mode.slice(1)) : "";
     return TITLES[view] + (label ? " · " + label : "") + " 🏀 Euroball";
   }
   // Built off siteRoot(), so it still works on github.io and on a Pages preview

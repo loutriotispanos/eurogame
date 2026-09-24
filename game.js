@@ -192,7 +192,7 @@
   }
 
   function modeLabel() {
-    return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : mode === "legends" ? "Legends"
+    return mode === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : mode === "legends" ? "Non-active"
          : mode === "endless" ? "Endless" : "Practice";
   }
 
@@ -311,7 +311,7 @@
         empty.className = "dropdown-empty";
         empty.textContent = guessedHit ? "Already guessed — try someone new"
           : (hardMode && guesses.length ? "Hard mode: nobody fits every clue so far — re-read your greens & yellows"
-          : (mode === "legends" ? "No legend found — try another spelling" : "No player found — try another spelling"));
+          : (mode === "legends" ? "No non-active player found — try another spelling" : "No player found — try another spelling"));
         els.dropdown.appendChild(empty);
         els.dropdown.hidden = false;
         els.input.setAttribute("aria-expanded", "true");
@@ -509,7 +509,7 @@
     { id: "clutch",      icon: "⏱️", name: "Clutch",             desc: "Win on your very last guess." },
     { id: "on-fire",     icon: "🔥", name: "On Fire",            desc: "Reach a 5-day Daily streak." },
     { id: "marathon",    icon: "🏃", name: "Marathon",           desc: "Reach an Endless run of 10." },
-    { id: "historian",   icon: "📜", name: "Historian",          desc: "Win a Legends game." },
+    { id: "historian",   icon: "📜", name: "Historian",          desc: "Win a Non-active game." },
     { id: "all-rounder", icon: "🌍", name: "All-Rounder",        desc: "Win in all four game modes." },
     { id: "hard-won",    icon: "💪", name: "Hard-Won",           desc: "Win with Hard mode on." },
     { id: "challenger",  icon: "🤝", name: "Challenge Accepted", desc: "Win a friend's challenge." }

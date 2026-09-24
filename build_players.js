@@ -21,11 +21,11 @@ const TEAMS = {
   "Olympiacos":       { country: "Greece" },
   "Fenerbahce":       { country: "Turkey" },
   "Anadolu Efes":     { country: "Turkey" },
+  "Besiktas":         { country: "Turkey" },     // joined for 2026-27 (replaced AS Monaco)
   "Maccabi Tel Aviv": { country: "Israel" },
   "Hapoel Tel Aviv":  { country: "Israel" },
   "Olimpia Milano":   { country: "Italy" },
   "Virtus Bologna":   { country: "Italy" },
-  "AS Monaco":        { country: "France" },   // based in Monaco but plays in the French league (LNB) — group with FR clubs
   "ASVEL":            { country: "France" },
   "Paris Basketball": { country: "France" },
   "Bayern Munich":    { country: "Germany" },
@@ -83,25 +83,21 @@ const NATIONALITY_OVERRIDES = {
 // (or rostered but never played a EuroLeague game); (2) fix positions only where
 // ours was clearly wrong; (3) move a misassigned player; adds are appended below.
 const ROSTER_REMOVE = new Set([
-  "Yoan Makoundou", "Maxim Klitschko",                           // AS Monaco
+  "Maxim Klitschko",                                             // AS Monaco (Makoundou restored for 2026-27)
   "Jesse Edwards",                                               // Baskonia
-  "Johannes Thiemann", "Rokas Jokubaitis",                       // Bayern Munich
-  "Nikola Djurisic", "Ognjen Radosic",                           // Crvena Zvezda
+  "Ognjen Radosic",                                              // Crvena Zvezda (Djurisic restored for 2026-27)
   "Mam Jaiteh",                                                  // Dubai BC
-  "Juan Nunez",                                                  // FC Barcelona
   "Mert Emre Eksioglu", "Yigit Hamza Mestoglu", "Jilson Bango",  // Fenerbahce
   "Itay Segev", "Tyler Ennis", "Oz Blayzer", "Keandre Cook",     // Hapoel Tel Aviv
-  "Amit Ebo",                                                    // Maccabi Tel Aviv
   "Vlatko Cancar",                                               // Olimpia Milano (contract terminated Oct 2025, 2 EL games)
-  "Keenan Evans", "Omiros Netzipoglou",                          // Olympiacos
+  "Keenan Evans",                                                // Olympiacos (Netzipoglou restored for 2026-27)
   "Richaun Holmes", "Ioannis Kouzeloglou",                       // Panathinaikos
-  "Joffrey Lauvergne",                                           // Partizan
   "Mady Sissoko",                                                // Real Madrid (Omer Yurtseven kept per user)
   "Yago dos Santos",                                             // Virtus Bologna
 ].map(n => n.toLowerCase()));
 
 // Positions fixed only where ours was clearly wrong and the official page better.
-const ROSTER_POSITION = { "Juhann Begarin": "Forward", "Jan Vesely": "Center" };
+const ROSTER_POSITION = { "Juhann Begarin": "Forward", "Jan Vesely": "Center", "Chris Silva": "Center" };
 
 // Chris Jones is on Hapoel Tel Aviv's official 2025-26 roster (was misassigned to Crvena Zvezda).
 const ROSTER_TEAM = { "Chris Jones": "Hapoel Tel Aviv" };
@@ -130,13 +126,160 @@ const ROSTER_ADD = [
   {"name":"Moustapha Fall","team":"Olympiacos","nationality":"France","position":"Center","height":218,"birthYear":1992,"number":10},
 ];
 
+// --- 2026-27 season roster update ------------------------------------------
+// Applied club-by-club against the official 2026-27 roster pages. Players who
+// left a club are removed; players who moved between clubs we already carry are
+// re-homed (team + new jersey number). Brand-new players are researched and
+// added in a later batch.
+const SEASON_REMOVE = new Set([
+  "Rodrigue Beaubois", "Sehmus Hazer",      // Anadolu Efes (Larkin → Fenerbahce, Saben Lee → Zalgiris)
+  "Rolands Smits", "Brice Dessert", "Vincent Poirier",               // (Weiler-Babb → Crvena Zvezda)
+  "Burak Can Yildizli", "Cole Swider",
+  "Nico Mannion", "Lorenzo Brown", "Quinn Ellis",       // Olimpia Milano (Brooks → Valencia)
+  "Bryant Dunston",    // (Nebo → FC Barcelona, Shields → Fenerbahce, LeDay → Hapoel, Sestina → ASVEL)
+  "Isaiah Canaan", "Nikola Kalinic",              // Crvena Zvezda (Miller-McIntyre → Olympiacos)
+  "Donatas Motiejunas",   // (Bolomboy → ASVEL, Rivero → Valencia)
+  "Nemanja Dangubic", "Aleksa Avramovic", "Awudu Abass",                 // Dubai BC
+  "Kenan Kamenjas",                                                      // (Caboclo → Hapoel)
+  "Juani Marcos", "Jan Vesely",            // FC Barcelona (Norris → Bayern, Cale → ASVEL)
+  "Willy Hernangomez", "Youssoupha Fall",   // (Satoransky → Hapoel)
+  "Nicolas Laprovittola", "Sayon Keita",                                 // (Clyburn → Fenerbahce)
+  "Brandon Boston Jr.", "Nando de Colo",                // Fenerbahce (Bacot, Colson → Maccabi)
+  "Tarik Biberovic", "Arturs Zagars", "Khem Birch",   // (Jantunen → Real Madrid)
+  "Guy Palatin", "Levi Randolph",        // Hapoel Tel Aviv (Madar → Maccabi, K. Edwards → Virtus)
+  "Markquis Nowell", "Rafa Villar",           // Baskonia (Luwawu-Cabarrot → Real Madrid)
+  "Gytis Radzevicius", "Khalifa Diop",
+  "Paul Eboua", "Zac Seljaas", "Shaquille Harrison", "Braian Angola",    // ASVEL
+  "Thomas Heurtel", "Melvin Ajinca", "Glynn Watson Jr.",   // (Ndiaye → Olympiacos)
+  "Bastien Vautier", "Armel Traore",
+  "Marcio Santos", "Lonnie Walker IV", "Jeffrey Dowtin Jr.",             // Maccabi Tel Aviv
+  "Zach Hankins", "Tamir Blatt",
+  "Giannoulis Larentzakis",         // Olympiacos (Fall → Panathinaikos, Ntilikina → Paris)
+  "Monte Morris", "Shaquielle McKissic",
+  "Cedi Osman", "Alexandros Samodurov",                   // Panathinaikos (Shorts → Valencia)
+  "Vassilis Toliopoulos",                     // (Grigonis → Zalgiris)
+  "Enzo Shahrvin", "Amath M'Baye", "Yakuba Ouattara",   // Paris Basketball (Stevens, Willis → Partizan)
+  "Shake Milton", "Mitar Bosnjakovic",               // Partizan (Osetkowski → Valencia)
+  "Aleksej Pokusevski", "Aleksa Radanov", "Nick Calathes",   // (Sterling Brown → Zalgiris)
+  "Trey Lyles", "Mario Hezonja", "Izan Almansa", "Alex Len",             // Real Madrid
+  "Omer Yurtseven",
+  "Sergio de Larrea", "Xabier Lopez-Arostegui", "Matt Costello",         // Valencia
+  "Isaac Nogues",
+  "Saliou Niang", "Alen Smailagic", "Matt Morgan",     // Virtus Bologna (Carsen Edwards → Zalgiris)
+  "Karim Jallow",
+  "Ignas Brazdeikis", "Laurynas Birutis", "Mantas Rubstavicius",         // Zalgiris Kaunas
+  "Neno Dimitrijevic", "Xavier Rathan-Mayes", "Leon Kratzer",            // Bayern Munich
+  "Stefan Jovic", "Elias Harris", "Isiaha Mike", "David McCormack",
+].map(n => n.toLowerCase()));
+
+// Clubs that left the EuroLeague this season. Their players who aren't moved
+// elsewhere (SEASON_MOVE) become season leavers automatically. The country is
+// kept here because the club is no longer in TEAMS.
+const SEASON_DROPPED_CLUBS = {
+  "AS Monaco": { country: "France" },   // based in Monaco, plays in the French league (LNB)
+};
+
+// Non-active players (LEGENDS) back on a current roster: full record, new club.
+// build_legends.js drops them from the non-active pool; build_careers.js opens
+// their new stint.
+const SEASON_RETURN = [
+  {"name":"Scottie Wilbekin","team":"Besiktas","nationality":"USA","position":"Guard","height":188,"birthYear":1993,"number":12},
+];
+
+const SEASON_MOVE = {
+  "Mike James":      { team: "Anadolu Efes", number: 55 },   // from AS Monaco
+  "Matthew Strazel": { team: "Anadolu Efes", number: 32 },   // from AS Monaco
+  "Collin Malcolm":  { team: "Anadolu Efes", number: 17 },   // from Hapoel Tel Aviv
+  "Bruno Fernando":  { team: "Anadolu Efes", number: 20 },   // from Partizan (was #24)
+  "Darius Thompson": { team: "Olimpia Milano", number: 13 }, // from Valencia
+  "Devon Hall":      { team: "Olimpia Milano", number: 22 }, // from Fenerbahce (was #20)
+  "Alec Peters":     { team: "Olimpia Milano", number: 25 }, // from Olympiacos
+  "Nicola Akele":    { team: "Olimpia Milano", number: 45 }, // from Virtus Bologna
+  "Moses Wright":    { team: "Olimpia Milano", number: 5 },  // from Zalgiris Kaunas (was #7)
+  "Devin Booker":    { team: "Olimpia Milano", number: 31 }, // stays, was #6
+  "Ousmane Diop":    { team: "Olimpia Milano", number: 6 },  // stays, was #25
+  "Metecan Birsen":  { team: "Besiktas", number: 11 },       // from Fenerbahce (was #1)
+  "Eugene Omoruyi":  { team: "Besiktas", number: 20 },       // from Baskonia (was #5)
+  "Wenyen Gabriel":  { team: "Besiktas", number: 32 },       // from Bayern Munich
+  "Chris Jones":      { team: "Crvena Zvezda", number: 1 },  // from Hapoel Tel Aviv
+  "Johnathan Motley": { team: "Crvena Zvezda", number: 0 },  // from Hapoel Tel Aviv
+  "David Kramer":     { team: "Crvena Zvezda", number: 44 }, // from Real Madrid (was #1)
+  "Nick Weiler-Babb": { team: "Crvena Zvezda", number: 3 },  // left Efes (was #8)
+  "Elie Okobo":        { team: "Dubai BC", number: 0 },      // from AS Monaco (dropped club)
+  "Jaron Blossomgame": { team: "Dubai BC", number: 4 },      // from AS Monaco (dropped club)
+  "Tornike Shengelia": { team: "Dubai BC", number: 23 },     // from FC Barcelona
+  "Mamadi Diakite":    { team: "Dubai BC", number: 21 },     // from Baskonia (was #1)
+  "Thomas Walkup":     { team: "Dubai BC", number: 44 },     // from Olympiacos (was #0)
+  "Justin Anderson":   { team: "Dubai BC", number: 1 },      // stays, was #10
+  "Justin Robinson":   { team: "FC Barcelona", number: 5 },  // from Paris Basketball
+  "Josh Nebo":         { team: "FC Barcelona", number: 32 }, // left Milano
+  "Yoan Makoundou":    { team: "FC Barcelona", number: 55 }, // restored (was AS Monaco #5)
+  "Duane Washington Jr.": { team: "Bayern Munich", number: 4 }, // from Partizan
+  "Miles Norris":      { team: "Bayern Munich", number: 0 },  // left Barcelona
+  "Johannes Thiemann": { team: "Bayern Munich", number: 32 }, // restored (was #0)
+  "Shane Larkin":      { team: "Fenerbahce", number: 0 },     // left Efes
+  "Will Clyburn":      { team: "Fenerbahce", number: 21 },    // left Barcelona
+  "Shavon Shields":    { team: "Fenerbahce", number: 31 },    // left Milano
+  "Trent Forrest":     { team: "Fenerbahce", number: 11 },    // from Baskonia
+  "Braxton Key":       { team: "Fenerbahce", number: 12 },    // from Valencia (was #7)
+  "Tomas Satoransky":  { team: "Hapoel Tel Aviv", number: 13 }, // left Barcelona
+  "Zach LeDay":        { team: "Hapoel Tel Aviv", number: 16 }, // left Milano
+  "Bruno Caboclo":     { team: "Hapoel Tel Aviv", number: 51 }, // left Dubai
+  "Kenneth Faried":    { team: "Baskonia", number: 35 },        // from Panathinaikos
+  "Myles Cale":        { team: "ASVEL", number: 0 },            // left Barcelona (was #3)
+  "Nate Sestina":      { team: "ASVEL", number: 77 },           // left Milano
+  "Joel Bolomboy":     { team: "ASVEL", number: 21 },           // left Crvena Zvezda
+  "Yam Madar":         { team: "Maccabi Tel Aviv", number: 26 }, // left Hapoel
+  "Bonzie Colson":     { team: "Maccabi Tel Aviv", number: 50 }, // left Fenerbahce
+  "Armando Bacot":     { team: "Maccabi Tel Aviv", number: 5 },  // left Fenerbahce (was #0)
+  "Daniel Theis":      { team: "Maccabi Tel Aviv", number: 23 }, // from AS Monaco (dropped club, was #10)
+  "Amit Ebo":          { team: "Maccabi Tel Aviv", number: 3 },  // restored (was #5)
+  "Codi Miller-McIntyre": { team: "Olympiacos", number: 0 },    // left Crvena Zvezda
+  "Mbaye Ndiaye":      { team: "Olympiacos", number: 24 },      // left ASVEL
+  "Jean Montero":      { team: "Olympiacos", number: 8 },       // from Valencia
+  "Panagiotis Kalaitzakis": { team: "Panathinaikos", number: 0 }, // stays, was #5
+  "Sylvain Francisco": { team: "Panathinaikos", number: 3 },    // from Zalgiris Kaunas
+  "Brancou Badio":     { team: "Panathinaikos", number: 7 },    // from Valencia (was #0)
+  "Isaac Bonga":       { team: "Panathinaikos", number: 32 },   // from Partizan (was #17)
+  "Moustapha Fall":    { team: "Panathinaikos", number: 93 },   // left Olympiacos (was #10)
+  "Terry Tarpey":      { team: "Paris Basketball", number: 3 }, // from AS Monaco (dropped club, was #22)
+  "Frank Ntilikina":   { team: "Paris Basketball", number: 5 }, // left Olympiacos (was #1)
+  "Luca Vildoza":      { team: "Partizan", number: 3 },         // from Virtus Bologna (was #1)
+  "Alessandro Pajola": { team: "Partizan", number: 66 },        // from Virtus Bologna (was #6)
+  "Lamar Stevens":     { team: "Partizan", number: 11 },        // left Paris (was #9)
+  "Kevarrius Hayes":   { team: "Partizan", number: 13 },        // from AS Monaco (dropped club)
+  "Derek Willis":      { team: "Partizan", number: 35 },        // left Paris
+  "Timothe Luwawu-Cabarrot": { team: "Real Madrid", number: 3 }, // left Baskonia (was #9)
+  "Jaime Pradilla":    { team: "Real Madrid", number: 4 },      // from Valencia
+  "Mikael Jantunen":   { team: "Real Madrid", number: 20 },     // left Fenerbahce (was #18)
+  "Neal Sako":         { team: "Valencia", number: 13 },        // stays, was #12
+  "T.J. Shorts":       { team: "Valencia", number: 0 },         // left Panathinaikos
+  "Armoni Brooks":     { team: "Valencia", number: 12 },        // left Milano
+  "Dylan Osetkowski":  { team: "Valencia", number: 8 },         // left Partizan (was #5)
+  "Nikola Mirotic":    { team: "Valencia", number: 33 },        // from AS Monaco (dropped club)
+  "Jasiel Rivero":     { team: "Valencia", number: 41 },        // left Crvena Zvezda (was #14)
+  "Kessler Edwards":   { team: "Virtus Bologna", number: 9 },   // left Hapoel (was #15)
+  "Sterling Brown":    { team: "Zalgiris Kaunas", number: 0 },  // left Partizan (was #12)
+  "Carsen Edwards":    { team: "Zalgiris Kaunas", number: 3 },  // left Virtus
+  "Saben Lee":         { team: "Zalgiris Kaunas", number: 7 },  // left Efes (was #5)
+  "Marius Grigonis":   { team: "Zalgiris Kaunas", number: 40 }, // left Panathinaikos
+};
+
+// Everyone at a dropped club who isn't moving elsewhere leaves with it.
+for (const p of raw.flatMap(r => r.players))
+  if (SEASON_DROPPED_CLUBS[p.team] && !SEASON_MOVE[p.name] && !ROSTER_REMOVE.has(p.name.trim().toLowerCase()))
+    SEASON_REMOVE.add(p.name.trim().toLowerCase());
+
 const all = raw.flatMap(r => r.players)
-  .filter(p => !ROSTER_REMOVE.has(p.name.trim().toLowerCase()));
+  .filter(p => !ROSTER_REMOVE.has(p.name.trim().toLowerCase()))
+  .filter(p => !SEASON_REMOVE.has(p.name.trim().toLowerCase()));
 for (const p of all) {
   if (ROSTER_POSITION[p.name]) p.position = ROSTER_POSITION[p.name];
   if (ROSTER_TEAM[p.name])     p.team     = ROSTER_TEAM[p.name];
+  if (SEASON_MOVE[p.name])     Object.assign(p, SEASON_MOVE[p.name]);
 }
-for (const a of ROSTER_ADD) all.push(a);
+for (const a of ROSTER_ADD) if (!SEASON_REMOVE.has(a.name.toLowerCase())) all.push({ ...a, ...SEASON_MOVE[a.name] });
+for (const a of SEASON_RETURN) all.push(a);
 
 // Validate teams; collect unknowns.
 const unknownTeams = new Set();
@@ -173,6 +316,24 @@ players.sort((a, b) =>
   (TEAM_ORDER.indexOf(a.team) - TEAM_ORDER.indexOf(b.team)) || (a.number - b.number)
 );
 
+// --- Emit former_players.json ---------------------------------------------
+// Season leavers stay IN the game — just not on a current roster. They are
+// handed to build_legends.js (the non-current pool) under their last club, and
+// build_careers.js closes their open stint at the season boundary.
+const former = new Map();
+for (const p of [...raw.flatMap(r => r.players), ...ROSTER_ADD]) {
+  const key = p.name.trim().toLowerCase();
+  if (!SEASON_REMOVE.has(key) || former.has(key)) continue;
+  former.set(key, { ...p, position: ROSTER_POSITION[p.name] || p.position, nationality: NATIONALITY_OVERRIDES[p.name] || p.nationality,
+                    teamCountry: (TEAMS[p.team] || SEASON_DROPPED_CLUBS[p.team]).country });
+}
+if (former.size !== SEASON_REMOVE.size) {
+  console.error("SEASON_REMOVE names not found in raw data:",
+    [...SEASON_REMOVE].filter(k => !former.has(k)).join(", "));
+  process.exit(1);
+}
+fs.writeFileSync("former_players.json", JSON.stringify([...former.values()], null, 1) + "\n");
+
 // --- Emit players.js --------------------------------------------------------
 const lines = [];
 lines.push("/*");
@@ -202,4 +363,5 @@ console.log("  Dropped (born 2007+):", dropped.young.length, "->", dropped.young
 console.log("  Dropped (duplicate name):", dropped.dup.length, "->", dropped.dup.join(", "));
 console.log("  Nationality fixes (" + natFixes.length + "):");
 for (const f of natFixes) console.log("    " + f);
+for (const n of [...overridePending]) if (SEASON_REMOVE.has(n.toLowerCase())) overridePending.delete(n);  // applied to their non-active record instead
 if (overridePending.size) console.log("  WARNING: override names not found in data:", [...overridePending].join(", "));

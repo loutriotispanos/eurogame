@@ -40,7 +40,7 @@
   var target = null, guesses = [], over = false, won = false, dealt = false;
   var matches = [], activeIndex = -1;
 
-  function filterLabel() { return filter === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : filter === "active" ? "Active" : filter === "retired" ? "Retired" : "Both"; }
+  function filterLabel() { return filter === "daily" ? (isArchive ? "Archive " + dayKey : "Daily") : filter === "active" ? "Active" : filter === "retired" ? "Non-active" : "Both"; }
   // careers.js also carries 1-2 club players for The Grid / Path Between now;
   // a guess-from-the-route puzzle needs a route: practice wants >=2 clubs and
   // the Daily sticks to well-travelled paths (>=4) so the trip tells a story.
