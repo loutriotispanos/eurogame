@@ -34,6 +34,8 @@ const TEAM_FIX = {
   "Fenerbahce Ulker": "Fenerbahce",
   "Monaco": "AS Monaco",
   "Zalgiris": "Zalgiris Kaunas",
+  "Wolves Vilnius": "BC Wolves",        // one club filed under two names (2026-27 audit)
+  "Monbus Obradoiro": "Obradoiro",      // sponsor name, same club
   "ratiopharm Ulm": "Ratiopharm Ulm",
   "Pallacanestro Cantù": "Pallacanestro Cantu",
   "Cantù": "Pallacanestro Cantu",
@@ -1813,6 +1815,37 @@ RAW.push(
 
 // --- 2026-27 new arrivals (researched in batches; bios in build_players.js SEASON_ADD) ---
 RAW.push(
+  // batch 4 (2026-09-24)
+  { name: "RJ Cole", career: [
+    { team: "Lavrio", from: 2022, to: 2023 }, { team: "Braunschweig", from: 2022, to: 2023 }, { team: "Lietuvos Rytas", from: 2023, to: 2025 }, { team: "Reyer Venezia", from: 2025, to: 2026 }, { team: "Olimpia Milano", from: 2026, to: null } ] },
+  { name: "Jason Burnell", career: [
+    { team: "Pallacanestro Cantu", from: 2019, to: 2020 }, { team: "Dinamo Sassari", from: 2020, to: 2022 }, { team: "Brindisi", from: 2022, to: 2023 }, { team: "Brescia", from: 2023, to: 2026 }, { team: "Olimpia Milano", from: 2026, to: null } ] },
+  { name: "Umoja Gibson", career: [
+    { team: "Gottingen", from: 2023, to: 2024 }, { team: "Spartak Subotica", from: 2024, to: 2025 }, { team: "Cedevita Olimpija", from: 2025, to: 2026 }, { team: "FC Barcelona", from: 2026, to: null } ] },
+  { name: "Justin Minaya", career: [
+    { team: "Portland Trail Blazers", from: 2023, to: 2025 }, { team: "FC Barcelona", from: 2026, to: null } ] },
+  { name: "Olek Balcerowski", career: [
+    { team: "Gran Canaria", from: 2017, to: 2021 }, { team: "Mega", from: 2021, to: 2022 }, { team: "Gran Canaria", from: 2021, to: 2023 }, { team: "Panathinaikos", from: 2023, to: 2024 }, { team: "Unicaja", from: 2024, to: 2026 }, { team: "FC Barcelona", from: 2026, to: null } ] },
+  { name: "Austin Wiley", career: [
+    { team: "Gladiators Trier", from: 2020, to: 2022 }, { team: "Neptunas", from: 2022, to: 2023 }, { team: "Tofas", from: 2023, to: 2024 }, { team: "Hapoel Jerusalem", from: 2024, to: 2026 }, { team: "Bayern Munich", from: 2026, to: null } ] },
+  { name: "Tobias Jensen", career: [
+    { team: "Ratiopharm Ulm", from: 2022, to: 2026 }, { team: "Bayern Munich", from: 2026, to: null } ] },
+  { name: "Sertac Sanli", career: [
+    { team: "Galatasaray", from: 2010, to: 2011 }, { team: "Tofas", from: 2011, to: 2012 }, { team: "Galatasaray", from: 2012, to: 2013 }, { team: "Gaziantep Basketbol", from: 2013, to: 2014 }, { team: "Usak Sportif", from: 2014, to: 2015 }, { team: "Trabzonspor", from: 2015, to: 2016 }, { team: "Besiktas", from: 2016, to: 2018 }, { team: "Anadolu Efes", from: 2018, to: 2021 }, { team: "FC Barcelona", from: 2021, to: 2023 }, { team: "Fenerbahce", from: 2023, to: 2025 }, { team: "Dubai BC", from: 2025, to: 2026 }, { team: "Besiktas", from: 2025, to: 2026 }, { team: "Fenerbahce", from: 2026, to: null } ] },
+  { name: "Damion Baugh", career: [
+    { team: "Charlotte Hornets", from: 2024, to: 2025 }, { team: "Calgary Surge", from: 2025, to: 2026 }, { team: "Baskonia", from: 2026, to: null } ] },
+  { name: "Kevin Kokila", career: [
+    { team: "JL Bourg-en-Bresse", from: 2022, to: 2026 }, { team: "Virtus Bologna", from: 2026, to: null } ] },
+  { name: "Yves Pons", career: [
+    { team: "Memphis Grizzlies", from: 2021, to: 2022 }, { team: "ASVEL", from: 2022, to: 2023 }, { team: "Girona", from: 2023, to: 2025 }, { team: "Andorra", from: 2025, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
+  { name: "Both Gach", career: [
+    { team: "Sigal Prishtina", from: 2022, to: 2023 }, { team: "Nokia", from: 2023, to: 2024 }, { team: "Darussafaka", from: 2024, to: 2025 }, { team: "JL Bourg-en-Bresse", from: 2025, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
+  { name: "Tyson Etienne", career: [
+    { team: "Brooklyn Nets", from: 2024, to: 2026 }, { team: "Paris Basketball", from: 2026, to: null } ] },
+  { name: "Mouhamadou Gueye", career: [
+    { team: "Toronto Raptors", from: 2023, to: 2024 }, { team: "Chicago Bulls", from: 2025, to: 2026 }, { team: "Valencia", from: 2026, to: null } ] },
+  { name: "Marek Blazevic", career: [
+    { team: "Lietuvos Rytas", from: 2018, to: 2020 }, { team: "Zalgiris Kaunas", from: 2020, to: 2022 }, { team: "Obradoiro", from: 2022, to: 2024 }, { team: "BC Wolves", from: 2024, to: 2025 }, { team: "Tofas", from: 2025, to: 2026 }, { team: "Zalgiris Kaunas", from: 2026, to: null } ] },
   // batch 3 (2026-09-24)
   { name: "Santi Yusta", career: [
     { team: "Obradoiro", from: 2015, to: 2017 }, { team: "Real Madrid", from: 2017, to: 2019 }, { team: "CB Canarias", from: 2019, to: 2021 }, { team: "Basket Zaragoza", from: 2021, to: 2026 }, { team: "Anadolu Efes", from: 2026, to: null } ] },

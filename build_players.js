@@ -189,6 +189,22 @@ const SEASON_RETURN = [
 // Players new to the database for 2026-27 (researched in batches; careers
 // live in build_careers.js under "2026-27 new arrivals").
 const SEASON_ADD = [
+  // batch 4 (2026-09-24)
+  {"name":"RJ Cole","team":"Olimpia Milano","nationality":"USA","position":"Guard","height":185,"birthYear":1999,"number":2},
+  {"name":"Jason Burnell","team":"Olimpia Milano","nationality":"USA","position":"Forward","height":201,"birthYear":1997,"number":0},
+  {"name":"Umoja Gibson","team":"FC Barcelona","nationality":"USA","position":"Guard","height":183,"birthYear":1998,"number":1},
+  {"name":"Justin Minaya","team":"FC Barcelona","nationality":"USA","position":"Guard","height":196,"birthYear":1999,"number":24},
+  {"name":"Olek Balcerowski","team":"FC Barcelona","nationality":"Poland","position":"Center","height":216,"birthYear":2000,"number":22},
+  {"name":"Austin Wiley","team":"Bayern Munich","nationality":"USA","position":"Center","height":208,"birthYear":1999,"number":50},
+  {"name":"Tobias Jensen","team":"Bayern Munich","nationality":"Denmark","position":"Guard","height":198,"birthYear":2004,"number":8},
+  {"name":"Sertac Sanli","team":"Fenerbahce","nationality":"Turkey","position":"Center","height":213,"birthYear":1991,"number":5},
+  {"name":"Damion Baugh","team":"Baskonia","nationality":"USA","position":"Guard","height":191,"birthYear":2000,"number":12},
+  {"name":"Kevin Kokila","team":"Virtus Bologna","nationality":"France","position":"Center","height":204,"birthYear":2001,"number":3},
+  {"name":"Yves Pons","team":"ASVEL","nationality":"France","position":"Forward","height":198,"birthYear":1999,"number":35},
+  {"name":"Both Gach","team":"ASVEL","nationality":"USA","position":"Forward","height":201,"birthYear":1999,"number":14},
+  {"name":"Tyson Etienne","team":"Paris Basketball","nationality":"USA","position":"Guard","height":185,"birthYear":1999,"number":9},
+  {"name":"Mouhamadou Gueye","team":"Valencia","nationality":"USA","position":"Forward","height":206,"birthYear":1998,"number":16},
+  {"name":"Marek Blazevic","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Center","height":211,"birthYear":2001,"number":22},
   // batch 3 (2026-09-24)
   {"name":"Santi Yusta","team":"Anadolu Efes","nationality":"Spain","position":"Forward","height":201,"birthYear":1997,"number":4},
   {"name":"Daron Russell","team":"Anadolu Efes","nationality":"USA","position":"Guard","height":180,"birthYear":1998,"number":11},
