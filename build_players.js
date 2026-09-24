@@ -189,6 +189,22 @@ const SEASON_RETURN = [
 // Players new to the database for 2026-27 (researched in batches; careers
 // live in build_careers.js under "2026-27 new arrivals").
 const SEASON_ADD = [
+  // batch 2 (2026-09-24)
+  {"name":"Alize Johnson","team":"Paris Basketball","nationality":"USA","position":"Forward","height":203,"birthYear":1996,"number":24},
+  {"name":"Tyrese Martin","team":"FC Barcelona","nationality":"USA","position":"Forward","height":198,"birthYear":1999,"number":2},
+  {"name":"Stanley Umude","team":"FC Barcelona","nationality":"USA","position":"Forward","height":198,"birthYear":1999,"number":3},
+  {"name":"Tosan Evbuomwan","team":"FC Barcelona","nationality":"United Kingdom","position":"Forward","height":203,"birthYear":2001,"number":20},
+  {"name":"Olivier Nkamhoua","team":"FC Barcelona","nationality":"Finland","position":"Forward","height":203,"birthYear":2000,"number":13},
+  {"name":"DJ Stewart","team":"Baskonia","nationality":"USA","position":"Forward","height":196,"birthYear":1999,"number":3},
+  {"name":"A.J. Lawson","team":"Baskonia","nationality":"Canada","position":"Forward","height":200,"birthYear":2000,"number":1},
+  {"name":"Marjon Beauchamp","team":"Bayern Munich","nationality":"USA","position":"Forward","height":201,"birthYear":2000,"number":3},
+  {"name":"Wendell Moore","team":"Virtus Bologna","nationality":"USA","position":"Guard","height":196,"birthYear":2001,"number":8},
+  {"name":"Patrick Baldwin","team":"Crvena Zvezda","nationality":"USA","position":"Forward","height":208,"birthYear":2002,"number":24},
+  {"name":"Jacob Toppin","team":"Hapoel Tel Aviv","nationality":"USA","position":"Forward","height":206,"birthYear":2000,"number":0},
+  {"name":"Marcus Bingham","team":"Fenerbahce","nationality":"USA","position":"Center","height":213,"birthYear":2000,"number":1},
+  {"name":"Davion Mintz","team":"Dubai BC","nationality":"USA","position":"Guard","height":193,"birthYear":1998,"number":6},
+  {"name":"TyTy Washington Jr.","team":"ASVEL","nationality":"USA","position":"Guard","height":191,"birthYear":2001,"number":3},
+  {"name":"Devon Dotson","team":"Besiktas","nationality":"USA","position":"Guard","height":185,"birthYear":1999,"number":1},
   // batch 1 (2026-09-24): the best-known veterans
   {"name":"Dario Saric","team":"Anadolu Efes","nationality":"Croatia","position":"Forward","height":208,"birthYear":1994,"number":5},
   {"name":"Jonas Valanciunas","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Center","height":211,"birthYear":1992,"number":17},

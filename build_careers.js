@@ -1813,6 +1813,37 @@ RAW.push(
 
 // --- 2026-27 new arrivals (researched in batches; bios in build_players.js SEASON_ADD) ---
 RAW.push(
+  // batch 2 (2026-09-24)
+  { name: "Alize Johnson", career: [
+    { team: "Indiana Pacers", from: 2018, to: 2020 }, { team: "Brooklyn Nets", from: 2020, to: 2021 }, { team: "Chicago Bulls", from: 2021, to: 2022 }, { team: "San Antonio Spurs", from: 2022, to: 2023 }, { team: "Busan KCC Egis", from: 2023, to: 2024 }, { team: "Atleticos de San German", from: 2023, to: 2024 }, { team: "Kawasaki Brave Thunders", from: 2024, to: 2025 }, { team: "Shenzhen Leopards", from: 2025, to: 2026 }, { team: "Paris Basketball", from: 2026, to: null } ] },
+  { name: "Tyrese Martin", career: [
+    { team: "Atlanta Hawks", from: 2022, to: 2023 }, { team: "Brooklyn Nets", from: 2024, to: 2026 }, { team: "Philadelphia 76ers", from: 2025, to: 2026 }, { team: "FC Barcelona", from: 2026, to: null } ] },
+  { name: "Stanley Umude", career: [
+    { team: "Detroit Pistons", from: 2023, to: 2024 }, { team: "Milwaukee Bucks", from: 2024, to: 2025 }, { team: "San Antonio Spurs", from: 2025, to: 2026 }, { team: "FC Barcelona", from: 2026, to: null } ] },
+  { name: "Tosan Evbuomwan", career: [
+    { team: "Detroit Pistons", from: 2023, to: 2024 }, { team: "Brooklyn Nets", from: 2024, to: 2025 }, { team: "New York Knicks", from: 2025, to: 2026 }, { team: "FC Barcelona", from: 2026, to: null } ] },
+  { name: "Olivier Nkamhoua", career: [
+    { team: "Niners Chemnitz", from: 2024, to: 2025 }, { team: "Varese", from: 2025, to: 2026 }, { team: "FC Barcelona", from: 2026, to: null } ] },
+  { name: "DJ Stewart", career: [
+    { team: "Marineros de Puerto Plata", from: 2022, to: 2023 }, { team: "Cedevita Olimpija", from: 2023, to: 2026 }, { team: "Baskonia", from: 2026, to: null } ] },
+  { name: "A.J. Lawson", career: [
+    { team: "Guelph Nighthawks", from: 2021, to: 2022 }, { team: "Dallas Mavericks", from: 2022, to: 2024 }, { team: "Minnesota Timberwolves", from: 2022, to: 2023 }, { team: "Toronto Raptors", from: 2024, to: 2026 }, { team: "Baskonia", from: 2026, to: null } ] },
+  { name: "Marjon Beauchamp", career: [
+    { team: "Milwaukee Bucks", from: 2022, to: 2025 }, { team: "New York Knicks", from: 2024, to: 2025 }, { team: "Los Angeles Clippers", from: 2024, to: 2025 }, { team: "Philadelphia 76ers", from: 2025, to: 2026 }, { team: "Bayern Munich", from: 2026, to: null } ] },
+  { name: "Wendell Moore", career: [
+    { team: "Minnesota Timberwolves", from: 2022, to: 2024 }, { team: "Detroit Pistons", from: 2024, to: 2025 }, { team: "Charlotte Hornets", from: 2024, to: 2025 }, { team: "Detroit Pistons", from: 2025, to: 2026 }, { team: "Virtus Bologna", from: 2026, to: null } ] },
+  { name: "Patrick Baldwin", career: [
+    { team: "Golden State Warriors", from: 2022, to: 2023 }, { team: "Washington Wizards", from: 2023, to: 2025 }, { team: "Los Angeles Clippers", from: 2024, to: 2025 }, { team: "Sacramento Kings", from: 2025, to: 2026 }, { team: "Crvena Zvezda", from: 2026, to: null } ] },
+  { name: "Jacob Toppin", career: [
+    { team: "New York Knicks", from: 2023, to: 2025 }, { team: "Atlanta Hawks", from: 2024, to: 2025 }, { team: "Hapoel Tel Aviv", from: 2026, to: null } ] },
+  { name: "Marcus Bingham", career: [
+    { team: "Hapoel Haifa", from: 2023, to: 2024 }, { team: "Hapoel Tel Aviv", from: 2024, to: 2025 }, { team: "Hapoel Holon", from: 2024, to: 2025 }, { team: "UNICS Kazan", from: 2025, to: 2026 }, { team: "Fenerbahce", from: 2026, to: null } ] },
+  { name: "Davion Mintz", career: [
+    { team: "Metros de Santiago", from: 2023, to: 2024 }, { team: "Oostende", from: 2024, to: 2025 }, { team: "Wurzburg", from: 2025, to: 2026 }, { team: "Dubai BC", from: 2026, to: null } ] },
+  { name: "TyTy Washington Jr.", career: [
+    { team: "Houston Rockets", from: 2022, to: 2023 }, { team: "Milwaukee Bucks", from: 2023, to: 2024 }, { team: "Phoenix Suns", from: 2024, to: 2025 }, { team: "Los Angeles Clippers", from: 2025, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
+  { name: "Devon Dotson", career: [
+    { team: "Chicago Bulls", from: 2020, to: 2022 }, { team: "Washington Wizards", from: 2022, to: 2023 }, { team: "Obradoiro", from: 2023, to: 2024 }, { team: "Joventut", from: 2024, to: 2025 }, { team: "Besiktas", from: 2025, to: null } ] },
   // batch 1 (2026-09-24)
   { name: "Dario Saric", career: [
     { team: "Dubrava", from: 2010, to: 2011 }, { team: "KK Zagreb", from: 2011, to: 2012 }, { team: "Cibona", from: 2012, to: 2014 }, { team: "Anadolu Efes", from: 2014, to: 2016 }, { team: "Philadelphia 76ers", from: 2016, to: 2019 }, { team: "Minnesota Timberwolves", from: 2018, to: 2019 }, { team: "Phoenix Suns", from: 2019, to: 2023 }, { team: "Oklahoma City Thunder", from: 2022, to: 2023 }, { team: "Golden State Warriors", from: 2023, to: 2024 }, { team: "Denver Nuggets", from: 2024, to: 2025 }, { team: "Sacramento Kings", from: 2025, to: 2026 }, { team: "Anadolu Efes", from: 2026, to: null } ] },

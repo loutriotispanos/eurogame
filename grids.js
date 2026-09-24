@@ -35,7 +35,7 @@ window.GRIDS = [
   {"rows":[{"t":"club","v":"Unicaja"},{"t":"club","v":"Baskonia"},{"t":"club","v":"Real Madrid"}],"cols":[{"t":"club","v":"AEK Athens"},{"t":"nat","v":"Spain"},{"t":"pos","v":"Forward"}]},
   {"rows":[{"t":"club","v":"Baskonia"},{"t":"club","v":"Virtus Bologna"},{"t":"club","v":"Anadolu Efes"}],"cols":[{"t":"club","v":"Partizan"},{"t":"club","v":"Olimpija Ljubljana"},{"t":"nat","v":"France"}]},
   {"rows":[{"t":"club","v":"Valencia"},{"t":"club","v":"Panathinaikos"},{"t":"club","v":"Khimki"}],"cols":[{"t":"club","v":"Baskonia"},{"t":"nat","v":"Spain"},{"t":"nat","v":"Serbia"}]},
-  {"rows":[{"t":"club","v":"ASVEL"},{"t":"club","v":"Galatasaray"},{"t":"club","v":"Baskonia"}],"cols":[{"t":"club","v":"Crvena Zvezda"},{"t":"club","v":"Fenerbahce"},{"t":"pos","v":"Center"}]},
+  {"rows":[{"t":"club","v":"ASVEL"},{"t":"club","v":"Hapoel Tel Aviv"},{"t":"club","v":"Baskonia"}],"cols":[{"t":"club","v":"Crvena Zvezda"},{"t":"club","v":"Fenerbahce"},{"t":"pos","v":"Center"}]},
   {"rows":[{"t":"club","v":"Khimki"},{"t":"club","v":"Olimpia Milano"},{"t":"club","v":"Zalgiris Kaunas"}],"cols":[{"t":"club","v":"Lietuvos Rytas"},{"t":"nat","v":"Serbia"},{"t":"pos","v":"Center"}]},
   {"rows":[{"t":"club","v":"Olimpia Milano"},{"t":"club","v":"Panathinaikos"},{"t":"club","v":"FC Barcelona"}],"cols":[{"t":"club","v":"Aris"},{"t":"club","v":"Partizan"},{"t":"nat","v":"USA"}]},
   {"rows":[{"t":"club","v":"FC Barcelona"},{"t":"club","v":"Baskonia"},{"t":"club","v":"Olimpia Milano"}],"cols":[{"t":"club","v":"Virtus Bologna"},{"t":"nat","v":"Argentina"},{"t":"nat","v":"Germany"}]},
