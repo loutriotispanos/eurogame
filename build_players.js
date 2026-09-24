@@ -189,7 +189,20 @@ const SEASON_RETURN = [
 // Players new to the database for 2026-27 (researched in batches; careers
 // live in build_careers.js under "2026-27 new arrivals").
 const SEASON_ADD = [
-  // batch 5 (2026-09-24)
+  // batch 6 (2026-09-24): the last ten
+  {"name":"Nikola Tanaskovic","team":"Partizan","nationality":"Serbia","position":"Center","height":204,"birthYear":1997,"number":10},
+  {"name":"Maksym Shulga","team":"Real Madrid","nationality":"Ukraine","position":"Forward","height":193,"birthYear":2002,"number":2},
+  {"name":"Mario Saint-Supery","team":"Valencia","nationality":"Spain","position":"Guard","height":191,"birthYear":2006,"number":5},
+  {"name":"Alvaro Cardenas","team":"Valencia","nationality":"Spain","position":"Guard","height":185,"birthYear":2002,"number":7},
+  {"name":"Gonzalo Corbalan","team":"Valencia","nationality":"Argentina","position":"Forward","height":193,"birthYear":2002,"number":20},
+  {"name":"Rasheed Bello","team":"Virtus Bologna","nationality":"USA","position":"Guard","height":184,"birthYear":2003,"number":0},
+  {"name":"Davide Casarin","team":"Virtus Bologna","nationality":"Italy","position":"Guard","height":196,"birthYear":2003,"number":7},
+  {"name":"Tommaso Baldasso","team":"Virtus Bologna","nationality":"Italy","position":"Guard","height":192,"birthYear":1998,"number":11},
+  {"name":"Bo Klintman","team":"Virtus Bologna","nationality":"Sweden","position":"Forward","height":206,"birthYear":2003,"number":34},
+  {"name":"Kaodirichi Akobundu-Ehiogu","team":"Zalgiris Kaunas","nationality":"Nigeria","position":"Center","height":208,"birthYear":1999,"number":2},
+  // batch 5 (2026-09-24), incl. two 2006-born players with real senior minutes (user OK)
+  {"name":"Yagiz Aksu","team":"Besiktas","nationality":"Turkey","position":"Guard","height":192,"birthYear":2006,"number":10},
+  {"name":"Marc-Owen Fodzo Dada","team":"ASVEL","nationality":"France","position":"Guard","height":188,"birthYear":2006,"number":1},
   {"name":"Berk Ugurlu","team":"Besiktas","nationality":"Turkey","position":"Guard","height":192,"birthYear":1996,"number":6},
   {"name":"Ignas Sargiunas","team":"Fenerbahce","nationality":"Lithuania","position":"Guard","height":194,"birthYear":1999,"number":43},
   {"name":"Agustin Ubal","team":"FC Barcelona","nationality":"Uruguay","position":"Guard","height":198,"birthYear":2003,"number":10},

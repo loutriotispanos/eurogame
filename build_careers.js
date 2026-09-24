@@ -1815,7 +1815,32 @@ RAW.push(
 
 // --- 2026-27 new arrivals (researched in batches; bios in build_players.js SEASON_ADD) ---
 RAW.push(
+  // batch 6 (2026-09-24)
+  { name: "Nikola Tanaskovic", career: [
+    { team: "Partizan", from: 2016, to: 2018 }, { team: "Mladost Zemun", from: 2018, to: 2019 }, { team: "Mega", from: 2019, to: 2020 }, { team: "Borac Banja Luka", from: 2020, to: 2021 }, { team: "Igokea", from: 2021, to: 2023 }, { team: "Breogan", from: 2022, to: 2023 }, { team: "Buducnost", from: 2023, to: 2026 }, { team: "Partizan", from: 2026, to: null } ] },
+  { name: "Maksym Shulga", career: [
+    { team: "Boston Celtics", from: 2025, to: 2026 }, { team: "Real Madrid", from: 2026, to: null } ] },
+  { name: "Mario Saint-Supery", career: [
+    { team: "Unicaja", from: 2021, to: 2024 }, { team: "Manresa", from: 2024, to: 2025 }, { team: "Valencia", from: 2026, to: null } ] },
+  { name: "Alvaro Cardenas", career: [
+    { team: "Peristeri", from: 2025, to: 2026 }, { team: "Valencia", from: 2026, to: null } ] },
+  { name: "Gonzalo Corbalan", career: [
+    { team: "San Pablo Burgos", from: 2022, to: 2026 }, { team: "Valencia", from: 2026, to: null } ] },
+  { name: "Rasheed Bello", career: [
+    { team: "Antwerp Giants", from: 2025, to: 2026 }, { team: "Virtus Bologna", from: 2026, to: null } ] },
+  { name: "Davide Casarin", career: [
+    { team: "Reyer Venezia", from: 2019, to: 2021 }, { team: "Treviso", from: 2021, to: 2022 }, { team: "Scaligera Verona", from: 2022, to: 2023 }, { team: "Reyer Venezia", from: 2023, to: 2025 }, { team: "Vanoli Cremona", from: 2025, to: 2026 }, { team: "Virtus Bologna", from: 2026, to: null } ] },
+  { name: "Tommaso Baldasso", career: [
+    { team: "Virtus Roma", from: 2016, to: 2020 }, { team: "Fortitudo Bologna", from: 2020, to: 2021 }, { team: "Olimpia Milano", from: 2021, to: 2023 }, { team: "Derthona Basket", from: 2023, to: 2026 }, { team: "Virtus Bologna", from: 2026, to: null } ] },
+  { name: "Bo Klintman", career: [
+    { team: "Cairns Taipans", from: 2023, to: 2024 }, { team: "Detroit Pistons", from: 2024, to: 2026 }, { team: "Virtus Bologna", from: 2026, to: null } ] },
+  { name: "Kaodirichi Akobundu-Ehiogu", career: [
+    { team: "Tigers Tubingen", from: 2023, to: 2024 }, { team: "Varese", from: 2024, to: 2025 }, { team: "Manresa", from: 2025, to: 2026 }, { team: "Zalgiris Kaunas", from: 2026, to: null } ] },
   // batch 5 (2026-09-24)
+  { name: "Yagiz Aksu", career: [
+    { team: "Besiktas", from: 2021, to: 2025 }, { team: "Manisa BB", from: 2025, to: 2026 }, { team: "Besiktas", from: 2026, to: null } ] },
+  { name: "Marc-Owen Fodzo Dada", career: [
+    { team: "SLUC Nancy", from: 2024, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
   { name: "Berk Ugurlu", career: [
     { team: "Fenerbahce", from: 2013, to: 2017 }, { team: "Pinar Karsiyaka", from: 2017, to: 2019 }, { team: "Tofas", from: 2019, to: 2023 }, { team: "Besiktas", from: 2023, to: null } ] },
   { name: "Ignas Sargiunas", career: [
