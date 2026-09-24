@@ -1925,6 +1925,10 @@ ok(window.Hub._urlFor("eurocup").indexOf("?game=eurocup") > 0 && window.Hub._tit
   var compItem = function (c) { var m = html.match(new RegExp('<button[^>]*data-comp="' + c + '"[^>]*>')); return m ? m[0] : ""; };
   ok(compItem("euroleague").indexOf('aria-checked="true"') > 0 && compItem("eurocup").indexOf('aria-checked="false"') > 0,
      "…EuroLeague is the checked competition and EuroCup is offered, not selected");
+  var ecView = html.slice(html.indexOf('id="eurocup-view"'), html.indexOf("/eurocup-view"));
+  var ecItem = function (c) { var m = ecView.match(new RegExp('<button[^>]*data-comp="' + c + '"[^>]*>')); return m ? m[0] : ""; };
+  ok(/id="ec-comp-btn"[^>]*>EuroCup/.test(ecView) && ecItem("eurocup").indexOf('aria-checked="true"') > 0 && ecItem("euroleague").indexOf('aria-checked="false"') > 0,
+     "…the EuroCup page carries the same switcher, reading EuroCup, with EuroLeague one tap away");
   ok(/id="eurocup-view"[^>]*hidden/.test(html) && html.indexOf('id="eurocup-back"') > 0,
      "…and EuroCup opens a hidden-by-default coming-soon view with a way back");
   ok(!/<img[^>]*(euroleague|eurocup)/i.test(html), "…with no competition logo anywhere: the names are text, the marks stay theirs");

@@ -42,35 +42,51 @@
 
   // mode: "practice" | "daily" (force a mode) | "archive:<YYYY-MM-DD>" (replay a
   // past daily) | undefined (plain open → resume last mode)
-  // The competition switcher on the hub. Only the EuroLeague is playable; the
-  // EuroCup entry opens a "coming soon" page (a state of the app, like Records,
-  // so it gets ?game=eurocup and no generated page of its own).
-  function setCompMenu(open) {
-    var btn = $("comp-btn"), menu = $("comp-menu");
-    if (!btn || !menu) return;
-    menu.hidden = !open;
-    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  // The competition switcher. It sits on the hub (EuroLeague ticked) and on the
+  // EuroCup page (EuroCup ticked), so it always says which competition you are
+  // in and switches both ways. Only the EuroLeague is playable; EuroCup opens a
+  // "coming soon" page (a state of the app, like Records: ?game=eurocup, no
+  // generated page of its own).
+  var COMP_SWITCHES = [["comp-btn", "comp-menu"], ["ec-comp-btn", "ec-comp-menu"]];
+  function setCompMenu(open, btnId) {
+    COMP_SWITCHES.forEach(function (p) {
+      var btn = $(p[0]), menu = $(p[1]);
+      if (!btn || !menu) return;
+      var on = !!open && p[0] === btnId;
+      menu.hidden = !on;
+      btn.setAttribute("aria-expanded", on ? "true" : "false");
+    });
+  }
+  function goComp(comp) {
+    setCompMenu(false);
+    var v = comp === "eurocup" ? "eurocup" : "home";
+    if (v !== curView) { pushNav({ v: v }); showView(v); }
   }
   function wireCompetition() {
-    var btn = $("comp-btn"), menu = $("comp-menu");
-    if (btn && menu) {
+    COMP_SWITCHES.forEach(function (p) {
+      var btn = $(p[0]), menu = $(p[1]);
+      if (!btn || !menu) return;
       btn.addEventListener("click", function (e) {
         if (e && e.stopPropagation) e.stopPropagation();
-        setCompMenu(menu.hidden);
+        setCompMenu(menu.hidden, p[0]);
       });
       var items = menu.querySelectorAll("[data-comp]");
       for (var i = 0; i < items.length; i++) items[i].addEventListener("click", function () {
-        var comp = this.getAttribute("data-comp");
-        setCompMenu(false);
-        if (comp === "eurocup") { pushNav({ v: "eurocup" }); showView("eurocup"); }
+        goComp(this.getAttribute("data-comp"));
       });
-      document.addEventListener("click", function (e) {
-        if (!menu.hidden && !(e && e.target && menu.contains && menu.contains(e.target))) setCompMenu(false);
+    });
+    document.addEventListener("click", function (e) {
+      var t = e && e.target;
+      var inside = COMP_SWITCHES.some(function (p) { var m = $(p[1]); return m && !m.hidden && t && m.contains && m.contains(t); });
+      if (!inside) setCompMenu(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (!e || e.key !== "Escape") return;
+      COMP_SWITCHES.forEach(function (p) {
+        var btn = $(p[0]), menu = $(p[1]);
+        if (btn && menu && !menu.hidden) { setCompMenu(false); btn.focus(); }
       });
-      document.addEventListener("keydown", function (e) {
-        if (e && e.key === "Escape" && !menu.hidden) { setCompMenu(false); btn.focus(); }
-      });
-    }
+    });
     var back = $("eurocup-back");
     if (back) back.addEventListener("click", function () { pushNav({ v: "home" }); showView("home"); });
   }

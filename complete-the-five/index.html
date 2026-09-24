@@ -1555,6 +1555,13 @@
   <!-- ===== EUROCUP (coming soon) ===== -->
   <div id="eurocup-view" class="view" hidden>
     <header>
+      <div class="comp-switch">
+        <button id="ec-comp-btn" class="comp-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="ec-comp-menu">EuroCup<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5"/></svg></button>
+        <div id="ec-comp-menu" class="comp-menu" role="menu" aria-label="Competition" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-comp="euroleague">EuroLeague <span class="comp-tag">Playing</span></button>
+          <button type="button" role="menuitemradio" aria-checked="true" data-comp="eurocup">EuroCup <span class="comp-tag">✓ Soon</span></button>
+        </div>
+      </div>
       <div class="kicker">Coming soon</div>
       <h1><span class="accent">EuroCup</span></h1>
       <div class="tagline">The second competition is on its way</div>
