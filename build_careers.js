@@ -1813,6 +1813,37 @@ RAW.push(
 
 // --- 2026-27 new arrivals (researched in batches; bios in build_players.js SEASON_ADD) ---
 RAW.push(
+  // batch 3 (2026-09-24)
+  { name: "Santi Yusta", career: [
+    { team: "Obradoiro", from: 2015, to: 2017 }, { team: "Real Madrid", from: 2017, to: 2019 }, { team: "CB Canarias", from: 2019, to: 2021 }, { team: "Basket Zaragoza", from: 2021, to: 2026 }, { team: "Anadolu Efes", from: 2026, to: null } ] },
+  { name: "Daron Russell", career: [
+    { team: "Galatasaray", from: 2022, to: 2023 }, { team: "Mornar", from: 2022, to: 2023 }, { team: "Manisa BB", from: 2023, to: 2024 }, { team: "Pinar Karsiyaka", from: 2024, to: 2025 }, { team: "New Taipei CTBC DEA", from: 2024, to: 2025 }, { team: "Cluj-Napoca", from: 2025, to: 2026 }, { team: "Anadolu Efes", from: 2026, to: null } ] },
+  { name: "Khadeen Carrington", career: [
+    { team: "Limburg United", from: 2018, to: 2019 }, { team: "Mornar", from: 2018, to: 2019 }, { team: "MHP Riesen Ludwigsburg", from: 2019, to: 2020 }, { team: "AS Monaco", from: 2020, to: 2021 }, { team: "JDA Dijon", from: 2021, to: 2022 }, { team: "Real Betis", from: 2021, to: 2022 }, { team: "Hapoel Jerusalem", from: 2022, to: 2026 }, { team: "Hapoel Tel Aviv", from: 2026, to: null } ] },
+  { name: "Eugene German", career: [
+    { team: "Ionikos Nikaias", from: 2021, to: 2022 }, { team: "Merkezefendi Belediyesi", from: 2021, to: 2022 }, { team: "Qingdao Eagles", from: 2022, to: 2023 }, { team: "Fujian Sturgeons", from: 2023, to: 2024 }, { team: "Merkezefendi Belediyesi", from: 2023, to: 2024 }, { team: "Beijing Ducks", from: 2024, to: 2026 }, { team: "Indios de Mayaguez", from: 2025, to: 2026 }, { team: "Hapoel Tel Aviv", from: 2026, to: null } ] },
+  { name: "Keaton Wallace", career: [
+    { team: "Atlanta Hawks", from: 2024, to: 2026 }, { team: "Maccabi Tel Aviv", from: 2026, to: null } ] },
+  { name: "Kyle Allman", career: [
+    { team: "Lavrio", from: 2019, to: 2020 }, { team: "VEF Riga", from: 2020, to: 2021 }, { team: "Paris Basketball", from: 2021, to: 2023 }, { team: "Besiktas", from: 2023, to: 2025 }, { team: "Darussafaka", from: 2023, to: 2024 }, { team: "Turk Telekom", from: 2025, to: 2026 }, { team: "Partizan", from: 2026, to: null } ] },
+  { name: "Ethan Thompson", career: [
+    { team: "Osos de Manati", from: 2023, to: 2024 }, { team: "Indiana Pacers", from: 2025, to: 2026 }, { team: "Partizan", from: 2026, to: null } ] },
+  { name: "Conor Morgan", career: [
+    { team: "Southland Sharks", from: 2017, to: 2018 }, { team: "Joventut", from: 2018, to: 2021 }, { team: "Fraser Valley Bandits", from: 2018, to: 2019 }, { team: "Andorra", from: 2021, to: 2022 }, { team: "Slask Wroclaw", from: 2022, to: 2023 }, { team: "Bahcesehir Koleji", from: 2022, to: 2023 }, { team: "London Lions", from: 2023, to: 2024 }, { team: "Besiktas", from: 2024, to: null } ] },
+  { name: "Daquan Jeffries", career: [
+    { team: "Sacramento Kings", from: 2019, to: 2021 }, { team: "Houston Rockets", from: 2020, to: 2021 }, { team: "New York Knicks", from: 2023, to: 2024 }, { team: "Charlotte Hornets", from: 2024, to: 2025 }, { team: "Besiktas", from: 2026, to: null } ] },
+  { name: "Anthony Brown", career: [
+    { team: "Los Angeles Lakers", from: 2015, to: 2016 }, { team: "New Orleans Pelicans", from: 2016, to: 2017 }, { team: "Minnesota Timberwolves", from: 2017, to: 2018 }, { team: "Partizan", from: 2018, to: 2019 }, { team: "Limoges", from: 2019, to: 2020 }, { team: "Fuenlabrada", from: 2019, to: 2020 }, { team: "Metropolitans 92", from: 2020, to: 2021 }, { team: "Bursaspor", from: 2021, to: 2022 }, { team: "Maccabi Rishon LeZion", from: 2021, to: 2022 }, { team: "UNICS Kazan", from: 2022, to: 2023 }, { team: "Bursaspor", from: 2023, to: 2024 }, { team: "Turk Telekom", from: 2024, to: 2025 }, { team: "Besiktas", from: 2025, to: null } ] },
+  { name: "David DeJulius", career: [
+    { team: "Lavrio", from: 2023, to: 2024 }, { team: "Gottingen", from: 2023, to: 2024 }, { team: "Maccabi Tel Aviv", from: 2024, to: 2025 }, { team: "Aris", from: 2024, to: 2025 }, { team: "Bursaspor", from: 2024, to: 2025 }, { team: "UCAM Murcia", from: 2025, to: 2026 }, { team: "Besiktas", from: 2026, to: null } ] },
+  { name: "Tremont Waters", career: [
+    { team: "Boston Celtics", from: 2019, to: 2021 }, { team: "Gigantes de Carolina", from: 2021, to: 2022 }, { team: "Metropolitans 92", from: 2022, to: 2023 }, { team: "Guangdong", from: 2023, to: 2024 }, { team: "Shanghai Sharks", from: 2024, to: 2025 }, { team: "Gigantes de Carolina", from: 2025, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
+  { name: "Hugo Besson", career: [
+    { team: "Chalon", from: 2018, to: 2020 }, { team: "Saint-Quentin", from: 2020, to: 2021 }, { team: "New Zealand Breakers", from: 2021, to: 2022 }, { team: "Metropolitans 92", from: 2022, to: 2023 }, { team: "FMP", from: 2023, to: 2024 }, { team: "Varese", from: 2023, to: 2024 }, { team: "Manisa BB", from: 2024, to: 2025 }, { team: "Tofas", from: 2025, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
+  { name: "Trent Frazier", career: [
+    { team: "Zenit Saint Petersburg", from: 2022, to: 2026 }, { team: "FMP", from: 2022, to: 2023 }, { team: "Virtus Bologna", from: 2026, to: null } ] },
+  { name: "Marcus Carr", career: [
+    { team: "Bnei Herzliya", from: 2023, to: 2024 }, { team: "Aris", from: 2023, to: 2024 }, { team: "Vancouver Bandits", from: 2023, to: 2024 }, { team: "Hapoel Galil Elyon", from: 2024, to: 2025 }, { team: "Brampton Honey Badgers", from: 2024, to: 2025 }, { team: "Wurzburg", from: 2025, to: 2026 }, { team: "Virtus Bologna", from: 2026, to: null } ] },
   // batch 2 (2026-09-24)
   { name: "Alize Johnson", career: [
     { team: "Indiana Pacers", from: 2018, to: 2020 }, { team: "Brooklyn Nets", from: 2020, to: 2021 }, { team: "Chicago Bulls", from: 2021, to: 2022 }, { team: "San Antonio Spurs", from: 2022, to: 2023 }, { team: "Busan KCC Egis", from: 2023, to: 2024 }, { team: "Atleticos de San German", from: 2023, to: 2024 }, { team: "Kawasaki Brave Thunders", from: 2024, to: 2025 }, { team: "Shenzhen Leopards", from: 2025, to: 2026 }, { team: "Paris Basketball", from: 2026, to: null } ] },

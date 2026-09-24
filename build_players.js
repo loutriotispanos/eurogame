@@ -189,6 +189,22 @@ const SEASON_RETURN = [
 // Players new to the database for 2026-27 (researched in batches; careers
 // live in build_careers.js under "2026-27 new arrivals").
 const SEASON_ADD = [
+  // batch 3 (2026-09-24)
+  {"name":"Santi Yusta","team":"Anadolu Efes","nationality":"Spain","position":"Forward","height":201,"birthYear":1997,"number":4},
+  {"name":"Daron Russell","team":"Anadolu Efes","nationality":"USA","position":"Guard","height":180,"birthYear":1998,"number":11},
+  {"name":"Khadeen Carrington","team":"Hapoel Tel Aviv","nationality":"Trinidad and Tobago","position":"Guard","height":193,"birthYear":1995,"number":5},
+  {"name":"Eugene German","team":"Hapoel Tel Aviv","nationality":"USA","position":"Guard","height":183,"birthYear":1997,"number":1},
+  {"name":"Keaton Wallace","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":191,"birthYear":1999,"number":17},
+  {"name":"Kyle Allman","team":"Partizan","nationality":"USA","position":"Guard","height":193,"birthYear":1997,"number":0},
+  {"name":"Ethan Thompson","team":"Partizan","nationality":"USA","position":"Forward","height":196,"birthYear":1999,"number":5},
+  {"name":"Conor Morgan","team":"Besiktas","nationality":"Canada","position":"Center","height":206,"birthYear":1994,"number":9},
+  {"name":"Daquan Jeffries","team":"Besiktas","nationality":"USA","position":"Forward","height":196,"birthYear":1997,"number":2},
+  {"name":"Anthony Brown","team":"Besiktas","nationality":"USA","position":"Forward","height":201,"birthYear":1992,"number":21},
+  {"name":"David DeJulius","team":"Besiktas","nationality":"USA","position":"Guard","height":183,"birthYear":1999,"number":5},
+  {"name":"Tremont Waters","team":"ASVEL","nationality":"USA","position":"Guard","height":178,"birthYear":1998,"number":51},
+  {"name":"Hugo Besson","team":"ASVEL","nationality":"France","position":"Guard","height":194,"birthYear":2001,"number":25},
+  {"name":"Trent Frazier","team":"Virtus Bologna","nationality":"USA","position":"Guard","height":188,"birthYear":1998,"number":1},
+  {"name":"Marcus Carr","team":"Virtus Bologna","nationality":"Canada","position":"Guard","height":188,"birthYear":1999,"number":2},
   // batch 2 (2026-09-24)
   {"name":"Alize Johnson","team":"Paris Basketball","nationality":"USA","position":"Forward","height":203,"birthYear":1996,"number":24},
   {"name":"Tyrese Martin","team":"FC Barcelona","nationality":"USA","position":"Forward","height":198,"birthYear":1999,"number":2},

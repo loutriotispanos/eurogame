@@ -134,7 +134,7 @@ function submitByName(name) {
 }
 
 console.log("data + init");
-ok(window.PLAYERS && window.PLAYERS.length === 243, "243 players loaded");
+ok(window.PLAYERS && window.PLAYERS.length === 258, "258 players loaded");
 ok(window.LEGENDS && window.LEGENDS.length === 318, "318 legends loaded");
 ok(window.LEGENDS.every(function (p) { return ["Guard", "Forward", "Center"].indexOf(p.position) >= 0; }), "all legend positions valid");
 ok(window.LEGENDS.every(function (p) { return window.TEAMS[p.team]; }), "every legend team resolves in TEAMS");
