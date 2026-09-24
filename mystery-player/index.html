@@ -1298,7 +1298,7 @@
       "name": "Which players can be the answer?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The Daily and Practice draw from the current 2025–26 EuroLeague rosters. Legends mode draws from 173 retired greats instead, and Endless mixes everyone."
+        "text": "The Daily and Practice draw from the current 2025–26 EuroLeague rosters. Non-active mode draws from players no longer on a current roster (retired greats included) instead, and Endless mixes everyone."
       }
     },
     {
@@ -1306,7 +1306,7 @@
       "name": "Is there a new one every day?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice, Legends and Endless are unlimited if you want to keep going."
+        "text": "Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice, Non-active and Endless are unlimited if you want to keep going."
       }
     }
   ]
@@ -1437,7 +1437,7 @@
       <a class="game-card" href="../mystery-player/" data-game="mystery">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-mystery"/></svg></span>
         <span class="gc-text"><span class="gc-title">Mystery Player</span>
-          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — Daily, Practice, Legends &amp; Endless.</span></span>
+          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — Daily, Practice, Non-active &amp; Endless.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="../player-id/" data-game="playerid">
@@ -1539,7 +1539,7 @@
     <div class="modes" role="tablist" aria-label="Game mode">
       <button id="tab-daily" type="button" role="tab" aria-controls="board-panel" aria-selected="true" tabindex="0">Daily</button>
       <button id="tab-practice" type="button" role="tab" aria-controls="board-panel" aria-selected="false" tabindex="-1">Practice</button>
-      <button id="tab-legends" type="button" role="tab" aria-controls="board-panel" aria-selected="false" tabindex="-1">Legends</button>
+      <button id="tab-legends" type="button" role="tab" aria-controls="board-panel" aria-selected="false" tabindex="-1">Non-active</button>
       <button id="tab-endless" type="button" role="tab" aria-controls="board-panel" aria-selected="false" tabindex="-1">Endless</button>
     </div>
 
@@ -1559,7 +1559,7 @@
         <div id="dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
       </div>
       <button id="give-up">Give up</button>
-      <button id="hint" type="button" title="Reveal a clue (Practice &amp; Legends)">Hint</button>
+      <button id="hint" type="button" title="Reveal a clue (Practice &amp; Non-active)">Hint</button>
       <button id="new-game">New game</button>
     </div>
 
@@ -1607,7 +1607,7 @@
       <div class="modes" id="pid-filter" role="tablist" aria-label="Game mode">
         <button id="pid-daily" type="button" role="tab" aria-selected="true" tabindex="0">Daily</button>
         <button id="pid-active" type="button" role="tab" aria-selected="false" tabindex="-1">Active</button>
-        <button id="pid-retired" type="button" role="tab" aria-selected="false" tabindex="-1">Retired</button>
+        <button id="pid-retired" type="button" role="tab" aria-selected="false" tabindex="-1">Non-active</button>
         <button id="pid-both" type="button" role="tab" aria-selected="false" tabindex="-1">Both</button>
       </div>
       <div id="pid-stats" class="pid-stats"></div>
@@ -1764,7 +1764,7 @@
       <div class="modes" id="cv-modes" role="tablist" aria-label="Game mode">
         <button id="cv-daily" type="button" role="tab" aria-selected="true" tabindex="0">Daily</button>
         <button id="cv-active" type="button" role="tab" aria-selected="false" tabindex="-1">Active</button>
-        <button id="cv-legends" type="button" role="tab" aria-selected="false" tabindex="-1">Legends</button>
+        <button id="cv-legends" type="button" role="tab" aria-selected="false" tabindex="-1">Non-active</button>
         <button id="cv-both" type="button" role="tab" aria-selected="false" tabindex="-1">Both</button>
       </div>
       <div id="cv-stats" class="pid-stats"></div>
@@ -1976,7 +1976,7 @@
       <p>Two EuroLeague players, one question — <strong>who is taller</strong>, <strong>who is older</strong>, or <strong>whose jersey number is higher</strong>? Tap your answer and the values are revealed.</p>
       <ul>
         <li>Every matchup has a real gap — no ties, no 1&nbsp;cm coin flips.</li>
-        <li>The pool mixes <strong>today's players and the legends</strong>, so eras collide.</li>
+        <li>The pool mixes <strong>today's players and non-active ones</strong>, so eras collide.</li>
       </ul>
       <h3>Game modes</h3>
       <ul>
@@ -2020,8 +2020,8 @@
       <ul>
         <li><strong>Daily</strong> — the same pair for everyone, once a day. One of the two is always a <em>Final Four starter</em>, so there's a name to hold on to. Keep your streak alive.</li>
         <li><strong>Active</strong> — both players are in the 2025–26 EuroLeague.</li>
-        <li><strong>Legends</strong> — both are retired greats.</li>
-        <li><strong>Both</strong> — any pair at all, including a legend beside a current player. The deep cuts live here: no famous name is guaranteed.</li>
+        <li><strong>Non-active</strong> — both are off the current EuroLeague rosters.</li>
+        <li><strong>Both</strong> — any pair at all, including a non-active player beside a current one. The deep cuts live here: no famous name is guaranteed.</li>
       </ul>
     </div>
   </div>
@@ -2043,7 +2043,7 @@
         <li><strong>Daily</strong> — one grid a day, the same board for everyone. Keep your streak alive.</li>
         <li><strong>Practice</strong> — random grids, as many as you like.</li>
       </ul>
-      <p class="modal-note">To keep answers fair, The Grid only uses <strong>well-travelled players and legends</strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
+      <p class="modal-note">To keep answers fair, The Grid only uses <strong>well-travelled players, current and non-active,</strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
     </div>
   </div>
 
@@ -2078,7 +2078,7 @@
       <h3>Game modes</h3>
       <ul>
         <li><strong>Daily</strong> — one career a day, the same for everyone. Keep your streak alive.</li>
-        <li><strong>Active / Retired / Both</strong> — unlimited practice with today's stars, the legends, or everyone.</li>
+        <li><strong>Active / Non-active / Both</strong> — unlimited practice with today's players, non-active ones, or everyone.</li>
       </ul>
     </div>
   </div>
@@ -2117,16 +2117,16 @@
       <dt>What does a yellow square mean?</dt>
       <dd>Close, but the meaning depends on the column. On club it means a different club in the same country. On height it means within 5&nbsp;cm, on age within 2 years, and on shirt number within 3.</dd>
       <dt>Which players can be the answer?</dt>
-      <dd>The Daily and Practice draw from the current 2025–26 EuroLeague rosters. Legends mode draws from 173 retired greats instead, and Endless mixes everyone.</dd>
+      <dd>The Daily and Practice draw from the current 2025–26 EuroLeague rosters. Non-active mode draws from players no longer on a current roster (retired greats included) instead, and Endless mixes everyone.</dd>
       <dt>Is there a new one every day?</dt>
-      <dd>Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice, Legends and Endless are unlimited if you want to keep going.</dd>
+      <dd>Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice, Non-active and Endless are unlimited if you want to keep going.</dd>
     </dl>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 
   <footer>
     Rosters are current to the <strong>2025–26 EuroLeague season</strong>; transfers since then are not reflected.<br />
-    293 players · 20 clubs · 173 retired legends · compiled from official club rosters, Wikipedia, FIBA and Proballers.<br />
+    274 players · 20 clubs · 249 non-active players · compiled from official club rosters, Wikipedia, FIBA and Proballers.<br />
     Published for the love of European basketball · No ads, no cookies, no account · Reads offline<br />
     Anonymous page counts only (Cloudflare Web Analytics) — no cookies, no profile, nothing that follows you off this site.
     · <a id="feedback-link" class="colophon-link" rel="nofollow">Send feedback</a>
@@ -2209,7 +2209,7 @@
       <ul>
         <li><strong>Daily</strong> — one mystery player a day, the same for everyone. Keep your streak alive.</li>
         <li><strong>Practice</strong> — unlimited random players from the active rosters.</li>
-        <li><strong>Legends</strong> — retired greats; filter by era.</li>
+        <li><strong>Non-active</strong> — players off the current rosters, retired greats included; filter by era.</li>
         <li><strong>Endless</strong> — solve players back-to-back and build the longest run you can. One loss ends the run.</li>
       </ul>
 
@@ -2224,7 +2224,7 @@
         <span><strong>Hard mode</strong> — only suggest players that fit every clue so far.</span></label></p>
       <p><label class="opt-toggle"><input type="checkbox" id="fx-toggle" />
         <span><strong>Sound &amp; vibration</strong> — subtle audio cues and a buzz on each guess.</span></label></p>
-      <p class="hint">Practice, Legends &amp; Endless also offer a <strong>Hint</strong> button and keep their own stats.</p>
+      <p class="hint">Practice, Non-active &amp; Endless also offer a <strong>Hint</strong> button and keep their own stats.</p>
     </div>
   </div>
 

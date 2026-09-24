@@ -1,0 +1,892 @@
+[
+ {
+  "name": "Trey Lyles",
+  "team": "Real Madrid",
+  "nationality": "Canada",
+  "position": "Forward",
+  "height": 206,
+  "birthYear": 1995,
+  "number": 0,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Mario Hezonja",
+  "team": "Real Madrid",
+  "nationality": "Croatia",
+  "position": "Forward",
+  "height": 206,
+  "birthYear": 1995,
+  "number": 11,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Izan Almansa",
+  "team": "Real Madrid",
+  "nationality": "Spain",
+  "position": "Forward",
+  "height": 208,
+  "birthYear": 2005,
+  "number": 13,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Alex Len",
+  "team": "Real Madrid",
+  "nationality": "Ukraine",
+  "position": "Center",
+  "height": 213,
+  "birthYear": 1993,
+  "number": 25,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Omer Yurtseven",
+  "team": "Real Madrid",
+  "nationality": "Turkey",
+  "position": "Center",
+  "height": 213,
+  "birthYear": 1998,
+  "number": 77,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Juani Marcos",
+  "team": "FC Barcelona",
+  "nationality": "Argentina",
+  "position": "Guard",
+  "height": 190,
+  "birthYear": 2000,
+  "number": 2,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Jan Vesely",
+  "team": "FC Barcelona",
+  "nationality": "Czech Republic",
+  "position": "Center",
+  "height": 213,
+  "birthYear": 1990,
+  "number": 6,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Willy Hernangomez",
+  "team": "FC Barcelona",
+  "nationality": "Spain",
+  "position": "Center",
+  "height": 210,
+  "birthYear": 1994,
+  "number": 14,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Youssoupha Fall",
+  "team": "FC Barcelona",
+  "nationality": "Senegal",
+  "position": "Center",
+  "height": 222,
+  "birthYear": 1995,
+  "number": 19,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Nicolas Laprovittola",
+  "team": "FC Barcelona",
+  "nationality": "Argentina",
+  "position": "Guard",
+  "height": 191,
+  "birthYear": 1990,
+  "number": 20,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Sayon Keita",
+  "team": "FC Barcelona",
+  "nationality": "Mali",
+  "position": "Center",
+  "height": 212,
+  "birthYear": 2008,
+  "number": 41,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Markquis Nowell",
+  "team": "Baskonia",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 170,
+  "birthYear": 1999,
+  "number": 3,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Rafa Villar",
+  "team": "Baskonia",
+  "nationality": "Spain",
+  "position": "Guard",
+  "height": 191,
+  "birthYear": 2004,
+  "number": 4,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Khalifa Diop",
+  "team": "Baskonia",
+  "nationality": "Senegal",
+  "position": "Center",
+  "height": 215,
+  "birthYear": 2002,
+  "number": 18,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Sergio de Larrea",
+  "team": "Valencia",
+  "nationality": "Spain",
+  "position": "Guard",
+  "height": 198,
+  "birthYear": 2005,
+  "number": 5,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Xabier Lopez-Arostegui",
+  "team": "Valencia",
+  "nationality": "Spain",
+  "position": "Forward",
+  "height": 200,
+  "birthYear": 1997,
+  "number": 6,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Matt Costello",
+  "team": "Valencia",
+  "nationality": "USA",
+  "position": "Forward",
+  "height": 208,
+  "birthYear": 1993,
+  "number": 24,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Isaac Nogues",
+  "team": "Valencia",
+  "nationality": "Spain",
+  "position": "Guard",
+  "height": 196,
+  "birthYear": 2004,
+  "number": 32,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Cedi Osman",
+  "team": "Panathinaikos",
+  "nationality": "Turkey",
+  "position": "Forward",
+  "height": 207,
+  "birthYear": 1995,
+  "number": 6,
+  "teamCountry": "Greece"
+ },
+ {
+  "name": "Alexandros Samodurov",
+  "team": "Panathinaikos",
+  "nationality": "Greece",
+  "position": "Forward",
+  "height": 210,
+  "birthYear": 2005,
+  "number": 20,
+  "teamCountry": "Greece"
+ },
+ {
+  "name": "Vassilis Toliopoulos",
+  "team": "Panathinaikos",
+  "nationality": "Greece",
+  "position": "Guard",
+  "height": 188,
+  "birthYear": 1996,
+  "number": 27,
+  "teamCountry": "Greece"
+ },
+ {
+  "name": "Giannoulis Larentzakis",
+  "team": "Olympiacos",
+  "nationality": "Greece",
+  "position": "Guard",
+  "height": 196,
+  "birthYear": 1993,
+  "number": 5,
+  "teamCountry": "Greece"
+ },
+ {
+  "name": "Monte Morris",
+  "team": "Olympiacos",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 188,
+  "birthYear": 1995,
+  "number": 11,
+  "teamCountry": "Greece"
+ },
+ {
+  "name": "Shaquielle McKissic",
+  "team": "Olympiacos",
+  "nationality": "USA",
+  "position": "Forward",
+  "height": 196,
+  "birthYear": 1990,
+  "number": 77,
+  "teamCountry": "Greece"
+ },
+ {
+  "name": "Brandon Boston Jr.",
+  "team": "Fenerbahce",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 198,
+  "birthYear": 2001,
+  "number": 11,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Nando de Colo",
+  "team": "Fenerbahce",
+  "nationality": "France",
+  "position": "Guard",
+  "height": 196,
+  "birthYear": 1987,
+  "number": 12,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Tarik Biberovic",
+  "team": "Fenerbahce",
+  "nationality": "Turkey",
+  "position": "Forward",
+  "height": 201,
+  "birthYear": 2001,
+  "number": 13,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Arturs Zagars",
+  "team": "Fenerbahce",
+  "nationality": "Latvia",
+  "position": "Guard",
+  "height": 190,
+  "birthYear": 2000,
+  "number": 32,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Khem Birch",
+  "team": "Fenerbahce",
+  "nationality": "Canada",
+  "position": "Center",
+  "height": 206,
+  "birthYear": 1992,
+  "number": 92,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Rodrigue Beaubois",
+  "team": "Anadolu Efes",
+  "nationality": "France",
+  "position": "Guard",
+  "height": 185,
+  "birthYear": 1988,
+  "number": 1,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Sehmus Hazer",
+  "team": "Anadolu Efes",
+  "nationality": "Turkey",
+  "position": "Guard",
+  "height": 191,
+  "birthYear": 1999,
+  "number": 2,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Rolands Smits",
+  "team": "Anadolu Efes",
+  "nationality": "Latvia",
+  "position": "Forward",
+  "height": 208,
+  "birthYear": 1995,
+  "number": 11,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Brice Dessert",
+  "team": "Anadolu Efes",
+  "nationality": "France",
+  "position": "Center",
+  "height": 211,
+  "birthYear": 2003,
+  "number": 13,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Vincent Poirier",
+  "team": "Anadolu Efes",
+  "nationality": "France",
+  "position": "Center",
+  "height": 213,
+  "birthYear": 1993,
+  "number": 17,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Burak Can Yildizli",
+  "team": "Anadolu Efes",
+  "nationality": "Turkey",
+  "position": "Forward",
+  "height": 203,
+  "birthYear": 1994,
+  "number": 19,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Cole Swider",
+  "team": "Anadolu Efes",
+  "nationality": "USA",
+  "position": "Forward",
+  "height": 208,
+  "birthYear": 1999,
+  "number": 21,
+  "teamCountry": "Turkey"
+ },
+ {
+  "name": "Marcio Santos",
+  "team": "Maccabi Tel Aviv",
+  "nationality": "Brazil",
+  "position": "Center",
+  "height": 204,
+  "birthYear": 2002,
+  "number": 3,
+  "teamCountry": "Israel"
+ },
+ {
+  "name": "Lonnie Walker IV",
+  "team": "Maccabi Tel Aviv",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 193,
+  "birthYear": 1998,
+  "number": 8,
+  "teamCountry": "Israel"
+ },
+ {
+  "name": "Zach Hankins",
+  "team": "Maccabi Tel Aviv",
+  "nationality": "USA",
+  "position": "Center",
+  "height": 211,
+  "birthYear": 1996,
+  "number": 35,
+  "teamCountry": "Israel"
+ },
+ {
+  "name": "Tamir Blatt",
+  "team": "Maccabi Tel Aviv",
+  "nationality": "Israel",
+  "position": "Guard",
+  "height": 178,
+  "birthYear": 1997,
+  "number": 45,
+  "teamCountry": "Israel"
+ },
+ {
+  "name": "Guy Palatin",
+  "team": "Hapoel Tel Aviv",
+  "nationality": "Israel",
+  "position": "Guard",
+  "height": 192,
+  "birthYear": 2000,
+  "number": 9,
+  "teamCountry": "Israel"
+ },
+ {
+  "name": "Levi Randolph",
+  "team": "Hapoel Tel Aviv",
+  "nationality": "USA",
+  "position": "Forward",
+  "height": 198,
+  "birthYear": 1992,
+  "number": 20,
+  "teamCountry": "Israel"
+ },
+ {
+  "name": "Nico Mannion",
+  "team": "Olimpia Milano",
+  "nationality": "Italy",
+  "position": "Guard",
+  "height": 188,
+  "birthYear": 2001,
+  "number": 1,
+  "teamCountry": "Italy"
+ },
+ {
+  "name": "Lorenzo Brown",
+  "team": "Olimpia Milano",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 196,
+  "birthYear": 1990,
+  "number": 2,
+  "teamCountry": "Italy"
+ },
+ {
+  "name": "Bryant Dunston",
+  "team": "Olimpia Milano",
+  "nationality": "USA",
+  "position": "Center",
+  "height": 203,
+  "birthYear": 1986,
+  "number": 42,
+  "teamCountry": "Italy"
+ },
+ {
+  "name": "Saliou Niang",
+  "team": "Virtus Bologna",
+  "nationality": "Italy",
+  "position": "Forward",
+  "height": 199,
+  "birthYear": 2004,
+  "number": 7,
+  "teamCountry": "Italy"
+ },
+ {
+  "name": "Alen Smailagic",
+  "team": "Virtus Bologna",
+  "nationality": "Serbia",
+  "position": "Forward",
+  "height": 208,
+  "birthYear": 2000,
+  "number": 9,
+  "teamCountry": "Italy"
+ },
+ {
+  "name": "Matt Morgan",
+  "team": "Virtus Bologna",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 193,
+  "birthYear": 1997,
+  "number": 30,
+  "teamCountry": "Italy"
+ },
+ {
+  "name": "Karim Jallow",
+  "team": "Virtus Bologna",
+  "nationality": "Germany",
+  "position": "Forward",
+  "height": 198,
+  "birthYear": 1997,
+  "number": 34,
+  "teamCountry": "Italy"
+ },
+ {
+  "name": "Nemanja Nedovic",
+  "team": "AS Monaco",
+  "nationality": "Serbia",
+  "position": "Guard",
+  "height": 192,
+  "birthYear": 1991,
+  "number": 26,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Juhann Begarin",
+  "team": "AS Monaco",
+  "nationality": "France",
+  "position": "Forward",
+  "height": 196,
+  "birthYear": 2002,
+  "number": 23,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Alpha Diallo",
+  "team": "AS Monaco",
+  "nationality": "France",
+  "position": "Forward",
+  "height": 201,
+  "birthYear": 1997,
+  "number": 11,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Thomas Heurtel",
+  "team": "ASVEL",
+  "nationality": "France",
+  "position": "Guard",
+  "height": 188,
+  "birthYear": 1989,
+  "number": 7,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Glynn Watson Jr.",
+  "team": "ASVEL",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 183,
+  "birthYear": 1997,
+  "number": 30,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Shaquille Harrison",
+  "team": "ASVEL",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 193,
+  "birthYear": 1993,
+  "number": 3,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Braian Angola",
+  "team": "ASVEL",
+  "nationality": "Colombia",
+  "position": "Guard",
+  "height": 198,
+  "birthYear": 1994,
+  "number": 6,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Zac Seljaas",
+  "team": "ASVEL",
+  "nationality": "USA",
+  "position": "Forward",
+  "height": 201,
+  "birthYear": 1997,
+  "number": 1,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Melvin Ajinca",
+  "team": "ASVEL",
+  "nationality": "France",
+  "position": "Forward",
+  "height": 202,
+  "birthYear": 2004,
+  "number": 8,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Paul Eboua",
+  "team": "ASVEL",
+  "nationality": "Cameroon",
+  "position": "Forward",
+  "height": 203,
+  "birthYear": 2000,
+  "number": 0,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Armel Traore",
+  "team": "ASVEL",
+  "nationality": "France",
+  "position": "Forward",
+  "height": 205,
+  "birthYear": 2003,
+  "number": 94,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Bastien Vautier",
+  "team": "ASVEL",
+  "nationality": "France",
+  "position": "Center",
+  "height": 210,
+  "birthYear": 1998,
+  "number": 32,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Yakuba Ouattara",
+  "team": "Paris Basketball",
+  "nationality": "France",
+  "position": "Guard",
+  "height": 192,
+  "birthYear": 1992,
+  "number": 24,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Amath M'Baye",
+  "team": "Paris Basketball",
+  "nationality": "France",
+  "position": "Forward",
+  "height": 206,
+  "birthYear": 1989,
+  "number": 22,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Enzo Shahrvin",
+  "team": "Paris Basketball",
+  "nationality": "France",
+  "position": "Center",
+  "height": 201,
+  "birthYear": 2003,
+  "number": 18,
+  "teamCountry": "France"
+ },
+ {
+  "name": "Stefan Jovic",
+  "team": "Bayern Munich",
+  "nationality": "Serbia",
+  "position": "Guard",
+  "height": 198,
+  "birthYear": 1990,
+  "number": 16,
+  "teamCountry": "Germany"
+ },
+ {
+  "name": "Xavier Rathan-Mayes",
+  "team": "Bayern Munich",
+  "nationality": "Canada",
+  "position": "Guard",
+  "height": 191,
+  "birthYear": 1994,
+  "number": 4,
+  "teamCountry": "Germany"
+ },
+ {
+  "name": "Isiaha Mike",
+  "team": "Bayern Munich",
+  "nationality": "Canada",
+  "position": "Forward",
+  "height": 203,
+  "birthYear": 1997,
+  "number": 22,
+  "teamCountry": "Germany"
+ },
+ {
+  "name": "Elias Harris",
+  "team": "Bayern Munich",
+  "nationality": "Germany",
+  "position": "Forward",
+  "height": 203,
+  "birthYear": 1989,
+  "number": 20,
+  "teamCountry": "Germany"
+ },
+ {
+  "name": "Leon Kratzer",
+  "team": "Bayern Munich",
+  "nationality": "Germany",
+  "position": "Center",
+  "height": 212,
+  "birthYear": 1997,
+  "number": 8,
+  "teamCountry": "Germany"
+ },
+ {
+  "name": "David McCormack",
+  "team": "Bayern Munich",
+  "nationality": "USA",
+  "position": "Center",
+  "height": 208,
+  "birthYear": 1999,
+  "number": 33,
+  "teamCountry": "Germany"
+ },
+ {
+  "name": "Nikola Kalinic",
+  "team": "Crvena Zvezda",
+  "nationality": "Serbia",
+  "position": "Forward",
+  "height": 203,
+  "birthYear": 1991,
+  "number": 12,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Shake Milton",
+  "team": "Partizan",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 196,
+  "birthYear": 1996,
+  "number": 2,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Mitar Bosnjakovic",
+  "team": "Partizan",
+  "nationality": "Serbia",
+  "position": "Forward",
+  "height": 201,
+  "birthYear": 2006,
+  "number": 8,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Aleksej Pokusevski",
+  "team": "Partizan",
+  "nationality": "Serbia",
+  "position": "Forward",
+  "height": 213,
+  "birthYear": 2001,
+  "number": 11,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Aleksa Radanov",
+  "team": "Partizan",
+  "nationality": "Serbia",
+  "position": "Forward",
+  "height": 201,
+  "birthYear": 1998,
+  "number": 13,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Nick Calathes",
+  "team": "Partizan",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 198,
+  "birthYear": 1989,
+  "number": 33,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Ignas Brazdeikis",
+  "team": "Zalgiris Kaunas",
+  "nationality": "Lithuania",
+  "position": "Forward",
+  "height": 201,
+  "birthYear": 1999,
+  "number": 8,
+  "teamCountry": "Lithuania"
+ },
+ {
+  "name": "Laurynas Birutis",
+  "team": "Zalgiris Kaunas",
+  "nationality": "Lithuania",
+  "position": "Center",
+  "height": 213,
+  "birthYear": 1997,
+  "number": 15,
+  "teamCountry": "Lithuania"
+ },
+ {
+  "name": "Mantas Rubstavicius",
+  "team": "Zalgiris Kaunas",
+  "nationality": "Lithuania",
+  "position": "Guard",
+  "height": 198,
+  "birthYear": 2002,
+  "number": 17,
+  "teamCountry": "Lithuania"
+ },
+ {
+  "name": "Nemanja Dangubic",
+  "team": "Dubai BC",
+  "nationality": "Serbia",
+  "position": "Forward",
+  "height": 204,
+  "birthYear": 1993,
+  "number": 2,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Aleksa Avramovic",
+  "team": "Dubai BC",
+  "nationality": "Serbia",
+  "position": "Guard",
+  "height": 193,
+  "birthYear": 1994,
+  "number": 4,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Awudu Abass",
+  "team": "Dubai BC",
+  "nationality": "Italy",
+  "position": "Forward",
+  "height": 198,
+  "birthYear": 1993,
+  "number": 5,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Kenan Kamenjas",
+  "team": "Dubai BC",
+  "nationality": "Bosnia and Herzegovina",
+  "position": "Center",
+  "height": 207,
+  "birthYear": 2000,
+  "number": 34,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Gytis Radzevicius",
+  "team": "Baskonia",
+  "nationality": "Lithuania",
+  "position": "Forward",
+  "height": 197,
+  "birthYear": 1995,
+  "number": 17,
+  "teamCountry": "Spain"
+ },
+ {
+  "name": "Isaiah Canaan",
+  "team": "Crvena Zvezda",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 183,
+  "birthYear": 1991,
+  "number": 3,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Donatas Motiejunas",
+  "team": "Crvena Zvezda",
+  "nationality": "Lithuania",
+  "position": "Center",
+  "height": 213,
+  "birthYear": 1990,
+  "number": 20,
+  "teamCountry": "ABA League"
+ },
+ {
+  "name": "Neno Dimitrijevic",
+  "team": "Bayern Munich",
+  "nationality": "North Macedonia",
+  "position": "Guard",
+  "height": 190,
+  "birthYear": 1998,
+  "number": 0,
+  "teamCountry": "Germany"
+ },
+ {
+  "name": "Jeffrey Dowtin Jr.",
+  "team": "Maccabi Tel Aviv",
+  "nationality": "USA",
+  "position": "Guard",
+  "height": 191,
+  "birthYear": 1997,
+  "number": 21,
+  "teamCountry": "Israel"
+ },
+ {
+  "name": "Quinn Ellis",
+  "team": "Olimpia Milano",
+  "nationality": "United Kingdom",
+  "position": "Guard",
+  "height": 196,
+  "birthYear": 2003,
+  "number": 3,
+  "teamCountry": "Italy"
+ }
+]

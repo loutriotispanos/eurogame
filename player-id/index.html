@@ -27,12 +27,12 @@
      dynamic og:title would be read as the default anyway — per-game previews
      would need real static pages per game. -->
 <link id="canonical" rel="canonical" href="https://euroballgames.com/player-id/" />
-<meta name="description" content="A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, retired legends, or both." />
+<meta name="description" content="A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, non-active players, or both." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Euroball" />
 <meta property="og:url" content="https://euroballgames.com/player-id/" />
 <meta property="og:title" content="Player ID — Euroball" />
-<meta property="og:description" content="A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, retired legends, or both." />
+<meta property="og:description" content="A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, non-active players, or both." />
 <meta property="og:image" content="https://euroballgames.com/og-image.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
@@ -40,7 +40,7 @@
 <meta property="og:image:alt" content="Euroball — eleven daily European basketball puzzles" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Player ID — Euroball" />
-<meta name="twitter:description" content="A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, retired legends, or both." />
+<meta name="twitter:description" content="A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, non-active players, or both." />
 <meta name="twitter:image" content="https://euroballgames.com/og-image.png" />
 <meta name="twitter:image:alt" content="Euroball — eleven daily European basketball puzzles" />
 
@@ -1245,7 +1245,7 @@
   "@type": "VideoGame",
   "name": "Player ID — Euroball",
   "url": "https://euroballgames.com/player-id/",
-  "description": "A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, retired legends, or both.",
+  "description": "A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, non-active players, or both.",
   "inLanguage": "en",
   "genre": [
     "Puzzle",
@@ -1295,10 +1295,10 @@
     },
     {
       "@type": "Question",
-      "name": "What is the difference between Active, Retired and Both?",
+      "name": "What is the difference between Active, Non-active and Both?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Active draws only from players on a 2025–26 EuroLeague roster. Retired draws from the legends database. Both mixes them, which is the hardest because the era is no longer a hint."
+        "text": "Active draws only from players on a 2025–26 EuroLeague roster. Non-active draws from players no longer on a current roster, retired greats included. Both mixes them, which is the hardest because the era is no longer a hint."
       }
     },
     {
@@ -1437,7 +1437,7 @@
       <a class="game-card" href="../mystery-player/" data-game="mystery">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-mystery"/></svg></span>
         <span class="gc-text"><span class="gc-title">Mystery Player</span>
-          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — Daily, Practice, Legends &amp; Endless.</span></span>
+          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — Daily, Practice, Non-active &amp; Endless.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="../player-id/" data-game="playerid">
@@ -1539,7 +1539,7 @@
     <div class="modes" role="tablist" aria-label="Game mode">
       <button id="tab-daily" type="button" role="tab" aria-controls="board-panel" aria-selected="true" tabindex="0">Daily</button>
       <button id="tab-practice" type="button" role="tab" aria-controls="board-panel" aria-selected="false" tabindex="-1">Practice</button>
-      <button id="tab-legends" type="button" role="tab" aria-controls="board-panel" aria-selected="false" tabindex="-1">Legends</button>
+      <button id="tab-legends" type="button" role="tab" aria-controls="board-panel" aria-selected="false" tabindex="-1">Non-active</button>
       <button id="tab-endless" type="button" role="tab" aria-controls="board-panel" aria-selected="false" tabindex="-1">Endless</button>
     </div>
 
@@ -1559,7 +1559,7 @@
         <div id="dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
       </div>
       <button id="give-up">Give up</button>
-      <button id="hint" type="button" title="Reveal a clue (Practice &amp; Legends)">Hint</button>
+      <button id="hint" type="button" title="Reveal a clue (Practice &amp; Non-active)">Hint</button>
       <button id="new-game">New game</button>
     </div>
 
@@ -1607,7 +1607,7 @@
       <div class="modes" id="pid-filter" role="tablist" aria-label="Game mode">
         <button id="pid-daily" type="button" role="tab" aria-selected="true" tabindex="0">Daily</button>
         <button id="pid-active" type="button" role="tab" aria-selected="false" tabindex="-1">Active</button>
-        <button id="pid-retired" type="button" role="tab" aria-selected="false" tabindex="-1">Retired</button>
+        <button id="pid-retired" type="button" role="tab" aria-selected="false" tabindex="-1">Non-active</button>
         <button id="pid-both" type="button" role="tab" aria-selected="false" tabindex="-1">Both</button>
       </div>
       <div id="pid-stats" class="pid-stats"></div>
@@ -1764,7 +1764,7 @@
       <div class="modes" id="cv-modes" role="tablist" aria-label="Game mode">
         <button id="cv-daily" type="button" role="tab" aria-selected="true" tabindex="0">Daily</button>
         <button id="cv-active" type="button" role="tab" aria-selected="false" tabindex="-1">Active</button>
-        <button id="cv-legends" type="button" role="tab" aria-selected="false" tabindex="-1">Legends</button>
+        <button id="cv-legends" type="button" role="tab" aria-selected="false" tabindex="-1">Non-active</button>
         <button id="cv-both" type="button" role="tab" aria-selected="false" tabindex="-1">Both</button>
       </div>
       <div id="cv-stats" class="pid-stats"></div>
@@ -1976,7 +1976,7 @@
       <p>Two EuroLeague players, one question — <strong>who is taller</strong>, <strong>who is older</strong>, or <strong>whose jersey number is higher</strong>? Tap your answer and the values are revealed.</p>
       <ul>
         <li>Every matchup has a real gap — no ties, no 1&nbsp;cm coin flips.</li>
-        <li>The pool mixes <strong>today's players and the legends</strong>, so eras collide.</li>
+        <li>The pool mixes <strong>today's players and non-active ones</strong>, so eras collide.</li>
       </ul>
       <h3>Game modes</h3>
       <ul>
@@ -2020,8 +2020,8 @@
       <ul>
         <li><strong>Daily</strong> — the same pair for everyone, once a day. One of the two is always a <em>Final Four starter</em>, so there's a name to hold on to. Keep your streak alive.</li>
         <li><strong>Active</strong> — both players are in the 2025–26 EuroLeague.</li>
-        <li><strong>Legends</strong> — both are retired greats.</li>
-        <li><strong>Both</strong> — any pair at all, including a legend beside a current player. The deep cuts live here: no famous name is guaranteed.</li>
+        <li><strong>Non-active</strong> — both are off the current EuroLeague rosters.</li>
+        <li><strong>Both</strong> — any pair at all, including a non-active player beside a current one. The deep cuts live here: no famous name is guaranteed.</li>
       </ul>
     </div>
   </div>
@@ -2043,7 +2043,7 @@
         <li><strong>Daily</strong> — one grid a day, the same board for everyone. Keep your streak alive.</li>
         <li><strong>Practice</strong> — random grids, as many as you like.</li>
       </ul>
-      <p class="modal-note">To keep answers fair, The Grid only uses <strong>well-travelled players and legends</strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
+      <p class="modal-note">To keep answers fair, The Grid only uses <strong>well-travelled players, current and non-active,</strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
     </div>
   </div>
 
@@ -2078,7 +2078,7 @@
       <h3>Game modes</h3>
       <ul>
         <li><strong>Daily</strong> — one career a day, the same for everyone. Keep your streak alive.</li>
-        <li><strong>Active / Retired / Both</strong> — unlimited practice with today's stars, the legends, or everyone.</li>
+        <li><strong>Active / Non-active / Both</strong> — unlimited practice with today's players, non-active ones, or everyone.</li>
       </ul>
     </div>
   </div>
@@ -2115,8 +2115,8 @@
       <dd>Because the career path is a very strong clue once you read it properly. Two guesses keeps it a test of recognition rather than a process of elimination.</dd>
       <dt>Do NBA years show up in the path?</dt>
       <dd>Yes. Many European careers pass through the NBA, and those stints appear in the timeline like any other club — often they are the clue that fixes the era for you.</dd>
-      <dt>What is the difference between Active, Retired and Both?</dt>
-      <dd>Active draws only from players on a 2025–26 EuroLeague roster. Retired draws from the legends database. Both mixes them, which is the hardest because the era is no longer a hint.</dd>
+      <dt>What is the difference between Active, Non-active and Both?</dt>
+      <dd>Active draws only from players on a 2025–26 EuroLeague roster. Non-active draws from players no longer on a current roster, retired greats included. Both mixes them, which is the hardest because the era is no longer a hint.</dd>
       <dt>How many careers are in the game?</dt>
       <dd>466 full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2025–26 EuroLeague rosters.</dd>
     </dl>
@@ -2125,7 +2125,7 @@
 
   <footer>
     Rosters are current to the <strong>2025–26 EuroLeague season</strong>; transfers since then are not reflected.<br />
-    293 players · 20 clubs · 173 retired legends · compiled from official club rosters, Wikipedia, FIBA and Proballers.<br />
+    274 players · 20 clubs · 249 non-active players · compiled from official club rosters, Wikipedia, FIBA and Proballers.<br />
     Published for the love of European basketball · No ads, no cookies, no account · Reads offline<br />
     Anonymous page counts only (Cloudflare Web Analytics) — no cookies, no profile, nothing that follows you off this site.
     · <a id="feedback-link" class="colophon-link" rel="nofollow">Send feedback</a>
@@ -2208,7 +2208,7 @@
       <ul>
         <li><strong>Daily</strong> — one mystery player a day, the same for everyone. Keep your streak alive.</li>
         <li><strong>Practice</strong> — unlimited random players from the active rosters.</li>
-        <li><strong>Legends</strong> — retired greats; filter by era.</li>
+        <li><strong>Non-active</strong> — players off the current rosters, retired greats included; filter by era.</li>
         <li><strong>Endless</strong> — solve players back-to-back and build the longest run you can. One loss ends the run.</li>
       </ul>
 
@@ -2223,7 +2223,7 @@
         <span><strong>Hard mode</strong> — only suggest players that fit every clue so far.</span></label></p>
       <p><label class="opt-toggle"><input type="checkbox" id="fx-toggle" />
         <span><strong>Sound &amp; vibration</strong> — subtle audio cues and a buzz on each guess.</span></label></p>
-      <p class="hint">Practice, Legends &amp; Endless also offer a <strong>Hint</strong> button and keep their own stats.</p>
+      <p class="hint">Practice, Non-active &amp; Endless also offer a <strong>Hint</strong> button and keep their own stats.</p>
     </div>
   </div>
 

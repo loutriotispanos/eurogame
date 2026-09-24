@@ -56,14 +56,14 @@ var PAGES = [
     faq: [
       ["How many guesses do I get?", "Eight. Every guess returns a full row of clues, so a deliberate opening guess — a player from a country and position you want to rule out — is worth more than a wild one."],
       ["What does a yellow square mean?", "Close, but the meaning depends on the column. On club it means a different club in the same country. On height it means within 5&nbsp;cm, on age within 2 years, and on shirt number within 3."],
-      ["Which players can be the answer?", "The Daily and Practice draw from the current 2025–26 EuroLeague rosters. Legends mode draws from 173 retired greats instead, and Endless mixes everyone."],
-      ["Is there a new one every day?", "Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice, Legends and Endless are unlimited if you want to keep going."]
+      ["Which players can be the answer?", "The Daily and Practice draw from the current 2025–26 EuroLeague rosters. Non-active mode draws from players no longer on a current roster (retired greats included) instead, and Endless mixes everyone."],
+      ["Is there a new one every day?", "Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice, Non-active and Endless are unlimited if you want to keep going."]
     ]
   },
   {
     view: "playerid", slug: "player-id", name: "Player ID",
     title: "Player ID — guess the player from his career path | Euroball",
-    desc: "A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, retired legends, or both.",
+    desc: "A EuroLeague player's whole career laid out club by club, with the years. Name him in two guesses. Daily puzzle plus unlimited practice with active players, non-active players, or both.",
     h1: "Player ID — name the player from his career path",
     intro: "Every club he ever played for, in order, with the years he was there — and nothing else. No stats, no photo, no nationality. Just the route. Two guesses to say whose career you are looking at.",
     how: [
@@ -74,7 +74,7 @@ var PAGES = [
     faq: [
       ["Why only two guesses?", "Because the career path is a very strong clue once you read it properly. Two guesses keeps it a test of recognition rather than a process of elimination."],
       ["Do NBA years show up in the path?", "Yes. Many European careers pass through the NBA, and those stints appear in the timeline like any other club — often they are the clue that fixes the era for you."],
-      ["What is the difference between Active, Retired and Both?", "Active draws only from players on a 2025–26 EuroLeague roster. Retired draws from the legends database. Both mixes them, which is the hardest because the era is no longer a hint."],
+      ["What is the difference between Active, Non-active and Both?", "Active draws only from players on a 2025–26 EuroLeague roster. Non-active draws from players no longer on a current roster, retired greats included. Both mixes them, which is the hardest because the era is no longer a hint."],
       ["How many careers are in the game?", "466 full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2025–26 EuroLeague rosters."]
     ]
   },
@@ -148,7 +148,7 @@ var PAGES = [
       "Each player can be used only once on the board, so spend your flexible names carefully. Most cells have several right answers."
     ],
     faq: [
-      ["Why was my answer rejected when the player really did fit?", "The Grid only accepts well-travelled players and legends whose full career is in the database. A newcomer still at his first club will be turned down even when he genuinely fits — a rule that keeps every offered name accurately checkable in both directions."],
+      ["Why was my answer rejected when the player really did fit?", "The Grid only accepts well-travelled players, current and non-active, whose full career is in the database. A newcomer still at his first club will be turned down even when he genuinely fits — a rule that keeps every offered name accurately checkable in both directions."],
       ["What is an Immaculate?", "Filling all nine cells without a single wrong guess. It is a badge on the result, not a separate mode."],
       ["Can two cells take the same player?", "No. Each player can appear once on the board. That constraint is what makes the shared-answer cells hard: two neighbouring cells may have almost the same answer list between them."],
       ["Can I give up on the Daily?", "Yes. Give up fills each empty cell with one answer that would have fitted, and asks once before it commits since there is no second grid that day. It records a loss for The Grid but still counts as played, so the hub streak survives."]
@@ -169,8 +169,8 @@ var PAGES = [
     faq: [
       ["What if I can think of two clubs they share?", "Then one of them is not in the database. A pair only becomes a puzzle if it shares exactly one club out of all 465 clubs on record — not merely one of the ~22 you would think to name — so the guarantee of a single right answer holds."],
       ["Can the answer be an NBA team?", "No. The answer is always a EuroLeague club or a club with genuine retired greats, even though the database knows about NBA and other stints and uses them elsewhere."],
-      ["Do the two players have to be from the same era?", "No, and Both mode leans on exactly that: a current EuroLeague player can be paired with a retired legend who played for the same club decades earlier."],
-      ["Why is one player in the Daily always familiar?", "The Daily is anchored on a Final Four starter so there is always one name you can hold on to. Active, Legends and Both drop that guarantee, and Both reaches widest of all."]
+      ["Do the two players have to be from the same era?", "No, and Both mode leans on exactly that: a current EuroLeague player can be paired with a non-active player who played for the same club decades earlier."],
+      ["Why is one player in the Daily always familiar?", "The Daily is anchored on a Final Four starter so there is always one name you can hold on to. Active, Non-active and Both drop that guarantee, and Both reaches widest of all."]
     ]
   },
   {
@@ -219,14 +219,14 @@ var PAGES = [
     intro: "Two players side by side and one question about them. Who is taller? Who is older? Whose shirt number is higher? Tap your answer and both values are revealed. Ten matchups make a Daily; Endless runs until you get one wrong.",
     how: [
       "Every matchup has a real gap between the two values — no ties and no one-centimetre coin flips.",
-      "The pool mixes today's EuroLeague players with the retired legends, so eras collide and instinct is worth as much as knowledge.",
+      "The pool mixes today's EuroLeague players with non-active ones, so eras collide and instinct is worth as much as knowledge.",
       "Daily is ten matchups, the same for everyone. Seven or more right is a pass and keeps your hub streak alive.",
       "Endless ends on your first wrong answer. Your best run is kept."
     ],
     faq: [
       ["Where do the heights and ages come from?", "The same database the rest of the site plays by — heights, birth years and shirt numbers compiled from official club rosters and cross-checked against the official 2025–26 EuroLeague rosters."],
       ["Can two players tie?", "No. A matchup is only used when there is a genuine gap between the values, so there is always a right answer."],
-      ["How many do I need to pass the Daily?", "Seven out of ten. It was eased from eight once real scores showed eight was too steep for a ten-round game with legends in the pool."],
+      ["How many do I need to pass the Daily?", "Seven out of ten. It was eased from eight once real scores showed eight was too steep for a ten-round game with non-active players in the pool."],
       ["Does Endless affect my streak?", "No. Only the Daily feeds the hub streak; Endless keeps its own best-run record on the Records page."]
     ]
   },
