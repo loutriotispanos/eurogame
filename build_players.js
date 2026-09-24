@@ -186,6 +186,27 @@ const SEASON_RETURN = [
   {"name":"Scottie Wilbekin","team":"Besiktas","nationality":"USA","position":"Guard","height":188,"birthYear":1993,"number":12},
 ];
 
+// Players new to the database for 2026-27 (researched in batches; careers
+// live in build_careers.js under "2026-27 new arrivals").
+const SEASON_ADD = [
+  // batch 1 (2026-09-24): the best-known veterans
+  {"name":"Dario Saric","team":"Anadolu Efes","nationality":"Croatia","position":"Forward","height":208,"birthYear":1994,"number":5},
+  {"name":"Jonas Valanciunas","team":"Zalgiris Kaunas","nationality":"Lithuania","position":"Center","height":211,"birthYear":1992,"number":17},
+  {"name":"Guerschon Yabusele","team":"Panathinaikos","nationality":"France","position":"Forward","height":203,"birthYear":1995,"number":28},
+  {"name":"Ante Zizic","team":"Besiktas","nationality":"Croatia","position":"Center","height":210,"birthYear":1997,"number":41},
+  {"name":"Furkan Korkmaz","team":"Besiktas","nationality":"Turkey","position":"Forward","height":201,"birthYear":1997,"number":30},
+  {"name":"Patty Mills","team":"ASVEL","nationality":"Australia","position":"Guard","height":188,"birthYear":1988,"number":8},
+  {"name":"Jae Crowder","team":"ASVEL","nationality":"USA","position":"Forward","height":198,"birthYear":1990,"number":99},
+  {"name":"T.J. Warren","team":"Paris Basketball","nationality":"USA","position":"Forward","height":203,"birthYear":1993,"number":1},
+  {"name":"Chris Duarte","team":"Baskonia","nationality":"Dominican Republic","position":"Forward","height":196,"birthYear":1997,"number":5},
+  {"name":"Jaylen Nowell","team":"Besiktas","nationality":"USA","position":"Guard","height":193,"birthYear":1999,"number":24},
+  {"name":"Johnny Juzang","team":"Fenerbahce","nationality":"USA","position":"Forward","height":201,"birthYear":2001,"number":9},
+  {"name":"Damian Jones","team":"Real Madrid","nationality":"USA","position":"Center","height":211,"birthYear":1995,"number":30},
+  {"name":"Olivier Sarr","team":"Real Madrid","nationality":"France","position":"Center","height":208,"birthYear":1999,"number":33},
+  {"name":"Amir Coffey","team":"Hapoel Tel Aviv","nationality":"USA","position":"Guard","height":201,"birthYear":1997,"number":7},
+  {"name":"Garrison Mathews","team":"Olimpia Milano","nationality":"USA","position":"Guard","height":196,"birthYear":1996,"number":24},
+];
+
 const SEASON_MOVE = {
   "Mike James":      { team: "Anadolu Efes", number: 55 },   // from AS Monaco
   "Matthew Strazel": { team: "Anadolu Efes", number: 32 },   // from AS Monaco
@@ -280,6 +301,7 @@ for (const p of all) {
 }
 for (const a of ROSTER_ADD) if (!SEASON_REMOVE.has(a.name.toLowerCase())) all.push({ ...a, ...SEASON_MOVE[a.name] });
 for (const a of SEASON_RETURN) all.push(a);
+for (const a of SEASON_ADD) all.push(a);
 
 // Validate teams; collect unknowns.
 const unknownTeams = new Set();

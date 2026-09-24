@@ -1811,6 +1811,41 @@ RAW.push(
   { name: "Mitar Bosnjakovic", career: [{"team":"Partizan","from":2024,"to":null}] }
 );
 
+// --- 2026-27 new arrivals (researched in batches; bios in build_players.js SEASON_ADD) ---
+RAW.push(
+  // batch 1 (2026-09-24)
+  { name: "Dario Saric", career: [
+    { team: "Dubrava", from: 2010, to: 2011 }, { team: "KK Zagreb", from: 2011, to: 2012 }, { team: "Cibona", from: 2012, to: 2014 }, { team: "Anadolu Efes", from: 2014, to: 2016 }, { team: "Philadelphia 76ers", from: 2016, to: 2019 }, { team: "Minnesota Timberwolves", from: 2018, to: 2019 }, { team: "Phoenix Suns", from: 2019, to: 2023 }, { team: "Oklahoma City Thunder", from: 2022, to: 2023 }, { team: "Golden State Warriors", from: 2023, to: 2024 }, { team: "Denver Nuggets", from: 2024, to: 2025 }, { team: "Sacramento Kings", from: 2025, to: 2026 }, { team: "Anadolu Efes", from: 2026, to: null } ] },
+  { name: "Jonas Valanciunas", career: [
+    { team: "Perlas", from: 2008, to: 2010 }, { team: "Lietuvos Rytas", from: 2009, to: 2012 }, { team: "Toronto Raptors", from: 2012, to: 2019 }, { team: "Memphis Grizzlies", from: 2018, to: 2021 }, { team: "New Orleans Pelicans", from: 2021, to: 2024 }, { team: "Washington Wizards", from: 2024, to: 2025 }, { team: "Sacramento Kings", from: 2024, to: 2025 }, { team: "Denver Nuggets", from: 2025, to: 2026 }, { team: "Zalgiris Kaunas", from: 2026, to: null } ] },
+  { name: "Guerschon Yabusele", career: [
+    { team: "Chorale Roanne", from: 2013, to: 2015 }, { team: "Rouen", from: 2015, to: 2016 }, { team: "Shanghai Sharks", from: 2016, to: 2017 }, { team: "Boston Celtics", from: 2017, to: 2019 }, { team: "Nanjing Monkey Kings", from: 2019, to: 2020 }, { team: "ASVEL", from: 2020, to: 2021 }, { team: "Real Madrid", from: 2021, to: 2024 }, { team: "Philadelphia 76ers", from: 2024, to: 2025 }, { team: "New York Knicks", from: 2025, to: 2026 }, { team: "Chicago Bulls", from: 2025, to: 2026 }, { team: "Panathinaikos", from: 2026, to: null } ] },
+  { name: "Ante Zizic", career: [
+    { team: "Kastela", from: 2013, to: 2014 }, { team: "Cibona", from: 2014, to: 2016 }, { team: "Darussafaka", from: 2016, to: 2017 }, { team: "Cleveland Cavaliers", from: 2017, to: 2020 }, { team: "Maccabi Tel Aviv", from: 2020, to: 2022 }, { team: "Anadolu Efes", from: 2022, to: 2023 }, { team: "Virtus Bologna", from: 2023, to: 2025 }, { team: "Besiktas", from: 2025, to: null } ] },
+  { name: "Furkan Korkmaz", career: [
+    { team: "Pertevniyal", from: 2013, to: 2014 }, { team: "Anadolu Efes", from: 2014, to: 2016 }, { team: "Banvit", from: 2016, to: 2017 }, { team: "Philadelphia 76ers", from: 2017, to: 2024 }, { team: "AS Monaco", from: 2024, to: 2025 }, { team: "Bahcesehir Koleji", from: 2024, to: 2025 }, { team: "Tofas", from: 2025, to: 2026 }, { team: "Besiktas", from: 2026, to: null } ] },
+  { name: "Patty Mills", career: [
+    { team: "Portland Trail Blazers", from: 2009, to: 2011 }, { team: "Melbourne Tigers", from: 2011, to: 2012 }, { team: "Xinjiang Flying Tigers", from: 2011, to: 2012 }, { team: "San Antonio Spurs", from: 2011, to: 2021 }, { team: "Brooklyn Nets", from: 2021, to: 2023 }, { team: "Atlanta Hawks", from: 2023, to: 2024 }, { team: "Miami Heat", from: 2023, to: 2024 }, { team: "Utah Jazz", from: 2024, to: 2025 }, { team: "Los Angeles Clippers", from: 2024, to: 2025 }, { team: "CB Canarias", from: 2025, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
+  { name: "Jae Crowder", career: [
+    { team: "Dallas Mavericks", from: 2012, to: 2015 }, { team: "Boston Celtics", from: 2014, to: 2017 }, { team: "Cleveland Cavaliers", from: 2017, to: 2018 }, { team: "Utah Jazz", from: 2017, to: 2019 }, { team: "Memphis Grizzlies", from: 2019, to: 2020 }, { team: "Miami Heat", from: 2019, to: 2020 }, { team: "Phoenix Suns", from: 2020, to: 2022 }, { team: "Milwaukee Bucks", from: 2022, to: 2024 }, { team: "Sacramento Kings", from: 2024, to: 2025 }, { team: "Vaqueros de Bayamon", from: 2025, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
+  { name: "T.J. Warren", career: [
+    { team: "Phoenix Suns", from: 2014, to: 2019 }, { team: "Indiana Pacers", from: 2019, to: 2022 }, { team: "Brooklyn Nets", from: 2022, to: 2023 }, { team: "Phoenix Suns", from: 2022, to: 2023 }, { team: "Minnesota Timberwolves", from: 2023, to: 2024 }, { team: "Paris Basketball", from: 2026, to: null } ] },
+  { name: "Chris Duarte", career: [
+    { team: "Indiana Pacers", from: 2021, to: 2023 }, { team: "Sacramento Kings", from: 2023, to: 2024 }, { team: "Chicago Bulls", from: 2024, to: 2025 }, { team: "Vaqueros de Bayamon", from: 2024, to: 2025 }, { team: "Unicaja", from: 2025, to: 2026 }, { team: "Baskonia", from: 2026, to: null } ] },
+  { name: "Jaylen Nowell", career: [
+    { team: "Minnesota Timberwolves", from: 2019, to: 2023 }, { team: "New Orleans Pelicans", from: 2024, to: 2025 }, { team: "Shanxi Loongs", from: 2025, to: 2026 }, { team: "Gigantes de Carolina", from: 2025, to: 2026 }, { team: "Besiktas", from: 2026, to: null } ] },
+  { name: "Johnny Juzang", career: [
+    { team: "Utah Jazz", from: 2022, to: 2025 }, { team: "Minnesota Timberwolves", from: 2025, to: 2026 }, { team: "Zenit Saint Petersburg", from: 2025, to: 2026 }, { team: "Fenerbahce", from: 2026, to: null } ] },
+  { name: "Damian Jones", career: [
+    { team: "Golden State Warriors", from: 2016, to: 2019 }, { team: "Atlanta Hawks", from: 2019, to: 2020 }, { team: "Phoenix Suns", from: 2020, to: 2021 }, { team: "Los Angeles Lakers", from: 2020, to: 2021 }, { team: "Sacramento Kings", from: 2020, to: 2022 }, { team: "Los Angeles Lakers", from: 2022, to: 2023 }, { team: "Utah Jazz", from: 2022, to: 2023 }, { team: "Cleveland Cavaliers", from: 2023, to: 2024 }, { team: "Zhejiang Golden Bulls", from: 2024, to: 2026 }, { team: "Vaqueros de Bayamon", from: 2025, to: 2026 }, { team: "Real Madrid", from: 2026, to: null } ] },
+  { name: "Olivier Sarr", career: [
+    { team: "Oklahoma City Thunder", from: 2021, to: 2024 }, { team: "Cleveland Cavaliers", from: 2025, to: 2026 }, { team: "Real Madrid", from: 2026, to: null } ] },
+  { name: "Amir Coffey", career: [
+    { team: "Los Angeles Clippers", from: 2019, to: 2025 }, { team: "Milwaukee Bucks", from: 2025, to: 2026 }, { team: "Phoenix Suns", from: 2025, to: 2026 }, { team: "Hapoel Tel Aviv", from: 2026, to: null } ] },
+  { name: "Garrison Mathews", career: [
+    { team: "Washington Wizards", from: 2019, to: 2021 }, { team: "Houston Rockets", from: 2021, to: 2023 }, { team: "Atlanta Hawks", from: 2022, to: 2025 }, { team: "Indiana Pacers", from: 2025, to: 2026 }, { team: "Olimpia Milano", from: 2026, to: null } ] }
+);
+
 // Merge researched expansion careers (retired legends). Each name resolves in
 // LEGENDS via legends_extra.json (build_legends.js loads the same file into
 // legends.js), so find() will tag these active:false and validate them.
