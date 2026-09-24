@@ -189,6 +189,16 @@ const SEASON_RETURN = [
 // Players new to the database for 2026-27 (researched in batches; careers
 // live in build_careers.js under "2026-27 new arrivals").
 const SEASON_ADD = [
+  // batch 5 (2026-09-24)
+  {"name":"Berk Ugurlu","team":"Besiktas","nationality":"Turkey","position":"Guard","height":192,"birthYear":1996,"number":6},
+  {"name":"Ignas Sargiunas","team":"Fenerbahce","nationality":"Lithuania","position":"Guard","height":194,"birthYear":1999,"number":43},
+  {"name":"Agustin Ubal","team":"FC Barcelona","nationality":"Uruguay","position":"Guard","height":198,"birthYear":2003,"number":10},
+  {"name":"Mathis Dossou-Yovo","team":"ASVEL","nationality":"France","position":"Center","height":208,"birthYear":2000,"number":12},
+  {"name":"Nikolaos Plotas","team":"Olympiacos","nationality":"Greece","position":"Guard","height":195,"birthYear":2004,"number":9},
+  {"name":"Antonis Karagiannidis","team":"Olympiacos","nationality":"Greece","position":"Center","height":206,"birthYear":2002,"number":29},
+  {"name":"Eleftherios Mantzoukas","team":"Panathinaikos","nationality":"Greece","position":"Forward","height":207,"birthYear":2003,"number":72},
+  {"name":"Dimitris Moraitis","team":"Panathinaikos","nationality":"Greece","position":"Guard","height":194,"birthYear":1999,"number":6},
+  {"name":"Maozinha Pereira","team":"Paris Basketball","nationality":"Brazil","position":"Forward","height":203,"birthYear":2000,"number":45},
   // batch 4 (2026-09-24)
   {"name":"RJ Cole","team":"Olimpia Milano","nationality":"USA","position":"Guard","height":185,"birthYear":1999,"number":2},
   {"name":"Jason Burnell","team":"Olimpia Milano","nationality":"USA","position":"Forward","height":201,"birthYear":1997,"number":0},

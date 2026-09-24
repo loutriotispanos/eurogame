@@ -1815,6 +1815,25 @@ RAW.push(
 
 // --- 2026-27 new arrivals (researched in batches; bios in build_players.js SEASON_ADD) ---
 RAW.push(
+  // batch 5 (2026-09-24)
+  { name: "Berk Ugurlu", career: [
+    { team: "Fenerbahce", from: 2013, to: 2017 }, { team: "Pinar Karsiyaka", from: 2017, to: 2019 }, { team: "Tofas", from: 2019, to: 2023 }, { team: "Besiktas", from: 2023, to: null } ] },
+  { name: "Ignas Sargiunas", career: [
+    { team: "CBet Prienai", from: 2020, to: 2022 }, { team: "Medi Bayreuth", from: 2022, to: 2023 }, { team: "Neptunas", from: 2023, to: 2024 }, { team: "Lietuvos Rytas", from: 2024, to: 2026 }, { team: "Fenerbahce", from: 2026, to: null } ] },
+  { name: "Agustin Ubal", career: [
+    { team: "Breogan", from: 2021, to: 2022 }, { team: "FC Barcelona", from: 2021, to: 2022 }, { team: "Bilbao Basket", from: 2022, to: 2023 }, { team: "Palencia", from: 2023, to: 2024 }, { team: "Granada", from: 2024, to: 2025 }, { team: "Manresa", from: 2025, to: 2026 }, { team: "FC Barcelona", from: 2026, to: null } ] },
+  { name: "Mathis Dossou-Yovo", career: [
+    { team: "Chalon", from: 2018, to: 2020 }, { team: "ALM Evreux", from: 2019, to: 2020 }, { team: "Ada Blois", from: 2020, to: 2021 }, { team: "Chalon", from: 2021, to: 2022 }, { team: "Saint-Quentin", from: 2022, to: 2024 }, { team: "Paris Basketball", from: 2024, to: 2025 }, { team: "Oldenburg", from: 2024, to: 2025 }, { team: "Nanterre", from: 2025, to: 2026 }, { team: "ASVEL", from: 2026, to: null } ] },
+  { name: "Nikolaos Plotas", career: [
+    { team: "Promitheas Patras", from: 2021, to: 2026 }, { team: "Olympiacos", from: 2026, to: null } ] },
+  { name: "Antonis Karagiannidis", career: [
+    { team: "Doxa Lefkadas", from: 2021, to: 2022 }, { team: "Aias Evosmou", from: 2022, to: 2023 }, { team: "Promitheas Patras", from: 2023, to: 2026 }, { team: "Olympiacos", from: 2026, to: null } ] },
+  { name: "Eleftherios Mantzoukas", career: [
+    { team: "Promitheas Patras", from: 2017, to: 2021 }, { team: "Panathinaikos", from: 2021, to: 2024 }, { team: "Maroussi", from: 2024, to: 2025 }, { team: "Aris", from: 2024, to: 2025 }, { team: "Panathinaikos", from: 2026, to: null } ] },
+  { name: "Dimitris Moraitis", career: [
+    { team: "AEK Athens", from: 2015, to: 2019 }, { team: "Kolossos Rodou", from: 2019, to: 2020 }, { team: "AEK Athens", from: 2020, to: 2021 }, { team: "Peristeri", from: 2021, to: 2023 }, { team: "Panathinaikos", from: 2023, to: 2025 }, { team: "Iraklis", from: 2025, to: 2026 }, { team: "Panathinaikos", from: 2026, to: null } ] },
+  { name: "Maozinha Pereira", career: [
+    { team: "Pinheiros", from: 2019, to: 2020 }, { team: "Crn Drim", from: 2020, to: 2021 }, { team: "Fortaleza Basquete Cearense", from: 2021, to: 2022 }, { team: "Corinthians", from: 2022, to: 2023 }, { team: "Memphis Grizzlies", from: 2023, to: 2024 }, { team: "Manisa BB", from: 2025, to: 2026 }, { team: "Paris Basketball", from: 2026, to: null } ] },
   // batch 4 (2026-09-24)
   { name: "RJ Cole", career: [
     { team: "Lavrio", from: 2022, to: 2023 }, { team: "Braunschweig", from: 2022, to: 2023 }, { team: "Lietuvos Rytas", from: 2023, to: 2025 }, { team: "Reyer Venezia", from: 2025, to: 2026 }, { team: "Olimpia Milano", from: 2026, to: null } ] },
