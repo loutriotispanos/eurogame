@@ -46,7 +46,7 @@ var PAGES = [
     title: "Mystery Player — the daily EuroLeague Wordle | Euroball",
     desc: "Guess the mystery EuroLeague player in 8 tries. Every guess colour-codes club, nationality, position, height, age and jersey number. A new player daily — free, no sign-up.",
     h1: "Mystery Player — the daily EuroLeague Wordle",
-    intro: "A Wordle for European basketball. One hidden player from the 2025–26 EuroLeague, eight tries, and a grid that tells you a little more each time. Guess a name and six columns light up at once: club, nationality, position, height, age and shirt number. Nothing is random — every colour narrows the field.",
+    intro: "A Wordle for European basketball. One hidden player from the 2026–27 EuroLeague, eight tries, and a grid that tells you a little more each time. Guess a name and six columns light up at once: club, nationality, position, height, age and shirt number. Nothing is random — every colour narrows the field.",
     how: [
       "Type any EuroLeague player's name and pick him from the list. The row fills in immediately.",
       "Green means an exact match. Yellow means close — a club in the same country, a height within 5&nbsp;cm, an age within 2 years, a number within 3. Grey means no match at all.",
@@ -56,7 +56,7 @@ var PAGES = [
     faq: [
       ["How many guesses do I get?", "Eight. Every guess returns a full row of clues, so a deliberate opening guess — a player from a country and position you want to rule out — is worth more than a wild one."],
       ["What does a yellow square mean?", "Close, but the meaning depends on the column. On club it means a different club in the same country. On height it means within 5&nbsp;cm, on age within 2 years, and on shirt number within 3."],
-      ["Which players can be the answer?", "The Daily and Practice draw from the current 2025–26 EuroLeague rosters. Non-active mode draws from players no longer on a current roster (retired greats included) instead, and Endless mixes everyone."],
+      ["Which players can be the answer?", "The Daily and Practice draw from the current 2026–27 EuroLeague rosters. Non-active mode draws from players no longer on a current roster (retired greats included) instead, and Endless mixes everyone."],
       ["Is there a new one every day?", "Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice, Non-active and Endless are unlimited if you want to keep going."]
     ]
   },
@@ -74,8 +74,8 @@ var PAGES = [
     faq: [
       ["Why only two guesses?", "Because the career path is a very strong clue once you read it properly. Two guesses keeps it a test of recognition rather than a process of elimination."],
       ["Do NBA years show up in the path?", "Yes. Many European careers pass through the NBA, and those stints appear in the timeline like any other club — often they are the clue that fixes the era for you."],
-      ["What is the difference between Active, Non-active and Both?", "Active draws only from players on a 2025–26 EuroLeague roster. Non-active draws from players no longer on a current roster, retired greats included. Both mixes them, which is the hardest because the era is no longer a hint."],
-      ["How many careers are in the game?", "466 full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2025–26 EuroLeague rosters."]
+      ["What is the difference between Active, Non-active and Both?", "Active draws only from players on a 2026–27 EuroLeague roster. Non-active draws from players no longer on a current roster, retired greats included. Both mixes them, which is the hardest because the era is no longer a hint."],
+      ["How many careers are in the game?", "531 full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2026–27 EuroLeague rosters."]
     ]
   },
   {
@@ -132,7 +132,7 @@ var PAGES = [
       ["How do I play without dragging?", "Every club has ▲ and ▼ buttons beside it that move it one place. The whole puzzle is solvable with those alone, which also makes it keyboard- and screen-reader-friendly."],
       ["What happens when a club locks green?", "It is in the right place. It stays green through later checks unless you move it again, so each check narrows the problem instead of resetting it."],
       ["Do loan spells and NBA years count as separate stops?", "Yes. Anything recorded as a distinct stint in the career database appears as its own club, in the order it happened."],
-      ["How many careers can appear?", "85 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 466-career database the rest of the site plays by."]
+      ["How many careers can appear?", "85 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 531-career database the rest of the site plays by."]
     ]
   },
   {
@@ -224,7 +224,7 @@ var PAGES = [
       "Endless ends on your first wrong answer. Your best run is kept."
     ],
     faq: [
-      ["Where do the heights and ages come from?", "The same database the rest of the site plays by — heights, birth years and shirt numbers compiled from official club rosters and cross-checked against the official 2025–26 EuroLeague rosters."],
+      ["Where do the heights and ages come from?", "The same database the rest of the site plays by — heights, birth years and shirt numbers compiled from official club rosters and cross-checked against the official 2026–27 EuroLeague rosters."],
       ["Can two players tie?", "No. A matchup is only used when there is a genuine gap between the values, so there is always a right answer."],
       ["How many do I need to pass the Daily?", "Seven out of ten. It was eased from eight once real scores showed eight was too steep for a ten-round game with non-active players in the pool."],
       ["Does Endless affect my streak?", "No. Only the Daily feeds the hub streak; Endless keeps its own best-run record on the Records page."]
@@ -232,10 +232,10 @@ var PAGES = [
   },
   {
     view: "rostermaster", slug: "roster-master", name: "Roster Master",
-    title: "Roster Master — name every 2025-26 EuroLeague roster | Euroball",
-    desc: "The long game: name every player on all twenty 2025-26 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good.",
+    title: "Roster Master — name every 2026-27 EuroLeague roster | Euroball",
+    desc: "The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good.",
     h1: "Roster Master — all twenty rosters, from memory",
-    intro: "The big one, and the only game here with no daily. Twenty clubs, 293 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
+    intro: "The big one, and the only game here with no daily. Twenty clubs, 213 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
     how: [
       "Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
       "Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.",
@@ -244,7 +244,7 @@ var PAGES = [
     ],
     faq: [
       ["Why is there no autocomplete?", "Because the game is recall. Every other game on the site offers a name list so you do not have to spell Spanoulis; here a list would let you walk the roster instead of remembering it, which is the entire puzzle."],
-      ["How current are the rosters?", "They are the 2025–26 EuroLeague squads, cross-checked club by club against the official rosters. Transfers made after that check are not reflected."],
+      ["How current are the rosters?", "They are the 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season. Some newly arrived players are still being added, and transfers made after that check are not reflected."],
       ["Does Roster Master affect my hub streak?", "No. It has no daily, so it sits outside the streak entirely. Your best score per club is kept on the Records page."],
       ["What happens if I clear a board by accident?", "You lose the filled slots but not your record. The best percentage stays on the club card, and a gold ★ once earned is permanent."]
     ]

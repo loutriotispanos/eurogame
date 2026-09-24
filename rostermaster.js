@@ -1,4 +1,4 @@
-/* Roster Master — the completion board, not a daily game. All twenty 2025-26
+/* Roster Master — the completion board, not a daily game. All twenty 2026-27
  * rosters; pick a club and name its whole roster from memory into an empty
  * grid headed Guards / Forwards / Centers. Pure RECALL: one input, NO
  * autocomplete (typing a match auto-fills its slot; a unique surname is
