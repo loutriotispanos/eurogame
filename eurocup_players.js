@@ -494,6 +494,15 @@ window.EUROCUP_PLAYERS = [
     "number": 7
   },
   {
+    "name": "Alija Islamovic",
+    "team": "Bosna Sarajevo",
+    "nationality": "Bosnia and Herzegovina",
+    "position": "Center",
+    "height": 207,
+    "birthYear": 2001,
+    "number": 33
+  },
+  {
     "name": "Darko Talic",
     "team": "Bosna Sarajevo",
     "nationality": "Bosnia and Herzegovina",
@@ -584,6 +593,132 @@ window.EUROCUP_PLAYERS = [
     "number": 2
   },
   {
+    "name": "Andrija Slavkovic",
+    "team": "Buducnost",
+    "nationality": "Montenegro",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1999,
+    "number": 7
+  },
+  {
+    "name": "Axel Bouteille",
+    "team": "Buducnost",
+    "nationality": "France",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1995,
+    "number": 83
+  },
+  {
+    "name": "Dordije Jovanovic",
+    "team": "Buducnost",
+    "nationality": "Montenegro",
+    "position": "Forward",
+    "height": 197,
+    "birthYear": 2003,
+    "number": 13
+  },
+  {
+    "name": "Emir Hadzibegovic",
+    "team": "Buducnost",
+    "nationality": "Montenegro",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 1996,
+    "number": 8
+  },
+  {
+    "name": "Fletcher Magee",
+    "team": "Buducnost",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1996,
+    "number": 3
+  },
+  {
+    "name": "Iverson Molinar",
+    "team": "Buducnost",
+    "nationality": "Panama",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1999,
+    "number": 10
+  },
+  {
+    "name": "Jerry Boutsiele",
+    "team": "Buducnost",
+    "nationality": "France",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1992,
+    "number": 16
+  },
+  {
+    "name": "Justin Smith",
+    "team": "Buducnost",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 201,
+    "birthYear": 1999,
+    "number": 0
+  },
+  {
+    "name": "Juwan Morgan",
+    "team": "Buducnost",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1997,
+    "number": 15
+  },
+  {
+    "name": "Marial Shayok",
+    "team": "Buducnost",
+    "nationality": "South Sudan",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 1995,
+    "number": 1
+  },
+  {
+    "name": "Oleksandr Kovliar",
+    "team": "Buducnost",
+    "nationality": "Ukraine",
+    "position": "Forward",
+    "height": 191,
+    "birthYear": 2002,
+    "number": 50
+  },
+  {
+    "name": "Stefan Dordevic",
+    "team": "Buducnost",
+    "nationality": "Serbia",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 1998,
+    "number": 45
+  },
+  {
+    "name": "Yogi Ferrell",
+    "team": "Buducnost",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1993,
+    "number": 11
+  },
+  {
+    "name": "Anthony Cowan Jr.",
+    "team": "Cedevita Olimpija",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1997,
+    "number": 1
+  },
+  {
     "name": "Jaka Blazic",
     "team": "Cedevita Olimpija",
     "nationality": "Slovenia",
@@ -591,6 +726,42 @@ window.EUROCUP_PLAYERS = [
     "height": 196,
     "birthYear": 1990,
     "number": 11
+  },
+  {
+    "name": "Jordan Gainey",
+    "team": "Cedevita Olimpija",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2002,
+    "number": 4
+  },
+  {
+    "name": "Rihards Lomazs",
+    "team": "Cedevita Olimpija",
+    "nationality": "Latvia",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1996,
+    "number": 6
+  },
+  {
+    "name": "Rok Radovic",
+    "team": "Cedevita Olimpija",
+    "nationality": "Slovenia",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2001,
+    "number": 3
+  },
+  {
+    "name": "Urban Kroflic",
+    "team": "Cedevita Olimpija",
+    "nationality": "Slovenia",
+    "position": "Guard",
+    "height": 198,
+    "birthYear": 2006,
+    "number": 23
   },
   {
     "name": "Aljami Durham",
