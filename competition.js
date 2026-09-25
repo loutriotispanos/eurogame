@@ -1,7 +1,7 @@
 /*
  * Which competition the games play on: the EuroLeague (players.js) or the
- * EuroCup (eurocup_players.js). Loaded after both data files and before any
- * game, because every game reads window.PLAYERS once, when it loads — so the
+ * EuroCup (eurocup_players.js). Loaded after the data files (players, legends,
+ * careers and their EuroCup twins) and before any game, because every game reads window.PLAYERS once, when it loads — so the
  * choice is made here, up front, and switching competitions reloads the page.
  *
  * The choice lives in elg:comp ("euroleague" | "eurocup"); a ?comp= in the URL
@@ -10,11 +10,12 @@
  * and nothing here changes anything.
  *
  * In EuroCup mode:
- *   - window.PLAYERS / window.TEAMS become the EuroCup's, the EuroLeague's are
- *     kept as EL_PLAYERS / EL_TEAMS, and LEGENDS is emptied (the non-active
- *     pool is EuroLeague history);
- *   - only the games in COMP_GAMES.eurocup are offered — the rest need careers,
- *     lineups or puzzles the EuroCup doesn't have yet;
+ *   - window.PLAYERS / TEAMS / CAREERS become the EuroCup's, the EuroLeague's
+ *     are kept as EL_PLAYERS / EL_TEAMS / EL_CAREERS, and LEGENDS is emptied
+ *     (the non-active pool is EuroLeague history);
+ *   - only the games in COMP_GAMES.eurocup are offered — the rest need lineups,
+ *     puzzles or grid/path banks the EuroCup doesn't have yet. The career games
+ *     join once eurocup_careers.js has careers;
  *   - saves are kept apart: every elg:<key> is read and written as
  *     elg:ec:<key>, so EuroCup stats, dailies and streaks never touch the
  *     EuroLeague ones. The few settings in SHARED stay common to both.
@@ -25,6 +26,7 @@
   var SHARED = { "elg:comp": 1, "elg:theme": 1, "elg:fbname": 1, "elg:fbdraft": 1, "elg:consent": 1,
                  "elg:seenhelp": 1, "elg:hl:seenhelp": 1, "elg:rm:seenhelp": 1 };
   var COMP_GAMES = { eurocup: ["mystery", "higherlower", "rostermaster"] };
+  if (window.EUROCUP_CAREERS && window.EUROCUP_CAREERS.length) COMP_GAMES.eurocup.push("playerid", "careerorder");
   var NAMES = { euroleague: "EuroLeague", eurocup: "EuroCup" };
 
   var ls = null;
@@ -67,6 +69,8 @@
   window.EL_TEAMS = window.TEAMS;
   window.PLAYERS = window.EUROCUP_PLAYERS;
   window.TEAMS = window.EUROCUP_TEAMS || {};
+  window.EL_CAREERS = window.CAREERS;
+  window.CAREERS = window.EUROCUP_CAREERS || [];
   window.LEGENDS = [];
 
   // Namespace the saves. Every game goes through window.localStorage, so the

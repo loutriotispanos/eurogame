@@ -923,7 +923,7 @@
   :root[data-comp="eurocup"][data-theme="dark"] .game-card[data-game="mystery"] { --gc: #4da3f0; }
   /* …and from the first paint the hub shows only the games the EuroCup plays, instead
      of flashing all eleven until app.js takes the rest away. */
-  :root[data-comp="eurocup"] .game-card:not([data-game="mystery"]):not([data-game="higherlower"]):not([data-game="rostermaster"]) { display: none; }
+  :root[data-comp="eurocup"] .game-card:not([data-game="mystery"]):not([data-game="playerid"]):not([data-game="careerorder"]):not([data-game="higherlower"]):not([data-game="rostermaster"]) { display: none; }
   .game-card[data-game="playerid"]     { --gc: #177f72; }
   .game-card[data-game="completefive"] { --gc: #a97f14; }
   .game-card[data-game="connections"]  { --gc: #7d54b4; }
@@ -2111,7 +2111,7 @@
       <h3>Game modes</h3>
       <ul>
         <li><strong>Daily</strong> — one career a day, the same for everyone. Keep your streak alive.</li>
-        <li><strong>Active / Non-active / Both</strong> — unlimited practice with today's players, non-active ones, or everyone.</li>
+        <li><strong><span class="comp-text" data-ec="Active">Active / Non-active / Both</span></strong> — unlimited practice with <span class="comp-text" data-ec="this season's EuroCup players.">today's players, non-active ones, or everyone.</span></li>
       </ul>
     </div>
   </div>
@@ -2293,8 +2293,9 @@
   <script src="players.js"></script>
   <script src="legends.js"></script>
   <script src="eurocup_players.js"></script>
-  <script src="competition.js"></script>
   <script src="careers.js"></script>
+  <script src="eurocup_careers.js"></script>
+  <script src="competition.js"></script>
   <script src="lineups.js"></script>
   <script src="puzzles.js"></script>
   <script src="oddones.js"></script>

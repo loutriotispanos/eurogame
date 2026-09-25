@@ -238,8 +238,11 @@
     renderGuesses(); renderCareer(); updateCounter(); updateNextBtn(); closeDropdown(); els.input.focus();
   }
 
+  // The EuroCup has no non-active pool, so no Non-active / Both either.
+  function modes() { return LEGENDS.length ? ["daily", "active", "retired", "both"] : ["daily", "active"]; }
   function setFilter(f) {
-    filter = ({ daily: 1, active: 1, retired: 1, both: 1 })[f] ? f : "daily";
+    if (!LEGENDS.length && (f === "retired" || f === "both")) f = "active";
+    filter = modes().indexOf(f) >= 0 ? f : "daily";
     if (filter === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     lsSet(K.filter, filter);
     if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("playerid", filter);   // keep ?mode= honest
@@ -295,7 +298,7 @@
     else if (e.key === "Escape") closeDropdown();
   }
   function onFilterKey(e) {
-    var order = ["daily", "active", "retired", "both"], i = order.indexOf(filter), n = order.length, next = null;
+    var order = modes(), i = order.indexOf(filter), n = order.length, next = null;
     if (e.key === "ArrowRight" || e.key === "ArrowDown") next = order[(i + 1) % n];
     else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = order[(i + n - 1) % n];
     else if (e.key === "Home") next = order[0];
@@ -336,6 +339,7 @@
     els.tabRetired.addEventListener("click", function () { if (filter !== "retired") setFilter("retired"); });
     els.tabBoth.addEventListener("click", function () { if (filter !== "both") setFilter("both"); });
     if (els.filterRow) els.filterRow.addEventListener("keydown", onFilterKey);
+    if (!LEGENDS.length) { els.tabRetired.hidden = true; els.tabBoth.hidden = true; }
     if (els.infoBtn) els.infoBtn.addEventListener("click", openInfo);
     if (els.infoClose) els.infoClose.addEventListener("click", closeInfo);
     if (els.infoModal) els.infoModal.addEventListener("click", function (e) { if (e.target === els.infoModal) closeInfo(); });
