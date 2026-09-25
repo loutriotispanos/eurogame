@@ -40,7 +40,8 @@ const TEAMS = {
   "Cedevita Olimpija": { country: "Slovenia" },
   "JL Bourg-en-Bresse": { country: "France" },
   "Trento": { country: "Italy" },
-  "Hapoel Jerusalem": { country: "Israel" }
+  "Hapoel Jerusalem": { country: "Israel" },
+  "Manresa": { country: "Spain" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -60,7 +61,9 @@ const PLAYERS = [
   // Cedevita Olimpija
   { name: "Jaka Blazic", team: "Cedevita Olimpija", number: 11 },
   // Hapoel Jerusalem
-  { name: "Shake Milton", team: "Hapoel Jerusalem", number: 9 }
+  { name: "Shake Milton", team: "Hapoel Jerusalem", number: 9 },
+  // Manresa
+  { name: "Rafa Villar", team: "Manresa", number: 44 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -206,7 +209,25 @@ const PENDING = [
   { name: "DeVontae Cacok", team: "Hapoel Jerusalem", position: "Center", number: 0 },
   { name: "Yotam Hanochi", team: "Hapoel Jerusalem", position: "Center", number: 8 },
   { name: "Dusan Miletic", team: "Hapoel Jerusalem", position: "Center", number: 11 },
-  { name: "Gabriel Chachashvili", team: "Hapoel Jerusalem", position: "Center", number: 33 }
+  { name: "Gabriel Chachashvili", team: "Hapoel Jerusalem", position: "Center", number: 33 },
+  // Manresa
+  { name: "Lukasz Kolenda", team: "Manresa", position: "Guard", number: 1 },
+  { name: "Hugo Benitez", team: "Manresa", position: "Guard", number: 2 },
+  { name: "Lucas Beaufort", team: "Manresa", position: "Guard", number: 5 },
+  { name: "Ferran Bassas", team: "Manresa", position: "Guard", number: 6 },
+  { name: "JD Notae", team: "Manresa", position: "Guard", number: 13 },
+  { name: "Gerard Fernandez", team: "Manresa", position: "Guard", number: 17 },
+  { name: "Lucas Sanchez", team: "Manresa", position: "Guard", number: 18 },
+  { name: "Timmy Allen", team: "Manresa", position: "Forward", number: 0 },
+  { name: "Eric Vila", team: "Manresa", position: "Forward", number: 4 },
+  { name: "Pablo Tamba", team: "Manresa", position: "Forward", number: 8 },
+  { name: "Chibuzo Agbo", team: "Manresa", position: "Forward", number: 11 },
+  { name: "Guillem Naspler", team: "Manresa", position: "Forward", number: 19 },
+  { name: "Gustav Drejer Erichsen", team: "Manresa", position: "Forward", number: 21 },
+  { name: "Yordan Minchev", team: "Manresa", position: "Forward", number: 91 },
+  { name: "Nick Ongenda", team: "Manresa", position: "Center", number: 14 },
+  { name: "Michael Enabulele", team: "Manresa", position: "Center", number: 20 },
+  { name: "Pierre Oriola", team: "Manresa", position: "Center", number: 29 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

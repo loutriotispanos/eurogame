@@ -36,6 +36,9 @@ window.EUROCUP_TEAMS = {
   },
   "Hapoel Jerusalem": {
     "country": "Israel"
+  },
+  "Manresa": {
+    "country": "Spain"
   }
 };
 
@@ -138,5 +141,14 @@ window.EUROCUP_PLAYERS = [
     "height": 196,
     "birthYear": 1996,
     "number": 9
+  },
+  {
+    "name": "Rafa Villar",
+    "team": "Manresa",
+    "nationality": "Spain",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 2004,
+    "number": 44
   }
 ];
