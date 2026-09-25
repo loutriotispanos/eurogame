@@ -39,7 +39,8 @@ const TEAMS = {
   "Buducnost": { country: "Montenegro" },
   "Cedevita Olimpija": { country: "Slovenia" },
   "JL Bourg-en-Bresse": { country: "France" },
-  "Trento": { country: "Italy" }
+  "Trento": { country: "Italy" },
+  "Hapoel Jerusalem": { country: "Israel" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -57,7 +58,9 @@ const PLAYERS = [
   { name: "Aleksa Avramovic", team: "Bahcesehir College", number: 4 },
   { name: "Isiaha Mike", team: "Bahcesehir College", number: 24 },
   // Cedevita Olimpija
-  { name: "Jaka Blazic", team: "Cedevita Olimpija", number: 11 }
+  { name: "Jaka Blazic", team: "Cedevita Olimpija", number: 11 },
+  // Hapoel Jerusalem
+  { name: "Shake Milton", team: "Hapoel Jerusalem", number: 9 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -189,7 +192,21 @@ const PENDING = [
   { name: "Jose Medina Bouza", team: "Trento", position: "Forward", number: 30 },
   { name: "Selom Mawugbe", team: "Trento", position: "Center", number: 21 },
   { name: "Jordan Bayehe", team: "Trento", position: "Center", number: 26 },
-  { name: "Oumar Fall", team: "Trento", position: "Center", number: 29 }
+  { name: "Oumar Fall", team: "Trento", position: "Center", number: 29 },
+  // Hapoel Jerusalem
+  { name: "Jared Harper", team: "Hapoel Jerusalem", position: "Guard", number: 1 },
+  { name: "Jaleen Smith", team: "Hapoel Jerusalem", position: "Guard", number: 3 },
+  { name: "Shachar Loberboum", team: "Hapoel Jerusalem", position: "Guard", number: 7 },
+  { name: "Roi Huber", team: "Hapoel Jerusalem", position: "Guard", number: 13 },
+  { name: "Ethan Burg", team: "Hapoel Jerusalem", position: "Guard", number: 35 },
+  { name: "Yovel Zoosman", team: "Hapoel Jerusalem", position: "Guard", number: 50 },
+  { name: "Kenny Lofton Jr.", team: "Hapoel Jerusalem", position: "Forward", number: 2 },
+  { name: "Nimrod Levi", team: "Hapoel Jerusalem", position: "Forward", number: 15 },
+  { name: "David Roddy", team: "Hapoel Jerusalem", position: "Forward", number: 21 },
+  { name: "DeVontae Cacok", team: "Hapoel Jerusalem", position: "Center", number: 0 },
+  { name: "Yotam Hanochi", team: "Hapoel Jerusalem", position: "Center", number: 8 },
+  { name: "Dusan Miletic", team: "Hapoel Jerusalem", position: "Center", number: 11 },
+  { name: "Gabriel Chachashvili", team: "Hapoel Jerusalem", position: "Center", number: 33 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

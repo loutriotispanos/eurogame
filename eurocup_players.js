@@ -33,6 +33,9 @@ window.EUROCUP_TEAMS = {
   },
   "Trento": {
     "country": "Italy"
+  },
+  "Hapoel Jerusalem": {
+    "country": "Israel"
   }
 };
 
@@ -126,5 +129,14 @@ window.EUROCUP_PLAYERS = [
     "height": 203,
     "birthYear": 2000,
     "number": 0
+  },
+  {
+    "name": "Shake Milton",
+    "team": "Hapoel Jerusalem",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1996,
+    "number": 9
   }
 ];
