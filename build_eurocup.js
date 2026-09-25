@@ -57,6 +57,7 @@ const PENDING = [
   { name: "Vasilis Charalampopoulos",  team: "Aris Thessaloniki", position: "Forward", number: 33 },
   { name: "Thanasis Antetokounmpo",    team: "Aris Thessaloniki", position: "Forward", number: 43 },
   { name: "Adam Mokoka",               team: "Aris Thessaloniki", position: "Forward", number: 95 },
+  { name: "Kostas Antetokounmpo",      team: "Aris Thessaloniki", position: "Forward", number: 37 },   // position unconfirmed: the screenshot crop showed no section
   { name: "Georgios Tanoulis",         team: "Aris Thessaloniki", position: "Center",  number: 50 }
 ];
 
