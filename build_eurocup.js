@@ -176,7 +176,24 @@ const PLAYERS = [
   { name: "Jordan Gainey", team: "Cedevita Olimpija", nationality: "USA", position: "Guard", height: 193, birthYear: 2002, number: 4 },
   { name: "Rihards Lomazs", team: "Cedevita Olimpija", nationality: "Latvia", position: "Guard", height: 193, birthYear: 1996, number: 6 },
   { name: "Urban Kroflic", team: "Cedevita Olimpija", nationality: "Slovenia", position: "Guard", height: 198, birthYear: 2006, number: 23 },
-  { name: "Rok Radovic", team: "Cedevita Olimpija", nationality: "Slovenia", position: "Forward", height: 201, birthYear: 2001, number: 3 }
+  { name: "Rok Radovic", team: "Cedevita Olimpija", nationality: "Slovenia", position: "Forward", height: 201, birthYear: 2001, number: 3 },
+  { name: "Miha Cerkvenik", team: "Cedevita Olimpija", nationality: "Slovenia", position: "Forward", height: 201, birthYear: 2001, number: 20 },
+  { name: "Matthew Hurt", team: "Cedevita Olimpija", nationality: "USA", position: "Forward", height: 206, birthYear: 2000, number: 21 },
+  { name: "Noah Kirkwood", team: "Cedevita Olimpija", nationality: "Canada", position: "Forward", height: 201, birthYear: 1999, number: 22 },
+  { name: "Osayi Osifo", team: "Cedevita Olimpija", nationality: "South Africa", position: "Center", height: 206, birthYear: 2000, number: 14 },
+  { name: "David Skara", team: "Cedevita Olimpija", nationality: "Croatia", position: "Center", height: 203, birthYear: 1995, number: 24 },
+  { name: "Jayce Johnson", team: "Cedevita Olimpija", nationality: "USA", position: "Center", height: 213, birthYear: 1997, number: 34 },
+  { name: "Keith Jordan Jr.", team: "JL Bourg-en-Bresse", nationality: "USA", position: "Guard", height: 198, birthYear: 1998, number: 2 },
+  { name: "Assemian Moulare", team: "JL Bourg-en-Bresse", nationality: "Ivory Coast", position: "Guard", height: 186, birthYear: 2003, number: 3 },
+  { name: "Antony Labanca", team: "JL Bourg-en-Bresse", nationality: "France", position: "Guard", height: 192, birthYear: 1994, number: 8 },
+  { name: "Tyson Walker", team: "JL Bourg-en-Bresse", nationality: "USA", position: "Guard", height: 185, birthYear: 2000, number: 12 },
+  { name: "Trey Woodbury", team: "JL Bourg-en-Bresse", nationality: "USA", position: "Guard", height: 193, birthYear: 1999, number: 22 },
+  { name: "Leni Monnet", team: "JL Bourg-en-Bresse", nationality: "France", position: "Guard", height: 194, birthYear: 2006, number: 55 },
+  { name: "Hugo Robineau", team: "JL Bourg-en-Bresse", nationality: "France", position: "Guard", height: 192, birthYear: 2000, number: 87 },
+  { name: "Adrian Nelson", team: "JL Bourg-en-Bresse", nationality: "USA", position: "Forward", height: 203, birthYear: 1999, number: 4 },
+  { name: "Tyrese Samuel", team: "JL Bourg-en-Bresse", nationality: "Canada", position: "Forward", height: 206, birthYear: 2000, number: 5 },
+  { name: "Lionel Gaudoux", team: "JL Bourg-en-Bresse", nationality: "France", position: "Center", height: 198, birthYear: 1995, number: 13 },
+  { name: "Kadin Shedrick", team: "JL Bourg-en-Bresse", nationality: "USA", position: "Center", height: 211, birthYear: 2001, number: 21 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -189,27 +206,7 @@ const PENDING = [
   // Bosna Sarajevo
   // Buducnost
   // Cedevita Olimpija
-  { name: "Miha Cerkvenik", team: "Cedevita Olimpija", position: "Forward", number: 20 },
-  { name: "Matthew Hurt", team: "Cedevita Olimpija", position: "Forward", number: 21 },
-  { name: "Noah Kirkwood", team: "Cedevita Olimpija", position: "Forward", number: 22 },
-  { name: "Cameron Houindo", team: "Cedevita Olimpija", position: "Center", number: 8 },
-  { name: "Osayi Osifo", team: "Cedevita Olimpija", position: "Center", number: 14 },
-  { name: "David Skara", team: "Cedevita Olimpija", position: "Center", number: 24 },
-  { name: "Jayce Johnson", team: "Cedevita Olimpija", position: "Center", number: 34 },
   // JL Bourg-en-Bresse
-  { name: "Keith Jordan Jr.", team: "JL Bourg-en-Bresse", position: "Guard", number: 2 },
-  { name: "Assemian Moulare", team: "JL Bourg-en-Bresse", position: "Guard", number: 3 },
-  { name: "Antony Labanca", team: "JL Bourg-en-Bresse", position: "Guard", number: 8 },
-  { name: "Tyson Walker", team: "JL Bourg-en-Bresse", position: "Guard", number: 12 },
-  { name: "Trey Woodbury", team: "JL Bourg-en-Bresse", position: "Guard", number: 22 },
-  { name: "Morgan Selebangue", team: "JL Bourg-en-Bresse", position: "Guard", number: 23 },
-  { name: "Leni Monnet", team: "JL Bourg-en-Bresse", position: "Guard", number: 55 },
-  { name: "Hugo Robineau", team: "JL Bourg-en-Bresse", position: "Guard", number: 87 },
-  { name: "Adrian Nelson", team: "JL Bourg-en-Bresse", position: "Forward", number: 4 },
-  { name: "Tyrese Samuel", team: "JL Bourg-en-Bresse", position: "Forward", number: 5 },
-  { name: "Nathan Soliman", team: "JL Bourg-en-Bresse", position: "Forward", number: 14 },
-  { name: "Lionel Gaudoux", team: "JL Bourg-en-Bresse", position: "Center", number: 13 },
-  { name: "Kadin Shedrick", team: "JL Bourg-en-Bresse", position: "Center", number: 21 },
   // Trento
   { name: "Darius Brown II", team: "Trento", position: "Guard", number: 0 },
   { name: "Giulio Vergnaghi", team: "Trento", position: "Guard", number: 6 },
