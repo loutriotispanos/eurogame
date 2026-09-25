@@ -41,7 +41,8 @@ const TEAMS = {
   "JL Bourg-en-Bresse": { country: "France" },
   "Trento": { country: "Italy" },
   "Hapoel Jerusalem": { country: "Israel" },
-  "Manresa": { country: "Spain" }
+  "Manresa": { country: "Spain" },
+  "La Laguna Tenerife": { country: "Spain" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -63,7 +64,9 @@ const PLAYERS = [
   // Hapoel Jerusalem
   { name: "Shake Milton", team: "Hapoel Jerusalem", number: 9 },
   // Manresa
-  { name: "Rafa Villar", team: "Manresa", number: 44 }
+  { name: "Rafa Villar", team: "Manresa", number: 44 },
+  // La Laguna Tenerife
+  { name: "Xabier Lopez-Arostegui", team: "La Laguna Tenerife", number: 7 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -227,7 +230,19 @@ const PENDING = [
   { name: "Yordan Minchev", team: "Manresa", position: "Forward", number: 91 },
   { name: "Nick Ongenda", team: "Manresa", position: "Center", number: 14 },
   { name: "Michael Enabulele", team: "Manresa", position: "Center", number: 20 },
-  { name: "Pierre Oriola", team: "Manresa", position: "Center", number: 29 }
+  { name: "Pierre Oriola", team: "Manresa", position: "Center", number: 29 },
+  // La Laguna Tenerife
+  { name: "Jaime Fernandez", team: "La Laguna Tenerife", position: "Guard", number: 3 },
+  { name: "Bruno Fitipaldo", team: "La Laguna Tenerife", position: "Guard", number: 6 },
+  { name: "Marcelinho Huertas", team: "La Laguna Tenerife", position: "Guard", number: 9 },
+  { name: "Arturs Kurucs", team: "La Laguna Tenerife", position: "Guard", number: 47 },
+  { name: "Bamba Cisse", team: "La Laguna Tenerife", position: "Forward", number: 1 },
+  { name: "Kyle Guy", team: "La Laguna Tenerife", position: "Forward", number: 2 },
+  { name: "Wesley van Beck", team: "La Laguna Tenerife", position: "Forward", number: 4 },
+  { name: "Hector Alderete", team: "La Laguna Tenerife", position: "Forward", number: 33 },
+  { name: "Tim Abromaitis", team: "La Laguna Tenerife", position: "Center", number: 21 },
+  { name: "Ethan Happ", team: "La Laguna Tenerife", position: "Center", number: 22 },
+  { name: "Vince Hunter", team: "La Laguna Tenerife", position: "Center", number: 32 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

@@ -39,6 +39,9 @@ window.EUROCUP_TEAMS = {
   },
   "Manresa": {
     "country": "Spain"
+  },
+  "La Laguna Tenerife": {
+    "country": "Spain"
   }
 };
 
@@ -141,6 +144,15 @@ window.EUROCUP_PLAYERS = [
     "height": 196,
     "birthYear": 1996,
     "number": 9
+  },
+  {
+    "name": "Xabier Lopez-Arostegui",
+    "team": "La Laguna Tenerife",
+    "nationality": "Spain",
+    "position": "Forward",
+    "height": 200,
+    "birthYear": 1997,
+    "number": 7
   },
   {
     "name": "Rafa Villar",
