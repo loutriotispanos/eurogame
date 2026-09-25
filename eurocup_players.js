@@ -1583,6 +1583,15 @@ window.EUROCUP_PLAYERS = [
     "number": 1
   },
   {
+    "name": "Joshua O'Garro",
+    "team": "London Lions",
+    "nationality": "United Kingdom",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2001,
+    "number": 7
+  },
+  {
     "name": "Keenan Evans",
     "team": "London Lions",
     "nationality": "USA",

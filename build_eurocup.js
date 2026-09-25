@@ -470,7 +470,8 @@ const PLAYERS = [
   { name: "Kyle Wiltjer", team: "Reyer Venezia", nationality: "Canada", position: "Forward", height: 208, birthYear: 1992, number: 33 },
   { name: "Sasha Grant", team: "Reyer Venezia", nationality: "Italy", position: "Forward", height: 201, birthYear: 2002, number: 44 },
   { name: "Amedeo Tessitori", team: "Reyer Venezia", nationality: "Italy", position: "Center", height: 208, birthYear: 1994, number: 0 },
-  { name: "Enoch Boakye", team: "Reyer Venezia", nationality: "Canada", position: "Center", height: 208, birthYear: 2003, number: 13 }
+  { name: "Enoch Boakye", team: "Reyer Venezia", nationality: "Canada", position: "Center", height: 208, birthYear: 2003, number: 13 },
+  { name: "Joshua O'Garro", team: "London Lions", nationality: "United Kingdom", position: "Forward", height: 198, birthYear: 2001, number: 7 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -491,7 +492,6 @@ const PENDING = [
   // Le Mans
   // Lietkabelis
   // London Lions
-  { name: "Joshua O'Garro", team: "London Lions", position: "Forward", number: 7 },
   // Maxima Roma
   // Napoli Basketball
   // Neptunas
