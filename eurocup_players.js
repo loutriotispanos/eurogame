@@ -503,15 +503,6 @@ window.EUROCUP_PLAYERS = [
     "number": 19
   },
   {
-    "name": "Daut Livadic",
-    "team": "Bosna Sarajevo",
-    "nationality": "Bosnia and Herzegovina",
-    "position": "Center",
-    "height": 207,
-    "birthYear": 2007,
-    "number": 22
-  },
-  {
     "name": "DeAndre Gholston",
     "team": "Bosna Sarajevo",
     "nationality": "USA",

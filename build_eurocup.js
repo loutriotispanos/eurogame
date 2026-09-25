@@ -157,21 +157,17 @@ const PLAYERS = [
   { name: "Ryan Hawkins", team: "Bosna Sarajevo", nationality: "USA", position: "Forward", height: 201, birthYear: 1997, number: 44 },
   { name: "James Banks", team: "Bosna Sarajevo", nationality: "USA", position: "Center", height: 208, birthYear: 1998, number: 1 },
   { name: "Reginald Perry", team: "Bosna Sarajevo", nationality: "USA", position: "Center", height: 203, birthYear: 2000, number: 11 },
-  { name: "Nikola Popovic", team: "Bosna Sarajevo", nationality: "Serbia", position: "Center", height: 211, birthYear: 1997, number: 21 },
-  { name: "Daut Livadic", team: "Bosna Sarajevo", nationality: "Bosnia and Herzegovina", position: "Center", height: 207, birthYear: 2007, number: 22 }
+  { name: "Nikola Popovic", team: "Bosna Sarajevo", nationality: "Serbia", position: "Center", height: 211, birthYear: 1997, number: 21 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
 // PLAYERS as full records. Official position and number from the roster page.
 const PENDING = [
   // Aris Thessaloniki
-  { name: "Chrysostomos Chatzilamprou", team: "Aris Thessaloniki", position: "Guard",  number: 10 },
   // Derthona Tortona
-  { name: "Edoardo Di Meo", team: "Derthona Tortona", position: "Guard", number: 9 },
   // Bahcesehir College
   // Balkan Botevgrad
   // Bosna Sarajevo
-  { name: "Miljan Kljestan", team: "Bosna Sarajevo", position: "Guard", number: 0 },
   { name: "Alija Islamovic", team: "Bosna Sarajevo", position: "Center", number: 33 },
   // Buducnost
   { name: "Fletcher Magee", team: "Buducnost", position: "Guard", number: 3 },
