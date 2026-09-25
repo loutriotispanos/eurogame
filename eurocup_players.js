@@ -15,6 +15,9 @@ window.EUROCUP_TEAMS = {
   },
   "Bahcesehir College": {
     "country": "Turkey"
+  },
+  "Balkan Botevgrad": {
+    "country": "Bulgaria"
   }
 };
 

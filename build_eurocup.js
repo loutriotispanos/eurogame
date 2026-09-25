@@ -33,7 +33,8 @@ const OPEN = false;
 const TEAMS = {
   "Aris Thessaloniki": { country: "Greece" },
   "Derthona Tortona": { country: "Italy" },
-  "Bahcesehir College": { country: "Turkey" }
+  "Bahcesehir College": { country: "Turkey" },
+  "Balkan Botevgrad": { country: "Bulgaria" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -90,7 +91,22 @@ const PENDING = [
   { name: "David DiLeo", team: "Bahcesehir College", position: "Forward", number: 51 },
   { name: "Damien Inglis", team: "Bahcesehir College", position: "Center", number: 7 },
   { name: "Furkan Haltali", team: "Bahcesehir College", position: "Center", number: 14 },
-  { name: "Trevion Williams", team: "Bahcesehir College", position: "Center", number: 50 }
+  { name: "Trevion Williams", team: "Bahcesehir College", position: "Center", number: 50 },
+  // Balkan Botevgrad
+  { name: "Darnell Edge", team: "Balkan Botevgrad", position: "Guard", number: 1 },
+  { name: "Aleksandar Stoimenov", team: "Balkan Botevgrad", position: "Guard", number: 3 },
+  { name: "Pavlin Ivanov", team: "Balkan Botevgrad", position: "Guard", number: 10 },
+  { name: "Javante McCoy", team: "Balkan Botevgrad", position: "Guard", number: 13 },
+  { name: "Konstantin Toshkov", team: "Balkan Botevgrad", position: "Guard", number: 22 },
+  { name: "David Okwera", team: "Balkan Botevgrad", position: "Forward", number: 0 },
+  { name: "Gael Bonilla", team: "Balkan Botevgrad", position: "Forward", number: 2 },
+  { name: "Alex Ducas", team: "Balkan Botevgrad", position: "Forward", number: 8 },
+  { name: "Nikolay Grozev", team: "Balkan Botevgrad", position: "Forward", number: 33 },
+  { name: "Dimitar Dimitrov", team: "Balkan Botevgrad", position: "Forward", number: 34 },
+  { name: "Ivan Alipiev", team: "Balkan Botevgrad", position: "Forward", number: 35 },
+  { name: "Martin Sotirov", team: "Balkan Botevgrad", position: "Forward", number: 44 },
+  { name: "Ivan Spirov", team: "Balkan Botevgrad", position: "Forward", number: 91 },
+  { name: "Ulrich Chomche", team: "Balkan Botevgrad", position: "Center", number: 14 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
