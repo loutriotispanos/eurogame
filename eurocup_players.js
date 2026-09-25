@@ -1331,6 +1331,213 @@ window.EUROCUP_PLAYERS = [
     "number": 15
   },
   {
+    "name": "Alexander Schumacher",
+    "team": "Lietkabelis",
+    "nationality": "Switzerland",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 2001,
+    "number": 2
+  },
+  {
+    "name": "Daniel Baslyk",
+    "team": "Lietkabelis",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2001,
+    "number": 9
+  },
+  {
+    "name": "Gabrielius Maldunas",
+    "team": "Lietkabelis",
+    "nationality": "Lithuania",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 1993,
+    "number": 12
+  },
+  {
+    "name": "Gytis Nemeiksa",
+    "team": "Lietkabelis",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2001,
+    "number": 50
+  },
+  {
+    "name": "Ivan Fevrier",
+    "team": "Lietkabelis",
+    "nationality": "France",
+    "position": "Forward",
+    "height": 205,
+    "birthYear": 1999,
+    "number": 23
+  },
+  {
+    "name": "Keondre Kennedy",
+    "team": "Lietkabelis",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2000,
+    "number": 0
+  },
+  {
+    "name": "Marius Valinskas",
+    "team": "Lietkabelis",
+    "nationality": "Lithuania",
+    "position": "Guard",
+    "height": 189,
+    "birthYear": 1999,
+    "number": 99
+  },
+  {
+    "name": "Milos Ilic",
+    "team": "Lietkabelis",
+    "nationality": "Serbia",
+    "position": "Forward",
+    "height": 205,
+    "birthYear": 2002,
+    "number": 11
+  },
+  {
+    "name": "Nojus Radzius",
+    "team": "Lietkabelis",
+    "nationality": "Lithuania",
+    "position": "Guard",
+    "height": 184,
+    "birthYear": 2005,
+    "number": 5
+  },
+  {
+    "name": "Ognjen Jaramaz",
+    "team": "Lietkabelis",
+    "nationality": "Serbia",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1995,
+    "number": 10
+  },
+  {
+    "name": "Veljko Ilic",
+    "team": "Lietkabelis",
+    "nationality": "Serbia",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 2002,
+    "number": 8
+  },
+  {
+    "name": "Zygimantas Simonis",
+    "team": "Lietkabelis",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 194,
+    "birthYear": 1995,
+    "number": 3
+  },
+  {
+    "name": "Aaryn Rai",
+    "team": "London Lions",
+    "nationality": "United Kingdom",
+    "position": "Forward",
+    "height": 197,
+    "birthYear": 1998,
+    "number": 21
+  },
+  {
+    "name": "Deane Williams",
+    "team": "London Lions",
+    "nationality": "United Kingdom",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1996,
+    "number": 31
+  },
+  {
+    "name": "Devante Jones",
+    "team": "London Lions",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1998,
+    "number": 3
+  },
+  {
+    "name": "Ethan Price",
+    "team": "London Lions",
+    "nationality": "United Kingdom",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 2001,
+    "number": 10
+  },
+  {
+    "name": "Joel Scott",
+    "team": "London Lions",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2001,
+    "number": 1
+  },
+  {
+    "name": "Keenan Evans",
+    "team": "London Lions",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 191,
+    "birthYear": 1996,
+    "number": 12
+  },
+  {
+    "name": "Landrius Horton",
+    "team": "London Lions",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1998,
+    "number": 23
+  },
+  {
+    "name": "Maxwell Lewis III",
+    "team": "London Lions",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2002,
+    "number": 2
+  },
+  {
+    "name": "Mo Soluade",
+    "team": "London Lions",
+    "nationality": "United Kingdom",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1995,
+    "number": 6
+  },
+  {
+    "name": "Tarik Phillip",
+    "team": "London Lions",
+    "nationality": "United Kingdom",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1993,
+    "number": 22
+  },
+  {
+    "name": "Thomas Kennedy",
+    "team": "London Lions",
+    "nationality": "Ireland",
+    "position": "Center",
+    "height": 207,
+    "birthYear": 2000,
+    "number": 54
+  },
+  {
     "name": "Chibuzo Agbo",
     "team": "Manresa",
     "nationality": "USA",
@@ -1457,6 +1664,141 @@ window.EUROCUP_PLAYERS = [
     "number": 91
   },
   {
+    "name": "Aaron Holiday",
+    "team": "Maxima Roma",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1996,
+    "number": 3
+  },
+  {
+    "name": "Brynton Lemar",
+    "team": "Maxima Roma",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1995,
+    "number": 11
+  },
+  {
+    "name": "Carl Wheatle",
+    "team": "Maxima Roma",
+    "nationality": "United Kingdom",
+    "position": "Forward",
+    "height": 200,
+    "birthYear": 1998,
+    "number": 10
+  },
+  {
+    "name": "Federico Bonacini",
+    "team": "Maxima Roma",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1999,
+    "number": 23
+  },
+  {
+    "name": "Giovanni Veronesi",
+    "team": "Maxima Roma",
+    "nationality": "Italy",
+    "position": "Forward",
+    "height": 197,
+    "birthYear": 1998,
+    "number": 16
+  },
+  {
+    "name": "Gora Camara",
+    "team": "Maxima Roma",
+    "nationality": "Senegal",
+    "position": "Center",
+    "height": 214,
+    "birthYear": 2001,
+    "number": 29
+  },
+  {
+    "name": "John Brown III",
+    "team": "Maxima Roma",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1992,
+    "number": 0
+  },
+  {
+    "name": "Matt Ryan",
+    "team": "Maxima Roma",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1997,
+    "number": 32
+  },
+  {
+    "name": "Miro Bilan",
+    "team": "Maxima Roma",
+    "nationality": "Croatia",
+    "position": "Center",
+    "height": 213,
+    "birthYear": 1989,
+    "number": 2
+  },
+  {
+    "name": "Mirza Alibegovic",
+    "team": "Maxima Roma",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 195,
+    "birthYear": 1992,
+    "number": 5
+  },
+  {
+    "name": "Xavier Moon",
+    "team": "Maxima Roma",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1995,
+    "number": 17
+  },
+  {
+    "name": "Andrej Jakimovski",
+    "team": "Napoli Basketball",
+    "nationality": "Bulgaria",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 2001,
+    "number": 23
+  },
+  {
+    "name": "Guglielmo Caruso",
+    "team": "Napoli Basketball",
+    "nationality": "Italy",
+    "position": "Center",
+    "height": 204,
+    "birthYear": 1999,
+    "number": 30
+  },
+  {
+    "name": "Jack White",
+    "team": "Napoli Basketball",
+    "nationality": "Australia",
+    "position": "Forward",
+    "height": 195,
+    "birthYear": 1997,
+    "number": 14
+  },
+  {
+    "name": "Jahmi'us Ramsey",
+    "team": "Napoli Basketball",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 192,
+    "birthYear": 2001,
+    "number": 37
+  },
+  {
     "name": "Jeffrey Dowtin Jr.",
     "team": "Napoli Basketball",
     "nationality": "USA",
@@ -1464,6 +1806,60 @@ window.EUROCUP_PLAYERS = [
     "height": 191,
     "birthYear": 1997,
     "number": 3
+  },
+  {
+    "name": "John Petrucelli",
+    "team": "Napoli Basketball",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1992,
+    "number": 11
+  },
+  {
+    "name": "Kaleb Tarczewski",
+    "team": "Napoli Basketball",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 213,
+    "birthYear": 1993,
+    "number": 25
+  },
+  {
+    "name": "Leonardo Faggian",
+    "team": "Napoli Basketball",
+    "nationality": "Italy",
+    "position": "Forward",
+    "height": 195,
+    "birthYear": 2004,
+    "number": 10
+  },
+  {
+    "name": "Leonardo Tote",
+    "team": "Napoli Basketball",
+    "nationality": "Italy",
+    "position": "Center",
+    "height": 212,
+    "birthYear": 1997,
+    "number": 35
+  },
+  {
+    "name": "Marco Spissu",
+    "team": "Napoli Basketball",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 182,
+    "birthYear": 1995,
+    "number": 0
+  },
+  {
+    "name": "Markel Brown",
+    "team": "Napoli Basketball",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1992,
+    "number": 22
   },
   {
     "name": "Zac Seljaas",
@@ -1475,6 +1871,258 @@ window.EUROCUP_PLAYERS = [
     "number": 1
   },
   {
+    "name": "Arnas Berucka",
+    "team": "Neptunas",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 1997,
+    "number": 21
+  },
+  {
+    "name": "Donatas Tarolis",
+    "team": "Neptunas",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 202,
+    "birthYear": 1994,
+    "number": 1
+  },
+  {
+    "name": "Einaras Tubutis",
+    "team": "Neptunas",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 1998,
+    "number": 37
+  },
+  {
+    "name": "Elvar Fridriksson",
+    "team": "Neptunas",
+    "nationality": "Iceland",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1994,
+    "number": 10
+  },
+  {
+    "name": "Henri Drell",
+    "team": "Neptunas",
+    "nationality": "Estonia",
+    "position": "Forward",
+    "height": 205,
+    "birthYear": 2000,
+    "number": 0
+  },
+  {
+    "name": "Kristupas Zemaitis",
+    "team": "Neptunas",
+    "nationality": "Lithuania",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1996,
+    "number": 13
+  },
+  {
+    "name": "Lukas Kreismontas",
+    "team": "Neptunas",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 197,
+    "birthYear": 2001,
+    "number": 88
+  },
+  {
+    "name": "Martynas Echodas",
+    "team": "Neptunas",
+    "nationality": "Lithuania",
+    "position": "Center",
+    "height": 204,
+    "birthYear": 1997,
+    "number": 14
+  },
+  {
+    "name": "Mindaugas Girdziunas",
+    "team": "Neptunas",
+    "nationality": "Lithuania",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1989,
+    "number": 8
+  },
+  {
+    "name": "Raymond Somerville",
+    "team": "Neptunas",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 2000,
+    "number": 17
+  },
+  {
+    "name": "Rytis Sakaitis",
+    "team": "Neptunas",
+    "nationality": "Lithuania",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2004,
+    "number": 12
+  },
+  {
+    "name": "Yannick Franke",
+    "team": "Neptunas",
+    "nationality": "Netherlands",
+    "position": "Guard",
+    "height": 194,
+    "birthYear": 1996,
+    "number": 5
+  },
+  {
+    "name": "Alexander Richardson",
+    "team": "Niners Chemnitz",
+    "nationality": "Germany",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 2003,
+    "number": 9
+  },
+  {
+    "name": "Ben Burnham",
+    "team": "Niners Chemnitz",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2002,
+    "number": 25
+  },
+  {
+    "name": "Cobe Williams",
+    "team": "Niners Chemnitz",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 2000,
+    "number": 24
+  },
+  {
+    "name": "Darion Atkins",
+    "team": "Niners Chemnitz",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1992,
+    "number": 17
+  },
+  {
+    "name": "Elias Roedl",
+    "team": "Niners Chemnitz",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2002,
+    "number": 11
+  },
+  {
+    "name": "Jannis von Seckendorff",
+    "team": "Niners Chemnitz",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 2002,
+    "number": 90
+  },
+  {
+    "name": "Luca Kellig",
+    "team": "Niners Chemnitz",
+    "nationality": "Germany",
+    "position": "Guard",
+    "height": 192,
+    "birthYear": 2006,
+    "number": 13
+  },
+  {
+    "name": "Mateo Seric",
+    "team": "Niners Chemnitz",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 1999,
+    "number": 21
+  },
+  {
+    "name": "Nighael Ceaser",
+    "team": "Niners Chemnitz",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 2000,
+    "number": 22
+  },
+  {
+    "name": "Phlandrous Fleming Jr.",
+    "team": "Niners Chemnitz",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1998,
+    "number": 1
+  },
+  {
+    "name": "Stefan Smith",
+    "team": "Niners Chemnitz",
+    "nationality": "Canada",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1999,
+    "number": 2
+  },
+  {
+    "name": "Urald King",
+    "team": "Niners Chemnitz",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1990,
+    "number": 20
+  },
+  {
+    "name": "Yohan Choupas",
+    "team": "Niners Chemnitz",
+    "nationality": "Germany",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2000,
+    "number": 6
+  },
+  {
+    "name": "Athanasios Bazinas",
+    "team": "PAOK",
+    "nationality": "Greece",
+    "position": "Guard",
+    "height": 194,
+    "birthYear": 2003,
+    "number": 77
+  },
+  {
+    "name": "Ben Moore",
+    "team": "PAOK",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1995,
+    "number": 26
+  },
+  {
+    "name": "Breein Tyree",
+    "team": "PAOK",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1998,
+    "number": 5
+  },
+  {
     "name": "Cedi Osman",
     "team": "PAOK",
     "nationality": "Turkey",
@@ -1484,6 +2132,60 @@ window.EUROCUP_PLAYERS = [
     "number": 6
   },
   {
+    "name": "Clifford Omoruyi",
+    "team": "PAOK",
+    "nationality": "Nigeria",
+    "position": "Center",
+    "height": 211,
+    "birthYear": 2001,
+    "number": 11
+  },
+  {
+    "name": "Dimitrios Kaklamanakis",
+    "team": "PAOK",
+    "nationality": "Greece",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 1994,
+    "number": 14
+  },
+  {
+    "name": "Georgios Fillios",
+    "team": "PAOK",
+    "nationality": "Greece",
+    "position": "Guard",
+    "height": 195,
+    "birthYear": 2002,
+    "number": 25
+  },
+  {
+    "name": "Kyle Alexander",
+    "team": "PAOK",
+    "nationality": "Canada",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1996,
+    "number": 8
+  },
+  {
+    "name": "Marcus Foster",
+    "team": "PAOK",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1995,
+    "number": 17
+  },
+  {
+    "name": "Naz Mitrou-Long",
+    "team": "PAOK",
+    "nationality": "Canada",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1993,
+    "number": 1
+  },
+  {
     "name": "Nick Calathes",
     "team": "PAOK",
     "nationality": "USA",
@@ -1491,6 +2193,42 @@ window.EUROCUP_PLAYERS = [
     "height": 198,
     "birthYear": 1989,
     "number": 33
+  },
+  {
+    "name": "Nikolaos Persidis",
+    "team": "PAOK",
+    "nationality": "Greece",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1995,
+    "number": 18
+  },
+  {
+    "name": "Nikos Chougkaz",
+    "team": "PAOK",
+    "nationality": "Greece",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 2000,
+    "number": 9
+  },
+  {
+    "name": "Raiquan Gray",
+    "team": "PAOK",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1999,
+    "number": 0
+  },
+  {
+    "name": "Trevor Hudgins",
+    "team": "PAOK",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 180,
+    "birthYear": 1999,
+    "number": 12
   },
   {
     "name": "Armel Traore",
