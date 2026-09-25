@@ -55,7 +55,8 @@ const TEAMS = {
   "San Pablo Burgos": { country: "Spain" },
   "Riga Zelli": { country: "Latvia" },
   "Roma Basketball": { country: "Italy" },
-  "Rostock Seawolves": { country: "Germany" }
+  "Rostock Seawolves": { country: "Germany" },
+  "Siauliai": { country: "Lithuania" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -454,7 +455,20 @@ const PENDING = [
   { name: "Philipp Hartwich", team: "Rostock Seawolves", position: "Center", number: 7 },
   { name: "Bruno Loll", team: "Rostock Seawolves", position: "Center", number: 20 },
   { name: "Owen Klassen", team: "Rostock Seawolves", position: "Center", number: 29 },
-  { name: "Bent Leuchten", team: "Rostock Seawolves", position: "Center", number: 51 }
+  { name: "Bent Leuchten", team: "Rostock Seawolves", position: "Center", number: 51 },
+  // Siauliai
+  { name: "Cedric Henderson Jr.", team: "Siauliai", position: "Guard", number: 2 },
+  { name: "Selim Fofana", team: "Siauliai", position: "Guard", number: 7 },
+  { name: "Karolis Lukosiunas", team: "Siauliai", position: "Guard", number: 16 },
+  { name: "Dayvion McKnight", team: "Siauliai", position: "Guard", number: 20 },
+  { name: "Michael Caffey", team: "Siauliai", position: "Guard", number: 55 },
+  { name: "Simas Jarumbauskas", team: "Siauliai", position: "Forward", number: 17 },
+  { name: "Erikas Venskus", team: "Siauliai", position: "Forward", number: 21 },
+  { name: "Tauras Jogela", team: "Siauliai", position: "Forward", number: 22 },
+  { name: "Dovydas Romancenko", team: "Siauliai", position: "Forward", number: 25 },
+  { name: "Rokas Civilis", team: "Siauliai", position: "Forward", number: 77 },
+  { name: "Martynas Pacevicius", team: "Siauliai", position: "Center", number: 9 },
+  { name: "Efton Reid", team: "Siauliai", position: "Center", number: 15 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

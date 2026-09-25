@@ -81,6 +81,9 @@ window.EUROCUP_TEAMS = {
   },
   "Rostock Seawolves": {
     "country": "Germany"
+  },
+  "Siauliai": {
+    "country": "Lithuania"
   }
 };
 
