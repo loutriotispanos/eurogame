@@ -35,7 +35,8 @@ const TEAMS = {
   "Derthona Tortona": { country: "Italy" },
   "Bahcesehir College": { country: "Turkey" },
   "Balkan Botevgrad": { country: "Bulgaria" },
-  "Bosna Sarajevo": { country: "Bosnia and Herzegovina" }
+  "Bosna Sarajevo": { country: "Bosnia and Herzegovina" },
+  "Buducnost": { country: "Montenegro" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -122,7 +123,21 @@ const PENDING = [
   { name: "Reginald Perry", team: "Bosna Sarajevo", position: "Center", number: 11 },
   { name: "Nikola Popovic", team: "Bosna Sarajevo", position: "Center", number: 21 },
   { name: "Daut Livadic", team: "Bosna Sarajevo", position: "Center", number: 22 },
-  { name: "Alija Islamovic", team: "Bosna Sarajevo", position: "Center", number: 33 }
+  { name: "Alija Islamovic", team: "Bosna Sarajevo", position: "Center", number: 33 },
+  // Buducnost
+  { name: "Fletcher Magee", team: "Buducnost", position: "Guard", number: 3 },
+  { name: "Iverson Molinar", team: "Buducnost", position: "Guard", number: 10 },
+  { name: "Yogi Ferrell", team: "Buducnost", position: "Guard", number: 11 },
+  { name: "Marial Shayok", team: "Buducnost", position: "Forward", number: 1 },
+  { name: "Andrija Slavkovic", team: "Buducnost", position: "Forward", number: 7 },
+  { name: "Emir Hadzibegovic", team: "Buducnost", position: "Forward", number: 8 },
+  { name: "Dordije Jovanovic", team: "Buducnost", position: "Forward", number: 13 },
+  { name: "Juwan Morgan", team: "Buducnost", position: "Forward", number: 15 },
+  { name: "Oleksandr Kovliar", team: "Buducnost", position: "Forward", number: 50 },
+  { name: "Axel Bouteille", team: "Buducnost", position: "Forward", number: 83 },
+  { name: "Justin Smith", team: "Buducnost", position: "Center", number: 0 },
+  { name: "Jerry Boutsiele", team: "Buducnost", position: "Center", number: 16 },
+  { name: "Stefan Dordevic", team: "Buducnost", position: "Center", number: 45 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

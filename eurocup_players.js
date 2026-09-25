@@ -21,6 +21,9 @@ window.EUROCUP_TEAMS = {
   },
   "Bosna Sarajevo": {
     "country": "Bosnia and Herzegovina"
+  },
+  "Buducnost": {
+    "country": "Montenegro"
   }
 };
 
