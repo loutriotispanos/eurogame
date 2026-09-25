@@ -64,7 +64,8 @@
   function collect() {
     var hub = { cur: 0, best: 0, done: false, freeze: false };
     if (window.Hub && window.Hub._reconcile) { window.Hub._reconcile(); hub = window.Hub._info(); }
-    return { hub: hub, dailies: GAMES.map(dailyRow), extras: extras(), rm: rosterMaster() };
+    var C = window.ELG_COMP;   // only the games the current competition offers
+    return { hub: hub, dailies: GAMES.filter(function (g) { return !C || C.plays(g.id); }).map(dailyRow), extras: extras(), rm: rosterMaster() };
   }
 
   function render() {

@@ -92,6 +92,7 @@
     return LEGENDS.filter(function (p) { return Math.floor(p.birthYear / 10) * 10 === d; });
   }
   function pool() { return mode === "legends" ? legendPool() : PLAYERS; }
+  function onEuroCup() { return !!(window.ELG_COMP && window.ELG_COMP.id === "eurocup"); }
   // Fold case + diacritics so a typed "Nunez"/"Nuñez" both match the ASCII data.
   function norm(s) { return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
   // Initials avatar for the autocomplete rows (deterministic colour from the name).
@@ -715,18 +716,19 @@
       var i = raw.indexOf(":");
       if (i < 1) return null;
       var flag = raw.slice(0, i), name = raw.slice(i + 1);
-      if (flag !== "a" && flag !== "l") return null;
+      if (flag !== "a" && flag !== "l" && flag !== "e") return null;
       return { flag: flag, name: name };
     } catch (e) { return null; }
   }
   function challengeURL() {
-    var flag = (mode === "legends") ? "l" : "a";           // legends draw from LEGENDS, everything else from PLAYERS
+    // legends draw from LEGENDS, everything else from PLAYERS; "e" = a EuroCup player
+    var flag = onEuroCup() ? "e" : (mode === "legends") ? "l" : "a";
     var loc = window.location || {};
     var origin = (loc.origin && loc.origin !== "null") ? loc.origin : "";
     return origin + (loc.pathname || "") + "#c=" + encodeChallenge(flag, target.name);
   }
   function copyChallenge(btn) {
-    var text = "🏀 Can you guess this EuroLeague player? " + challengeURL();
+    var text = "🏀 Can you guess this " + (onEuroCup() ? "EuroCup" : "EuroLeague") + " player? " + challengeURL();
     var flash = function () {
       var orig = btn.textContent;
       btn.textContent = "Link copied!";
@@ -746,6 +748,14 @@
     if (!m) return false;
     var parsed = parseChallengeToken(m[1]);
     if (!parsed) return false;
+    // A link from the other competition switches to it first (the page reloads
+    // on the same link), since this one's PLAYERS can't contain its player.
+    var C = window.ELG_COMP;
+    if ((parsed.flag === "e") !== onEuroCup()) {
+      if (parsed.flag === "e" && !(C && C.eurocupReady)) return false;
+      if (C && C.set) { C.set(parsed.flag === "e" ? "eurocup" : "euroleague"); try { window.location.reload(); } catch (e) {} }
+      return false;
+    }
     var arr = parsed.flag === "l" ? LEGENDS : PLAYERS;
     var p = arr.filter(function (x) { return x.name === parsed.name; })[0];
     if (!p) return false;
@@ -844,6 +854,7 @@
   function setMode(m, fromChallenge) {
     if (!fromChallenge) exitChallenge();   // a real tab switch leaves any active challenge
     mode = (m === "practice" || m === "legends" || m === "endless") ? m : "daily";
+    if (mode === "legends" && !LEGENDS.length) mode = "practice";   // no non-active pool (the EuroCup)
     if (mode === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
     if (!fromChallenge) lsSet(K.mode, mode);
     if (window.ELG && window.ELG.modeURL) window.ELG.modeURL("mystery", mode);   // keep ?mode= honest
@@ -1121,6 +1132,7 @@
     els.tabDaily.addEventListener("click", function () { if (mode !== "daily" || challengeTarget || isArchive) setMode("daily"); });
     els.tabPractice.addEventListener("click", function () { if (mode !== "practice" || challengeTarget) setMode("practice"); });
     els.tabLegends.addEventListener("click", function () { if (mode !== "legends" || challengeTarget) setMode("legends"); });
+    if (!LEGENDS.length) els.tabLegends.hidden = true;   // the EuroCup has no non-active pool
     els.tabEndless.addEventListener("click", function () { if (mode !== "endless" || challengeTarget) setMode("endless"); });
     els.modes.addEventListener("keydown", onTabKey);
 
@@ -1190,6 +1202,9 @@
     goMode: setMode,
     goArchive: function (d) { pendingArchive = /^\d{4}-\d{2}-\d{2}$/.test(String(d)) ? String(d) : null; setMode("daily"); },
     _peekDay: function () { return { day: dayKey, archive: isArchive, mode: mode, over: over, won: won }; },
+    _target: function () { return target; },
+    _challengeURL: function () { return challengeURL(); },
+    _applyChallenge: function () { return applyChallengeFromHash(); },
     onShow: function () {
       if (isArchive) setMode("daily");       // a hub open always lands on TODAY's edition
       if (maybeFirstHelp()) return;          // focus stays in the how-to modal

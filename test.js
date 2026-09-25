@@ -86,6 +86,24 @@ try { navigator.clipboard = { writeText: function (t) { captured = t; return Pro
 eval(fs.readFileSync("clubs.js", "utf8"));      // club-name canonicalisation, shared by Common Club + Path Between
 eval(fs.readFileSync("players.js", "utf8"));
 eval(fs.readFileSync("legends.js", "utf8"));
+eval(fs.readFileSync("eurocup_players.js", "utf8"));
+// `ELG_EC=1 node test.js` is the EuroCup run (the main run spawns it near the
+// end). The real EuroCup file is empty until the rosters are researched, so it
+// plays on a fixture: thirty EuroLeague records re-homed to three made-up clubs,
+// with some EuroLeague saves already in storage that must stay untouched.
+var EC = !!process.env.ELG_EC;
+if (EC) {
+  window.EUROCUP_TEAMS = { "Test Club A": { country: "Spain" }, "Test Club B": { country: "Italy" }, "Test Club C": { country: "France" } };
+  window.EUROCUP_PLAYERS = window.PLAYERS.slice(0, 30).map(function (p, i) {
+    return { name: p.name, team: ["Test Club A", "Test Club B", "Test Club C"][i % 3], nationality: p.nationality,
+             position: p.position, height: p.height, birthYear: p.birthYear, number: p.number };
+  });
+  store["elg:comp"] = JSON.stringify("eurocup");
+  store["elg:stats"] = JSON.stringify({ played: 9, wins: 7, curStreak: 3, maxStreak: 5 });
+  store["elg:theme"] = JSON.stringify("dark");
+  win.location.reload = function () { win._reloaded = true; };
+}
+eval(fs.readFileSync("competition.js", "utf8"));   // EuroLeague unless a EuroCup fixture is loaded
 eval(fs.readFileSync("careers.js", "utf8"));
 eval(fs.readFileSync("lineups.js", "utf8"));
 eval(fs.readFileSync("puzzles.js", "utf8"));
@@ -110,6 +128,48 @@ eval(fs.readFileSync("app.js", "utf8"));
 
 var pass = 0, fail = 0;
 function ok(c, m) { if (c) { pass++; console.log("  ok   " + m); } else { fail++; console.log("  FAIL " + m); } }
+
+if (EC) {
+  var C = window.ELG_COMP;
+  ok(C.id === "eurocup" && C.name === "EuroCup" && C.eurocupReady, "EC: with EuroCup players and elg:comp=eurocup, the EuroCup is the competition");
+  ok(window.PLAYERS === window.EUROCUP_PLAYERS && window.EL_PLAYERS.length > 200 && window.TEAMS["Test Club A"],
+     "EC: the games get the EuroCup's players and clubs; the EuroLeague's are kept aside");
+  ok(window.LEGENDS.length === 0, "EC: no non-active pool, that is EuroLeague history");
+  ok(C.plays("mystery") && C.plays("higherlower") && C.plays("rostermaster") && !C.plays("playerid") && !C.plays("thegrid") && !C.plays("connections"),
+     "EC: only the roster games are offered (the rest need careers, lineups or puzzles)");
+  var ms = JSON.parse(window.localStorage.getItem("elg:stats") || "null");
+  ok(!ms || ms.played !== 9, "EC: the EuroLeague's Mystery stats are not what the EuroCup reads");
+  window.localStorage.setItem("elg:hl:stats", "x");
+  ok(store["elg:ec:hl:stats"] === "x" && !("elg:hl:stats" in store), "EC: a game's save lands under elg:ec:, beside the EuroLeague's");
+  ok(JSON.parse(store["elg:stats"]).played === 9 && JSON.parse(store["elg:stats"]).wins === 7, "EC: the EuroLeague save is untouched");
+  ok(window.localStorage.getItem("elg:theme") === JSON.stringify("dark") && !("elg:ec:theme" in store), "EC: settings like the theme stay shared");
+  window.localStorage.removeItem("elg:hl:stats");
+  ok(!("elg:ec:hl:stats" in store), "EC: removeItem is namespaced too");
+  window.Mystery.goDaily();
+  ok(window.EUROCUP_PLAYERS.indexOf(window.Mystery._target()) >= 0, "EC: Mystery's daily player is a EuroCup player");
+  ok(doc.getElementById("tab-legends").hidden === true, "EC: Mystery's Non-active tab is hidden");
+  window.Mystery.goMode("legends");
+  ok(window.Mystery._peekDay().mode === "practice", "EC: a stored or linked Non-active mode falls back to Practice");
+  ok(b64urlDecode(window.Mystery._challengeURL().split("#c=")[1]).indexOf("e:") === 0, "EC: a challenge link is flagged as a EuroCup player");
+  win.location.hash = "#c=" + b64urlEncode("a:" + window.EL_PLAYERS[40].name);
+  win._reloaded = false;
+  ok(window.Mystery._applyChallenge() === false && win._reloaded && JSON.parse(store["elg:comp"]) === "euroleague",
+     "EC: a EuroLeague challenge link switches back to the EuroLeague and reloads on the same link");
+  store["elg:comp"] = JSON.stringify("eurocup"); win.location.hash = "";
+  window.Hub._showView("playerid");
+  ok(window.Hub._curView() === "home", "EC: a link to a game the EuroCup doesn't offer lands on the hub");
+  window.Hub._showView("records");
+  ok(window.Hub._curView() === "records", "EC: Records still opens");
+  ok(window.Records._collect().dailies.map(function (d) { return d.id; }).join() === "mystery,higherlower", "EC: Records lists only the EuroCup's dailies");
+  window.Hub._showView("eurocup");
+  ok(window.Hub._curView() === "home", "EC: the coming-soon page is gone once the EuroCup plays");
+  window.Hub._renderCompMenu();
+  ok(doc.getElementById("comp-name").textContent === "EuroCup", "EC: the hub's switcher reads EuroCup");
+  window.Hub._goComp("euroleague");
+  ok(JSON.parse(store["elg:comp"]) === "euroleague" && /\/$/.test(String(win.location.href)), "EC: choosing the EuroLeague saves it and reloads the hub");
+  console.log("\n" + pass + " passed, " + fail + " failed");
+  process.exit(fail ? 1 : 0);
+}
 function fire(el, type, ev) { (el._listeners[type] || []).forEach(function (fn) { fn(ev || { preventDefault: function () {}, key: "" }); }); }
 function fireWin(type, ev) { (win._listeners[type] || []).forEach(function (fn) { fn(ev || {}); }); }
 function fireDoc(type, ev) { (doc._listeners[type] || []).forEach(function (fn) { fn(ev || {}); }); }
@@ -2354,5 +2414,30 @@ ok(oap.archive === false && oap.day === HTODAY, "re-opening from the hub lands b
 fire(byId("oo-daily"), "click");
 ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way home from an archive replay");
 
+
+// --- Competitions: the EuroLeague run (this one) and the EuroCup run ---------
+ok(window.ELG_COMP.id === "euroleague" && window.ELG_COMP.eurocupReady === (window.EUROCUP_PLAYERS.length > 0) && window.EL_PLAYERS === undefined,
+   "the EuroLeague is the competition by default, and its players are the games' players");
+ok(window.ELG_COMP.plays("thegrid") && window.ELG_COMP.plays("pathbetween"), "…where every game is offered");
+(function () {
+  var saved = store["elg:comp"];
+  store["elg:comp"] = JSON.stringify("eurocup");
+  if (!window.ELG_COMP.eurocupReady) {
+    ok(window.PLAYERS.length > 200, "…and a saved EuroCup choice changes nothing while the EuroCup has no players");
+    window.Hub._goComp("eurocup");
+    ok(window.Hub._curView() === "eurocup", "…where choosing EuroCup still opens the coming-soon page");
+  }
+  if (saved === undefined) delete store["elg:comp"]; else store["elg:comp"] = saved;
+  var html = require("fs").readFileSync(__dirname + "/index.html", "utf8");
+  var at = function (f) { return html.indexOf('<script src="' + f + '">'); };
+  ok(at("players.js") < at("eurocup_players.js") && at("legends.js") < at("competition.js") && at("eurocup_players.js") < at("competition.js") && at("competition.js") < at("game.js"),
+     "competition.js loads after both rosters and before every game");
+  var sw = require("fs").readFileSync(__dirname + "/sw.js", "utf8");
+  ok(sw.indexOf('"eurocup_players.js"') > 0 && sw.indexOf('"competition.js"') > 0, "…and both new files are cached for offline play");
+  var r = require("child_process").spawnSync(process.execPath, [__filename], { cwd: __dirname, env: Object.assign({}, process.env, { ELG_EC: "1" }), encoding: "utf8" });
+  var lines = String(r.stdout || "").split(/\r?\n/).filter(function (l) { return /^  (ok|FAIL) +EC:/.test(l); });
+  lines.forEach(function (l) { ok(l.indexOf("  ok") === 0, l.replace(/^  (ok|FAIL)\s+/, "")); });
+  ok(r.status === 0 && lines.length >= 20, "the EuroCup run passed (" + lines.length + " cases)");
+})();
 console.log("\n" + pass + " passed, " + fail + " failed");
 process.exit(fail ? 1 : 0);
