@@ -51,7 +51,8 @@ const TEAMS = {
   "Neptunas": { country: "Lithuania" },
   "Niners Chemnitz": { country: "Germany" },
   "PAOK": { country: "Greece" },
-  "Ratiopharm Ulm": { country: "Germany" }
+  "Ratiopharm Ulm": { country: "Germany" },
+  "San Pablo Burgos": { country: "Spain" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -390,7 +391,21 @@ const PENDING = [
   { name: "Meissa Faye", team: "Ratiopharm Ulm", position: "Forward", number: 11 },
   { name: "Michael Rataj", team: "Ratiopharm Ulm", position: "Forward", number: 12 },
   { name: "Lenny Liedtke", team: "Ratiopharm Ulm", position: "Forward", number: 55 },
-  { name: "Simisola Shittu", team: "Ratiopharm Ulm", position: "Center", number: 45 }
+  { name: "Simisola Shittu", team: "Ratiopharm Ulm", position: "Center", number: 45 },
+  // San Pablo Burgos
+  { name: "Chase Audige", team: "San Pablo Burgos", position: "Guard", number: 1 },
+  { name: "DJ Steward", team: "San Pablo Burgos", position: "Guard", number: 4 },
+  { name: "Ziga Samar", team: "San Pablo Burgos", position: "Guard", number: 5 },
+  { name: "Retin Obasohan", team: "San Pablo Burgos", position: "Guard", number: 32 },
+  { name: "Raul Lobaco", team: "San Pablo Burgos", position: "Guard", number: 55 },
+  { name: "Joaquin Taboada", team: "San Pablo Burgos", position: "Guard", number: 59 },
+  { name: "Pablo Almazan", team: "San Pablo Burgos", position: "Forward", number: 8 },
+  { name: "Daniel Diez", team: "San Pablo Burgos", position: "Forward", number: 11 },
+  { name: "Dusan Radosavljevic", team: "San Pablo Burgos", position: "Forward", number: 15 },
+  { name: "Christian Sengfelder", team: "San Pablo Burgos", position: "Forward", number: 43 },
+  { name: "Balsa Koprivica", team: "San Pablo Burgos", position: "Center", number: 7 },
+  { name: "Ruben Guerrero", team: "San Pablo Burgos", position: "Center", number: 12 },
+  { name: "Sekou Doumbouya", team: "San Pablo Burgos", position: "Center", number: 45 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

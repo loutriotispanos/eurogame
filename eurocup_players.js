@@ -69,6 +69,9 @@ window.EUROCUP_TEAMS = {
   },
   "Ratiopharm Ulm": {
     "country": "Germany"
+  },
+  "San Pablo Burgos": {
+    "country": "Spain"
   }
 };
 
