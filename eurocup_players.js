@@ -251,6 +251,33 @@ window.EUROCUP_PLAYERS = [
     "number": 4
   },
   {
+    "name": "Damien Inglis",
+    "team": "Bahcesehir College",
+    "nationality": "France",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1995,
+    "number": 7
+  },
+  {
+    "name": "David DiLeo",
+    "team": "Bahcesehir College",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1997,
+    "number": 51
+  },
+  {
+    "name": "Furkan Haltali",
+    "team": "Bahcesehir College",
+    "nationality": "Turkey",
+    "position": "Center",
+    "height": 211,
+    "birthYear": 2002,
+    "number": 14
+  },
+  {
     "name": "Isiaha Mike",
     "team": "Bahcesehir College",
     "nationality": "Canada",
@@ -258,6 +285,141 @@ window.EUROCUP_PLAYERS = [
     "height": 203,
     "birthYear": 1997,
     "number": 24
+  },
+  {
+    "name": "Ismet Akpinar",
+    "team": "Bahcesehir College",
+    "nationality": "Germany",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1995,
+    "number": 5
+  },
+  {
+    "name": "Kenan Sipahi",
+    "team": "Bahcesehir College",
+    "nationality": "Turkey",
+    "position": "Guard",
+    "height": 197,
+    "birthYear": 1995,
+    "number": 55
+  },
+  {
+    "name": "Malachi Flynn",
+    "team": "Bahcesehir College",
+    "nationality": "Turkey",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 1998,
+    "number": 22
+  },
+  {
+    "name": "Marcquise Reed",
+    "team": "Bahcesehir College",
+    "nationality": "Georgia",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1995,
+    "number": 0
+  },
+  {
+    "name": "Mateusz Ponitka",
+    "team": "Bahcesehir College",
+    "nationality": "Poland",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1993,
+    "number": 38
+  },
+  {
+    "name": "Maxim Mutaf",
+    "team": "Bahcesehir College",
+    "nationality": "Turkey",
+    "position": "Forward",
+    "height": 193,
+    "birthYear": 1991,
+    "number": 17
+  },
+  {
+    "name": "Trevion Williams",
+    "team": "Bahcesehir College",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 2000,
+    "number": 50
+  },
+  {
+    "name": "Tyler Cavanaugh",
+    "team": "Bahcesehir College",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 1994,
+    "number": 34
+  },
+  {
+    "name": "Aleksandar Stoimenov",
+    "team": "Balkan Botevgrad",
+    "nationality": "Bulgaria",
+    "position": "Guard",
+    "height": 198,
+    "birthYear": 2001,
+    "number": 3
+  },
+  {
+    "name": "Darnell Edge",
+    "team": "Balkan Botevgrad",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 1997,
+    "number": 1
+  },
+  {
+    "name": "David Okwera",
+    "team": "Balkan Botevgrad",
+    "nationality": "Australia",
+    "position": "Forward",
+    "height": 208,
+    "birthYear": 2002,
+    "number": 0
+  },
+  {
+    "name": "Gael Bonilla",
+    "team": "Balkan Botevgrad",
+    "nationality": "Mexico",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 2003,
+    "number": 2
+  },
+  {
+    "name": "Javante McCoy",
+    "team": "Balkan Botevgrad",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1998,
+    "number": 13
+  },
+  {
+    "name": "Konstantin Toshkov",
+    "team": "Balkan Botevgrad",
+    "nationality": "Bulgaria",
+    "position": "Guard",
+    "height": 186,
+    "birthYear": 2002,
+    "number": 22
+  },
+  {
+    "name": "Pavlin Ivanov",
+    "team": "Balkan Botevgrad",
+    "nationality": "Bulgaria",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1993,
+    "number": 10
   },
   {
     "name": "Jaka Blazic",
@@ -305,6 +467,15 @@ window.EUROCUP_PLAYERS = [
     "number": 21
   },
   {
+    "name": "Dominik Olejniczak",
+    "team": "Derthona Tortona",
+    "nationality": "Poland",
+    "position": "Center",
+    "height": 213,
+    "birthYear": 1996,
+    "number": 17
+  },
+  {
     "name": "Giordano Bortolani",
     "team": "Derthona Tortona",
     "nationality": "Italy",
@@ -312,6 +483,15 @@ window.EUROCUP_PLAYERS = [
     "height": 193,
     "birthYear": 2000,
     "number": 12
+  },
+  {
+    "name": "Giulio Gazzotti",
+    "team": "Derthona Tortona",
+    "nationality": "Italy",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1991,
+    "number": 24
   },
   {
     "name": "Justin Gorham",
