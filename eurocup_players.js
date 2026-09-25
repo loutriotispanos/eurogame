@@ -1765,7 +1765,7 @@ window.EUROCUP_PLAYERS = [
   {
     "name": "Andrej Jakimovski",
     "team": "Napoli Basketball",
-    "nationality": "Bulgaria",
+    "nationality": "North Macedonia",
     "position": "Forward",
     "height": 203,
     "birthYear": 2001,
@@ -2089,7 +2089,7 @@ window.EUROCUP_PLAYERS = [
   {
     "name": "Yohan Choupas",
     "team": "Niners Chemnitz",
-    "nationality": "Germany",
+    "nationality": "France",
     "position": "Guard",
     "height": 193,
     "birthYear": 2000,
