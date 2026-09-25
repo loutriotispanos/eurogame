@@ -66,6 +66,9 @@ window.EUROCUP_TEAMS = {
   },
   "PAOK": {
     "country": "Greece"
+  },
+  "Ratiopharm Ulm": {
+    "country": "Germany"
   }
 };
 
@@ -231,5 +234,14 @@ window.EUROCUP_PLAYERS = [
     "height": 198,
     "birthYear": 1989,
     "number": 33
+  },
+  {
+    "name": "Armel Traore",
+    "team": "Ratiopharm Ulm",
+    "nationality": "France",
+    "position": "Forward",
+    "height": 205,
+    "birthYear": 2003,
+    "number": 94
   }
 ];

@@ -50,7 +50,8 @@ const TEAMS = {
   "Napoli Basketball": { country: "Italy" },
   "Neptunas": { country: "Lithuania" },
   "Niners Chemnitz": { country: "Germany" },
-  "PAOK": { country: "Greece" }
+  "PAOK": { country: "Greece" },
+  "Ratiopharm Ulm": { country: "Germany" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -82,7 +83,9 @@ const PLAYERS = [
   { name: "Jeffrey Dowtin Jr.", team: "Napoli Basketball", number: 3 },
   // PAOK
   { name: "Cedi Osman", team: "PAOK", number: 6 },
-  { name: "Nick Calathes", team: "PAOK", number: 33 }
+  { name: "Nick Calathes", team: "PAOK", number: 33 },
+  // Ratiopharm Ulm
+  { name: "Armel Traore", team: "Ratiopharm Ulm", number: 94 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -372,7 +375,22 @@ const PENDING = [
   { name: "Kyle Alexander", team: "PAOK", position: "Center", number: 8 },
   { name: "Clifford Omoruyi", team: "PAOK", position: "Center", number: 11 },
   { name: "Dimitrios Kaklamanakis", team: "PAOK", position: "Center", number: 14 },
-  { name: "Ben Moore", team: "PAOK", position: "Center", number: 26 }
+  { name: "Ben Moore", team: "PAOK", position: "Center", number: 26 },
+  // Ratiopharm Ulm
+  { name: "Adam Atamna", team: "Ratiopharm Ulm", position: "Guard", number: 0 },
+  { name: "Namori Omog", team: "Ratiopharm Ulm", position: "Guard", number: 1 },
+  { name: "Ibi Watson", team: "Ratiopharm Ulm", position: "Guard", number: 2 },
+  { name: "Teo Milicic", team: "Ratiopharm Ulm", position: "Guard", number: 4 },
+  { name: "Devin Schmidt", team: "Ratiopharm Ulm", position: "Guard", number: 8 },
+  { name: "CJ Anthony Jr.", team: "Ratiopharm Ulm", position: "Guard", number: 25 },
+  { name: "Jaylen Sims", team: "Ratiopharm Ulm", position: "Guard", number: 30 },
+  { name: "Lucas Fischer", team: "Ratiopharm Ulm", position: "Guard", number: 43 },
+  { name: "Marvin Heckel", team: "Ratiopharm Ulm", position: "Guard", number: 47 },
+  { name: "Dwayne Koroma", team: "Ratiopharm Ulm", position: "Forward", number: 3 },
+  { name: "Meissa Faye", team: "Ratiopharm Ulm", position: "Forward", number: 11 },
+  { name: "Michael Rataj", team: "Ratiopharm Ulm", position: "Forward", number: 12 },
+  { name: "Lenny Liedtke", team: "Ratiopharm Ulm", position: "Forward", number: 55 },
+  { name: "Simisola Shittu", team: "Ratiopharm Ulm", position: "Center", number: 45 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
