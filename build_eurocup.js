@@ -38,7 +38,8 @@ const TEAMS = {
   "Bosna Sarajevo": { country: "Bosnia and Herzegovina" },
   "Buducnost": { country: "Montenegro" },
   "Cedevita Olimpija": { country: "Slovenia" },
-  "JL Bourg-en-Bresse": { country: "France" }
+  "JL Bourg-en-Bresse": { country: "France" },
+  "Trento": { country: "Italy" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -169,7 +170,26 @@ const PENDING = [
   { name: "Tyrese Samuel", team: "JL Bourg-en-Bresse", position: "Forward", number: 5 },
   { name: "Nathan Soliman", team: "JL Bourg-en-Bresse", position: "Forward", number: 14 },
   { name: "Lionel Gaudoux", team: "JL Bourg-en-Bresse", position: "Center", number: 13 },
-  { name: "Kadin Shedrick", team: "JL Bourg-en-Bresse", position: "Center", number: 21 }
+  { name: "Kadin Shedrick", team: "JL Bourg-en-Bresse", position: "Center", number: 21 },
+  // Trento
+  { name: "Darius Brown II", team: "Trento", position: "Guard", number: 0 },
+  { name: "Giulio Vergnaghi", team: "Trento", position: "Guard", number: 6 },
+  { name: "Cheickh Niang", team: "Trento", position: "Guard", number: 7 },
+  { name: "Quincy Olivari", team: "Trento", position: "Guard", number: 8 },
+  { name: "Cosimo Flauto", team: "Trento", position: "Guard", number: 9 },
+  { name: "Toto Forray", team: "Trento", position: "Guard", number: 10 },
+  { name: "Federico Cattapan", team: "Trento", position: "Guard", number: 11 },
+  { name: "Patrick Hassan", team: "Trento", position: "Guard", number: 68 },
+  { name: "Charlie Brown Jr.", team: "Trento", position: "Forward", number: 4 },
+  { name: "Alessandro Bertini", team: "Trento", position: "Forward", number: 5 },
+  { name: "Vittorio Triggiani", team: "Trento", position: "Forward", number: 12 },
+  { name: "Antonio Barra", team: "Trento", position: "Forward", number: 13 },
+  { name: "Mansour Bayo", team: "Trento", position: "Forward", number: 15 },
+  { name: "Isaiah Bigelow", team: "Trento", position: "Forward", number: 24 },
+  { name: "Jose Medina Bouza", team: "Trento", position: "Forward", number: 30 },
+  { name: "Selom Mawugbe", team: "Trento", position: "Center", number: 21 },
+  { name: "Jordan Bayehe", team: "Trento", position: "Center", number: 26 },
+  { name: "Oumar Fall", team: "Trento", position: "Center", number: 29 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

@@ -30,6 +30,9 @@ window.EUROCUP_TEAMS = {
   },
   "JL Bourg-en-Bresse": {
     "country": "France"
+  },
+  "Trento": {
+    "country": "Italy"
   }
 };
 
