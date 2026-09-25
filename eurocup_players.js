@@ -368,6 +368,15 @@ window.EUROCUP_PLAYERS = [
     "number": 3
   },
   {
+    "name": "Alex Ducas",
+    "team": "Balkan Botevgrad",
+    "nationality": "Australia",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2000,
+    "number": 8
+  },
+  {
     "name": "Darnell Edge",
     "team": "Balkan Botevgrad",
     "nationality": "USA",
@@ -386,6 +395,15 @@ window.EUROCUP_PLAYERS = [
     "number": 0
   },
   {
+    "name": "Dimitar Dimitrov",
+    "team": "Balkan Botevgrad",
+    "nationality": "Bulgaria",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1993,
+    "number": 34
+  },
+  {
     "name": "Gael Bonilla",
     "team": "Balkan Botevgrad",
     "nationality": "Mexico",
@@ -393,6 +411,24 @@ window.EUROCUP_PLAYERS = [
     "height": 203,
     "birthYear": 2003,
     "number": 2
+  },
+  {
+    "name": "Ivan Alipiev",
+    "team": "Balkan Botevgrad",
+    "nationality": "Bulgaria",
+    "position": "Forward",
+    "height": 200,
+    "birthYear": 1999,
+    "number": 35
+  },
+  {
+    "name": "Ivan Spirov",
+    "team": "Balkan Botevgrad",
+    "nationality": "Bulgaria",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 2003,
+    "number": 91
   },
   {
     "name": "Javante McCoy",
@@ -413,6 +449,24 @@ window.EUROCUP_PLAYERS = [
     "number": 22
   },
   {
+    "name": "Martin Sotirov",
+    "team": "Balkan Botevgrad",
+    "nationality": "Bulgaria",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1999,
+    "number": 44
+  },
+  {
+    "name": "Nikolay Grozev",
+    "team": "Balkan Botevgrad",
+    "nationality": "Bulgaria",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1994,
+    "number": 33
+  },
+  {
     "name": "Pavlin Ivanov",
     "team": "Balkan Botevgrad",
     "nationality": "Bulgaria",
@@ -420,6 +474,123 @@ window.EUROCUP_PLAYERS = [
     "height": 196,
     "birthYear": 1993,
     "number": 10
+  },
+  {
+    "name": "Ulrich Chomche",
+    "team": "Balkan Botevgrad",
+    "nationality": "Cameroon",
+    "position": "Center",
+    "height": 211,
+    "birthYear": 2005,
+    "number": 14
+  },
+  {
+    "name": "Adin Vrabac",
+    "team": "Bosna Sarajevo",
+    "nationality": "Bosnia and Herzegovina",
+    "position": "Guard",
+    "height": 206,
+    "birthYear": 1994,
+    "number": 7
+  },
+  {
+    "name": "Darko Talic",
+    "team": "Bosna Sarajevo",
+    "nationality": "Bosnia and Herzegovina",
+    "position": "Guard",
+    "height": 192,
+    "birthYear": 1998,
+    "number": 19
+  },
+  {
+    "name": "Daut Livadic",
+    "team": "Bosna Sarajevo",
+    "nationality": "Bosnia and Herzegovina",
+    "position": "Center",
+    "height": 207,
+    "birthYear": 2007,
+    "number": 22
+  },
+  {
+    "name": "DeAndre Gholston",
+    "team": "Bosna Sarajevo",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 2000,
+    "number": 4
+  },
+  {
+    "name": "Edin Atic",
+    "team": "Bosna Sarajevo",
+    "nationality": "Bosnia and Herzegovina",
+    "position": "Guard",
+    "height": 201,
+    "birthYear": 1997,
+    "number": 5
+  },
+  {
+    "name": "Gary Browne",
+    "team": "Bosna Sarajevo",
+    "nationality": "Puerto Rico",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 1993,
+    "number": 14
+  },
+  {
+    "name": "James Banks",
+    "team": "Bosna Sarajevo",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1998,
+    "number": 1
+  },
+  {
+    "name": "Marcus Domask",
+    "team": "Bosna Sarajevo",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 198,
+    "birthYear": 2000,
+    "number": 3
+  },
+  {
+    "name": "Nikola Popovic",
+    "team": "Bosna Sarajevo",
+    "nationality": "Serbia",
+    "position": "Center",
+    "height": 211,
+    "birthYear": 1997,
+    "number": 21
+  },
+  {
+    "name": "Reginald Perry",
+    "team": "Bosna Sarajevo",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 2000,
+    "number": 11
+  },
+  {
+    "name": "Ryan Hawkins",
+    "team": "Bosna Sarajevo",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1997,
+    "number": 44
+  },
+  {
+    "name": "Shawn Pipes Jr.",
+    "team": "Bosna Sarajevo",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1999,
+    "number": 2
   },
   {
     "name": "Jaka Blazic",

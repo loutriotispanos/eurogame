@@ -139,7 +139,26 @@ const PLAYERS = [
   { name: "Javante McCoy", team: "Balkan Botevgrad", nationality: "USA", position: "Guard", height: 196, birthYear: 1998, number: 13 },
   { name: "Konstantin Toshkov", team: "Balkan Botevgrad", nationality: "Bulgaria", position: "Guard", height: 186, birthYear: 2002, number: 22 },
   { name: "David Okwera", team: "Balkan Botevgrad", nationality: "Australia", position: "Forward", height: 208, birthYear: 2002, number: 0 },
-  { name: "Gael Bonilla", team: "Balkan Botevgrad", nationality: "Mexico", position: "Forward", height: 203, birthYear: 2003, number: 2 }
+  { name: "Gael Bonilla", team: "Balkan Botevgrad", nationality: "Mexico", position: "Forward", height: 203, birthYear: 2003, number: 2 },
+  { name: "Alex Ducas", team: "Balkan Botevgrad", nationality: "Australia", position: "Forward", height: 201, birthYear: 2000, number: 8 },
+  { name: "Nikolay Grozev", team: "Balkan Botevgrad", nationality: "Bulgaria", position: "Forward", height: 198, birthYear: 1994, number: 33 },
+  { name: "Dimitar Dimitrov", team: "Balkan Botevgrad", nationality: "Bulgaria", position: "Forward", height: 203, birthYear: 1993, number: 34 },
+  { name: "Ivan Alipiev", team: "Balkan Botevgrad", nationality: "Bulgaria", position: "Forward", height: 200, birthYear: 1999, number: 35 },
+  { name: "Martin Sotirov", team: "Balkan Botevgrad", nationality: "Bulgaria", position: "Forward", height: 201, birthYear: 1999, number: 44 },
+  { name: "Ivan Spirov", team: "Balkan Botevgrad", nationality: "Bulgaria", position: "Forward", height: 203, birthYear: 2003, number: 91 },
+  { name: "Ulrich Chomche", team: "Balkan Botevgrad", nationality: "Cameroon", position: "Center", height: 211, birthYear: 2005, number: 14 },
+  { name: "Shawn Pipes Jr.", team: "Bosna Sarajevo", nationality: "USA", position: "Guard", height: 188, birthYear: 1999, number: 2 },
+  { name: "Marcus Domask", team: "Bosna Sarajevo", nationality: "USA", position: "Guard", height: 198, birthYear: 2000, number: 3 },
+  { name: "DeAndre Gholston", team: "Bosna Sarajevo", nationality: "USA", position: "Guard", height: 196, birthYear: 2000, number: 4 },
+  { name: "Edin Atic", team: "Bosna Sarajevo", nationality: "Bosnia and Herzegovina", position: "Guard", height: 201, birthYear: 1997, number: 5 },
+  { name: "Adin Vrabac", team: "Bosna Sarajevo", nationality: "Bosnia and Herzegovina", position: "Guard", height: 206, birthYear: 1994, number: 7 },
+  { name: "Gary Browne", team: "Bosna Sarajevo", nationality: "Puerto Rico", position: "Guard", height: 185, birthYear: 1993, number: 14 },
+  { name: "Darko Talic", team: "Bosna Sarajevo", nationality: "Bosnia and Herzegovina", position: "Guard", height: 192, birthYear: 1998, number: 19 },
+  { name: "Ryan Hawkins", team: "Bosna Sarajevo", nationality: "USA", position: "Forward", height: 201, birthYear: 1997, number: 44 },
+  { name: "James Banks", team: "Bosna Sarajevo", nationality: "USA", position: "Center", height: 208, birthYear: 1998, number: 1 },
+  { name: "Reginald Perry", team: "Bosna Sarajevo", nationality: "USA", position: "Center", height: 203, birthYear: 2000, number: 11 },
+  { name: "Nikola Popovic", team: "Bosna Sarajevo", nationality: "Serbia", position: "Center", height: 211, birthYear: 1997, number: 21 },
+  { name: "Daut Livadic", team: "Bosna Sarajevo", nationality: "Bosnia and Herzegovina", position: "Center", height: 207, birthYear: 2007, number: 22 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -151,27 +170,8 @@ const PENDING = [
   { name: "Edoardo Di Meo", team: "Derthona Tortona", position: "Guard", number: 9 },
   // Bahcesehir College
   // Balkan Botevgrad
-  { name: "Alex Ducas", team: "Balkan Botevgrad", position: "Forward", number: 8 },
-  { name: "Nikolay Grozev", team: "Balkan Botevgrad", position: "Forward", number: 33 },
-  { name: "Dimitar Dimitrov", team: "Balkan Botevgrad", position: "Forward", number: 34 },
-  { name: "Ivan Alipiev", team: "Balkan Botevgrad", position: "Forward", number: 35 },
-  { name: "Martin Sotirov", team: "Balkan Botevgrad", position: "Forward", number: 44 },
-  { name: "Ivan Spirov", team: "Balkan Botevgrad", position: "Forward", number: 91 },
-  { name: "Ulrich Chomche", team: "Balkan Botevgrad", position: "Center", number: 14 },
   // Bosna Sarajevo
   { name: "Miljan Kljestan", team: "Bosna Sarajevo", position: "Guard", number: 0 },
-  { name: "Shawn Pipes Jr.", team: "Bosna Sarajevo", position: "Guard", number: 2 },
-  { name: "Marcus Domask", team: "Bosna Sarajevo", position: "Guard", number: 3 },
-  { name: "DeAndre Gholston", team: "Bosna Sarajevo", position: "Guard", number: 4 },
-  { name: "Edin Atic", team: "Bosna Sarajevo", position: "Guard", number: 5 },
-  { name: "Adin Vrabac", team: "Bosna Sarajevo", position: "Guard", number: 7 },
-  { name: "Gary Browne", team: "Bosna Sarajevo", position: "Guard", number: 14 },
-  { name: "Darko Talic", team: "Bosna Sarajevo", position: "Guard", number: 19 },
-  { name: "Ryan Hawkins", team: "Bosna Sarajevo", position: "Forward", number: 44 },
-  { name: "James Banks", team: "Bosna Sarajevo", position: "Center", number: 1 },
-  { name: "Reginald Perry", team: "Bosna Sarajevo", position: "Center", number: 11 },
-  { name: "Nikola Popovic", team: "Bosna Sarajevo", position: "Center", number: 21 },
-  { name: "Daut Livadic", team: "Bosna Sarajevo", position: "Center", number: 22 },
   { name: "Alija Islamovic", team: "Bosna Sarajevo", position: "Center", number: 33 },
   // Buducnost
   { name: "Fletcher Magee", team: "Buducnost", position: "Guard", number: 3 },
