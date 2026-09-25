@@ -27,6 +27,9 @@ window.EUROCUP_TEAMS = {
   },
   "Cedevita Olimpija": {
     "country": "Slovenia"
+  },
+  "JL Bourg-en-Bresse": {
+    "country": "France"
   }
 };
 

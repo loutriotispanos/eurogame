@@ -37,7 +37,8 @@ const TEAMS = {
   "Balkan Botevgrad": { country: "Bulgaria" },
   "Bosna Sarajevo": { country: "Bosnia and Herzegovina" },
   "Buducnost": { country: "Montenegro" },
-  "Cedevita Olimpija": { country: "Slovenia" }
+  "Cedevita Olimpija": { country: "Slovenia" },
+  "JL Bourg-en-Bresse": { country: "France" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -154,7 +155,21 @@ const PENDING = [
   { name: "Cameron Houindo", team: "Cedevita Olimpija", position: "Center", number: 8 },
   { name: "Osayi Osifo", team: "Cedevita Olimpija", position: "Center", number: 14 },
   { name: "David Skara", team: "Cedevita Olimpija", position: "Center", number: 24 },
-  { name: "Jayce Johnson", team: "Cedevita Olimpija", position: "Center", number: 34 }
+  { name: "Jayce Johnson", team: "Cedevita Olimpija", position: "Center", number: 34 },
+  // JL Bourg-en-Bresse
+  { name: "Keith Jordan Jr.", team: "JL Bourg-en-Bresse", position: "Guard", number: 2 },
+  { name: "Assemian Moulare", team: "JL Bourg-en-Bresse", position: "Guard", number: 3 },
+  { name: "Antony Labanca", team: "JL Bourg-en-Bresse", position: "Guard", number: 8 },
+  { name: "Tyson Walker", team: "JL Bourg-en-Bresse", position: "Guard", number: 12 },
+  { name: "Trey Woodbury", team: "JL Bourg-en-Bresse", position: "Guard", number: 22 },
+  { name: "Morgan Selebangue", team: "JL Bourg-en-Bresse", position: "Guard", number: 23 },
+  { name: "Leni Monnet", team: "JL Bourg-en-Bresse", position: "Guard", number: 55 },
+  { name: "Hugo Robineau", team: "JL Bourg-en-Bresse", position: "Guard", number: 87 },
+  { name: "Adrian Nelson", team: "JL Bourg-en-Bresse", position: "Forward", number: 4 },
+  { name: "Tyrese Samuel", team: "JL Bourg-en-Bresse", position: "Forward", number: 5 },
+  { name: "Nathan Soliman", team: "JL Bourg-en-Bresse", position: "Forward", number: 14 },
+  { name: "Lionel Gaudoux", team: "JL Bourg-en-Bresse", position: "Center", number: 13 },
+  { name: "Kadin Shedrick", team: "JL Bourg-en-Bresse", position: "Center", number: 21 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
