@@ -917,6 +917,24 @@ window.EUROCUP_PLAYERS = [
     "number": 3
   },
   {
+    "name": "Jaleen Smith",
+    "team": "Hapoel Jerusalem",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1994,
+    "number": 3
+  },
+  {
+    "name": "Jared Harper",
+    "team": "Hapoel Jerusalem",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 178,
+    "birthYear": 1997,
+    "number": 1
+  },
+  {
     "name": "Shake Milton",
     "team": "Hapoel Jerusalem",
     "nationality": "USA",
@@ -1113,6 +1131,78 @@ window.EUROCUP_PLAYERS = [
     "height": 188,
     "birthYear": 2001,
     "number": 1
+  },
+  {
+    "name": "Alessandro Bertini",
+    "team": "Trento",
+    "nationality": "Italy",
+    "position": "Forward",
+    "height": 195,
+    "birthYear": 2002,
+    "number": 5
+  },
+  {
+    "name": "Charlie Brown Jr.",
+    "team": "Trento",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1997,
+    "number": 4
+  },
+  {
+    "name": "Darius Brown II",
+    "team": "Trento",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1999,
+    "number": 0
+  },
+  {
+    "name": "Isaiah Bigelow",
+    "team": "Trento",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2000,
+    "number": 24
+  },
+  {
+    "name": "Jordan Bayehe",
+    "team": "Trento",
+    "nationality": "Cameroon",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 1999,
+    "number": 26
+  },
+  {
+    "name": "Quincy Olivari",
+    "team": "Trento",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 2001,
+    "number": 8
+  },
+  {
+    "name": "Selom Mawugbe",
+    "team": "Trento",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1998,
+    "number": 21
+  },
+  {
+    "name": "Toto Forray",
+    "team": "Trento",
+    "nationality": "Argentina",
+    "position": "Guard",
+    "height": 187,
+    "birthYear": 1986,
+    "number": 10
   },
   {
     "name": "Shaquielle McKissic",

@@ -193,7 +193,17 @@ const PLAYERS = [
   { name: "Adrian Nelson", team: "JL Bourg-en-Bresse", nationality: "USA", position: "Forward", height: 203, birthYear: 1999, number: 4 },
   { name: "Tyrese Samuel", team: "JL Bourg-en-Bresse", nationality: "Canada", position: "Forward", height: 206, birthYear: 2000, number: 5 },
   { name: "Lionel Gaudoux", team: "JL Bourg-en-Bresse", nationality: "France", position: "Center", height: 198, birthYear: 1995, number: 13 },
-  { name: "Kadin Shedrick", team: "JL Bourg-en-Bresse", nationality: "USA", position: "Center", height: 211, birthYear: 2001, number: 21 }
+  { name: "Kadin Shedrick", team: "JL Bourg-en-Bresse", nationality: "USA", position: "Center", height: 211, birthYear: 2001, number: 21 },
+  { name: "Darius Brown II", team: "Trento", nationality: "USA", position: "Guard", height: 188, birthYear: 1999, number: 0 },
+  { name: "Quincy Olivari", team: "Trento", nationality: "USA", position: "Guard", height: 191, birthYear: 2001, number: 8 },
+  { name: "Toto Forray", team: "Trento", nationality: "Argentina", position: "Guard", height: 187, birthYear: 1986, number: 10 },
+  { name: "Charlie Brown Jr.", team: "Trento", nationality: "USA", position: "Forward", height: 198, birthYear: 1997, number: 4 },
+  { name: "Alessandro Bertini", team: "Trento", nationality: "Italy", position: "Forward", height: 195, birthYear: 2002, number: 5 },
+  { name: "Isaiah Bigelow", team: "Trento", nationality: "USA", position: "Forward", height: 201, birthYear: 2000, number: 24 },
+  { name: "Selom Mawugbe", team: "Trento", nationality: "USA", position: "Center", height: 208, birthYear: 1998, number: 21 },
+  { name: "Jordan Bayehe", team: "Trento", nationality: "Cameroon", position: "Center", height: 206, birthYear: 1999, number: 26 },
+  { name: "Jared Harper", team: "Hapoel Jerusalem", nationality: "USA", position: "Guard", height: 178, birthYear: 1997, number: 1 },
+  { name: "Jaleen Smith", team: "Hapoel Jerusalem", nationality: "USA", position: "Guard", height: 193, birthYear: 1994, number: 3 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -208,27 +218,7 @@ const PENDING = [
   // Cedevita Olimpija
   // JL Bourg-en-Bresse
   // Trento
-  { name: "Darius Brown II", team: "Trento", position: "Guard", number: 0 },
-  { name: "Giulio Vergnaghi", team: "Trento", position: "Guard", number: 6 },
-  { name: "Cheickh Niang", team: "Trento", position: "Guard", number: 7 },
-  { name: "Quincy Olivari", team: "Trento", position: "Guard", number: 8 },
-  { name: "Cosimo Flauto", team: "Trento", position: "Guard", number: 9 },
-  { name: "Toto Forray", team: "Trento", position: "Guard", number: 10 },
-  { name: "Federico Cattapan", team: "Trento", position: "Guard", number: 11 },
-  { name: "Patrick Hassan", team: "Trento", position: "Guard", number: 68 },
-  { name: "Charlie Brown Jr.", team: "Trento", position: "Forward", number: 4 },
-  { name: "Alessandro Bertini", team: "Trento", position: "Forward", number: 5 },
-  { name: "Vittorio Triggiani", team: "Trento", position: "Forward", number: 12 },
-  { name: "Antonio Barra", team: "Trento", position: "Forward", number: 13 },
-  { name: "Mansour Bayo", team: "Trento", position: "Forward", number: 15 },
-  { name: "Isaiah Bigelow", team: "Trento", position: "Forward", number: 24 },
-  { name: "Jose Medina Bouza", team: "Trento", position: "Forward", number: 30 },
-  { name: "Selom Mawugbe", team: "Trento", position: "Center", number: 21 },
-  { name: "Jordan Bayehe", team: "Trento", position: "Center", number: 26 },
-  { name: "Oumar Fall", team: "Trento", position: "Center", number: 29 },
   // Hapoel Jerusalem
-  { name: "Jared Harper", team: "Hapoel Jerusalem", position: "Guard", number: 1 },
-  { name: "Jaleen Smith", team: "Hapoel Jerusalem", position: "Guard", number: 3 },
   { name: "Shachar Loberboum", team: "Hapoel Jerusalem", position: "Guard", number: 7 },
   { name: "Roi Huber", team: "Hapoel Jerusalem", position: "Guard", number: 13 },
   { name: "Ethan Burg", team: "Hapoel Jerusalem", position: "Guard", number: 35 },
