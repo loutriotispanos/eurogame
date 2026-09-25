@@ -87,6 +87,9 @@ window.EUROCUP_TEAMS = {
   },
   "Skyliners Frankfurt": {
     "country": "Germany"
+  },
+  "Slask Wroclaw": {
+    "country": "Poland"
   }
 };
 

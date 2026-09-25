@@ -57,7 +57,8 @@ const TEAMS = {
   "Roma Basketball": { country: "Italy" },
   "Rostock Seawolves": { country: "Germany" },
   "Siauliai": { country: "Lithuania" },
-  "Skyliners Frankfurt": { country: "Germany" }
+  "Skyliners Frankfurt": { country: "Germany" },
+  "Slask Wroclaw": { country: "Poland" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -489,7 +490,20 @@ const PENDING = [
   { name: "Race Thompson", team: "Skyliners Frankfurt", position: "Center", number: 5 },
   { name: "Moses Poelking", team: "Skyliners Frankfurt", position: "Center", number: 6 },
   { name: "Jacob Knauf", team: "Skyliners Frankfurt", position: "Center", number: 25 },
-  { name: "Roman Bedime", team: "Skyliners Frankfurt", position: "Center", number: 35 }
+  { name: "Roman Bedime", team: "Skyliners Frankfurt", position: "Center", number: 35 },
+  // Slask Wroclaw
+  { name: "Anthony Hickey", team: "Slask Wroclaw", position: "Guard", number: 2 },
+  { name: "Malik Parsons", team: "Slask Wroclaw", position: "Guard", number: 3 },
+  { name: "Kyrell Luc", team: "Slask Wroclaw", position: "Guard", number: 4 },
+  { name: "Anthony Wrzeszcz", team: "Slask Wroclaw", position: "Guard", number: 8 },
+  { name: "Blazej Kulikowski", team: "Slask Wroclaw", position: "Guard", number: 11 },
+  { name: "Blazej Czerniewicz", team: "Slask Wroclaw", position: "Guard", number: 27 },
+  { name: "Devin Robinson", team: "Slask Wroclaw", position: "Forward", number: 5 },
+  { name: "Tymoteusz Sternicki", team: "Slask Wroclaw", position: "Forward", number: 22 },
+  { name: "Jakub Niziol", team: "Slask Wroclaw", position: "Forward", number: 35 },
+  { name: "Isaih Moore", team: "Slask Wroclaw", position: "Center", number: 13 },
+  { name: "John Egbunu", team: "Slask Wroclaw", position: "Center", number: 15 },
+  { name: "Leon Dunin-Wasowicz", team: "Slask Wroclaw", position: "Center", number: 17 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
