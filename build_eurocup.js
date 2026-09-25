@@ -52,7 +52,8 @@ const TEAMS = {
   "Niners Chemnitz": { country: "Germany" },
   "PAOK": { country: "Greece" },
   "Ratiopharm Ulm": { country: "Germany" },
-  "San Pablo Burgos": { country: "Spain" }
+  "San Pablo Burgos": { country: "Spain" },
+  "Riga Zelli": { country: "Latvia" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -405,7 +406,22 @@ const PENDING = [
   { name: "Christian Sengfelder", team: "San Pablo Burgos", position: "Forward", number: 43 },
   { name: "Balsa Koprivica", team: "San Pablo Burgos", position: "Center", number: 7 },
   { name: "Ruben Guerrero", team: "San Pablo Burgos", position: "Center", number: 12 },
-  { name: "Sekou Doumbouya", team: "San Pablo Burgos", position: "Center", number: 45 }
+  { name: "Sekou Doumbouya", team: "San Pablo Burgos", position: "Center", number: 45 },
+  // Riga Zelli
+  { name: "Tony Perkins", team: "Riga Zelli", position: "Guard", number: 1 },
+  { name: "Benjamin Shungu", team: "Riga Zelli", position: "Guard", number: 2 },
+  { name: "Toms Skuja", team: "Riga Zelli", position: "Guard", number: 3 },
+  { name: "Gustavs Kampuss", team: "Riga Zelli", position: "Guard", number: 6 },
+  { name: "Rolands Sulcs", team: "Riga Zelli", position: "Guard", number: 10 },
+  { name: "Tyler Wahl", team: "Riga Zelli", position: "Forward", number: 5 },
+  { name: "Kristians Feierbergs", team: "Riga Zelli", position: "Forward", number: 11 },
+  { name: "Kristers Kikusts", team: "Riga Zelli", position: "Forward", number: 12 },
+  { name: "Martynas Varnas", team: "Riga Zelli", position: "Forward", number: 13 },
+  { name: "Tomas Talcis", team: "Riga Zelli", position: "Forward", number: 22 },
+  { name: "Janis Berzins", team: "Riga Zelli", position: "Forward", number: 31 },
+  { name: "Ivan Tkachenko", team: "Riga Zelli", position: "Forward", number: 55 },
+  { name: "Klavs Cavars", team: "Riga Zelli", position: "Center", number: 15 },
+  { name: "Isaac Johnson", team: "Riga Zelli", position: "Center", number: 33 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

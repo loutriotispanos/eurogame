@@ -72,6 +72,9 @@ window.EUROCUP_TEAMS = {
   },
   "San Pablo Burgos": {
     "country": "Spain"
+  },
+  "Riga Zelli": {
+    "country": "Latvia"
   }
 };
 
