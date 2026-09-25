@@ -46,7 +46,8 @@ const TEAMS = {
   "Le Mans": { country: "France" },
   "Lietkabelis": { country: "Lithuania" },
   "London Lions": { country: "United Kingdom" },
-  "Maxima Roma": { country: "Italy" }
+  "Maxima Roma": { country: "Italy" },
+  "Napoli Basketball": { country: "Italy" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -72,7 +73,10 @@ const PLAYERS = [
   // La Laguna Tenerife
   { name: "Xabier Lopez-Arostegui", team: "La Laguna Tenerife", number: 7 },
   // Le Mans
-  { name: "Melvin Ajinca", team: "Le Mans", number: 8 }
+  { name: "Melvin Ajinca", team: "Le Mans", number: 8 },
+  // Napoli Basketball
+  { name: "Zac Seljaas", team: "Napoli Basketball", number: 1 },
+  { name: "Jeffrey Dowtin Jr.", team: "Napoli Basketball", number: 3 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -304,7 +308,19 @@ const PENDING = [
   { name: "Andrija Dozic", team: "Maxima Roma", position: "Forward", number: 77 },
   { name: "John Brown III", team: "Maxima Roma", position: "Center", number: 0 },
   { name: "Miro Bilan", team: "Maxima Roma", position: "Center", number: 2 },
-  { name: "Gora Camara", team: "Maxima Roma", position: "Center", number: 29 }
+  { name: "Gora Camara", team: "Maxima Roma", position: "Center", number: 29 },
+  // Napoli Basketball
+  { name: "Marco Spissu", team: "Napoli Basketball", position: "Guard", number: 0 },
+  { name: "John Petrucelli", team: "Napoli Basketball", position: "Guard", number: 11 },
+  { name: "Markel Brown", team: "Napoli Basketball", position: "Guard", number: 22 },
+  { name: "Jahmi'us Ramsey", team: "Napoli Basketball", position: "Guard", number: 37 },
+  { name: "Leonardo Faggian", team: "Napoli Basketball", position: "Forward", number: 10 },
+  { name: "Jack White", team: "Napoli Basketball", position: "Forward", number: 14 },
+  { name: "Andrej Jakimovski", team: "Napoli Basketball", position: "Forward", number: 23 },
+  { name: "Assane Sankare", team: "Napoli Basketball", position: "Center", number: 12 },
+  { name: "Kaleb Tarczewski", team: "Napoli Basketball", position: "Center", number: 25 },
+  { name: "Guglielmo Caruso", team: "Napoli Basketball", position: "Center", number: 30 },
+  { name: "Leonardo Tote", team: "Napoli Basketball", position: "Center", number: 35 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

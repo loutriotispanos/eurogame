@@ -54,6 +54,9 @@ window.EUROCUP_TEAMS = {
   },
   "Maxima Roma": {
     "country": "Italy"
+  },
+  "Napoli Basketball": {
+    "country": "Italy"
   }
 };
 
@@ -183,5 +186,23 @@ window.EUROCUP_PLAYERS = [
     "height": 191,
     "birthYear": 2004,
     "number": 44
+  },
+  {
+    "name": "Jeffrey Dowtin Jr.",
+    "team": "Napoli Basketball",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1997,
+    "number": 3
+  },
+  {
+    "name": "Zac Seljaas",
+    "team": "Napoli Basketball",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1997,
+    "number": 1
   }
 ];
