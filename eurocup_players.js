@@ -12,6 +12,9 @@ window.EUROCUP_TEAMS = {
   },
   "Derthona Tortona": {
     "country": "Italy"
+  },
+  "Bahcesehir College": {
+    "country": "Turkey"
   }
 };
 
@@ -60,6 +63,24 @@ window.EUROCUP_PLAYERS = [
     "height": 188,
     "birthYear": 1996,
     "number": 4
+  },
+  {
+    "name": "Aleksa Avramovic",
+    "team": "Bahcesehir College",
+    "nationality": "Serbia",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1994,
+    "number": 4
+  },
+  {
+    "name": "Isiaha Mike",
+    "team": "Bahcesehir College",
+    "nationality": "Canada",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1997,
+    "number": 24
   },
   {
     "name": "Karim Jallow",

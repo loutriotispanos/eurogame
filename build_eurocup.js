@@ -32,7 +32,8 @@ const OPEN = false;
 // club name → { country }
 const TEAMS = {
   "Aris Thessaloniki": { country: "Greece" },
-  "Derthona Tortona": { country: "Italy" }
+  "Derthona Tortona": { country: "Italy" },
+  "Bahcesehir College": { country: "Turkey" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -45,7 +46,10 @@ const PLAYERS = [
   { name: "Khem Birch",           team: "Aris Thessaloniki", number: 92 },
   // Derthona Tortona
   { name: "Paul Eboua", team: "Derthona Tortona", number: 0 },
-  { name: "Karim Jallow", team: "Derthona Tortona", number: 35 }
+  { name: "Karim Jallow", team: "Derthona Tortona", number: 35 },
+  // Bahcesehir College
+  { name: "Aleksa Avramovic", team: "Bahcesehir College", number: 4 },
+  { name: "Isiaha Mike", team: "Bahcesehir College", number: 24 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -74,7 +78,19 @@ const PENDING = [
   { name: "Amar Alibegovic", team: "Derthona Tortona", position: "Forward", number: 7 },
   { name: "Brayden Zumstein", team: "Derthona Tortona", position: "Forward", number: 10 },
   { name: "Giulio Gazzotti", team: "Derthona Tortona", position: "Forward", number: 24 },
-  { name: "Dominik Olejniczak", team: "Derthona Tortona", position: "Center", number: 17 }
+  { name: "Dominik Olejniczak", team: "Derthona Tortona", position: "Center", number: 17 },
+  // Bahcesehir College
+  { name: "Marcquise Reed", team: "Bahcesehir College", position: "Guard", number: 0 },
+  { name: "Ismet Akpinar", team: "Bahcesehir College", position: "Guard", number: 5 },
+  { name: "Malachi Flynn", team: "Bahcesehir College", position: "Guard", number: 22 },
+  { name: "Kenan Sipahi", team: "Bahcesehir College", position: "Guard", number: 55 },
+  { name: "Maxim Mutaf", team: "Bahcesehir College", position: "Forward", number: 17 },
+  { name: "Tyler Cavanaugh", team: "Bahcesehir College", position: "Forward", number: 34 },
+  { name: "Mateusz Ponitka", team: "Bahcesehir College", position: "Forward", number: 38 },
+  { name: "David DiLeo", team: "Bahcesehir College", position: "Forward", number: 51 },
+  { name: "Damien Inglis", team: "Bahcesehir College", position: "Center", number: 7 },
+  { name: "Furkan Haltali", team: "Bahcesehir College", position: "Center", number: 14 },
+  { name: "Trevion Williams", team: "Bahcesehir College", position: "Center", number: 50 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
