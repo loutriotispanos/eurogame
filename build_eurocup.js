@@ -42,7 +42,8 @@ const TEAMS = {
   "Trento": { country: "Italy" },
   "Hapoel Jerusalem": { country: "Israel" },
   "Manresa": { country: "Spain" },
-  "La Laguna Tenerife": { country: "Spain" }
+  "La Laguna Tenerife": { country: "Spain" },
+  "Le Mans": { country: "France" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -66,7 +67,9 @@ const PLAYERS = [
   // Manresa
   { name: "Rafa Villar", team: "Manresa", number: 44 },
   // La Laguna Tenerife
-  { name: "Xabier Lopez-Arostegui", team: "La Laguna Tenerife", number: 7 }
+  { name: "Xabier Lopez-Arostegui", team: "La Laguna Tenerife", number: 7 },
+  // Le Mans
+  { name: "Melvin Ajinca", team: "Le Mans", number: 8 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -242,7 +245,21 @@ const PENDING = [
   { name: "Hector Alderete", team: "La Laguna Tenerife", position: "Forward", number: 33 },
   { name: "Tim Abromaitis", team: "La Laguna Tenerife", position: "Center", number: 21 },
   { name: "Ethan Happ", team: "La Laguna Tenerife", position: "Center", number: 22 },
-  { name: "Vince Hunter", team: "La Laguna Tenerife", position: "Center", number: 32 }
+  { name: "Vince Hunter", team: "La Laguna Tenerife", position: "Center", number: 32 },
+  // Le Mans
+  { name: "Carlos Stewart Jr.", team: "Le Mans", position: "Guard", number: 0 },
+  { name: "Bastien Grasshoff", team: "Le Mans", position: "Guard", number: 1 },
+  { name: "Jordan King", team: "Le Mans", position: "Guard", number: 2 },
+  { name: "Afeny Cognet", team: "Le Mans", position: "Guard", number: 3 },
+  { name: "Leopold Delaunay", team: "Le Mans", position: "Guard", number: 9 },
+  { name: "Ugo Doumbia Niang", team: "Le Mans", position: "Guard", number: 10 },
+  { name: "Moses Wood", team: "Le Mans", position: "Forward", number: 23 },
+  { name: "Lucas Dufeal", team: "Le Mans", position: "Forward", number: 32 },
+  { name: "Madiba Diaby-Cisse", team: "Le Mans", position: "Forward", number: 88 },
+  { name: "Swann Penda", team: "Le Mans", position: "Forward", number: 93 },
+  { name: "Wilfried Yeguete", team: "Le Mans", position: "Center", number: 15 },
+  { name: "Tyler Beracou", team: "Le Mans", position: "Center", number: 26 },
+  { name: "Tashawn Thomas", team: "Le Mans", position: "Center", number: 35 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

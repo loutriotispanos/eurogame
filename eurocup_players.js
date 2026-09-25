@@ -42,6 +42,9 @@ window.EUROCUP_TEAMS = {
   },
   "La Laguna Tenerife": {
     "country": "Spain"
+  },
+  "Le Mans": {
+    "country": "France"
   }
 };
 
@@ -153,6 +156,15 @@ window.EUROCUP_PLAYERS = [
     "height": 200,
     "birthYear": 1997,
     "number": 7
+  },
+  {
+    "name": "Melvin Ajinca",
+    "team": "Le Mans",
+    "nationality": "France",
+    "position": "Forward",
+    "height": 202,
+    "birthYear": 2004,
+    "number": 8
   },
   {
     "name": "Rafa Villar",
