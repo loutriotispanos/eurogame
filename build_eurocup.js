@@ -58,7 +58,8 @@ const TEAMS = {
   "Rostock Seawolves": { country: "Germany" },
   "Siauliai": { country: "Lithuania" },
   "Skyliners Frankfurt": { country: "Germany" },
-  "Slask Wroclaw": { country: "Poland" }
+  "Slask Wroclaw": { country: "Poland" },
+  "Tofas": { country: "Turkey" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -503,7 +504,23 @@ const PENDING = [
   { name: "Jakub Niziol", team: "Slask Wroclaw", position: "Forward", number: 35 },
   { name: "Isaih Moore", team: "Slask Wroclaw", position: "Center", number: 13 },
   { name: "John Egbunu", team: "Slask Wroclaw", position: "Center", number: 15 },
-  { name: "Leon Dunin-Wasowicz", team: "Slask Wroclaw", position: "Center", number: 17 }
+  { name: "Leon Dunin-Wasowicz", team: "Slask Wroclaw", position: "Center", number: 17 },
+  // Tofas
+  { name: "Kerem Corumlular", team: "Tofas", position: "Guard", number: 4 },
+  { name: "Zach Nutall", team: "Tofas", position: "Guard", number: 10 },
+  { name: "Efe Postel", team: "Tofas", position: "Guard", number: 22 },
+  { name: "Bryce Jones", team: "Tofas", position: "Guard", number: 32 },
+  { name: "Shavar Reynolds Jr.", team: "Tofas", position: "Guard", number: 33 },
+  { name: "Berkay Gonul", team: "Tofas", position: "Forward", number: 2 },
+  { name: "Yigitcan Saybir", team: "Tofas", position: "Forward", number: 3 },
+  { name: "Sadik Kabaca", team: "Tofas", position: "Forward", number: 6 },
+  { name: "Tre'Shawn Thurman", team: "Tofas", position: "Forward", number: 15 },
+  { name: "Poyraz Pasaoglu", team: "Tofas", position: "Forward", number: 35 },
+  { name: "Gabriel Brown", team: "Tofas", position: "Forward", number: 44 },
+  { name: "Leon Apaydin", team: "Tofas", position: "Forward", number: 55 },
+  { name: "Terrell Carter II", team: "Tofas", position: "Center", number: 5 },
+  { name: "Jamuni McNeace", team: "Tofas", position: "Center", number: 8 },
+  { name: "Emirhan Serbest", team: "Tofas", position: "Center", number: 24 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

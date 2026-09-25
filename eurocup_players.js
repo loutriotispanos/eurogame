@@ -90,6 +90,9 @@ window.EUROCUP_TEAMS = {
   },
   "Slask Wroclaw": {
     "country": "Poland"
+  },
+  "Tofas": {
+    "country": "Turkey"
   }
 };
 
