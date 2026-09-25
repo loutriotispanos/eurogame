@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#f7f3ea" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <!-- Night mode: set the saved (or OS-preferred) theme BEFORE first paint to avoid a flash. -->
-<script>(function(){try{var t=localStorage.getItem("elg:theme");if(t)t=JSON.parse(t);if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);var c=localStorage.getItem("elg:comp");if(c&&JSON.parse(c)==="eurocup")document.documentElement.setAttribute("data-comp","eurocup");}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("elg:theme");if(t)t=JSON.parse(t);if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);var c=window.__ELG_COMP__?JSON.stringify(window.__ELG_COMP__):localStorage.getItem("elg:comp");if(c&&JSON.parse(c)==="eurocup")document.documentElement.setAttribute("data-comp","eurocup");}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Euroball" />
 <link rel="apple-touch-icon" href="icon-192.png" />
@@ -923,7 +923,7 @@
   :root[data-comp="eurocup"][data-theme="dark"] .game-card[data-game="mystery"] { --gc: #4da3f0; }
   /* …and from the first paint the hub shows only the games the EuroCup plays, instead
      of flashing all eleven until app.js takes the rest away. */
-  :root[data-comp="eurocup"] .game-card:not([data-game="mystery"]):not([data-game="higherlower"]):not([data-game="rostermaster"]) { display: none; }
+  :root[data-comp="eurocup"] .game-card:not([data-game="mystery"]):not([data-game="playerid"]):not([data-game="careerorder"]):not([data-game="thegrid"]):not([data-game="pathbetween"]):not([data-game="higherlower"]):not([data-game="rostermaster"]) { display: none; }
   .game-card[data-game="playerid"]     { --gc: #177f72; }
   .game-card[data-game="completefive"] { --gc: #a97f14; }
   .game-card[data-game="connections"]  { --gc: #7d54b4; }
@@ -1447,7 +1447,7 @@
       <a class="game-card" href="mystery-player/" data-game="mystery">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-mystery"/></svg></span>
         <span class="gc-text"><span class="gc-title">Mystery Player</span>
-          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — Daily, Practice, Non-active &amp; Endless.</span></span>
+          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — <span class="comp-text" data-ec="Daily, Practice &amp; Endless.">Daily, Practice, Non-active &amp; Endless.</span></span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="player-id/" data-game="playerid">
@@ -2076,7 +2076,7 @@
         <li><strong>Daily</strong> — one grid a day, the same board for everyone. Keep your streak alive.</li>
         <li><strong>Practice</strong> — random grids, as many as you like.</li>
       </ul>
-      <p class="modal-note">To keep answers fair, The Grid only uses <strong>well-travelled players, current and non-active,</strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
+      <p class="modal-note">To keep answers fair, The Grid only uses <strong><span class="comp-text" data-ec="this season's EuroCup players">well-travelled players, current and non-active,</span></strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
     </div>
   </div>
 
@@ -2111,7 +2111,7 @@
       <h3>Game modes</h3>
       <ul>
         <li><strong>Daily</strong> — one career a day, the same for everyone. Keep your streak alive.</li>
-        <li><strong>Active / Non-active / Both</strong> — unlimited practice with today's players, non-active ones, or everyone.</li>
+        <li><strong><span class="comp-text" data-ec="Active">Active / Non-active / Both</span></strong> — unlimited practice with <span class="comp-text" data-ec="this season's EuroCup players.">today's players, non-active ones, or everyone.</span></li>
       </ul>
     </div>
   </div>
@@ -2136,6 +2136,7 @@
   <footer>
     Rosters are current to the <strong>2026–27 <span class="comp-text" data-ec="EuroCup">EuroLeague</span> season</strong>, checked club by club at the season start; transfers since then are not reflected.<br />
     <span class="comp-text" data-ec="{n} players · {c} clubs · compiled from the official EuroCup rosters, FIBA and Wikipedia.">294 players · 20 clubs · 318 non-active players · compiled from official club rosters, Wikipedia, FIBA and Proballers.</span><br />
+    Play the <a class="colophon-link comp-link" href="?comp=euroleague">EuroLeague games</a> · the <a class="colophon-link comp-link" href="eurocup/">EuroCup games</a><br />
     Published for the love of European basketball · No ads, no account · Reads offline<br />
     Anonymous page counts (Cloudflare Web Analytics, cookie-free) · Google Analytics only if you allow it
     · <a id="stats-link" class="colophon-link" rel="nofollow">Stats settings</a>
@@ -2293,8 +2294,13 @@
   <script src="players.js"></script>
   <script src="legends.js"></script>
   <script src="eurocup_players.js"></script>
-  <script src="competition.js"></script>
   <script src="careers.js"></script>
+  <script src="eurocup_careers.js"></script>
+  <script src="grids.js"></script>
+  <script src="eurocup_grids.js"></script>
+  <script src="paths.js"></script>
+  <script src="eurocup_paths.js"></script>
+  <script src="competition.js"></script>
   <script src="lineups.js"></script>
   <script src="puzzles.js"></script>
   <script src="oddones.js"></script>
@@ -2303,10 +2309,8 @@
   <script src="completefive.js"></script>
   <script src="connections.js"></script>
   <script src="careerorder.js"></script>
-  <script src="grids.js"></script>
   <script src="thegrid.js"></script>
   <script src="clubreveal.js"></script>
-  <script src="paths.js"></script>
   <script src="pathbetween.js"></script>
   <script src="oddoneout.js"></script>
   <script src="higherlower.js"></script>
