@@ -45,7 +45,8 @@ const TEAMS = {
   "La Laguna Tenerife": { country: "Spain" },
   "Le Mans": { country: "France" },
   "Lietkabelis": { country: "Lithuania" },
-  "London Lions": { country: "United Kingdom" }
+  "London Lions": { country: "United Kingdom" },
+  "Maxima Roma": { country: "Italy" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -289,7 +290,21 @@ const PENDING = [
   { name: "Keenan Evans", team: "London Lions", position: "Forward", number: 12 },
   { name: "Aaryn Rai", team: "London Lions", position: "Forward", number: 21 },
   { name: "Deane Williams", team: "London Lions", position: "Forward", number: 31 },
-  { name: "Thomas Kennedy", team: "London Lions", position: "Center", number: 54 }
+  { name: "Thomas Kennedy", team: "London Lions", position: "Center", number: 54 },
+  // Maxima Roma
+  { name: "Aaron Holiday", team: "Maxima Roma", position: "Guard", number: 3 },
+  { name: "Mirza Alibegovic", team: "Maxima Roma", position: "Guard", number: 5 },
+  { name: "Francesco Carnevale", team: "Maxima Roma", position: "Guard", number: 8 },
+  { name: "Brynton Lemar", team: "Maxima Roma", position: "Guard", number: 11 },
+  { name: "Xavier Moon", team: "Maxima Roma", position: "Guard", number: 17 },
+  { name: "Federico Bonacini", team: "Maxima Roma", position: "Guard", number: 23 },
+  { name: "Carl Wheatle", team: "Maxima Roma", position: "Forward", number: 10 },
+  { name: "Giovanni Veronesi", team: "Maxima Roma", position: "Forward", number: 16 },
+  { name: "Matt Ryan", team: "Maxima Roma", position: "Forward", number: 32 },
+  { name: "Andrija Dozic", team: "Maxima Roma", position: "Forward", number: 77 },
+  { name: "John Brown III", team: "Maxima Roma", position: "Center", number: 0 },
+  { name: "Miro Bilan", team: "Maxima Roma", position: "Center", number: 2 },
+  { name: "Gora Camara", team: "Maxima Roma", position: "Center", number: 29 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

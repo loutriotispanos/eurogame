@@ -51,6 +51,9 @@ window.EUROCUP_TEAMS = {
   },
   "London Lions": {
     "country": "United Kingdom"
+  },
+  "Maxima Roma": {
+    "country": "Italy"
   }
 };
 
