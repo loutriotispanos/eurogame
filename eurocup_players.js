@@ -917,6 +917,51 @@ window.EUROCUP_PLAYERS = [
     "number": 3
   },
   {
+    "name": "David Roddy",
+    "team": "Hapoel Jerusalem",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 2001,
+    "number": 21
+  },
+  {
+    "name": "DeVontae Cacok",
+    "team": "Hapoel Jerusalem",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 201,
+    "birthYear": 1996,
+    "number": 0
+  },
+  {
+    "name": "Dusan Miletic",
+    "team": "Hapoel Jerusalem",
+    "nationality": "Serbia",
+    "position": "Center",
+    "height": 215,
+    "birthYear": 1998,
+    "number": 11
+  },
+  {
+    "name": "Ethan Burg",
+    "team": "Hapoel Jerusalem",
+    "nationality": "Israel",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 2002,
+    "number": 35
+  },
+  {
+    "name": "Gabriel Chachashvili",
+    "team": "Hapoel Jerusalem",
+    "nationality": "Israel",
+    "position": "Center",
+    "height": 210,
+    "birthYear": 1999,
+    "number": 33
+  },
+  {
     "name": "Jaleen Smith",
     "team": "Hapoel Jerusalem",
     "nationality": "USA",
@@ -935,6 +980,33 @@ window.EUROCUP_PLAYERS = [
     "number": 1
   },
   {
+    "name": "Kenny Lofton Jr.",
+    "team": "Hapoel Jerusalem",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2002,
+    "number": 2
+  },
+  {
+    "name": "Nimrod Levi",
+    "team": "Hapoel Jerusalem",
+    "nationality": "Israel",
+    "position": "Forward",
+    "height": 208,
+    "birthYear": 1995,
+    "number": 15
+  },
+  {
+    "name": "Roi Huber",
+    "team": "Hapoel Jerusalem",
+    "nationality": "Israel",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1997,
+    "number": 13
+  },
+  {
     "name": "Shake Milton",
     "team": "Hapoel Jerusalem",
     "nationality": "USA",
@@ -942,6 +1014,24 @@ window.EUROCUP_PLAYERS = [
     "height": 196,
     "birthYear": 1996,
     "number": 9
+  },
+  {
+    "name": "Yotam Hanochi",
+    "team": "Hapoel Jerusalem",
+    "nationality": "Israel",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 2000,
+    "number": 8
+  },
+  {
+    "name": "Yovel Zoosman",
+    "team": "Hapoel Jerusalem",
+    "nationality": "Israel",
+    "position": "Guard",
+    "height": 200,
+    "birthYear": 1998,
+    "number": 50
   },
   {
     "name": "Adrian Nelson",
@@ -1061,6 +1151,60 @@ window.EUROCUP_PLAYERS = [
     "number": 8
   },
   {
+    "name": "Eric Vila",
+    "team": "Manresa",
+    "nationality": "Spain",
+    "position": "Forward",
+    "height": 211,
+    "birthYear": 1998,
+    "number": 4
+  },
+  {
+    "name": "Ferran Bassas",
+    "team": "Manresa",
+    "nationality": "Spain",
+    "position": "Guard",
+    "height": 181,
+    "birthYear": 1992,
+    "number": 6
+  },
+  {
+    "name": "Hugo Benitez",
+    "team": "Manresa",
+    "nationality": "France",
+    "position": "Guard",
+    "height": 192,
+    "birthYear": 2001,
+    "number": 2
+  },
+  {
+    "name": "JD Notae",
+    "team": "Manresa",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1998,
+    "number": 13
+  },
+  {
+    "name": "Lucas Beaufort",
+    "team": "Manresa",
+    "nationality": "France",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2002,
+    "number": 5
+  },
+  {
+    "name": "Lukasz Kolenda",
+    "team": "Manresa",
+    "nationality": "Poland",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1999,
+    "number": 1
+  },
+  {
     "name": "Rafa Villar",
     "team": "Manresa",
     "nationality": "Spain",
@@ -1068,6 +1212,15 @@ window.EUROCUP_PLAYERS = [
     "height": 191,
     "birthYear": 2004,
     "number": 44
+  },
+  {
+    "name": "Timmy Allen",
+    "team": "Manresa",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2000,
+    "number": 0
   },
   {
     "name": "Jeffrey Dowtin Jr.",

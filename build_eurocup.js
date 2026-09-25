@@ -203,7 +203,24 @@ const PLAYERS = [
   { name: "Selom Mawugbe", team: "Trento", nationality: "USA", position: "Center", height: 208, birthYear: 1998, number: 21 },
   { name: "Jordan Bayehe", team: "Trento", nationality: "Cameroon", position: "Center", height: 206, birthYear: 1999, number: 26 },
   { name: "Jared Harper", team: "Hapoel Jerusalem", nationality: "USA", position: "Guard", height: 178, birthYear: 1997, number: 1 },
-  { name: "Jaleen Smith", team: "Hapoel Jerusalem", nationality: "USA", position: "Guard", height: 193, birthYear: 1994, number: 3 }
+  { name: "Jaleen Smith", team: "Hapoel Jerusalem", nationality: "USA", position: "Guard", height: 193, birthYear: 1994, number: 3 },
+  { name: "Roi Huber", team: "Hapoel Jerusalem", nationality: "Israel", position: "Guard", height: 188, birthYear: 1997, number: 13 },
+  { name: "Ethan Burg", team: "Hapoel Jerusalem", nationality: "Israel", position: "Guard", height: 191, birthYear: 2002, number: 35 },
+  { name: "Yovel Zoosman", team: "Hapoel Jerusalem", nationality: "Israel", position: "Guard", height: 200, birthYear: 1998, number: 50 },
+  { name: "Kenny Lofton Jr.", team: "Hapoel Jerusalem", nationality: "USA", position: "Forward", height: 198, birthYear: 2002, number: 2 },
+  { name: "Nimrod Levi", team: "Hapoel Jerusalem", nationality: "Israel", position: "Forward", height: 208, birthYear: 1995, number: 15 },
+  { name: "David Roddy", team: "Hapoel Jerusalem", nationality: "USA", position: "Forward", height: 196, birthYear: 2001, number: 21 },
+  { name: "DeVontae Cacok", team: "Hapoel Jerusalem", nationality: "USA", position: "Center", height: 201, birthYear: 1996, number: 0 },
+  { name: "Yotam Hanochi", team: "Hapoel Jerusalem", nationality: "Israel", position: "Center", height: 208, birthYear: 2000, number: 8 },
+  { name: "Dusan Miletic", team: "Hapoel Jerusalem", nationality: "Serbia", position: "Center", height: 215, birthYear: 1998, number: 11 },
+  { name: "Gabriel Chachashvili", team: "Hapoel Jerusalem", nationality: "Israel", position: "Center", height: 210, birthYear: 1999, number: 33 },
+  { name: "Lukasz Kolenda", team: "Manresa", nationality: "Poland", position: "Guard", height: 196, birthYear: 1999, number: 1 },
+  { name: "Hugo Benitez", team: "Manresa", nationality: "France", position: "Guard", height: 192, birthYear: 2001, number: 2 },
+  { name: "Lucas Beaufort", team: "Manresa", nationality: "France", position: "Guard", height: 193, birthYear: 2002, number: 5 },
+  { name: "Ferran Bassas", team: "Manresa", nationality: "Spain", position: "Guard", height: 181, birthYear: 1992, number: 6 },
+  { name: "JD Notae", team: "Manresa", nationality: "USA", position: "Guard", height: 188, birthYear: 1998, number: 13 },
+  { name: "Timmy Allen", team: "Manresa", nationality: "USA", position: "Forward", height: 198, birthYear: 2000, number: 0 },
+  { name: "Eric Vila", team: "Manresa", nationality: "Spain", position: "Forward", height: 211, birthYear: 1998, number: 4 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -219,27 +236,7 @@ const PENDING = [
   // JL Bourg-en-Bresse
   // Trento
   // Hapoel Jerusalem
-  { name: "Shachar Loberboum", team: "Hapoel Jerusalem", position: "Guard", number: 7 },
-  { name: "Roi Huber", team: "Hapoel Jerusalem", position: "Guard", number: 13 },
-  { name: "Ethan Burg", team: "Hapoel Jerusalem", position: "Guard", number: 35 },
-  { name: "Yovel Zoosman", team: "Hapoel Jerusalem", position: "Guard", number: 50 },
-  { name: "Kenny Lofton Jr.", team: "Hapoel Jerusalem", position: "Forward", number: 2 },
-  { name: "Nimrod Levi", team: "Hapoel Jerusalem", position: "Forward", number: 15 },
-  { name: "David Roddy", team: "Hapoel Jerusalem", position: "Forward", number: 21 },
-  { name: "DeVontae Cacok", team: "Hapoel Jerusalem", position: "Center", number: 0 },
-  { name: "Yotam Hanochi", team: "Hapoel Jerusalem", position: "Center", number: 8 },
-  { name: "Dusan Miletic", team: "Hapoel Jerusalem", position: "Center", number: 11 },
-  { name: "Gabriel Chachashvili", team: "Hapoel Jerusalem", position: "Center", number: 33 },
   // Manresa
-  { name: "Lukasz Kolenda", team: "Manresa", position: "Guard", number: 1 },
-  { name: "Hugo Benitez", team: "Manresa", position: "Guard", number: 2 },
-  { name: "Lucas Beaufort", team: "Manresa", position: "Guard", number: 5 },
-  { name: "Ferran Bassas", team: "Manresa", position: "Guard", number: 6 },
-  { name: "JD Notae", team: "Manresa", position: "Guard", number: 13 },
-  { name: "Gerard Fernandez", team: "Manresa", position: "Guard", number: 17 },
-  { name: "Lucas Sanchez", team: "Manresa", position: "Guard", number: 18 },
-  { name: "Timmy Allen", team: "Manresa", position: "Forward", number: 0 },
-  { name: "Eric Vila", team: "Manresa", position: "Forward", number: 4 },
   { name: "Pablo Tamba", team: "Manresa", position: "Forward", number: 8 },
   { name: "Chibuzo Agbo", team: "Manresa", position: "Forward", number: 11 },
   { name: "Guillem Naspler", team: "Manresa", position: "Forward", number: 19 },
