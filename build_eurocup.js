@@ -53,7 +53,8 @@ const TEAMS = {
   "PAOK": { country: "Greece" },
   "Ratiopharm Ulm": { country: "Germany" },
   "San Pablo Burgos": { country: "Spain" },
-  "Riga Zelli": { country: "Latvia" }
+  "Riga Zelli": { country: "Latvia" },
+  "Roma Basketball": { country: "Italy" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -87,7 +88,9 @@ const PLAYERS = [
   { name: "Cedi Osman", team: "PAOK", number: 6 },
   { name: "Nick Calathes", team: "PAOK", number: 33 },
   // Ratiopharm Ulm
-  { name: "Armel Traore", team: "Ratiopharm Ulm", number: 94 }
+  { name: "Armel Traore", team: "Ratiopharm Ulm", number: 94 },
+  // Roma Basketball
+  { name: "Nico Mannion", team: "Roma Basketball", number: 1 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -421,7 +424,20 @@ const PENDING = [
   { name: "Janis Berzins", team: "Riga Zelli", position: "Forward", number: 31 },
   { name: "Ivan Tkachenko", team: "Riga Zelli", position: "Forward", number: 55 },
   { name: "Klavs Cavars", team: "Riga Zelli", position: "Center", number: 15 },
-  { name: "Isaac Johnson", team: "Riga Zelli", position: "Center", number: 33 }
+  { name: "Isaac Johnson", team: "Riga Zelli", position: "Center", number: 33 },
+  // Roma Basketball
+  { name: "Corey Davis Jr.", team: "Roma Basketball", position: "Guard", number: 5 },
+  { name: "Erik Stevenson", team: "Roma Basketball", position: "Guard", number: 10 },
+  { name: "Gerald Ayayi", team: "Roma Basketball", position: "Guard", number: 11 },
+  { name: "Michael Iuzzolino", team: "Roma Basketball", position: "Guard", number: 33 },
+  { name: "Valerio Ciotoli", team: "Roma Basketball", position: "Guard", number: 37 },
+  { name: "Paul Watson Jr.", team: "Roma Basketball", position: "Forward", number: 3 },
+  { name: "Trentyn Flowers", team: "Roma Basketball", position: "Forward", number: 9 },
+  { name: "Arturs Strautins", team: "Roma Basketball", position: "Forward", number: 12 },
+  { name: "Giannis Odzebe", team: "Roma Basketball", position: "Forward", number: 13 },
+  { name: "Andrea Mezzanotte", team: "Roma Basketball", position: "Forward", number: 24 },
+  { name: "Giovanni Emejuru", team: "Roma Basketball", position: "Center", number: 7 },
+  { name: "Marko Simonovic", team: "Roma Basketball", position: "Center", number: 19 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

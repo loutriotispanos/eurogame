@@ -75,6 +75,9 @@ window.EUROCUP_TEAMS = {
   },
   "Riga Zelli": {
     "country": "Latvia"
+  },
+  "Roma Basketball": {
+    "country": "Italy"
   }
 };
 
@@ -249,5 +252,14 @@ window.EUROCUP_PLAYERS = [
     "height": 205,
     "birthYear": 2003,
     "number": 94
+  },
+  {
+    "name": "Nico Mannion",
+    "team": "Roma Basketball",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 2001,
+    "number": 1
   }
 ];
