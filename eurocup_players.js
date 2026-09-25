@@ -96,6 +96,9 @@ window.EUROCUP_TEAMS = {
   },
   "Turk Telekom": {
     "country": "Turkey"
+  },
+  "Cluj-Napoca": {
+    "country": "Romania"
   }
 };
 

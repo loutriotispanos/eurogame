@@ -60,7 +60,8 @@ const TEAMS = {
   "Skyliners Frankfurt": { country: "Germany" },
   "Slask Wroclaw": { country: "Poland" },
   "Tofas": { country: "Turkey" },
-  "Turk Telekom": { country: "Turkey" }
+  "Turk Telekom": { country: "Turkey" },
+  "Cluj-Napoca": { country: "Romania" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -538,7 +539,24 @@ const PENDING = [
   { name: "Goktug Bas", team: "Turk Telekom", position: "Forward", number: 57 },
   { name: "Emircan Kosut", team: "Turk Telekom", position: "Center", number: 9 },
   { name: "Ismael Bako", team: "Turk Telekom", position: "Center", number: 28 },
-  { name: "Kris Bankston", team: "Turk Telekom", position: "Center", number: 30 }
+  { name: "Kris Bankston", team: "Turk Telekom", position: "Center", number: 30 },
+  // Cluj-Napoca
+  { name: "Otis Livingston II", team: "Cluj-Napoca", position: "Guard", number: 0 },
+  { name: "Javonte Smart", team: "Cluj-Napoca", position: "Guard", number: 1 },
+  { name: "Thomas Bernat", team: "Cluj-Napoca", position: "Guard", number: 2 },
+  { name: "Andrei Cepoi", team: "Cluj-Napoca", position: "Guard", number: 7 },
+  { name: "Malcolm Hill", team: "Cluj-Napoca", position: "Guard", number: 21 },
+  { name: "Patrick Richard", team: "Cluj-Napoca", position: "Guard", number: 35 },
+  { name: "Kristian Kullamae", team: "Cluj-Napoca", position: "Guard", number: 77 },
+  { name: "Luca-Ionut Illes", team: "Cluj-Napoca", position: "Guard", number: 88 },
+  { name: "Dusan Beslac", team: "Cluj-Napoca", position: "Forward", number: 3 },
+  { name: "Jalyn McCreary", team: "Cluj-Napoca", position: "Forward", number: 8 },
+  { name: "Alexandru Campean", team: "Cluj-Napoca", position: "Forward", number: 11 },
+  { name: "Javon Bess", team: "Cluj-Napoca", position: "Forward", number: 20 },
+  { name: "Bobe Nicolescu", team: "Cluj-Napoca", position: "Forward", number: 24 },
+  { name: "Christian Bishop", team: "Cluj-Napoca", position: "Center", number: 13 },
+  { name: "Uros Plavsic", team: "Cluj-Napoca", position: "Center", number: 22 },
+  { name: "Tudor Tancau", team: "Cluj-Napoca", position: "Center", number: 32 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
