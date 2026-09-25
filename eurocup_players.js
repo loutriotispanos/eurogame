@@ -99,6 +99,9 @@ window.EUROCUP_TEAMS = {
   },
   "Cluj-Napoca": {
     "country": "Romania"
+  },
+  "Reyer Venezia": {
+    "country": "Italy"
   }
 };
 
@@ -273,6 +276,15 @@ window.EUROCUP_PLAYERS = [
     "height": 205,
     "birthYear": 2003,
     "number": 94
+  },
+  {
+    "name": "Glynn Watson Jr.",
+    "team": "Reyer Venezia",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1997,
+    "number": 30
   },
   {
     "name": "Nico Mannion",

@@ -61,7 +61,8 @@ const TEAMS = {
   "Slask Wroclaw": { country: "Poland" },
   "Tofas": { country: "Turkey" },
   "Turk Telekom": { country: "Turkey" },
-  "Cluj-Napoca": { country: "Romania" }
+  "Cluj-Napoca": { country: "Romania" },
+  "Reyer Venezia": { country: "Italy" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -99,7 +100,9 @@ const PLAYERS = [
   // Roma Basketball
   { name: "Nico Mannion", team: "Roma Basketball", number: 1 },
   // Turk Telekom
-  { name: "Shaquielle McKissic", team: "Turk Telekom", number: 77 }
+  { name: "Shaquielle McKissic", team: "Turk Telekom", number: 77 },
+  // Reyer Venezia
+  { name: "Glynn Watson Jr.", team: "Reyer Venezia", number: 30 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -556,7 +559,23 @@ const PENDING = [
   { name: "Bobe Nicolescu", team: "Cluj-Napoca", position: "Forward", number: 24 },
   { name: "Christian Bishop", team: "Cluj-Napoca", position: "Center", number: 13 },
   { name: "Uros Plavsic", team: "Cluj-Napoca", position: "Center", number: 22 },
-  { name: "Tudor Tancau", team: "Cluj-Napoca", position: "Center", number: 32 }
+  { name: "Tudor Tancau", team: "Cluj-Napoca", position: "Center", number: 32 },
+  // Reyer Venezia
+  { name: "Octavio Maretto", team: "Reyer Venezia", position: "Guard", number: 1 },
+  { name: "Giovanni De Nicolao", team: "Reyer Venezia", position: "Guard", number: 5 },
+  { name: "Leonardo Candi", team: "Reyer Venezia", position: "Guard", number: 7 },
+  { name: "Ky Bowman", team: "Reyer Venezia", position: "Guard", number: 8 },
+  { name: "Sir'Jabari Rice", team: "Reyer Venezia", position: "Guard", number: 10 },
+  { name: "Erick Green", team: "Reyer Venezia", position: "Guard", number: 32 },
+  { name: "Gabriele Sarghini", team: "Reyer Venezia", position: "Guard", number: 40 },
+  { name: "Federico Fasolo", team: "Reyer Venezia", position: "Guard", number: 45 },
+  { name: "Giga Janelidze", team: "Reyer Venezia", position: "Forward", number: 14 },
+  { name: "Louis Olinde", team: "Reyer Venezia", position: "Forward", number: 19 },
+  { name: "Jordan Parks", team: "Reyer Venezia", position: "Forward", number: 22 },
+  { name: "Kyle Wiltjer", team: "Reyer Venezia", position: "Forward", number: 33 },
+  { name: "Sasha Grant", team: "Reyer Venezia", position: "Forward", number: 44 },
+  { name: "Amedeo Tessitori", team: "Reyer Venezia", position: "Center", number: 0 },
+  { name: "Enoch Boakye", team: "Reyer Venezia", position: "Center", number: 13 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
