@@ -54,27 +54,28 @@ raw.push({"players":[{"name":"Chris Jones","team":"Crvena Zvezda","nationality":
 // --- Consolidation ----------------------------------------------------------
 const YOUNGEST_BIRTH_YEAR = 2006;   // drop development players born 2007+
 
-// Nationality convention: "where the player is from" (birthplace / passport),
-// NOT an adopted senior national team. The research captured FIBA national
-// teams, so these naturalized/heritage players are corrected to their origin.
+// Nationality convention (the user's rule, 2026-09-25): the NATIONAL TEAM a player
+// has played for; only a player who never played for one takes his birth/passport
+// country. These naturalized players are pinned to the senior team they play for,
+// so a research pass that recorded the passport can't quietly undo it.
 const NATIONALITY_OVERRIDES = {
-  "Kendrick Nunn":  "USA",   // plays for Greece
-  "Shane Larkin":   "USA",   // plays for Turkey
-  "T.J. Shorts":    "USA",   // plays for North Macedonia
-  "Jordan Loyd":    "USA",   // plays for Poland
-  "Donta Hall":     "USA",   // plays for Azerbaijan
-  "Zach LeDay":     "USA",   // plays for Azerbaijan
-  "Josh Nebo":      "USA",   // plays for Slovenia
-  "Bryant Dunston": "USA",   // plays for Armenia
-  "Lorenzo Brown":  "USA",   // plays for Spain
-  "Ish Wainright":  "USA",   // plays for Uganda
-  "Tai Odiase":     "USA",   // plays for Puerto Rico
-  "Jordan Nwora":   "USA",   // plays for Nigeria
-  "Semi Ojeleye":   "USA",   // plays for Nigeria
-  "Carlik Jones":   "USA",   // plays for South Sudan
-  "Nick Calathes":  "USA",   // plays for Greece
-  "Terry Tarpey":   "USA",   // plays for France
-  "Alpha Diallo":   "France",// born/raised France, plays for Guinea
+  "Kendrick Nunn":  "USA",            // Greek passport, but has never played for Greece
+  "Shane Larkin":   "Turkey",
+  "T.J. Shorts":    "North Macedonia",
+  "Jordan Loyd":    "Poland",
+  "Donta Hall":     "Azerbaijan",
+  "Zach LeDay":     "Azerbaijan",
+  "Josh Nebo":      "Slovenia",
+  "Bryant Dunston": "Armenia",
+  "Lorenzo Brown":  "Spain",
+  "Ish Wainright":  "Uganda",
+  "Tai Odiase":     "Puerto Rico",
+  "Jordan Nwora":   "Nigeria",
+  "Semi Ojeleye":   "Nigeria",
+  "Carlik Jones":   "South Sudan",
+  "Nick Calathes":  "Greece",
+  "Terry Tarpey":   "France",
+  "Alpha Diallo":   "Guinea",
 };
 
 // --- 2025-26 official-roster cross-check corrections -------------------------

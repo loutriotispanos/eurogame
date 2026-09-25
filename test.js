@@ -2445,6 +2445,15 @@ fire(byId("oo-daily"), "click");
 ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way home from an archive replay");
 
 
+// --- Nationality = the national team a player has played for -----------------
+(function () {
+  var nat = {};
+  window.PLAYERS.concat(window.LEGENDS).forEach(function (p) { nat[p.name] = p.nationality; });
+  ok(nat["Nick Calathes"] === "Greece" && nat["Shane Larkin"] === "Turkey" && nat["Alpha Diallo"] === "Guinea",
+     "naturalized players carry the national team they play for (Calathes Greece, Larkin Turkey, Diallo Guinea)");
+  ok(nat["Kendrick Nunn"] === "USA", "…and one who never played for his second country keeps his own (Nunn USA)");
+})();
+
 // --- Competitions: the EuroLeague run (this one) and the EuroCup run ---------
 ok(window.ELG_COMP.id === "euroleague" && window.ELG_COMP.eurocupReady === (window.EUROCUP_PLAYERS.length > 0) && window.EL_PLAYERS === undefined,
    "the EuroLeague is the competition by default, and its players are the games' players");

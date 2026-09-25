@@ -33,7 +33,7 @@ window.LEGENDS = [
   {"name":"Panagiotis Giannakis","team":"Aris","nationality":"Greece","position":"Guard","height":193,"birthYear":1959,"number":6},
   // --- AS Monaco ---
   {"name":"Sergii Gladyr","team":"AS Monaco","nationality":"Ukraine","position":"Guard","height":196,"birthYear":1988,"number":8},
-  {"name":"Alpha Diallo","team":"AS Monaco","nationality":"France","position":"Forward","height":201,"birthYear":1997,"number":11},
+  {"name":"Alpha Diallo","team":"AS Monaco","nationality":"Guinea","position":"Forward","height":201,"birthYear":1997,"number":11},
   {"name":"Juhann Begarin","team":"AS Monaco","nationality":"France","position":"Forward","height":196,"birthYear":2002,"number":23},
   {"name":"Ali Traore","team":"AS Monaco","nationality":"France","position":"Center","height":208,"birthYear":1985,"number":24},
   {"name":"Nemanja Nedovic","team":"AS Monaco","nationality":"Serbia","position":"Guard","height":192,"birthYear":1991,"number":26},
@@ -211,7 +211,7 @@ window.LEGENDS = [
   {"name":"Terrell McIntyre","team":"Montepaschi Siena","nationality":"USA","position":"Guard","height":176,"birthYear":1977,"number":5},
   // --- Olimpia Milano ---
   {"name":"Nico Mannion","team":"Olimpia Milano","nationality":"Italy","position":"Guard","height":188,"birthYear":2001,"number":1},
-  {"name":"Lorenzo Brown","team":"Olimpia Milano","nationality":"USA","position":"Guard","height":196,"birthYear":1990,"number":2},
+  {"name":"Lorenzo Brown","team":"Olimpia Milano","nationality":"Spain","position":"Guard","height":196,"birthYear":1990,"number":2},
   {"name":"Quinn Ellis","team":"Olimpia Milano","nationality":"United Kingdom","position":"Guard","height":196,"birthYear":2003,"number":3},
   {"name":"Vladimir Micov","team":"Olimpia Milano","nationality":"Serbia","position":"Forward","height":201,"birthYear":1985,"number":5},
   {"name":"Mike D'Antoni","team":"Olimpia Milano","nationality":"USA","position":"Guard","height":191,"birthYear":1951,"number":8},
@@ -219,7 +219,7 @@ window.LEGENDS = [
   {"name":"Antonello Riva","team":"Olimpia Milano","nationality":"Italy","position":"Forward","height":196,"birthYear":1962,"number":12},
   {"name":"Bob McAdoo","team":"Olimpia Milano","nationality":"USA","position":"Center","height":206,"birthYear":1951,"number":15},
   {"name":"Kyle Hines","team":"Olimpia Milano","nationality":"USA","position":"Center","height":198,"birthYear":1986,"number":42},
-  {"name":"Bryant Dunston","team":"Olimpia Milano","nationality":"USA","position":"Center","height":203,"birthYear":1986,"number":42},
+  {"name":"Bryant Dunston","team":"Olimpia Milano","nationality":"Armenia","position":"Center","height":203,"birthYear":1986,"number":42},
   // --- Olimpija Ljubljana ---
   {"name":"Rasho Nesterovic","team":"Olimpija Ljubljana","nationality":"Slovenia","position":"Center","height":213,"birthYear":1976,"number":8},
   {"name":"Marko Milic","team":"Olimpija Ljubljana","nationality":"Slovenia","position":"Forward","height":199,"birthYear":1977,"number":12},
@@ -289,7 +289,7 @@ window.LEGENDS = [
   {"name":"Predrag Drobnjak","team":"Partizan","nationality":"Montenegro","position":"Center","height":211,"birthYear":1975,"number":18},
   {"name":"Vlade Divac","team":"Partizan","nationality":"Serbia","position":"Center","height":216,"birthYear":1968,"number":21},
   {"name":"Milan Macvan","team":"Partizan","nationality":"Serbia","position":"Forward","height":206,"birthYear":1989,"number":25},
-  {"name":"Nick Calathes","team":"Partizan","nationality":"USA","position":"Guard","height":198,"birthYear":1989,"number":33},
+  {"name":"Nick Calathes","team":"Partizan","nationality":"Greece","position":"Guard","height":198,"birthYear":1989,"number":33},
   // --- Pau-Orthez ---
   {"name":"Mickael Pietrus","team":"Pau-Orthez","nationality":"France","position":"Guard","height":198,"birthYear":1982,"number":2},
   {"name":"Boris Diaw","team":"Pau-Orthez","nationality":"France","position":"Forward","height":203,"birthYear":1982,"number":3},
