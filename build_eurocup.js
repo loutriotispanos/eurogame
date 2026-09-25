@@ -54,7 +54,8 @@ const TEAMS = {
   "Ratiopharm Ulm": { country: "Germany" },
   "San Pablo Burgos": { country: "Spain" },
   "Riga Zelli": { country: "Latvia" },
-  "Roma Basketball": { country: "Italy" }
+  "Roma Basketball": { country: "Italy" },
+  "Rostock Seawolves": { country: "Germany" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -437,7 +438,23 @@ const PENDING = [
   { name: "Giannis Odzebe", team: "Roma Basketball", position: "Forward", number: 13 },
   { name: "Andrea Mezzanotte", team: "Roma Basketball", position: "Forward", number: 24 },
   { name: "Giovanni Emejuru", team: "Roma Basketball", position: "Center", number: 7 },
-  { name: "Marko Simonovic", team: "Roma Basketball", position: "Center", number: 19 }
+  { name: "Marko Simonovic", team: "Roma Basketball", position: "Center", number: 19 },
+  // Rostock Seawolves
+  { name: "TJ Crockett Jr.", team: "Rostock Seawolves", position: "Guard", number: 0 },
+  { name: "Zach Copeland", team: "Rostock Seawolves", position: "Guard", number: 2 },
+  { name: "Elias Baggette", team: "Rostock Seawolves", position: "Guard", number: 4 },
+  { name: "Isayah Owens", team: "Rostock Seawolves", position: "Guard", number: 6 },
+  { name: "DeAndre Lansdowne", team: "Rostock Seawolves", position: "Guard", number: 9 },
+  { name: "Johnathan Stove", team: "Rostock Seawolves", position: "Guard", number: 22 },
+  { name: "Dominic Lockhart", team: "Rostock Seawolves", position: "Forward", number: 3 },
+  { name: "Robin Amaize", team: "Rostock Seawolves", position: "Forward", number: 15 },
+  { name: "Matthes Tilsen", team: "Rostock Seawolves", position: "Forward", number: 31 },
+  { name: "Todd Withers", team: "Rostock Seawolves", position: "Forward", number: 33 },
+  { name: "Artur Konontsuk", team: "Rostock Seawolves", position: "Forward", number: 34 },
+  { name: "Philipp Hartwich", team: "Rostock Seawolves", position: "Center", number: 7 },
+  { name: "Bruno Loll", team: "Rostock Seawolves", position: "Center", number: 20 },
+  { name: "Owen Klassen", team: "Rostock Seawolves", position: "Center", number: 29 },
+  { name: "Bent Leuchten", team: "Rostock Seawolves", position: "Center", number: 51 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

@@ -78,6 +78,9 @@ window.EUROCUP_TEAMS = {
   },
   "Roma Basketball": {
     "country": "Italy"
+  },
+  "Rostock Seawolves": {
+    "country": "Germany"
   }
 };
 
