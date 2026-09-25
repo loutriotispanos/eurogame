@@ -9,6 +9,9 @@ window.EUROCUP_OPEN = false;
 window.EUROCUP_TEAMS = {
   "Aris Thessaloniki": {
     "country": "Greece"
+  },
+  "Derthona Tortona": {
+    "country": "Italy"
   }
 };
 
@@ -57,5 +60,23 @@ window.EUROCUP_PLAYERS = [
     "height": 188,
     "birthYear": 1996,
     "number": 4
+  },
+  {
+    "name": "Karim Jallow",
+    "team": "Derthona Tortona",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1997,
+    "number": 35
+  },
+  {
+    "name": "Paul Eboua",
+    "team": "Derthona Tortona",
+    "nationality": "Cameroon",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 2000,
+    "number": 0
   }
 ];

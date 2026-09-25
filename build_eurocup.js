@@ -31,7 +31,8 @@ const OPEN = false;
 
 // club name → { country }
 const TEAMS = {
-  "Aris Thessaloniki": { country: "Greece" }
+  "Aris Thessaloniki": { country: "Greece" },
+  "Derthona Tortona": { country: "Italy" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -41,7 +42,10 @@ const PLAYERS = [
   { name: "Neno Dimitrijevic",    team: "Aris Thessaloniki", number: 7 },
   { name: "Stefan Jovic",         team: "Aris Thessaloniki", number: 24 },
   { name: "Matt Morgan",          team: "Aris Thessaloniki", number: 30 },
-  { name: "Khem Birch",           team: "Aris Thessaloniki", number: 92 }
+  { name: "Khem Birch",           team: "Aris Thessaloniki", number: 92 },
+  // Derthona Tortona
+  { name: "Paul Eboua", team: "Derthona Tortona", number: 0 },
+  { name: "Karim Jallow", team: "Derthona Tortona", number: 35 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -57,8 +61,20 @@ const PENDING = [
   { name: "Vasilis Charalampopoulos",  team: "Aris Thessaloniki", position: "Forward", number: 33 },
   { name: "Thanasis Antetokounmpo",    team: "Aris Thessaloniki", position: "Forward", number: 43 },
   { name: "Adam Mokoka",               team: "Aris Thessaloniki", position: "Forward", number: 95 },
-  { name: "Kostas Antetokounmpo",      team: "Aris Thessaloniki", position: "Forward", number: 37 },   // position unconfirmed: the screenshot crop showed no section
-  { name: "Georgios Tanoulis",         team: "Aris Thessaloniki", position: "Center",  number: 50 }
+  { name: "Kostas Antetokounmpo",      team: "Aris Thessaloniki", position: "Center",  number: 37 },
+  { name: "Georgios Tanoulis",         team: "Aris Thessaloniki", position: "Center",  number: 50 },
+  // Derthona Tortona
+  { name: "Prentiss Hubb", team: "Derthona Tortona", position: "Guard", number: 3 },
+  { name: "Andrea Pecchia", team: "Derthona Tortona", position: "Guard", number: 6 },
+  { name: "Edoardo Di Meo", team: "Derthona Tortona", position: "Guard", number: 9 },
+  { name: "Giordano Bortolani", team: "Derthona Tortona", position: "Guard", number: 12 },
+  { name: "Dante Maddox Jr.", team: "Derthona Tortona", position: "Guard", number: 21 },
+  { name: "Aljami Durham", team: "Derthona Tortona", position: "Guard", number: 42 },
+  { name: "Justin Gorham", team: "Derthona Tortona", position: "Forward", number: 4 },
+  { name: "Amar Alibegovic", team: "Derthona Tortona", position: "Forward", number: 7 },
+  { name: "Brayden Zumstein", team: "Derthona Tortona", position: "Forward", number: 10 },
+  { name: "Giulio Gazzotti", team: "Derthona Tortona", position: "Forward", number: 24 },
+  { name: "Dominik Olejniczak", team: "Derthona Tortona", position: "Center", number: 17 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
