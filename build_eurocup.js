@@ -238,7 +238,15 @@ const PLAYERS = [
   { name: "Tim Abromaitis", team: "La Laguna Tenerife", nationality: "USA", position: "Center", height: 203, birthYear: 1989, number: 21 },
   { name: "Ethan Happ", team: "La Laguna Tenerife", nationality: "USA", position: "Center", height: 208, birthYear: 1996, number: 22 },
   { name: "Vince Hunter", team: "La Laguna Tenerife", nationality: "USA", position: "Center", height: 203, birthYear: 1994, number: 32 },
-  { name: "Carlos Stewart Jr.", team: "Le Mans", nationality: "USA", position: "Guard", height: 185, birthYear: 2003, number: 0 }
+  { name: "Carlos Stewart Jr.", team: "Le Mans", nationality: "USA", position: "Guard", height: 185, birthYear: 2003, number: 0 },
+  { name: "Jordan King", team: "Le Mans", nationality: "Jamaica", position: "Guard", height: 183, birthYear: 2001, number: 2 },
+  { name: "Leopold Delaunay", team: "Le Mans", nationality: "France", position: "Guard", height: 193, birthYear: 2001, number: 9 },
+  { name: "Ugo Doumbia Niang", team: "Le Mans", nationality: "France", position: "Guard", height: 193, birthYear: 2003, number: 10 },
+  { name: "Moses Wood", team: "Le Mans", nationality: "USA", position: "Forward", height: 203, birthYear: 1999, number: 23 },
+  { name: "Lucas Dufeal", team: "Le Mans", nationality: "France", position: "Forward", height: 204, birthYear: 2003, number: 32 },
+  { name: "Wilfried Yeguete", team: "Le Mans", nationality: "France", position: "Center", height: 202, birthYear: 1991, number: 15 },
+  { name: "Tyler Beracou", team: "Le Mans", nationality: "France", position: "Center", height: 202, birthYear: 2006, number: 26 },
+  { name: "Tashawn Thomas", team: "Le Mans", nationality: "USA", position: "Center", height: 203, birthYear: 1993, number: 35 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -257,18 +265,6 @@ const PENDING = [
   // Manresa
   // La Laguna Tenerife
   // Le Mans
-  { name: "Bastien Grasshoff", team: "Le Mans", position: "Guard", number: 1 },
-  { name: "Jordan King", team: "Le Mans", position: "Guard", number: 2 },
-  { name: "Afeny Cognet", team: "Le Mans", position: "Guard", number: 3 },
-  { name: "Leopold Delaunay", team: "Le Mans", position: "Guard", number: 9 },
-  { name: "Ugo Doumbia Niang", team: "Le Mans", position: "Guard", number: 10 },
-  { name: "Moses Wood", team: "Le Mans", position: "Forward", number: 23 },
-  { name: "Lucas Dufeal", team: "Le Mans", position: "Forward", number: 32 },
-  { name: "Madiba Diaby-Cisse", team: "Le Mans", position: "Forward", number: 88 },
-  { name: "Swann Penda", team: "Le Mans", position: "Forward", number: 93 },
-  { name: "Wilfried Yeguete", team: "Le Mans", position: "Center", number: 15 },
-  { name: "Tyler Beracou", team: "Le Mans", position: "Center", number: 26 },
-  { name: "Tashawn Thomas", team: "Le Mans", position: "Center", number: 35 },
   // Lietkabelis
   { name: "Alexander Schumacher", team: "Lietkabelis", position: "Guard", number: 2 },
   { name: "Nojus Radzius", team: "Lietkabelis", position: "Guard", number: 5 },

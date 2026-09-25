@@ -1250,6 +1250,33 @@ window.EUROCUP_PLAYERS = [
     "number": 0
   },
   {
+    "name": "Jordan King",
+    "team": "Le Mans",
+    "nationality": "Jamaica",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 2001,
+    "number": 2
+  },
+  {
+    "name": "Leopold Delaunay",
+    "team": "Le Mans",
+    "nationality": "France",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2001,
+    "number": 9
+  },
+  {
+    "name": "Lucas Dufeal",
+    "team": "Le Mans",
+    "nationality": "France",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 2003,
+    "number": 32
+  },
+  {
     "name": "Melvin Ajinca",
     "team": "Le Mans",
     "nationality": "France",
@@ -1257,6 +1284,51 @@ window.EUROCUP_PLAYERS = [
     "height": 202,
     "birthYear": 2004,
     "number": 8
+  },
+  {
+    "name": "Moses Wood",
+    "team": "Le Mans",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1999,
+    "number": 23
+  },
+  {
+    "name": "Tashawn Thomas",
+    "team": "Le Mans",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1993,
+    "number": 35
+  },
+  {
+    "name": "Tyler Beracou",
+    "team": "Le Mans",
+    "nationality": "France",
+    "position": "Center",
+    "height": 202,
+    "birthYear": 2006,
+    "number": 26
+  },
+  {
+    "name": "Ugo Doumbia Niang",
+    "team": "Le Mans",
+    "nationality": "France",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2003,
+    "number": 10
+  },
+  {
+    "name": "Wilfried Yeguete",
+    "team": "Le Mans",
+    "nationality": "France",
+    "position": "Center",
+    "height": 202,
+    "birthYear": 1991,
+    "number": 15
   },
   {
     "name": "Chibuzo Agbo",
