@@ -44,7 +44,7 @@
   // past daily) | undefined (plain open → resume last mode)
   // The competition switcher. It sits on the hub (EuroLeague ticked) and on the
   // EuroCup page (EuroCup ticked), so it always says which competition you are
-  // in and switches both ways. Only the EuroLeague is playable; EuroCup opens a
+  // in and switches both ways. Until the EuroCup has players it opens a
   // "coming soon" page (a state of the app, like Records: ?game=eurocup, no
   // generated page of its own).
   var COMP_SWITCHES = [["comp-btn", "comp-menu"], ["ec-comp-btn", "ec-comp-menu"]];
@@ -57,12 +57,43 @@
       btn.setAttribute("aria-expanded", on ? "true" : "false");
     });
   }
-  function goComp(comp) {
+  // competition.js has already picked the competition (window.ELG_COMP) and
+  // handed its players to the games, which read them once at load. So picking
+  // the other one saves the choice and reloads the hub; picking the one you're
+  // in just goes home. The EuroCup opens the coming-soon page until it has players.
+  function comp() { return window.ELG_COMP || { id: "euroleague", name: "EuroLeague", eurocupReady: false, plays: function () { return true; } }; }
+  function goComp(c) {
     setCompMenu(false);
-    var v = comp === "eurocup" ? "eurocup" : "home";
-    if (v !== curView) { pushNav({ v: v }); showView(v); }
+    var C = comp();
+    if (c === "eurocup" && !C.eurocupReady) {
+      if (curView !== "eurocup") { pushNav({ v: "eurocup" }); showView("eurocup"); }
+      return;
+    }
+    if (c === C.id) {
+      if (curView !== "home") { pushNav({ v: "home" }); showView("home"); }
+      return;
+    }
+    if (C.set) C.set(c);
+    try { window.location.href = siteRoot(); } catch (e) {}
+  }
+  // The hub's switcher says which competition is playing. (The coming-soon
+  // page's switcher is only ever seen from the EuroLeague, so its markup is fixed.)
+  function renderCompMenu() {
+    var C = comp();
+    var name = $("comp-name");
+    if (name) name.textContent = C.name;
+    var menu = $("comp-menu");
+    if (!menu) return;
+    var items = menu.querySelectorAll("[data-comp]");
+    for (var i = 0; i < items.length; i++) {
+      var id = items[i].getAttribute("data-comp"), on = id === C.id;
+      var tag = on ? "✓ Playing" : (id === "eurocup" && !C.eurocupReady) ? "Soon" : "Play";
+      items[i].setAttribute("aria-checked", on ? "true" : "false");
+      items[i].innerHTML = (id === "eurocup" ? "EuroCup" : "EuroLeague") + ' <span class="comp-tag">' + tag + "</span>";
+    }
   }
   function wireCompetition() {
+    renderCompMenu();
     COMP_SWITCHES.forEach(function (p) {
       var btn = $(p[0]), menu = $(p[1]);
       if (!btn || !menu) return;
@@ -94,6 +125,9 @@
   function showView(name, mode) {
     setCompMenu(false);
     if (VIEWS.indexOf(name) === -1) name = "home";
+    // A game the current competition doesn't offer (an old link, a bookmark),
+    // or the EuroCup coming-soon page once the EuroCup is playing, is the hub.
+    if ((SLUGS[name] && !comp().plays(name)) || (name === "eurocup" && comp().eurocupReady)) name = "home";
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
     curView = name;
@@ -469,7 +503,14 @@
       catch (e) { dl.textContent = todayStr(); }
     }
     var cards = document.querySelectorAll(".game-card");
-    Array.prototype.forEach.call(cards, function (c) {
+    // Tiles for games this competition doesn't offer leave the grid, so the
+    // packer in layoutHome sizes what's actually there.
+    cards = Array.prototype.filter.call(cards, function (c) {
+      if (comp().plays(c.getAttribute("data-game"))) return true;
+      if (c.parentNode) c.parentNode.removeChild(c);
+      return false;
+    });
+    cards.forEach(function (c) {
       // Plain open: each game resumes its last-used mode (Daily for first-timers).
       //
       // The tile is a real <a href="the-grid/"> now, so this has to say which
@@ -548,6 +589,7 @@
       }
     });
     var linked = linkedGame();
+    if (linked && SLUGS[linked] && !comp().plays(linked)) linked = null;   // not in this competition: the hub, and its URL
     var initial = hasChallenge() ? "mystery" : (linked || "home");
     var initialMode = linked ? linkedMode(linked) : null;
     // The deep link is now KEPT, normalised to this view's canonical URL, so the
@@ -800,6 +842,7 @@
     _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme,
     _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
     _copyAddress: copyAddress, _showView: showView, _pushNav: pushNav, _urlFor: urlFor,
+    _goComp: goComp, _renderCompMenu: renderCompMenu, _curView: function () { return curView; },
     _isMode: isMode, _pageTitle: pageTitle, _modes: MODES,
     _slugs: SLUGS, _siteRoot: siteRoot, _titles: TITLES, _canon: CANON, _linkedGame: linkedGame,
     // The built title is captured once, at load. The harness needs to restate it

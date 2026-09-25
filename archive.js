@@ -55,6 +55,7 @@
       var row = document.createElement("div");
       row.className = "arch-row";
       GAMES.forEach(function (g) {
+        if (window.ELG_COMP && !window.ELG_COMP.plays(g.id)) return;   // not offered in this competition
         var st = stateFor(g.k, d);
         var b = document.createElement("button");
         b.type = "button";
