@@ -56,7 +56,8 @@ const TEAMS = {
   "Riga Zelli": { country: "Latvia" },
   "Roma Basketball": { country: "Italy" },
   "Rostock Seawolves": { country: "Germany" },
-  "Siauliai": { country: "Lithuania" }
+  "Siauliai": { country: "Lithuania" },
+  "Skyliners Frankfurt": { country: "Germany" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -468,7 +469,27 @@ const PENDING = [
   { name: "Dovydas Romancenko", team: "Siauliai", position: "Forward", number: 25 },
   { name: "Rokas Civilis", team: "Siauliai", position: "Forward", number: 77 },
   { name: "Martynas Pacevicius", team: "Siauliai", position: "Center", number: 9 },
-  { name: "Efton Reid", team: "Siauliai", position: "Center", number: 15 }
+  { name: "Efton Reid", team: "Siauliai", position: "Center", number: 15 },
+  // Skyliners Frankfurt
+  { name: "Jamie Edoka", team: "Skyliners Frankfurt", position: "Guard", number: 0 },
+  { name: "Isaiah Swope", team: "Skyliners Frankfurt", position: "Guard", number: 1 },
+  { name: "Nahiem Alleyne", team: "Skyliners Frankfurt", position: "Guard", number: 4 },
+  { name: "William Christmas", team: "Skyliners Frankfurt", position: "Guard", number: 8 },
+  { name: "Judah Mintz", team: "Skyliners Frankfurt", position: "Guard", number: 10 },
+  { name: "Dusan Nikolic", team: "Skyliners Frankfurt", position: "Guard", number: 14 },
+  { name: "Thomas Klepeisz", team: "Skyliners Frankfurt", position: "Guard", number: 22 },
+  { name: "Lenny Benczak", team: "Skyliners Frankfurt", position: "Guard", number: 24 },
+  { name: "Lukas Smazak", team: "Skyliners Frankfurt", position: "Guard", number: 44 },
+  { name: "Ryan Arcidiacono", team: "Skyliners Frankfurt", position: "Guard", number: 51 },
+  { name: "Julius Messer", team: "Skyliners Frankfurt", position: "Forward", number: 3 },
+  { name: "Ivan Crnjac", team: "Skyliners Frankfurt", position: "Forward", number: 13 },
+  { name: "Radii Caisin", team: "Skyliners Frankfurt", position: "Forward", number: 15 },
+  { name: "Till Pape", team: "Skyliners Frankfurt", position: "Forward", number: 19 },
+  { name: "Maximilian Peters", team: "Skyliners Frankfurt", position: "Forward", number: 21 },
+  { name: "Race Thompson", team: "Skyliners Frankfurt", position: "Center", number: 5 },
+  { name: "Moses Poelking", team: "Skyliners Frankfurt", position: "Center", number: 6 },
+  { name: "Jacob Knauf", team: "Skyliners Frankfurt", position: "Center", number: 25 },
+  { name: "Roman Bedime", team: "Skyliners Frankfurt", position: "Center", number: 35 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

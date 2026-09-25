@@ -84,6 +84,9 @@ window.EUROCUP_TEAMS = {
   },
   "Siauliai": {
     "country": "Lithuania"
+  },
+  "Skyliners Frankfurt": {
+    "country": "Germany"
   }
 };
 
