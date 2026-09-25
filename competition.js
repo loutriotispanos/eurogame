@@ -54,6 +54,13 @@
     set: writePref
   };
 
+  // The EuroCup blue (index.html CSS): the head script guessed from the stored
+  // choice before paint; this is the answer, since the EuroCup may not be open.
+  try {
+    if (comp === "eurocup") document.documentElement.setAttribute("data-comp", "eurocup");
+    else document.documentElement.removeAttribute("data-comp");
+  } catch (e) {}
+
   if (comp !== "eurocup") return;
 
   window.EL_PLAYERS = window.PLAYERS;

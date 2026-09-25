@@ -2461,6 +2461,9 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
     var html = require("fs").readFileSync(__dirname + "/index.html", "utf8");
     ok((html.match(/class="comp-text" data-ec="/g) || []).length >= 7 && /<li data-ec-hide><strong>Non-active<\/strong>/.test(html),
        "…and the EuroCup's own words are in the page: taglines, rules, footer (and no Non-active rule)");
+    ok(/:root\[data-comp="eurocup"\] \{ --accent: #0b6fce;/.test(html) && /:root\[data-comp="eurocup"\]\[data-theme="dark"\] \{ --accent: #4da3f0;/.test(html)
+       && /JSON\.parse\(c\)===\"eurocup\"\)document\.documentElement\.setAttribute\("data-comp","eurocup"\)/.test(html),
+       "…and it plays in the EuroCup blue, day and night, set before first paint");
   }
 })();
 
