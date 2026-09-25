@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#f7f3ea" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <!-- Night mode: set the saved (or OS-preferred) theme BEFORE first paint to avoid a flash. -->
-<script>(function(){try{var t=localStorage.getItem("elg:theme");if(t)t=JSON.parse(t);if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("elg:theme");if(t)t=JSON.parse(t);if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);var c=localStorage.getItem("elg:comp");if(c&&JSON.parse(c)==="eurocup")document.documentElement.setAttribute("data-comp","eurocup");}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Euroball" />
 <link rel="apple-touch-icon" href="../icon-192.png" />
@@ -788,6 +788,13 @@
   /* Night mode is a re-inking, not a second stylesheet: every value below is a
      token the light theme already used, so nothing downstream needs a dark
      twin. (It used to take forty of them.) */
+  /* EuroCup mode: the competition's blue in place of the EuroLeague orange wherever
+     the page's own accent shows (the Euro in Euroball, kicker, switcher, Mystery
+     Player). Colour only, never its marks; the other games keep their own. The
+     data-comp attribute is set before paint (head script) and confirmed by
+     competition.js. */
+  :root[data-comp="eurocup"] { --accent: #0b6fce; --accent-2: #095cad; }
+  :root[data-comp="eurocup"][data-theme="dark"] { --accent: #4da3f0; --accent-2: #3a8fdb; }
   :root[data-theme="dark"] {
     --paper: #15120c;      /* deep warm base */
     --paper-2: #2c2618;    /* inset / hover — clearly lifted off paper */
@@ -914,6 +921,11 @@
     text-decoration: none;
   }
   .game-card[data-game="mystery"]      { --gc: #c65611; }
+  :root[data-comp="eurocup"] .game-card[data-game="mystery"] { --gc: #0b6fce; }   /* the brand game takes the EuroCup blue */
+  :root[data-comp="eurocup"][data-theme="dark"] .game-card[data-game="mystery"] { --gc: #4da3f0; }
+  /* …and from the first paint the hub shows only the games the EuroCup plays, instead
+     of flashing all eleven until app.js takes the rest away. */
+  :root[data-comp="eurocup"] .game-card:not([data-game="mystery"]):not([data-game="higherlower"]):not([data-game="rostermaster"]) { display: none; }
   .game-card[data-game="playerid"]     { --gc: #177f72; }
   .game-card[data-game="completefive"] { --gc: #a97f14; }
   .game-card[data-game="connections"]  { --gc: #7d54b4; }
