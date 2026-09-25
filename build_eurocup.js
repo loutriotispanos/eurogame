@@ -102,34 +102,33 @@ const PLAYERS = [
   // Turk Telekom
   { name: "Shaquielle McKissic", team: "Turk Telekom", number: 77 },
   // Reyer Venezia
-  { name: "Glynn Watson Jr.", team: "Reyer Venezia", number: 30 }
+  { name: "Glynn Watson Jr.", team: "Reyer Venezia", number: 30 },
+  { name: "Elijah Mitrou-Long", team: "Aris Thessaloniki", nationality: "Greece", position: "Guard", height: 187, birthYear: 1996, number: 0 },
+  { name: "Stylianos Poulianitis", team: "Aris Thessaloniki", nationality: "Greece", position: "Guard", height: 190, birthYear: 1995, number: 11 },
+  { name: "Eleftherios Bochoridis", team: "Aris Thessaloniki", nationality: "Greece", position: "Guard", height: 196, birthYear: 1994, number: 13 },
+  { name: "Jeremiah Robinson-Earl", team: "Aris Thessaloniki", nationality: "USA", position: "Forward", height: 206, birthYear: 2000, number: 3 },
+  { name: "E.J. Liddell", team: "Aris Thessaloniki", nationality: "USA", position: "Forward", height: 198, birthYear: 2000, number: 32 },
+  { name: "Vasilis Charalampopoulos", team: "Aris Thessaloniki", nationality: "Greece", position: "Forward", height: 204, birthYear: 1997, number: 33 },
+  { name: "Thanasis Antetokounmpo", team: "Aris Thessaloniki", nationality: "Greece", position: "Forward", height: 201, birthYear: 1992, number: 43 },
+  { name: "Adam Mokoka", team: "Aris Thessaloniki", nationality: "France", position: "Forward", height: 196, birthYear: 1998, number: 95 },
+  { name: "Kostas Antetokounmpo", team: "Aris Thessaloniki", nationality: "Greece", position: "Center", height: 208, birthYear: 1997, number: 37 },
+  { name: "Georgios Tanoulis", team: "Aris Thessaloniki", nationality: "Greece", position: "Center", height: 210, birthYear: 2002, number: 50 },
+  { name: "Prentiss Hubb", team: "Derthona Tortona", nationality: "USA", position: "Guard", height: 191, birthYear: 1999, number: 3 },
+  { name: "Andrea Pecchia", team: "Derthona Tortona", nationality: "Italy", position: "Guard", height: 196, birthYear: 1997, number: 6 },
+  { name: "Giordano Bortolani", team: "Derthona Tortona", nationality: "Italy", position: "Guard", height: 193, birthYear: 2000, number: 12 },
+  { name: "Dante Maddox Jr.", team: "Derthona Tortona", nationality: "USA", position: "Guard", height: 188, birthYear: 2002, number: 21 },
+  { name: "Aljami Durham", team: "Derthona Tortona", nationality: "USA", position: "Guard", height: 193, birthYear: 1998, number: 42 },
+  { name: "Justin Gorham", team: "Derthona Tortona", nationality: "USA", position: "Forward", height: 201, birthYear: 1998, number: 4 },
+  { name: "Amar Alibegovic", team: "Derthona Tortona", nationality: "Bosnia and Herzegovina", position: "Forward", height: 206, birthYear: 1995, number: 7 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
 // PLAYERS as full records. Official position and number from the roster page.
 const PENDING = [
   // Aris Thessaloniki
-  { name: "Elijah Mitrou-Long",        team: "Aris Thessaloniki", position: "Guard",   number: 0 },
   { name: "Chrysostomos Chatzilamprou", team: "Aris Thessaloniki", position: "Guard",  number: 10 },
-  { name: "Stylianos Poulianitis",     team: "Aris Thessaloniki", position: "Guard",   number: 11 },
-  { name: "Eleftherios Bochoridis",    team: "Aris Thessaloniki", position: "Guard",   number: 13 },
-  { name: "Jeremiah Robinson-Earl",    team: "Aris Thessaloniki", position: "Forward", number: 3 },
-  { name: "E.J. Liddell",              team: "Aris Thessaloniki", position: "Forward", number: 32 },
-  { name: "Vasilis Charalampopoulos",  team: "Aris Thessaloniki", position: "Forward", number: 33 },
-  { name: "Thanasis Antetokounmpo",    team: "Aris Thessaloniki", position: "Forward", number: 43 },
-  { name: "Adam Mokoka",               team: "Aris Thessaloniki", position: "Forward", number: 95 },
-  { name: "Kostas Antetokounmpo",      team: "Aris Thessaloniki", position: "Center",  number: 37 },
-  { name: "Georgios Tanoulis",         team: "Aris Thessaloniki", position: "Center",  number: 50 },
   // Derthona Tortona
-  { name: "Prentiss Hubb", team: "Derthona Tortona", position: "Guard", number: 3 },
-  { name: "Andrea Pecchia", team: "Derthona Tortona", position: "Guard", number: 6 },
   { name: "Edoardo Di Meo", team: "Derthona Tortona", position: "Guard", number: 9 },
-  { name: "Giordano Bortolani", team: "Derthona Tortona", position: "Guard", number: 12 },
-  { name: "Dante Maddox Jr.", team: "Derthona Tortona", position: "Guard", number: 21 },
-  { name: "Aljami Durham", team: "Derthona Tortona", position: "Guard", number: 42 },
-  { name: "Justin Gorham", team: "Derthona Tortona", position: "Forward", number: 4 },
-  { name: "Amar Alibegovic", team: "Derthona Tortona", position: "Forward", number: 7 },
-  { name: "Brayden Zumstein", team: "Derthona Tortona", position: "Forward", number: 10 },
   { name: "Giulio Gazzotti", team: "Derthona Tortona", position: "Forward", number: 24 },
   { name: "Dominik Olejniczak", team: "Derthona Tortona", position: "Center", number: 17 },
   // Bahcesehir College

@@ -107,6 +107,60 @@ window.EUROCUP_TEAMS = {
 
 window.EUROCUP_PLAYERS = [
   {
+    "name": "Adam Mokoka",
+    "team": "Aris Thessaloniki",
+    "nationality": "France",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 1998,
+    "number": 95
+  },
+  {
+    "name": "E.J. Liddell",
+    "team": "Aris Thessaloniki",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2000,
+    "number": 32
+  },
+  {
+    "name": "Eleftherios Bochoridis",
+    "team": "Aris Thessaloniki",
+    "nationality": "Greece",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1994,
+    "number": 13
+  },
+  {
+    "name": "Elijah Mitrou-Long",
+    "team": "Aris Thessaloniki",
+    "nationality": "Greece",
+    "position": "Guard",
+    "height": 187,
+    "birthYear": 1996,
+    "number": 0
+  },
+  {
+    "name": "Georgios Tanoulis",
+    "team": "Aris Thessaloniki",
+    "nationality": "Greece",
+    "position": "Center",
+    "height": 210,
+    "birthYear": 2002,
+    "number": 50
+  },
+  {
+    "name": "Jeremiah Robinson-Earl",
+    "team": "Aris Thessaloniki",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 2000,
+    "number": 3
+  },
+  {
     "name": "Khem Birch",
     "team": "Aris Thessaloniki",
     "nationality": "Canada",
@@ -114,6 +168,15 @@ window.EUROCUP_PLAYERS = [
     "height": 206,
     "birthYear": 1992,
     "number": 92
+  },
+  {
+    "name": "Kostas Antetokounmpo",
+    "team": "Aris Thessaloniki",
+    "nationality": "Greece",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1997,
+    "number": 37
   },
   {
     "name": "Matt Morgan",
@@ -141,6 +204,33 @@ window.EUROCUP_PLAYERS = [
     "height": 198,
     "birthYear": 1990,
     "number": 24
+  },
+  {
+    "name": "Stylianos Poulianitis",
+    "team": "Aris Thessaloniki",
+    "nationality": "Greece",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1995,
+    "number": 11
+  },
+  {
+    "name": "Thanasis Antetokounmpo",
+    "team": "Aris Thessaloniki",
+    "nationality": "Greece",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1992,
+    "number": 43
+  },
+  {
+    "name": "Vasilis Charalampopoulos",
+    "team": "Aris Thessaloniki",
+    "nationality": "Greece",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 1997,
+    "number": 33
   },
   {
     "name": "Vassilis Toliopoulos",
@@ -179,6 +269,60 @@ window.EUROCUP_PLAYERS = [
     "number": 11
   },
   {
+    "name": "Aljami Durham",
+    "team": "Derthona Tortona",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1998,
+    "number": 42
+  },
+  {
+    "name": "Amar Alibegovic",
+    "team": "Derthona Tortona",
+    "nationality": "Bosnia and Herzegovina",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 1995,
+    "number": 7
+  },
+  {
+    "name": "Andrea Pecchia",
+    "team": "Derthona Tortona",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1997,
+    "number": 6
+  },
+  {
+    "name": "Dante Maddox Jr.",
+    "team": "Derthona Tortona",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 2002,
+    "number": 21
+  },
+  {
+    "name": "Giordano Bortolani",
+    "team": "Derthona Tortona",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2000,
+    "number": 12
+  },
+  {
+    "name": "Justin Gorham",
+    "team": "Derthona Tortona",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1998,
+    "number": 4
+  },
+  {
     "name": "Karim Jallow",
     "team": "Derthona Tortona",
     "nationality": "Germany",
@@ -195,6 +339,15 @@ window.EUROCUP_PLAYERS = [
     "height": 203,
     "birthYear": 2000,
     "number": 0
+  },
+  {
+    "name": "Prentiss Hubb",
+    "team": "Derthona Tortona",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1999,
+    "number": 3
   },
   {
     "name": "Shake Milton",
