@@ -818,6 +818,105 @@ window.EUROCUP_PLAYERS = [
     "number": 23
   },
   {
+    "name": "Bobe Nicolescu",
+    "team": "Cluj-Napoca",
+    "nationality": "Romania",
+    "position": "Forward",
+    "height": 199,
+    "birthYear": 1997,
+    "number": 24
+  },
+  {
+    "name": "Christian Bishop",
+    "team": "Cluj-Napoca",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 200,
+    "birthYear": 2000,
+    "number": 13
+  },
+  {
+    "name": "Dusan Beslac",
+    "team": "Cluj-Napoca",
+    "nationality": "Serbia",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 1998,
+    "number": 3
+  },
+  {
+    "name": "Jalyn McCreary",
+    "team": "Cluj-Napoca",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 202,
+    "birthYear": 2000,
+    "number": 8
+  },
+  {
+    "name": "Javon Bess",
+    "team": "Cluj-Napoca",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 195,
+    "birthYear": 1996,
+    "number": 20
+  },
+  {
+    "name": "Javonte Smart",
+    "team": "Cluj-Napoca",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1999,
+    "number": 1
+  },
+  {
+    "name": "Kristian Kullamae",
+    "team": "Cluj-Napoca",
+    "nationality": "Estonia",
+    "position": "Guard",
+    "height": 194,
+    "birthYear": 1999,
+    "number": 77
+  },
+  {
+    "name": "Malcolm Hill",
+    "team": "Cluj-Napoca",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 197,
+    "birthYear": 1995,
+    "number": 21
+  },
+  {
+    "name": "Otis Livingston II",
+    "team": "Cluj-Napoca",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 177,
+    "birthYear": 1996,
+    "number": 0
+  },
+  {
+    "name": "Patrick Richard",
+    "team": "Cluj-Napoca",
+    "nationality": "Romania",
+    "position": "Guard",
+    "height": 194,
+    "birthYear": 1990,
+    "number": 35
+  },
+  {
+    "name": "Uros Plavsic",
+    "team": "Cluj-Napoca",
+    "nationality": "Serbia",
+    "position": "Center",
+    "height": 215,
+    "birthYear": 1998,
+    "number": 22
+  },
+  {
     "name": "Aljami Durham",
     "team": "Derthona Tortona",
     "nationality": "USA",
@@ -2339,6 +2438,51 @@ window.EUROCUP_PLAYERS = [
     "number": 45
   },
   {
+    "name": "Amedeo Tessitori",
+    "team": "Reyer Venezia",
+    "nationality": "Italy",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1994,
+    "number": 0
+  },
+  {
+    "name": "Enoch Boakye",
+    "team": "Reyer Venezia",
+    "nationality": "Canada",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 2003,
+    "number": 13
+  },
+  {
+    "name": "Erick Green",
+    "team": "Reyer Venezia",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1992,
+    "number": 32
+  },
+  {
+    "name": "Giga Janelidze",
+    "team": "Reyer Venezia",
+    "nationality": "Italy",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1995,
+    "number": 14
+  },
+  {
+    "name": "Giovanni De Nicolao",
+    "team": "Reyer Venezia",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 187,
+    "birthYear": 1996,
+    "number": 5
+  },
+  {
     "name": "Glynn Watson Jr.",
     "team": "Reyer Venezia",
     "nationality": "USA",
@@ -2346,6 +2490,78 @@ window.EUROCUP_PLAYERS = [
     "height": 183,
     "birthYear": 1997,
     "number": 30
+  },
+  {
+    "name": "Jordan Parks",
+    "team": "Reyer Venezia",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1994,
+    "number": 22
+  },
+  {
+    "name": "Ky Bowman",
+    "team": "Reyer Venezia",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1997,
+    "number": 8
+  },
+  {
+    "name": "Kyle Wiltjer",
+    "team": "Reyer Venezia",
+    "nationality": "Canada",
+    "position": "Forward",
+    "height": 208,
+    "birthYear": 1992,
+    "number": 33
+  },
+  {
+    "name": "Leonardo Candi",
+    "team": "Reyer Venezia",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1997,
+    "number": 7
+  },
+  {
+    "name": "Louis Olinde",
+    "team": "Reyer Venezia",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 205,
+    "birthYear": 1998,
+    "number": 19
+  },
+  {
+    "name": "Octavio Maretto",
+    "team": "Reyer Venezia",
+    "nationality": "Italy",
+    "position": "Guard",
+    "height": 198,
+    "birthYear": 2004,
+    "number": 1
+  },
+  {
+    "name": "Sasha Grant",
+    "team": "Reyer Venezia",
+    "nationality": "Italy",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2002,
+    "number": 44
+  },
+  {
+    "name": "Sir'Jabari Rice",
+    "team": "Reyer Venezia",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1998,
+    "number": 10
   },
   {
     "name": "Benjamin Shungu",
@@ -2897,6 +3113,321 @@ window.EUROCUP_PLAYERS = [
     "number": 22
   },
   {
+    "name": "Dusan Nikolic",
+    "team": "Skyliners Frankfurt",
+    "nationality": "Germany",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 2005,
+    "number": 14
+  },
+  {
+    "name": "Isaiah Swope",
+    "team": "Skyliners Frankfurt",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 178,
+    "birthYear": 2003,
+    "number": 1
+  },
+  {
+    "name": "Jacob Knauf",
+    "team": "Skyliners Frankfurt",
+    "nationality": "Germany",
+    "position": "Center",
+    "height": 210,
+    "birthYear": 1997,
+    "number": 25
+  },
+  {
+    "name": "Judah Mintz",
+    "team": "Skyliners Frankfurt",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 2003,
+    "number": 10
+  },
+  {
+    "name": "Moses Poelking",
+    "team": "Skyliners Frankfurt",
+    "nationality": "Germany",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 1997,
+    "number": 6
+  },
+  {
+    "name": "Nahiem Alleyne",
+    "team": "Skyliners Frankfurt",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2001,
+    "number": 4
+  },
+  {
+    "name": "Race Thompson",
+    "team": "Skyliners Frankfurt",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1999,
+    "number": 5
+  },
+  {
+    "name": "Radii Caisin",
+    "team": "Skyliners Frankfurt",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2001,
+    "number": 15
+  },
+  {
+    "name": "Roman Bedime",
+    "team": "Skyliners Frankfurt",
+    "nationality": "Germany",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 2001,
+    "number": 35
+  },
+  {
+    "name": "Ryan Arcidiacono",
+    "team": "Skyliners Frankfurt",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1994,
+    "number": 51
+  },
+  {
+    "name": "Thomas Klepeisz",
+    "team": "Skyliners Frankfurt",
+    "nationality": "Austria",
+    "position": "Guard",
+    "height": 186,
+    "birthYear": 1991,
+    "number": 22
+  },
+  {
+    "name": "Till Pape",
+    "team": "Skyliners Frankfurt",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 1997,
+    "number": 19
+  },
+  {
+    "name": "William Christmas",
+    "team": "Skyliners Frankfurt",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1996,
+    "number": 8
+  },
+  {
+    "name": "Anthony Hickey",
+    "team": "Slask Wroclaw",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 180,
+    "birthYear": 1992,
+    "number": 2
+  },
+  {
+    "name": "Anthony Wrzeszcz",
+    "team": "Slask Wroclaw",
+    "nationality": "Poland",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2004,
+    "number": 8
+  },
+  {
+    "name": "Blazej Czerniewicz",
+    "team": "Slask Wroclaw",
+    "nationality": "Poland",
+    "position": "Guard",
+    "height": 198,
+    "birthYear": 2002,
+    "number": 27
+  },
+  {
+    "name": "Blazej Kulikowski",
+    "team": "Slask Wroclaw",
+    "nationality": "Poland",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2001,
+    "number": 11
+  },
+  {
+    "name": "Devin Robinson",
+    "team": "Slask Wroclaw",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1995,
+    "number": 5
+  },
+  {
+    "name": "Isaih Moore",
+    "team": "Slask Wroclaw",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 2000,
+    "number": 13
+  },
+  {
+    "name": "Jakub Niziol",
+    "team": "Slask Wroclaw",
+    "nationality": "Poland",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1996,
+    "number": 35
+  },
+  {
+    "name": "John Egbunu",
+    "team": "Slask Wroclaw",
+    "nationality": "Nigeria",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1994,
+    "number": 15
+  },
+  {
+    "name": "Kyrell Luc",
+    "team": "Slask Wroclaw",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 180,
+    "birthYear": 2002,
+    "number": 4
+  },
+  {
+    "name": "Malik Parsons",
+    "team": "Slask Wroclaw",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1999,
+    "number": 3
+  },
+  {
+    "name": "Tymoteusz Sternicki",
+    "team": "Slask Wroclaw",
+    "nationality": "Poland",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 2006,
+    "number": 22
+  },
+  {
+    "name": "Bryce Jones",
+    "team": "Tofas",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1994,
+    "number": 32
+  },
+  {
+    "name": "Efe Postel",
+    "team": "Tofas",
+    "nationality": "Turkey",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 2006,
+    "number": 22
+  },
+  {
+    "name": "Gabriel Brown",
+    "team": "Tofas",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2000,
+    "number": 44
+  },
+  {
+    "name": "Jamuni McNeace",
+    "team": "Tofas",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1996,
+    "number": 8
+  },
+  {
+    "name": "Leon Apaydin",
+    "team": "Tofas",
+    "nationality": "Turkey",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1999,
+    "number": 55
+  },
+  {
+    "name": "Sadik Kabaca",
+    "team": "Tofas",
+    "nationality": "Turkey",
+    "position": "Forward",
+    "height": 208,
+    "birthYear": 2000,
+    "number": 6
+  },
+  {
+    "name": "Shavar Reynolds Jr.",
+    "team": "Tofas",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1998,
+    "number": 33
+  },
+  {
+    "name": "Terrell Carter II",
+    "team": "Tofas",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1996,
+    "number": 5
+  },
+  {
+    "name": "Tre'Shawn Thurman",
+    "team": "Tofas",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1995,
+    "number": 15
+  },
+  {
+    "name": "Yigitcan Saybir",
+    "team": "Tofas",
+    "nationality": "Turkey",
+    "position": "Forward",
+    "height": 204,
+    "birthYear": 1999,
+    "number": 3
+  },
+  {
+    "name": "Zach Nutall",
+    "team": "Tofas",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1999,
+    "number": 10
+  },
+  {
     "name": "Alessandro Bertini",
     "team": "Trento",
     "nationality": "Italy",
@@ -2969,6 +3500,87 @@ window.EUROCUP_PLAYERS = [
     "number": 10
   },
   {
+    "name": "Anthony Lamb",
+    "team": "Turk Telekom",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1998,
+    "number": 22
+  },
+  {
+    "name": "Ata Kahraman",
+    "team": "Turk Telekom",
+    "nationality": "Turkey",
+    "position": "Guard",
+    "height": 195,
+    "birthYear": 1999,
+    "number": 6
+  },
+  {
+    "name": "Dogus Ozdemiroglu",
+    "team": "Turk Telekom",
+    "nationality": "Turkey",
+    "position": "Guard",
+    "height": 194,
+    "birthYear": 1996,
+    "number": 18
+  },
+  {
+    "name": "Emircan Kosut",
+    "team": "Turk Telekom",
+    "nationality": "Turkey",
+    "position": "Center",
+    "height": 216,
+    "birthYear": 1995,
+    "number": 9
+  },
+  {
+    "name": "Goktug Bas",
+    "team": "Turk Telekom",
+    "nationality": "Turkey",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2001,
+    "number": 57
+  },
+  {
+    "name": "Ismael Bako",
+    "team": "Turk Telekom",
+    "nationality": "Belgium",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1995,
+    "number": 28
+  },
+  {
+    "name": "Jerrick Harding",
+    "team": "Turk Telekom",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 1998,
+    "number": 7
+  },
+  {
+    "name": "Kris Bankston",
+    "team": "Turk Telekom",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 205,
+    "birthYear": 1999,
+    "number": 30
+  },
+  {
+    "name": "Mete Tekcevik",
+    "team": "Turk Telekom",
+    "nationality": "Turkey",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 2001,
+    "number": 55
+  },
+  {
     "name": "Shaquielle McKissic",
     "team": "Turk Telekom",
     "nationality": "USA",
@@ -2976,5 +3588,32 @@ window.EUROCUP_PLAYERS = [
     "height": 196,
     "birthYear": 1990,
     "number": 77
+  },
+  {
+    "name": "Tim Schneider",
+    "team": "Turk Telekom",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 208,
+    "birthYear": 1997,
+    "number": 3
+  },
+  {
+    "name": "Tony Taylor",
+    "team": "Turk Telekom",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 1990,
+    "number": 21
+  },
+  {
+    "name": "Uros Trifunovic",
+    "team": "Turk Telekom",
+    "nationality": "Serbia",
+    "position": "Forward",
+    "height": 200,
+    "birthYear": 2000,
+    "number": 10
   }
 ];
