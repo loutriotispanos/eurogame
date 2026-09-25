@@ -2467,6 +2467,17 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   }
 })();
 
+// --- AdSense: ownership is verified with ads.txt only, no ad script -----------
+(function () {
+  var fs2 = require("fs");
+  var adsTxt = fs2.readFileSync(__dirname + "/ads.txt", "utf8").trim();
+  ok(adsTxt === "google.com, pub-3074975180118677, DIRECT, f08c47fec0942fa0",
+     "ads.txt declares the AdSense publisher (google.com, pub-…, DIRECT, Google's TAG id)");
+  var html = fs2.readFileSync(__dirname + "/index.html", "utf8");
+  ok(html.indexOf("adsbygoogle") === -1 && html.indexOf("googlesyndication") === -1,
+     "…and no ad script is on the page yet: the 'No ads' promise still holds until ads are switched on");
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};
