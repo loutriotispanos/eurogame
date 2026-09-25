@@ -2296,7 +2296,7 @@ window.EUROCUP_PLAYERS = [
   {
     "name": "Nick Calathes",
     "team": "PAOK",
-    "nationality": "USA",
+    "nationality": "Greece",
     "position": "Guard",
     "height": 198,
     "birthYear": 1989,
