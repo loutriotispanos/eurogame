@@ -93,6 +93,9 @@ window.EUROCUP_TEAMS = {
   },
   "Tofas": {
     "country": "Turkey"
+  },
+  "Turk Telekom": {
+    "country": "Turkey"
   }
 };
 
@@ -276,5 +279,14 @@ window.EUROCUP_PLAYERS = [
     "height": 188,
     "birthYear": 2001,
     "number": 1
+  },
+  {
+    "name": "Shaquielle McKissic",
+    "team": "Turk Telekom",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 1990,
+    "number": 77
   }
 ];

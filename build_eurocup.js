@@ -59,7 +59,8 @@ const TEAMS = {
   "Siauliai": { country: "Lithuania" },
   "Skyliners Frankfurt": { country: "Germany" },
   "Slask Wroclaw": { country: "Poland" },
-  "Tofas": { country: "Turkey" }
+  "Tofas": { country: "Turkey" },
+  "Turk Telekom": { country: "Turkey" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -95,7 +96,9 @@ const PLAYERS = [
   // Ratiopharm Ulm
   { name: "Armel Traore", team: "Ratiopharm Ulm", number: 94 },
   // Roma Basketball
-  { name: "Nico Mannion", team: "Roma Basketball", number: 1 }
+  { name: "Nico Mannion", team: "Roma Basketball", number: 1 },
+  // Turk Telekom
+  { name: "Shaquielle McKissic", team: "Turk Telekom", number: 77 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -520,7 +523,22 @@ const PENDING = [
   { name: "Leon Apaydin", team: "Tofas", position: "Forward", number: 55 },
   { name: "Terrell Carter II", team: "Tofas", position: "Center", number: 5 },
   { name: "Jamuni McNeace", team: "Tofas", position: "Center", number: 8 },
-  { name: "Emirhan Serbest", team: "Tofas", position: "Center", number: 24 }
+  { name: "Emirhan Serbest", team: "Tofas", position: "Center", number: 24 },
+  // Turk Telekom
+  { name: "Ata Kahraman", team: "Turk Telekom", position: "Guard", number: 6 },
+  { name: "Jerrick Harding", team: "Turk Telekom", position: "Guard", number: 7 },
+  { name: "Dogus Ozdemiroglu", team: "Turk Telekom", position: "Guard", number: 18 },
+  { name: "Tony Taylor", team: "Turk Telekom", position: "Guard", number: 21 },
+  { name: "Mete Tekcevik", team: "Turk Telekom", position: "Guard", number: 55 },
+  { name: "Anil Alyanak", team: "Turk Telekom", position: "Forward", number: 0 },
+  { name: "Tim Schneider", team: "Turk Telekom", position: "Forward", number: 3 },
+  { name: "Omer Can", team: "Turk Telekom", position: "Forward", number: 8 },
+  { name: "Uros Trifunovic", team: "Turk Telekom", position: "Forward", number: 10 },
+  { name: "Anthony Lamb", team: "Turk Telekom", position: "Forward", number: 22 },
+  { name: "Goktug Bas", team: "Turk Telekom", position: "Forward", number: 57 },
+  { name: "Emircan Kosut", team: "Turk Telekom", position: "Center", number: 9 },
+  { name: "Ismael Bako", team: "Turk Telekom", position: "Center", number: 28 },
+  { name: "Kris Bankston", team: "Turk Telekom", position: "Center", number: 30 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
