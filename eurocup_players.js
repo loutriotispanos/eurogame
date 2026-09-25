@@ -4,7 +4,7 @@
  * a coming-soon page.
  */
 
-window.EUROCUP_OPEN = false;
+window.EUROCUP_OPEN = true;
 
 window.EUROCUP_TEAMS = {
   "Aris Thessaloniki": {

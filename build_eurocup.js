@@ -24,10 +24,10 @@ const fs = require("fs");
 
 const SEASON = "2026-27";
 
-// Flip to true once every club is in and researched. Until then the EuroCup
-// stays the coming-soon page even though this file already has players, so a
-// half-built roster can never go live.
-const OPEN = false;
+// Every club is in and researched (2026-09-25), so the EuroCup is open. Set it
+// back to false to return to the coming-soon page, e.g. while next season's
+// rosters are being rebuilt, so a half-built roster can never go live.
+const OPEN = true;
 
 // club name → { country }
 const TEAMS = {

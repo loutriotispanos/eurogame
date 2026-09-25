@@ -2446,6 +2446,24 @@ fire(byId("oo-daily"), "click");
 ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way home from an archive replay");
 
 
+// --- The EuroCup database ------------------------------------------------------
+(function () {
+  var EC = window.EUROCUP_PLAYERS || [], clubs = {};
+  EC.forEach(function (p) { clubs[p.team] = 1; });
+  var names = Object.keys(clubs);
+  if (window.EUROCUP_OPEN) {
+    ok(names.length === Object.keys(window.EUROCUP_TEAMS).length && names.length >= 30 && EC.length > 300,
+       "the open EuroCup has every club filled (" + names.length + " clubs, " + EC.length + " players)");
+    ok(EC.every(function (p) { return p.birthYear < 2007; }), "…and no one born 2007 or later (the no-young-players rule)");
+    var rm = require("fs").readFileSync(__dirname + "/rostermaster.js", "utf8");
+    var noBadge = names.filter(function (t) { return rm.indexOf('"' + t + '":') === -1; });
+    ok(noBadge.length === 0, "…and every EuroCup club has its own Roster Master badge" + (noBadge.length ? " (missing: " + noBadge.join(", ") + ")" : ""));
+    var html = require("fs").readFileSync(__dirname + "/index.html", "utf8");
+    ok((html.match(/class="comp-text" data-ec="/g) || []).length >= 7 && /<li data-ec-hide><strong>Non-active<\/strong>/.test(html),
+       "…and the EuroCup's own words are in the page: taglines, rules, footer (and no Non-active rule)");
+  }
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};

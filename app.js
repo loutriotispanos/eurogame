@@ -118,8 +118,26 @@
     setStatsBar(!statsChoice());          // ask only until there is an answer
   }
 
+  // Words that belong to one competition. The page ships the EuroLeague's; in
+  // EuroCup mode each .comp-text takes its data-ec version ({n} = players,
+  // {c} = clubs, counted from the data) and [data-ec-hide] (the Non-active rule —
+  // the EuroCup has no non-active pool) goes away.
+  function applyCompText() {
+    if (comp().id !== "eurocup") return;
+    var P = window.PLAYERS || [], clubs = {};
+    P.forEach(function (p) { clubs[p.team] = 1; });
+    var nc = Object.keys(clubs).length;
+    var texts = document.querySelectorAll(".comp-text");
+    for (var i = 0; i < texts.length; i++) {
+      texts[i].textContent = String(texts[i].getAttribute("data-ec") || "").replace(/\{n\}/g, P.length).replace(/\{c\}/g, nc);
+    }
+    var hide = document.querySelectorAll("[data-ec-hide]");
+    for (var j = 0; j < hide.length; j++) hide[j].hidden = true;
+  }
+
   function wireCompetition() {
     renderCompMenu();
+    applyCompText();
     COMP_SWITCHES.forEach(function (p) {
       var btn = $(p[0]), menu = $(p[1]);
       if (!btn || !menu) return;
@@ -870,7 +888,7 @@
     _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
     _copyAddress: copyAddress, _showView: showView, _pushNav: pushNav, _urlFor: urlFor,
     _chooseStats: chooseStats, _wireStats: wireStats, _statsChoice: statsChoice,
-    _goComp: goComp, _renderCompMenu: renderCompMenu, _curView: function () { return curView; },
+    _applyCompText: applyCompText, _goComp: goComp, _renderCompMenu: renderCompMenu, _curView: function () { return curView; },
     _isMode: isMode, _pageTitle: pageTitle, _modes: MODES,
     _slugs: SLUGS, _siteRoot: siteRoot, _titles: TITLES, _canon: CANON, _linkedGame: linkedGame,
     // The built title is captured once, at load. The harness needs to restate it
