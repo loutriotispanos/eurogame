@@ -48,7 +48,8 @@ const TEAMS = {
   "London Lions": { country: "United Kingdom" },
   "Maxima Roma": { country: "Italy" },
   "Napoli Basketball": { country: "Italy" },
-  "Neptunas": { country: "Lithuania" }
+  "Neptunas": { country: "Lithuania" },
+  "Niners Chemnitz": { country: "Germany" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -335,7 +336,23 @@ const PENDING = [
   { name: "Einaras Tubutis", team: "Neptunas", position: "Forward", number: 37 },
   { name: "Lukas Kreismontas", team: "Neptunas", position: "Forward", number: 88 },
   { name: "Martynas Echodas", team: "Neptunas", position: "Center", number: 14 },
-  { name: "Raymond Somerville", team: "Neptunas", position: "Center", number: 17 }
+  { name: "Raymond Somerville", team: "Neptunas", position: "Center", number: 17 },
+  // Niners Chemnitz
+  { name: "Phlandrous Fleming Jr.", team: "Niners Chemnitz", position: "Guard", number: 1 },
+  { name: "Stefan Smith", team: "Niners Chemnitz", position: "Guard", number: 2 },
+  { name: "Yohan Choupas", team: "Niners Chemnitz", position: "Guard", number: 6 },
+  { name: "Luca Kellig", team: "Niners Chemnitz", position: "Guard", number: 13 },
+  { name: "Cobe Williams", team: "Niners Chemnitz", position: "Guard", number: 24 },
+  { name: "Elias Roedl", team: "Niners Chemnitz", position: "Forward", number: 11 },
+  { name: "Alfons Milatz", team: "Niners Chemnitz", position: "Forward", number: 19 },
+  { name: "Urald King", team: "Niners Chemnitz", position: "Forward", number: 20 },
+  { name: "Mateo Seric", team: "Niners Chemnitz", position: "Forward", number: 21 },
+  { name: "Ben Burnham", team: "Niners Chemnitz", position: "Forward", number: 25 },
+  { name: "Jannis von Seckendorff", team: "Niners Chemnitz", position: "Forward", number: 90 },
+  { name: "Alexander Richardson", team: "Niners Chemnitz", position: "Center", number: 9 },
+  { name: "Darion Atkins", team: "Niners Chemnitz", position: "Center", number: 17 },
+  { name: "Nighael Ceaser", team: "Niners Chemnitz", position: "Center", number: 22 },
+  { name: "Anton Bock", team: "Niners Chemnitz", position: "Center", number: 27 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

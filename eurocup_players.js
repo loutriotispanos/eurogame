@@ -60,6 +60,9 @@ window.EUROCUP_TEAMS = {
   },
   "Neptunas": {
     "country": "Lithuania"
+  },
+  "Niners Chemnitz": {
+    "country": "Germany"
   }
 };
 
