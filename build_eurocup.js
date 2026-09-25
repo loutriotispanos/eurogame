@@ -47,7 +47,8 @@ const TEAMS = {
   "Lietkabelis": { country: "Lithuania" },
   "London Lions": { country: "United Kingdom" },
   "Maxima Roma": { country: "Italy" },
-  "Napoli Basketball": { country: "Italy" }
+  "Napoli Basketball": { country: "Italy" },
+  "Neptunas": { country: "Lithuania" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -320,7 +321,21 @@ const PENDING = [
   { name: "Assane Sankare", team: "Napoli Basketball", position: "Center", number: 12 },
   { name: "Kaleb Tarczewski", team: "Napoli Basketball", position: "Center", number: 25 },
   { name: "Guglielmo Caruso", team: "Napoli Basketball", position: "Center", number: 30 },
-  { name: "Leonardo Tote", team: "Napoli Basketball", position: "Center", number: 35 }
+  { name: "Leonardo Tote", team: "Napoli Basketball", position: "Center", number: 35 },
+  // Neptunas
+  { name: "Yannick Franke", team: "Neptunas", position: "Guard", number: 5 },
+  { name: "Simas Sarakauskas", team: "Neptunas", position: "Guard", number: 7 },
+  { name: "Mindaugas Girdziunas", team: "Neptunas", position: "Guard", number: 8 },
+  { name: "Elvar Fridriksson", team: "Neptunas", position: "Guard", number: 10 },
+  { name: "Rytis Sakaitis", team: "Neptunas", position: "Guard", number: 12 },
+  { name: "Kristupas Zemaitis", team: "Neptunas", position: "Guard", number: 13 },
+  { name: "Henri Drell", team: "Neptunas", position: "Forward", number: 0 },
+  { name: "Donatas Tarolis", team: "Neptunas", position: "Forward", number: 1 },
+  { name: "Arnas Berucka", team: "Neptunas", position: "Forward", number: 21 },
+  { name: "Einaras Tubutis", team: "Neptunas", position: "Forward", number: 37 },
+  { name: "Lukas Kreismontas", team: "Neptunas", position: "Forward", number: 88 },
+  { name: "Martynas Echodas", team: "Neptunas", position: "Center", number: 14 },
+  { name: "Raymond Somerville", team: "Neptunas", position: "Center", number: 17 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

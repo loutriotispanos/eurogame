@@ -57,6 +57,9 @@ window.EUROCUP_TEAMS = {
   },
   "Napoli Basketball": {
     "country": "Italy"
+  },
+  "Neptunas": {
+    "country": "Lithuania"
   }
 };
 
