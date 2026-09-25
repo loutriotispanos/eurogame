@@ -3,13 +3,14 @@
      transform in build_pages.js and re-run `node build_pages.js`. -->
 <html lang="en">
 <head>
+<script>window.__ELG_COMP__ = "euroleague";</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <link rel="manifest" href="../manifest.webmanifest" />
 <meta name="theme-color" content="#f7f3ea" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <!-- Night mode: set the saved (or OS-preferred) theme BEFORE first paint to avoid a flash. -->
-<script>(function(){try{var t=localStorage.getItem("elg:theme");if(t)t=JSON.parse(t);if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);var c=localStorage.getItem("elg:comp");if(c&&JSON.parse(c)==="eurocup")document.documentElement.setAttribute("data-comp","eurocup");}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem("elg:theme");if(t)t=JSON.parse(t);if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);var c=window.__ELG_COMP__?JSON.stringify(window.__ELG_COMP__):localStorage.getItem("elg:comp");if(c&&JSON.parse(c)==="eurocup")document.documentElement.setAttribute("data-comp","eurocup");}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Euroball" />
 <link rel="apple-touch-icon" href="../icon-192.png" />
@@ -1542,7 +1543,7 @@
       <a class="game-card" href="../mystery-player/" data-game="mystery">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-mystery"/></svg></span>
         <span class="gc-text"><span class="gc-title">Mystery Player</span>
-          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — Daily, Practice, Non-active &amp; Endless.</span></span>
+          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — <span class="comp-text" data-ec="Daily, Practice &amp; Endless.">Daily, Practice, Non-active &amp; Endless.</span></span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="../player-id/" data-game="playerid">
@@ -2255,6 +2256,7 @@
   <footer>
     Rosters are current to the <strong>2026–27 <span class="comp-text" data-ec="EuroCup">EuroLeague</span> season</strong>, checked club by club at the season start; transfers since then are not reflected.<br />
     <span class="comp-text" data-ec="{n} players · {c} clubs · compiled from the official EuroCup rosters, FIBA and Wikipedia.">294 players · 20 clubs · 318 non-active players · compiled from official club rosters, Wikipedia, FIBA and Proballers.</span><br />
+    Play the <a class="colophon-link comp-link" href="../?comp=euroleague">EuroLeague games</a> · the <a class="colophon-link comp-link" href="../eurocup/">EuroCup games</a><br />
     Published for the love of European basketball · No ads, no account · Reads offline<br />
     Anonymous page counts (Cloudflare Web Analytics, cookie-free) · Google Analytics only if you allow it
     · <a id="stats-link" class="colophon-link" rel="nofollow">Stats settings</a>

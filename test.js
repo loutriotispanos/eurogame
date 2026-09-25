@@ -193,6 +193,16 @@ if (EC) {
   store["elg:comp"] = JSON.stringify("eurocup"); win.location.hash = "";
   window.Hub._showView("connections");
   ok(window.Hub._curView() === "home", "EC: a link to a game the EuroCup doesn't offer lands on the hub");
+  ok(window.Hub._urlFor("thegrid") === "/eurocup/the-grid/" && window.Hub._urlFor("home") === "/eurocup/"
+     && window.Hub._urlFor("thegrid", "practice") === "/eurocup/the-grid/?mode=practice",
+     "EC: a game's address, and the hub's, sit under /eurocup/");
+  window.Hub._showView("pathbetween");
+  ok(doc.getElementById("canonical").href === "https://euroballgames.com/eurocup/path-between/", "EC: …and so does the canonical");
+  var BPe = require("./build_pages.js");
+  var offered = ["mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"]
+    .filter(function (g) { return C.plays(g); });
+  ok(BPe.EC_PAGES.map(function (p) { return p.view; }).sort().join() === offered.sort().join(),
+     "EC: there is a EuroCup page for exactly the games the EuroCup plays");
   window.Hub._showView("records");
   ok(window.Hub._curView() === "records", "EC: Records still opens");
   ok(window.Records._collect().dailies.map(function (d) { return d.id; }).join() === "mystery,playerid,careerorder,thegrid,pathbetween,higherlower", "EC: Records lists only the EuroCup's dailies");
@@ -201,7 +211,8 @@ if (EC) {
   window.Hub._renderCompMenu();
   ok(doc.getElementById("comp-name").textContent === "EuroCup", "EC: the hub's switcher reads EuroCup");
   window.Hub._goComp("euroleague");
-  ok(JSON.parse(store["elg:comp"]) === "euroleague" && /\/$/.test(String(win.location.href)), "EC: choosing the EuroLeague saves it and reloads the hub");
+  ok(JSON.parse(store["elg:comp"]) === "euroleague" && /\/$/.test(String(win.location.href)) && !/eurocup\/$/.test(String(win.location.href)),
+     "EC: choosing the EuroLeague saves it and reloads the site hub, not the EuroCup's");
   console.log("\n" + pass + " passed, " + fail + " failed");
   process.exit(fail ? 1 : 0);
 }
@@ -2044,7 +2055,8 @@ win.location.hash = chHash;
 // that don't open anything.
 var smXML = fs.readFileSync("sitemap.xml", "utf8");
 var smSlugs = (smXML.match(/<loc>https:\/\/euroballgames\.com\/([a-z0-9-]+)\/<\/loc>/g) || [])
-  .map(function (s) { return s.replace(/^<loc>https:\/\/euroballgames\.com\//, "").replace(/\/<\/loc>$/, ""); });
+  .map(function (s) { return s.replace(/^<loc>https:\/\/euroballgames\.com\//, "").replace(/\/<\/loc>$/, ""); })
+  .filter(function (s) { return s !== "eurocup"; });   // the EuroCup hub — its pages are checked below
 var appGames = ["mystery", "playerid", "completefive", "connections", "careerorder", "thegrid",
                 "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"];
 var appSlugs = appGames.map(function (g) { return window.Hub._slugs[g]; });
@@ -2145,9 +2157,59 @@ ok(fbHTML.indexOf('<button class="game-card"') === -1, "no tile is left as a but
 // fact is written down.
 var swJS = fs.readFileSync("sw.js", "utf8");
 var swPages = ((swJS.match(/var PAGES = \[([\s\S]*?)\];/) || [])[1] || "").match(/"([a-z0-9-]+)\/"/g) || [];
-swPages = swPages.map(function (s) { return s.replace(/[",\/]/g, ""); });
+swPages = swPages.map(function (s) { return s.replace(/[",\/]/g, ""); }).filter(function (s) { return s !== "eurocup"; });
 ok(swPages.length === appGames.length && appGames.every(function (g) { return swPages.indexOf(window.Hub._slugs[g]) >= 0; }),
    "the service worker precaches every generated page, so an offline reload lands back on the same game");
+
+console.log("The EuroCup's own pages — a hub and one page per game it plays");
+(function () {
+  var ecAll = [BP.EC_HUB].concat(BP.EC_PAGES);
+  var ecLocs = (smXML.match(/<loc>https:\/\/euroballgames\.com\/eurocup\/[^<]*<\/loc>/g) || [])
+    .map(function (l) { return l.replace(/^<loc>https:\/\/euroballgames\.com\//, "").replace(/<\/loc>$/, ""); });
+  ok(ecLocs.length === ecAll.length && ecAll.every(function (p) { return ecLocs.indexOf(BP.pagePath(p)) >= 0; }),
+     "the sitemap lists the EuroCup hub and each EuroCup game page, and no other /eurocup/ address");
+  var swList = ((swJS.match(/var PAGES = \[([\s\S]*?)\];/) || [])[1] || "");
+  ok(ecAll.every(function (p) { return swList.indexOf('"' + BP.pagePath(p) + '"') >= 0; }),
+     "…and the service worker precaches every one of them");
+  ok(BP.EC_PAGES.every(function (p) { return window.Hub._slugs[p.view] === p.slug; }),
+     "a EuroCup page lives at the same slug as its EuroLeague twin, under /eurocup/");
+  var bad = [], elTitles = {};
+  BP.PAGES.forEach(function (p) { elTitles[p.title] = 1; elTitles[p.desc] = 1; });
+  ecAll.forEach(function (p) {
+    var rel = BP.pagePath(p), f = rel + "index.html", hub = p.view === "home";
+    if (!fs.existsSync(f)) { bad.push(rel + ":missing"); return; }
+    var h = fs.readFileSync(f, "utf8");
+    if (h.replace(/\r\n/g, "\n") !== BP.buildPage(bpShell, p).replace(/\r\n/g, "\n")) bad.push(rel + ":drift");
+    if (h.indexOf('<link id="canonical" rel="canonical" href="https://euroballgames.com/' + rel + '" />') === -1) bad.push(rel + ":canonical");
+    if (!/^<!DOCTYPE html>[\s\S]*?<head>\n<script>window\.__ELG_COMP__ = "eurocup";<\/script>/.test(h)) bad.push(rel + ":comp");
+    if (h.indexOf('window.__ELG_ROOT__ = "' + (hub ? "../" : "../../") + '"') === -1) bad.push(rel + ":root");
+    if (!hub && h.indexOf('window.__ELG_VIEW__ = "' + p.view + '"') === -1) bad.push(rel + ":view");
+    if (/<script src="(?!\.\.\/)/.test(h) || (!hub && /<script src="\.\.\/[a-z]/.test(h))) bad.push(rel + ":scripts");
+    var tiles = (h.match(/<a class="game-card" href="[^"]*" data-game="([a-z]+)"/g) || []).map(function (t) { return t.replace(/^.*data-game="|"$/g, ""); });
+    if (tiles.sort().join() !== BP.EC_PAGES.map(function (g) { return g.view; }).sort().join()) bad.push(rel + ":tiles");
+    if ((h.match(/<a class="game-card" href="([^"]*)"/g) || []).some(function (t) { return t.indexOf(hub ? 'href="../' : 'href="../../') >= 0; })) bad.push(rel + ":tilehref");
+    if (h.indexOf(">2026–27 <span class=\"comp-text\" data-ec=\"EuroCup\">EuroCup</span> season") === -1) bad.push(rel + ":words");
+    if (elTitles[p.title] || elTitles[p.desc]) bad.push(rel + ":dupe");
+    var faqs = -1;
+    (h.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g) || []).forEach(function (b) {
+      try { var o = JSON.parse(b.replace(/^<script[^>]*>/, "").replace(/<\/script>$/, "")); if (o["@type"] === "FAQPage") faqs = o.mainEntity.length; }
+      catch (e) { bad.push(rel + ":ld"); }
+    });
+    if (!hub && faqs < 3) bad.push(rel + ":faq");
+    if (hub !== (h.indexOf('<section class="seo-copy"') === -1)) bad.push(rel + ":copy");
+  });
+  ok(bad.length === 0, "each EuroCup page exists, is current, canonicalises to itself under /eurocup/, declares the EuroCup before anything runs, "
+     + "reaches the root from its depth, shows only the EuroCup's tiles, already says EuroCup, and has its own title and FAQ" + (bad.length ? " — " + bad.join(", ") : ""));
+  var elBad = BP.PAGES.filter(function (p) {
+    return !/<head>\n<script>window\.__ELG_COMP__ = "euroleague";<\/script>/.test(fs.readFileSync(p.slug + "/index.html", "utf8"));
+  });
+  ok(elBad.length === 0, "each EuroLeague game page declares the EuroLeague, so its address and its content always agree");
+  ok(!/__ELG_COMP__ =/.test(bpShell), "…while the site hub declares nothing: it plays whichever competition the visitor last chose");
+  ok(/<a class="colophon-link comp-link" href="eurocup\/">/.test(bpShell) && /<a class="colophon-link comp-link" href="\?comp=euroleague">/.test(bpShell),
+     "the footer links both competitions, so a crawler walking from the hub finds the EuroCup pages");
+  ok(window.Hub._urlFor("thegrid") === "/the-grid/" && window.Hub._ecDir === "eurocup/",
+     "in the EuroLeague a game's address has no competition prefix");
+})();
 
 // Old links must never break. They are in the sitemap Google already crawled.
 win.__ELG_VIEW__ = undefined;

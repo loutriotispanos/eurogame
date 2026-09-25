@@ -252,6 +252,159 @@ var PAGES = [
 ];
 
 /* ---------------------------------------------------------------------------
+ * THE EUROCUP'S COPY.
+ *
+ * The EuroCup plays seven of the games on its own players, so it gets its own
+ * pages: a hub at /eurocup/ and one page per game at /eurocup/<slug>/, same
+ * slugs as the EuroLeague's. Each declares its competition in its <head>
+ * (window.__ELG_COMP__), so a visitor arriving from a search plays the EuroCup
+ * with nothing stored. Written separately rather than templated off the
+ * EuroLeague copy: the numbers, the modes and the pools all differ, and a page
+ * that half-describes the other competition is worse than no page.
+ * ------------------------------------------------------------------------- */
+var EC_DIR = "eurocup";
+var EC_HUB = {
+  view: "home", name: "EuroCup",
+  title: "EuroCup games — daily EuroCup basketball puzzles | Euroball",
+  desc: "Seven free daily puzzle games about the 2026–27 EuroCup: guess the mystery player, name him from his career path, fill the grid, link two players through their teammates, and more. 32 clubs, 391 players.",
+  ogTitle: "Euroball 🏀 EuroCup"
+};
+var EC_PAGES = [
+  {
+    view: "mystery", slug: "mystery-player", name: "Mystery Player",
+    title: "Mystery Player — the daily EuroCup Wordle | Euroball",
+    desc: "Guess the mystery EuroCup player in 8 tries. Every guess colour-codes club, nationality, position, height, age and jersey number. A new player from the 2026–27 EuroCup daily — free, no sign-up.",
+    h1: "Mystery Player — the daily EuroCup Wordle",
+    intro: "A Wordle for the EuroCup. One hidden player from the 2026–27 EuroCup, eight tries, and a grid that tells you a little more each time. Guess a name and six columns light up at once: club, nationality, position, height, age and shirt number. Thirty-two clubs across Europe make the club and country columns work harder than they do in the EuroLeague.",
+    how: [
+      "Type any EuroCup player's name and pick him from the list. The row fills in immediately.",
+      "Green means an exact match. Yellow means close — a club in the same country, a height within 5&nbsp;cm, an age within 2 years, a number within 3. Grey means no match at all.",
+      "On height, age and number an arrow points the way: ↑ says the answer is higher than your guess, ↓ says lower.",
+      "You have eight guesses. Solve it and your hub streak survives another day."
+    ],
+    faq: [
+      ["Which players can be the answer?", "Anyone on a 2026–27 EuroCup roster: 391 players across 32 clubs, researched club by club from the official rosters. Nationality is the national team a player has played for."],
+      ["What does a yellow square mean?", "Close, but the meaning depends on the column. On club it means a different club in the same country — Trento for Reyer Venezia, say. On height it means within 5&nbsp;cm, on age within 2 years, and on shirt number within 3."],
+      ["Is it separate from the EuroLeague Mystery Player?", "Yes. The EuroCup keeps its own daily, its own stats and its own streaks, so playing one competition never touches the other. Switch between them from the competition menu at the top of the hub."],
+      ["Is there a new one every day?", "Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice and Endless are unlimited if you want to keep going."]
+    ]
+  },
+  {
+    view: "playerid", slug: "player-id", name: "Player ID",
+    title: "Player ID — guess the EuroCup player from his career path | Euroball",
+    desc: "A EuroCup player's whole career laid out club by club, with the years. Name him in two guesses. A daily puzzle plus unlimited practice across the 2026–27 EuroCup rosters.",
+    h1: "Player ID — name the EuroCup player from his career path",
+    intro: "Every club he has played for, in order, with the years he was there — and nothing else. No stats, no photo, no nationality. The last stop is always his 2026–27 EuroCup club; everything before it is the route that got him there. Two guesses to say whose career you are looking at.",
+    how: [
+      "Read the path from his first club to his current one. The countries, the leagues and the length of each stop tell you most of what you need.",
+      "Start typing and pick a name from the list. The list gives names only — no club hints, which would give the game away.",
+      "You get two guesses. A near-miss costs the same as a wild one, so read the whole path before committing."
+    ],
+    faq: [
+      ["How many careers are in the game?", "350 of the EuroCup's 391 players have a full career timeline, built from the official EuroCup player biographies. The Daily sticks to careers of four clubs or more so the route tells a story."],
+      ["Do NBA years show up in the path?", "Yes. Sixty-one EuroCup careers pass through the NBA, and those stints appear in the timeline like any other club. College, G League and third-division stops are left out."],
+      ["Why is there no Non-active mode?", "Because every EuroCup puzzle is a current player. The EuroLeague version adds retired and non-active players; the EuroCup plays on this season's rosters only."],
+      ["Why only two guesses?", "Because the career path is a very strong clue once you read it properly. Two guesses keeps it a test of recognition rather than a process of elimination."]
+    ]
+  },
+  {
+    view: "careerorder", slug: "career-order", name: "Career Order",
+    title: "Career Order — put a EuroCup career back in order | Euroball",
+    desc: "A EuroCup player's clubs, shuffled. Drag them back into the order he played for them, earliest to latest, in three checks. Daily puzzle plus Easy, Medium and Hard.",
+    h1: "Career Order — put the EuroCup career back in order",
+    intro: "You are given a EuroCup player and every club he has played for, scrambled. Put them back into the order he actually played for them, earliest at the top, latest at the bottom. The years stay hidden until you are done, so there is nothing to read off — only what you know about how the career went.",
+    how: [
+      "Drag a club by its ≡ handle, or move it with the ▲ / ▼ buttons if you would rather not drag.",
+      "Hit Check order. Clubs in the right spot lock green and stay green until you move them yourself.",
+      "You get three checks. Solve it before they run out or the answer is revealed.",
+      "Easy, Medium and Hard are simply shorter and longer careers — more clubs means more ways to be wrong."
+    ],
+    faq: [
+      ["How many careers can appear?", "226 EuroCup careers are long enough, with three or more different clubs, to make a fair ordering puzzle."],
+      ["Is the last club always his EuroCup club?", "Yes — the 2026–27 club is always the latest stop, which is a free anchor. The work is everything before it."],
+      ["How do I play without dragging?", "Every club has ▲ and ▼ buttons beside it that move it one place. The whole puzzle is solvable with those alone, which also makes it keyboard- and screen-reader-friendly."],
+      ["Do NBA years count as separate stops?", "Yes. Anything recorded as a distinct stint in the career database appears as its own club, in the order it happened."]
+    ]
+  },
+  {
+    view: "thegrid", slug: "the-grid", name: "The Grid",
+    title: "The Grid — the daily EuroCup basketball grid game | Euroball",
+    desc: "A 3×3 grid of clubs, nationalities and positions for the EuroCup. Name a EuroCup player who fits both the row and the column in every cell, with twelve guesses for nine cells. New grid daily.",
+    h1: "The Grid — nine cells, twelve guesses, EuroCup players only",
+    intro: "Three rows, three columns, and nine cells where they cross. Each cell wants one 2026–27 EuroCup player who satisfies both sides at once — played for Olympiacos and is American, say. The headers can be EuroCup clubs or EuroLeague ones, because EuroCup careers run through both. Twelve guesses for nine cells, no player twice.",
+    how: [
+      "Tap a cell, then name any EuroCup player who fits its row and its column together.",
+      "Twelve guesses cover nine cells, so you can afford three misses. Right or wrong, every guess costs one.",
+      "A player counts for a club if it appears anywhere in his career — short stints and NBA spells included.",
+      "Each player can be used only once on the board, so spend your flexible names carefully. Every cell has at least two right answers."
+    ],
+    faq: [
+      ["Who counts as an answer?", "Any of the 350 EuroCup players whose full career is in the database. A player without a recorded career is not accepted even if he fits, which keeps every name the game offers accurately checkable."],
+      ["Why are there EuroLeague clubs on a EuroCup grid?", "Because that is where many EuroCup careers have been. Olympiacos, Partizan or Fenerbahce in a header asks who in this season's EuroCup once played there."],
+      ["How many grids are there?", "43 EuroCup boards, each verified to have enough answers per cell and a way to fill all nine cells with nine different players."],
+      ["Is it separate from the EuroLeague Grid?", "Yes: different boards, its own daily and its own streak. Switch competitions from the menu at the top of the hub."]
+    ]
+  },
+  {
+    view: "pathbetween", slug: "path-between", name: "Path Between",
+    title: "Path Between — link two EuroCup players through teammates | Euroball",
+    desc: "Six degrees of the EuroCup. Connect two EuroCup players through men who were actually teammates — same club, overlapping seasons — inside a budget of par plus three. New pair daily.",
+    h1: "Path Between — six degrees of the EuroCup",
+    intro: "Two EuroCup players at either end and a chain to build between them. Every name you add must be another EuroCup player who was a real teammate of the one before — the same club in the same seasons. Par is the shortest chain that exists; you get par plus three guesses, and every guess costs one whether it lands or not.",
+    how: [
+      "The career lines under your current player and the target are the map. Find where two paths crossed in the same years.",
+      "This season's teammates count: two players on the same EuroCup roster are linked. So do old teammates from anywhere in their careers, NBA included.",
+      "Each player can appear in the chain only once, so it is possible to route yourself into a corner. A dead end loses the round.",
+      "Names suggest themselves as you type, and the list never marks which of them actually links."
+    ],
+    faq: [
+      ["What exactly counts as a teammate?", "A shared club with overlapping stint years, judged on the EuroCup players' careers. Two players who wore the same shirt in different seasons are not teammates here."],
+      ["How many puzzles are there?", "170 EuroCup pairs: 50 Easy (one player in between), 80 Medium, which is also the Daily's pool, and 40 Hard (three in between). Each has more than one shortest route."],
+      ["What is par?", "The length of the shortest chain that actually exists between the two players, computed in advance. Your budget is par plus three."],
+      ["What happens if I give up?", "The game reveals one shortest route. On the Daily it asks once before committing and records a loss, but the round still counts as played, so your hub streak survives."]
+    ]
+  },
+  {
+    view: "higherlower", slug: "higher-or-lower", name: "Higher or Lower",
+    title: "Higher or Lower — the EuroCup stats game | Euroball",
+    desc: "Two EuroCup players, one question: who is taller, who is older, whose shirt number is higher? Ten matchups a day, or an endless run that ends on your first mistake.",
+    h1: "Higher or Lower — taller, older, bigger number? (EuroCup)",
+    intro: "Two players from the 2026–27 EuroCup side by side and one question about them. Who is taller? Who is older? Whose shirt number is higher? Tap your answer and both values are revealed. Ten matchups make a Daily; Endless runs until you get one wrong.",
+    how: [
+      "Every matchup has a real gap between the two values — no ties and no one-centimetre coin flips.",
+      "Both players are on a current EuroCup roster, from any of the 32 clubs.",
+      "Daily is ten matchups, the same for everyone. Seven or more right is a pass and keeps your hub streak alive.",
+      "Endless ends on your first wrong answer. Your best run is kept."
+    ],
+    faq: [
+      ["Where do the heights and ages come from?", "The official 2026–27 EuroCup rosters, researched club by club: heights, birth years and shirt numbers for all 391 players."],
+      ["Can two players tie?", "No. A matchup is only used when there is a genuine gap between the values, so there is always a right answer."],
+      ["How many do I need to pass the Daily?", "Seven out of ten."],
+      ["Does Endless affect my streak?", "No. Only the Daily feeds the hub streak; Endless keeps its own best-run record on the Records page."]
+    ]
+  },
+  {
+    view: "rostermaster", slug: "roster-master", name: "Roster Master",
+    title: "Roster Master — name every 2026-27 EuroCup roster | Euroball",
+    desc: "The long game: name every player on all thirty-two 2026-27 EuroCup rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good.",
+    h1: "Roster Master — all thirty-two EuroCup rosters, from memory",
+    intro: "The only game here with no daily. Thirty-two EuroCup clubs, 391 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
+    how: [
+      "Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
+      "Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.",
+      "Progress saves automatically, per club. Come back whenever — this is not a single sitting.",
+      "Clear board starts a club over, but your best percentage survives on the club's card. Complete a roster once and the gold ★ is yours even if you clear it."
+    ],
+    faq: [
+      ["How current are the rosters?", "They are the 2026–27 EuroCup squads, taken club by club from the official rosters at the start of the season. Transfers made after that are not reflected."],
+      ["Which clubs are in it?", "All 32 EuroCup clubs, from Aris Thessaloniki and Turk Telekom to London Lions, Reyer Venezia and Slask Wroclaw."],
+      ["Why is there no autocomplete?", "Because the game is recall. A name list would let you walk the roster instead of remembering it, which is the entire puzzle."],
+      ["Is my EuroLeague progress affected?", "No. The EuroCup keeps its own boards, best scores and gold stars, separate from the EuroLeague's."]
+    ]
+  }
+];
+
+/* ---------------------------------------------------------------------------
  * PLUMBING.
  * ------------------------------------------------------------------------- */
 
@@ -276,16 +429,26 @@ function plain(s) {
  * rather than a general "anything without a scheme" rewrite, because the head
  * also carries a data: URI favicon and dozens of href="#ico-…" sprite
  * references, and a greedy regex would happily break both. */
-function reroot(html) {
-  html = html.replace(/(<script\s+src=")([a-z0-9_]+\.js)(")/gi, "$1../$2$3");
-  html = html.replace(/(<link\s+rel="manifest"\s+href=")(manifest\.webmanifest)(")/i, "$1../$2$3");
-  html = html.replace(/(<link\s+rel="apple-touch-icon"\s+href=")(icon-\d+\.png)(")/i, "$1../$2$3");
+//
+// up    — the way back to the SITE root: "../" from /the-grid/ or /eurocup/,
+//         "../../" from /eurocup/the-grid/.
+// tiles — where the hub tiles' own directory is, relative to this page: "../"
+//         from any game page, "" from the EuroCup hub (whose games are its own
+//         subdirectories). Defaults to up, which is right for the EuroLeague.
+function reroot(html, up, tiles) {
+  up = up == null ? "../" : up;
+  tiles = tiles == null ? up : tiles;
+  html = html.replace(/(<script\s+src=")([a-z0-9_]+\.js)(")/gi, "$1" + up + "$2$3");
+  html = html.replace(/(<link\s+rel="manifest"\s+href=")(manifest\.webmanifest)(")/i, "$1" + up + "$2$3");
+  html = html.replace(/(<link\s+rel="apple-touch-icon"\s+href=")(icon-\d+\.png)(")/i, "$1" + up + "$2$3");
+  // The footer's two competition links are written from the site root.
+  html = html.replace(/(<a class="colophon-link comp-link" href=")([^"]*)(")/g, "$1" + up + "$2$3");
   // The hub tiles. They are links now precisely so a crawler can walk from the
   // lobby to all eleven games — but the lobby travels INSIDE every generated
   // page, and href="the-grid/" read from /path-between/ resolves to
   // /path-between/the-grid/. Every one of those would be a 404 that the sitemap
   // never mentions, which is a worse problem than the orphaning the links fixed.
-  html = html.replace(/(<a class="game-card" href=")([a-z0-9-]+\/)(")/g, "$1../$2$3");
+  html = html.replace(/(<a class="game-card" href=")([a-z0-9-]+\/)(")/g, "$1" + tiles + "$2$3");
   // The service worker needs NO rewrite: index.html resolves its URL from
   // __ELG_ROOT__, which this page overrides to "../" a few lines further down, so
   // it already points at the root copy. Worth stating because the obvious thing
@@ -294,6 +457,34 @@ function reroot(html) {
   // Service-Worker-Allowed header, which matters because Pages won't send one.
   return html;
 }
+
+/* A EuroCup page is the same app with the EuroCup chosen before anything runs.
+ * The script would re-word it on load anyway (app.js applyCompText); doing it
+ * here too means the served HTML already says EuroCup, for anything that reads
+ * the page without running it. And the tiles of games the EuroCup doesn't play
+ * are cut, not hidden: each would be a link to a /eurocup/ page that doesn't
+ * exist. */
+function eurocupify(html) {
+  var ec = (function () {
+    var P = [];
+    try { var w = {}; new Function("window", fs.readFileSync(path.join(ROOT, "eurocup_players.js"), "utf8"))(w); P = w.EUROCUP_PLAYERS || []; } catch (e) {}
+    var clubs = {};
+    P.forEach(function (x) { clubs[x.team] = 1; });
+    return { n: P.length, c: Object.keys(clubs).length };
+  })();
+  html = html.replace(/(<span class="comp-text" data-ec=")([^"]*)(">)([^<]*)(<\/span>)/g, function (m, a, ecText, b, inner, c) {
+    return a + ecText + b + ecText.replace(/\{n\}/g, ec.n).replace(/\{c\}/g, ec.c) + c;
+  });
+  html = html.replace(/<([a-z]+) data-ec-hide>/g, "<$1 data-ec-hide hidden>");
+  html = html.replace(/\s*<a class="game-card" href="(?:\.\.\/)*[a-z0-9-]+\/" data-game="([a-z]+)">[\s\S]*?<\/a>/g, function (m, view) {
+    return EC_PLAYS.indexOf(view) >= 0 ? m : "";
+  });
+  return html;
+}
+var EC_PLAYS = EC_PAGES.map(function (p) { return p.view; });
+EC_HUB.comp = "eurocup";
+EC_PAGES.forEach(function (p) { p.comp = "eurocup"; });
+var ALL_PAGES = PAGES.concat([EC_HUB], EC_PAGES);
 
 function replaceTag(html, re, next) {
   if (!re.test(html)) throw new Error("build_pages: index.html no longer contains " + re + " — the transform is out of date");
@@ -322,7 +513,9 @@ function seoSection(p) {
     out.push("      <dd>" + qa[1] + "</dd>");
   });
   out.push("    </dl>");
-  out.push('    <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>');
+  out.push(p.comp === "eurocup"
+    ? '    <p class="seo-more">Euroball has ' + EC_PAGES.length + ' daily EuroCup puzzles, and eleven for the EuroLeague. <a href="../">See the EuroCup games →</a></p>'
+    : '    <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>');
   out.push("  </section>");
   return out.join("\n");
 }
@@ -341,7 +534,7 @@ function structuredData(p, url) {
     operatingSystem: "Any",
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-    about: { "@type": "SportsOrganization", name: "EuroLeague Basketball" },
+    about: { "@type": "SportsOrganization", name: p.comp === "eurocup" ? "EuroCup" : "EuroLeague Basketball" },
     isPartOf: { "@type": "WebSite", name: "Euroball", url: ORIGIN + "/" }
   };
   var faq = {
@@ -358,20 +551,59 @@ function structuredData(p, url) {
   var crumbs = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
+    itemListElement: (p.comp === "eurocup" ? [
+      { "@type": "ListItem", position: 1, name: "Euroball", item: ORIGIN + "/" },
+      { "@type": "ListItem", position: 2, name: "EuroCup", item: ORIGIN + "/" + EC_DIR + "/" },
+      { "@type": "ListItem", position: 3, name: p.name, item: url }
+    ] : [
       { "@type": "ListItem", position: 1, name: "Euroball", item: ORIGIN + "/" },
       { "@type": "ListItem", position: 2, name: p.name, item: url }
-    ]
+    ])
   };
   return [game, faq, crumbs].map(function (o) {
     return '<script type="application/ld+json">\n' + jsonld(o) + "\n</script>";
   }).join("\n");
 }
 
+// The page's own address, relative to the site root.
+function pagePath(p) {
+  if (p.comp === "eurocup") return EC_DIR + "/" + (p.view === "home" ? "" : p.slug + "/");
+  return p.slug + "/";
+}
+
+/* The EuroCup hub has no prose section — like the site's own hub, it is a
+ * viewport-filling grid of tiles, and each tile already carries its game's name
+ * and one line about it. What it adds for a crawler is a list of its games. */
+function hubData(p, url) {
+  var list = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Euroball daily EuroCup games",
+    numberOfItems: EC_PAGES.length,
+    itemListElement: EC_PAGES.map(function (g, i) {
+      return { "@type": "ListItem", position: i + 1, name: g.name, url: ORIGIN + "/" + pagePath(g) };
+    })
+  };
+  var crumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Euroball", item: ORIGIN + "/" },
+      { "@type": "ListItem", position: 2, name: p.name, item: url }
+    ]
+  };
+  return [list, crumbs].map(function (o) {
+    return '<script type="application/ld+json">\n' + jsonld(o) + "\n</script>";
+  }).join("\n");
+}
+
 function buildPage(shell, p) {
-  var url = ORIGIN + "/" + p.slug + "/";
+  var url = ORIGIN + "/" + pagePath(p);
   var desc = plain(p.desc);
-  var html = reroot(shell);
+  var hub = p.view === "home";
+  var up = p.comp === "eurocup" ? (hub ? "../" : "../../") : "../";
+  var html = reroot(shell, up, p.comp === "eurocup" && hub ? "" : "../");
+  if (p.comp === "eurocup") html = eurocupify(html);
 
   html = replaceTag(html, /<title>[\s\S]*?<\/title>/, "<title>" + esc(p.title) + "</title>");
   html = replaceTag(html, /<meta name="description" content="[\s\S]*?" \/>/,
@@ -380,12 +612,13 @@ function buildPage(shell, p) {
     '<link id="canonical" rel="canonical" href="' + url + '" />');
   html = replaceTag(html, /<meta property="og:url" content="[^"]*" \/>/,
     '<meta property="og:url" content="' + url + '" />');
+  var ogTitle = p.ogTitle || (p.name + " — Euroball" + (p.comp === "eurocup" ? " EuroCup" : ""));
   html = replaceTag(html, /<meta property="og:title" content="[^"]*" \/>/,
-    '<meta property="og:title" content="' + esc(p.name + " — Euroball") + '" />');
+    '<meta property="og:title" content="' + esc(ogTitle) + '" />');
   html = replaceTag(html, /<meta property="og:description" content="[^"]*" \/>/,
     '<meta property="og:description" content="' + esc(desc) + '" />');
   html = replaceTag(html, /<meta name="twitter:title" content="[^"]*" \/>/,
-    '<meta name="twitter:title" content="' + esc(p.name + " — Euroball") + '" />');
+    '<meta name="twitter:title" content="' + esc(ogTitle) + '" />');
   html = replaceTag(html, /<meta name="twitter:description" content="[^"]*" \/>/,
     '<meta name="twitter:description" content="' + esc(desc) + '" />');
 
@@ -399,10 +632,17 @@ function buildPage(shell, p) {
   // ordering is load-bearing and replaceTag() throws rather than silently
   // producing eleven pages that all boot to the lobby.
   html = replaceTag(html, /<script>window\.__ELG_ROOT__ = "\.\/";<\/script>/,
-    '<script>window.__ELG_ROOT__ = "../"; window.__ELG_VIEW__ = ' + JSON.stringify(p.view) + ";</script>");
+    '<script>window.__ELG_ROOT__ = ' + JSON.stringify(up) + ";" + (hub ? "" : " window.__ELG_VIEW__ = " + JSON.stringify(p.view) + ";") + "</script>");
 
-  html = replaceTag(html, /<\/head>/, structuredData(p, url) + "\n</head>");
-  html = replaceTag(html, /  <footer>/, seoSection(p) + "\n\n  <footer>");
+  // Which competition this page is, stated before the pre-paint script reads
+  // it and before competition.js picks the players. Every generated page says
+  // so — /the-grid/ as firmly as /eurocup/the-grid/ — so the address and what
+  // is on screen can never disagree. (The hub at / states nothing: it plays
+  // whichever competition the visitor last chose.)
+  html = replaceTag(html, /<head>\n/, "<head>\n<script>window.__ELG_COMP__ = " + JSON.stringify(p.comp || "euroleague") + ";</script>\n");
+
+  html = replaceTag(html, /<\/head>/, (hub ? hubData(p, url) : structuredData(p, url)) + "\n</head>");
+  if (!hub) html = replaceTag(html, /  <footer>/, seoSection(p) + "\n\n  <footer>");
 
   html = html.replace(/^<!DOCTYPE html>/,
     "<!DOCTYPE html>\n<!-- GENERATED by build_pages.js — do not edit. Change the copy or the\n" +
@@ -417,15 +657,17 @@ function main() {
     console.warn("! index.html does not set window.__ELG_ROOT__ — the hub will not know its own root.");
   }
   var written = 0;
-  PAGES.forEach(function (p) {
-    var dir = path.join(ROOT, p.slug);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+  ALL_PAGES.forEach(function (p) {
+    var rel = pagePath(p);
+    var dir = path.join(ROOT, rel);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, "index.html"), buildPage(shell, p));
     written++;
-    console.log("  " + p.slug + "/index.html");
+    console.log("  " + rel + "index.html");
   });
   console.log("build_pages: wrote " + written + " page" + (written === 1 ? "" : "s"));
 }
 
-module.exports = { PAGES: PAGES, buildPage: buildPage, reroot: reroot, plain: plain };
+module.exports = { PAGES: PAGES, EC_PAGES: EC_PAGES, EC_HUB: EC_HUB, ALL_PAGES: ALL_PAGES, pagePath: pagePath,
+                   buildPage: buildPage, reroot: reroot, plain: plain };
 if (require.main === module) main();

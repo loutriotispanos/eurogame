@@ -5,7 +5,10 @@
  * choice is made here, up front, and switching competitions reloads the page.
  *
  * The choice lives in elg:comp ("euroleague" | "eurocup"); a ?comp= in the URL
- * sets it too. The EuroCup is only chosen once build_eurocup.js opens it
+ * sets it too, and so does a generated page that declares its competition
+ * (window.__ELG_COMP__, set in its <head> by build_pages.js): /eurocup/the-grid/
+ * is the EuroCup's Grid for a visitor arriving from a search with nothing
+ * stored, and /the-grid/ the EuroLeague's. The EuroCup is only chosen once build_eurocup.js opens it
  * (EUROCUP_OPEN) and it has players; until then it stays the coming-soon page
  * and nothing here changes anything.
  *
@@ -46,7 +49,9 @@
 
   var fromURL = null;
   try { fromURL = /[?&]comp=([a-z]+)/.exec(window.location.search || ""); fromURL = fromURL && fromURL[1]; } catch (e) {}
-  if (NAMES[fromURL]) writePref(fromURL);
+  var declared = window.__ELG_COMP__;
+  if (NAMES[declared]) writePref(declared);
+  else if (NAMES[fromURL]) writePref(fromURL);
 
   var ready = !!(window.EUROCUP_OPEN && window.EUROCUP_PLAYERS && window.EUROCUP_PLAYERS.length);
   var comp = (readPref() === "eurocup" && ready) ? "eurocup" : "euroleague";

@@ -74,7 +74,7 @@
       return;
     }
     if (C.set) C.set(c);
-    try { window.location.href = siteRoot(); } catch (e) {}
+    try { window.location.href = siteRoot() + (c === "eurocup" ? EC_DIR : ""); } catch (e) {}
   }
   // The hub's switcher says which competition is playing. (The coming-soon
   // page's switcher is only ever seen from the EuroLeague, so its markup is fixed.)
@@ -421,6 +421,13 @@
     var rel = (typeof window.__ELG_ROOT__ === "string" && window.__ELG_ROOT__) || "./";
     try { return new URL(rel, window.location.href).pathname; } catch (e) { return "/"; }
   }
+  // The EuroCup's pages are a directory of their own (build_pages.js): its hub
+  // at /eurocup/, its games at /eurocup/the-grid/ and so on. __ELG_ROOT__ is
+  // always the SITE root, so this is the one place the prefix is added — to the
+  // address, the canonical and the switch — and a EuroCup visitor never lands on
+  // a EuroLeague URL showing EuroCup content.
+  var EC_DIR = "eurocup/";
+  function compDir() { return comp().id === "eurocup" ? EC_DIR : ""; }
 
   // Modes are addressable too (?game=thegrid&mode=practice). The lists live here
   // because the strings are NOT uniform across games — daily/practice,
@@ -460,7 +467,7 @@
   // URLs serve the same document, so they are states of a page, not pages. Only
   // things worth being a page get a path.
   function urlFor(view, mode) {
-    var root = siteRoot();
+    var root = siteRoot() + compDir();
     if (!TITLES[view]) return root;
     var q = isMode(view, mode) ? "?mode=" + mode : "";
     if (SLUGS[view]) return root + SLUGS[view] + "/" + q;
@@ -486,7 +493,7 @@
     // Keep the built title while we are on the game that page is about — but
     // hand back to the composed one as soon as a real mode is showing, because
     // then the tab has something to say that the built title cannot ("· Practice").
-    if (SEO_TITLE && view === window.__ELG_VIEW__ && !(isMode(view, mode) && mode !== "daily")) t = SEO_TITLE;
+    if (SEO_TITLE && view === (window.__ELG_VIEW__ || "home") && !(isMode(view, mode) && mode !== "daily")) t = SEO_TITLE;
     try { document.title = t; } catch (e) {}
     var c = $("canonical");
     // The canonical deliberately DROPS the mode. Every mode of a game serves the
@@ -497,7 +504,7 @@
     // Always the LIVE domain, never siteRoot() — the canonical's job is to point
     // the github.io mirror and any preview build at the one real address, so it
     // is the single URL here that must not be relative.
-    if (c) c.href = CANON + (SLUGS[view] ? SLUGS[view] + "/" : TITLES[view] ? "?game=" + view : "");
+    if (c) c.href = CANON + compDir() + (SLUGS[view] ? SLUGS[view] + "/" : TITLES[view] ? "?game=" + view : "");
   }
 
   // Called by every game whenever its mode changes — a tab click, the keyboard
@@ -890,7 +897,7 @@
     _chooseStats: chooseStats, _wireStats: wireStats, _statsChoice: statsChoice,
     _applyCompText: applyCompText, _goComp: goComp, _renderCompMenu: renderCompMenu, _curView: function () { return curView; },
     _isMode: isMode, _pageTitle: pageTitle, _modes: MODES,
-    _slugs: SLUGS, _siteRoot: siteRoot, _titles: TITLES, _canon: CANON, _linkedGame: linkedGame,
+    _slugs: SLUGS, _siteRoot: siteRoot, _ecDir: EC_DIR, _titles: TITLES, _canon: CANON, _linkedGame: linkedGame,
     // The built title is captured once, at load. The harness needs to restate it
     // to drive both branches, since in tests the document is always index.html.
     _readSeoTitle: readSeoTitle,
