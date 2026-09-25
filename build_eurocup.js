@@ -34,7 +34,8 @@ const TEAMS = {
   "Aris Thessaloniki": { country: "Greece" },
   "Derthona Tortona": { country: "Italy" },
   "Bahcesehir College": { country: "Turkey" },
-  "Balkan Botevgrad": { country: "Bulgaria" }
+  "Balkan Botevgrad": { country: "Bulgaria" },
+  "Bosna Sarajevo": { country: "Bosnia and Herzegovina" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -106,7 +107,22 @@ const PENDING = [
   { name: "Ivan Alipiev", team: "Balkan Botevgrad", position: "Forward", number: 35 },
   { name: "Martin Sotirov", team: "Balkan Botevgrad", position: "Forward", number: 44 },
   { name: "Ivan Spirov", team: "Balkan Botevgrad", position: "Forward", number: 91 },
-  { name: "Ulrich Chomche", team: "Balkan Botevgrad", position: "Center", number: 14 }
+  { name: "Ulrich Chomche", team: "Balkan Botevgrad", position: "Center", number: 14 },
+  // Bosna Sarajevo
+  { name: "Miljan Kljestan", team: "Bosna Sarajevo", position: "Guard", number: 0 },
+  { name: "Shawn Pipes Jr.", team: "Bosna Sarajevo", position: "Guard", number: 2 },
+  { name: "Marcus Domask", team: "Bosna Sarajevo", position: "Guard", number: 3 },
+  { name: "DeAndre Gholston", team: "Bosna Sarajevo", position: "Guard", number: 4 },
+  { name: "Edin Atic", team: "Bosna Sarajevo", position: "Guard", number: 5 },
+  { name: "Adin Vrabac", team: "Bosna Sarajevo", position: "Guard", number: 7 },
+  { name: "Gary Browne", team: "Bosna Sarajevo", position: "Guard", number: 14 },
+  { name: "Darko Talic", team: "Bosna Sarajevo", position: "Guard", number: 19 },
+  { name: "Ryan Hawkins", team: "Bosna Sarajevo", position: "Forward", number: 44 },
+  { name: "James Banks", team: "Bosna Sarajevo", position: "Center", number: 1 },
+  { name: "Reginald Perry", team: "Bosna Sarajevo", position: "Center", number: 11 },
+  { name: "Nikola Popovic", team: "Bosna Sarajevo", position: "Center", number: 21 },
+  { name: "Daut Livadic", team: "Bosna Sarajevo", position: "Center", number: 22 },
+  { name: "Alija Islamovic", team: "Bosna Sarajevo", position: "Center", number: 33 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

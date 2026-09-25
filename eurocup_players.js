@@ -18,6 +18,9 @@ window.EUROCUP_TEAMS = {
   },
   "Balkan Botevgrad": {
     "country": "Bulgaria"
+  },
+  "Bosna Sarajevo": {
+    "country": "Bosnia and Herzegovina"
   }
 };
 
