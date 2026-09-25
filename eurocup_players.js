@@ -1133,6 +1133,105 @@ window.EUROCUP_PLAYERS = [
     "number": 12
   },
   {
+    "name": "Arturs Kurucs",
+    "team": "La Laguna Tenerife",
+    "nationality": "Latvia",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2000,
+    "number": 47
+  },
+  {
+    "name": "Bamba Cisse",
+    "team": "La Laguna Tenerife",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 2001,
+    "number": 1
+  },
+  {
+    "name": "Bruno Fitipaldo",
+    "team": "La Laguna Tenerife",
+    "nationality": "Uruguay",
+    "position": "Guard",
+    "height": 184,
+    "birthYear": 1991,
+    "number": 6
+  },
+  {
+    "name": "Ethan Happ",
+    "team": "La Laguna Tenerife",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1996,
+    "number": 22
+  },
+  {
+    "name": "Hector Alderete",
+    "team": "La Laguna Tenerife",
+    "nationality": "Spain",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 2002,
+    "number": 33
+  },
+  {
+    "name": "Jaime Fernandez",
+    "team": "La Laguna Tenerife",
+    "nationality": "Spain",
+    "position": "Guard",
+    "height": 186,
+    "birthYear": 1993,
+    "number": 3
+  },
+  {
+    "name": "Kyle Guy",
+    "team": "La Laguna Tenerife",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 185,
+    "birthYear": 1997,
+    "number": 2
+  },
+  {
+    "name": "Marcelinho Huertas",
+    "team": "La Laguna Tenerife",
+    "nationality": "Brazil",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1983,
+    "number": 9
+  },
+  {
+    "name": "Tim Abromaitis",
+    "team": "La Laguna Tenerife",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1989,
+    "number": 21
+  },
+  {
+    "name": "Vince Hunter",
+    "team": "La Laguna Tenerife",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1994,
+    "number": 32
+  },
+  {
+    "name": "Wesley van Beck",
+    "team": "La Laguna Tenerife",
+    "nationality": "Azerbaijan",
+    "position": "Forward",
+    "height": 193,
+    "birthYear": 1996,
+    "number": 4
+  },
+  {
     "name": "Xabier Lopez-Arostegui",
     "team": "La Laguna Tenerife",
     "nationality": "Spain",
@@ -1142,6 +1241,15 @@ window.EUROCUP_PLAYERS = [
     "number": 7
   },
   {
+    "name": "Carlos Stewart Jr.",
+    "team": "Le Mans",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 2003,
+    "number": 0
+  },
+  {
     "name": "Melvin Ajinca",
     "team": "Le Mans",
     "nationality": "France",
@@ -1149,6 +1257,15 @@ window.EUROCUP_PLAYERS = [
     "height": 202,
     "birthYear": 2004,
     "number": 8
+  },
+  {
+    "name": "Chibuzo Agbo",
+    "team": "Manresa",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 200,
+    "birthYear": 2001,
+    "number": 11
   },
   {
     "name": "Eric Vila",
@@ -1205,6 +1322,42 @@ window.EUROCUP_PLAYERS = [
     "number": 1
   },
   {
+    "name": "Michael Enabulele",
+    "team": "Manresa",
+    "nationality": "Spain",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 2006,
+    "number": 20
+  },
+  {
+    "name": "Nick Ongenda",
+    "team": "Manresa",
+    "nationality": "Canada",
+    "position": "Center",
+    "height": 211,
+    "birthYear": 2000,
+    "number": 14
+  },
+  {
+    "name": "Pablo Tamba",
+    "team": "Manresa",
+    "nationality": "Spain",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2003,
+    "number": 8
+  },
+  {
+    "name": "Pierre Oriola",
+    "team": "Manresa",
+    "nationality": "Spain",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1992,
+    "number": 29
+  },
+  {
     "name": "Rafa Villar",
     "team": "Manresa",
     "nationality": "Spain",
@@ -1221,6 +1374,15 @@ window.EUROCUP_PLAYERS = [
     "height": 198,
     "birthYear": 2000,
     "number": 0
+  },
+  {
+    "name": "Yordan Minchev",
+    "team": "Manresa",
+    "nationality": "Bulgaria",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1998,
+    "number": 91
   },
   {
     "name": "Jeffrey Dowtin Jr.",

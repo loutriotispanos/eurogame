@@ -220,7 +220,25 @@ const PLAYERS = [
   { name: "Ferran Bassas", team: "Manresa", nationality: "Spain", position: "Guard", height: 181, birthYear: 1992, number: 6 },
   { name: "JD Notae", team: "Manresa", nationality: "USA", position: "Guard", height: 188, birthYear: 1998, number: 13 },
   { name: "Timmy Allen", team: "Manresa", nationality: "USA", position: "Forward", height: 198, birthYear: 2000, number: 0 },
-  { name: "Eric Vila", team: "Manresa", nationality: "Spain", position: "Forward", height: 211, birthYear: 1998, number: 4 }
+  { name: "Eric Vila", team: "Manresa", nationality: "Spain", position: "Forward", height: 211, birthYear: 1998, number: 4 },
+  { name: "Pablo Tamba", team: "Manresa", nationality: "Spain", position: "Forward", height: 201, birthYear: 2003, number: 8 },
+  { name: "Chibuzo Agbo", team: "Manresa", nationality: "USA", position: "Forward", height: 200, birthYear: 2001, number: 11 },
+  { name: "Yordan Minchev", team: "Manresa", nationality: "Bulgaria", position: "Forward", height: 203, birthYear: 1998, number: 91 },
+  { name: "Nick Ongenda", team: "Manresa", nationality: "Canada", position: "Center", height: 211, birthYear: 2000, number: 14 },
+  { name: "Michael Enabulele", team: "Manresa", nationality: "Spain", position: "Center", height: 206, birthYear: 2006, number: 20 },
+  { name: "Pierre Oriola", team: "Manresa", nationality: "Spain", position: "Center", height: 208, birthYear: 1992, number: 29 },
+  { name: "Jaime Fernandez", team: "La Laguna Tenerife", nationality: "Spain", position: "Guard", height: 186, birthYear: 1993, number: 3 },
+  { name: "Bruno Fitipaldo", team: "La Laguna Tenerife", nationality: "Uruguay", position: "Guard", height: 184, birthYear: 1991, number: 6 },
+  { name: "Marcelinho Huertas", team: "La Laguna Tenerife", nationality: "Brazil", position: "Guard", height: 191, birthYear: 1983, number: 9 },
+  { name: "Arturs Kurucs", team: "La Laguna Tenerife", nationality: "Latvia", position: "Guard", height: 193, birthYear: 2000, number: 47 },
+  { name: "Bamba Cisse", team: "La Laguna Tenerife", nationality: "USA", position: "Forward", height: 196, birthYear: 2001, number: 1 },
+  { name: "Kyle Guy", team: "La Laguna Tenerife", nationality: "USA", position: "Forward", height: 185, birthYear: 1997, number: 2 },
+  { name: "Wesley van Beck", team: "La Laguna Tenerife", nationality: "Azerbaijan", position: "Forward", height: 193, birthYear: 1996, number: 4 },
+  { name: "Hector Alderete", team: "La Laguna Tenerife", nationality: "Spain", position: "Forward", height: 203, birthYear: 2002, number: 33 },
+  { name: "Tim Abromaitis", team: "La Laguna Tenerife", nationality: "USA", position: "Center", height: 203, birthYear: 1989, number: 21 },
+  { name: "Ethan Happ", team: "La Laguna Tenerife", nationality: "USA", position: "Center", height: 208, birthYear: 1996, number: 22 },
+  { name: "Vince Hunter", team: "La Laguna Tenerife", nationality: "USA", position: "Center", height: 203, birthYear: 1994, number: 32 },
+  { name: "Carlos Stewart Jr.", team: "Le Mans", nationality: "USA", position: "Guard", height: 185, birthYear: 2003, number: 0 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -237,28 +255,8 @@ const PENDING = [
   // Trento
   // Hapoel Jerusalem
   // Manresa
-  { name: "Pablo Tamba", team: "Manresa", position: "Forward", number: 8 },
-  { name: "Chibuzo Agbo", team: "Manresa", position: "Forward", number: 11 },
-  { name: "Guillem Naspler", team: "Manresa", position: "Forward", number: 19 },
-  { name: "Gustav Drejer Erichsen", team: "Manresa", position: "Forward", number: 21 },
-  { name: "Yordan Minchev", team: "Manresa", position: "Forward", number: 91 },
-  { name: "Nick Ongenda", team: "Manresa", position: "Center", number: 14 },
-  { name: "Michael Enabulele", team: "Manresa", position: "Center", number: 20 },
-  { name: "Pierre Oriola", team: "Manresa", position: "Center", number: 29 },
   // La Laguna Tenerife
-  { name: "Jaime Fernandez", team: "La Laguna Tenerife", position: "Guard", number: 3 },
-  { name: "Bruno Fitipaldo", team: "La Laguna Tenerife", position: "Guard", number: 6 },
-  { name: "Marcelinho Huertas", team: "La Laguna Tenerife", position: "Guard", number: 9 },
-  { name: "Arturs Kurucs", team: "La Laguna Tenerife", position: "Guard", number: 47 },
-  { name: "Bamba Cisse", team: "La Laguna Tenerife", position: "Forward", number: 1 },
-  { name: "Kyle Guy", team: "La Laguna Tenerife", position: "Forward", number: 2 },
-  { name: "Wesley van Beck", team: "La Laguna Tenerife", position: "Forward", number: 4 },
-  { name: "Hector Alderete", team: "La Laguna Tenerife", position: "Forward", number: 33 },
-  { name: "Tim Abromaitis", team: "La Laguna Tenerife", position: "Center", number: 21 },
-  { name: "Ethan Happ", team: "La Laguna Tenerife", position: "Center", number: 22 },
-  { name: "Vince Hunter", team: "La Laguna Tenerife", position: "Center", number: 32 },
   // Le Mans
-  { name: "Carlos Stewart Jr.", team: "Le Mans", position: "Guard", number: 0 },
   { name: "Bastien Grasshoff", team: "Le Mans", position: "Guard", number: 1 },
   { name: "Jordan King", team: "Le Mans", position: "Guard", number: 2 },
   { name: "Afeny Cognet", team: "Le Mans", position: "Guard", number: 3 },
