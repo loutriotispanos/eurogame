@@ -49,7 +49,8 @@ const TEAMS = {
   "Maxima Roma": { country: "Italy" },
   "Napoli Basketball": { country: "Italy" },
   "Neptunas": { country: "Lithuania" },
-  "Niners Chemnitz": { country: "Germany" }
+  "Niners Chemnitz": { country: "Germany" },
+  "PAOK": { country: "Greece" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -78,7 +79,10 @@ const PLAYERS = [
   { name: "Melvin Ajinca", team: "Le Mans", number: 8 },
   // Napoli Basketball
   { name: "Zac Seljaas", team: "Napoli Basketball", number: 1 },
-  { name: "Jeffrey Dowtin Jr.", team: "Napoli Basketball", number: 3 }
+  { name: "Jeffrey Dowtin Jr.", team: "Napoli Basketball", number: 3 },
+  // PAOK
+  { name: "Cedi Osman", team: "PAOK", number: 6 },
+  { name: "Nick Calathes", team: "PAOK", number: 33 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -352,7 +356,23 @@ const PENDING = [
   { name: "Alexander Richardson", team: "Niners Chemnitz", position: "Center", number: 9 },
   { name: "Darion Atkins", team: "Niners Chemnitz", position: "Center", number: 17 },
   { name: "Nighael Ceaser", team: "Niners Chemnitz", position: "Center", number: 22 },
-  { name: "Anton Bock", team: "Niners Chemnitz", position: "Center", number: 27 }
+  { name: "Anton Bock", team: "Niners Chemnitz", position: "Center", number: 27 },
+  // PAOK
+  { name: "Naz Mitrou-Long", team: "PAOK", position: "Guard", number: 1 },
+  { name: "Georgios Charalampidis", team: "PAOK", position: "Guard", number: 2 },
+  { name: "Breein Tyree", team: "PAOK", position: "Guard", number: 5 },
+  { name: "Trevor Hudgins", team: "PAOK", position: "Guard", number: 12 },
+  { name: "Marcus Foster", team: "PAOK", position: "Guard", number: 17 },
+  { name: "Georgios Fillios", team: "PAOK", position: "Guard", number: 25 },
+  { name: "Athanasios Bazinas", team: "PAOK", position: "Guard", number: 77 },
+  { name: "Raiquan Gray", team: "PAOK", position: "Forward", number: 0 },
+  { name: "Nikos Chougkaz", team: "PAOK", position: "Forward", number: 9 },
+  { name: "Ioannis Spanos", team: "PAOK", position: "Forward", number: 10 },
+  { name: "Nikolaos Persidis", team: "PAOK", position: "Forward", number: 18 },
+  { name: "Kyle Alexander", team: "PAOK", position: "Center", number: 8 },
+  { name: "Clifford Omoruyi", team: "PAOK", position: "Center", number: 11 },
+  { name: "Dimitrios Kaklamanakis", team: "PAOK", position: "Center", number: 14 },
+  { name: "Ben Moore", team: "PAOK", position: "Center", number: 26 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

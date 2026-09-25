@@ -63,6 +63,9 @@ window.EUROCUP_TEAMS = {
   },
   "Niners Chemnitz": {
     "country": "Germany"
+  },
+  "PAOK": {
+    "country": "Greece"
   }
 };
 
@@ -210,5 +213,23 @@ window.EUROCUP_PLAYERS = [
     "height": 201,
     "birthYear": 1997,
     "number": 1
+  },
+  {
+    "name": "Cedi Osman",
+    "team": "PAOK",
+    "nationality": "Turkey",
+    "position": "Forward",
+    "height": 207,
+    "birthYear": 1995,
+    "number": 6
+  },
+  {
+    "name": "Nick Calathes",
+    "team": "PAOK",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 198,
+    "birthYear": 1989,
+    "number": 33
   }
 ];
