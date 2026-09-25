@@ -44,7 +44,8 @@ const TEAMS = {
   "Manresa": { country: "Spain" },
   "La Laguna Tenerife": { country: "Spain" },
   "Le Mans": { country: "France" },
-  "Lietkabelis": { country: "Lithuania" }
+  "Lietkabelis": { country: "Lithuania" },
+  "London Lions": { country: "Great Britain" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -274,7 +275,21 @@ const PENDING = [
   { name: "Ivan Fevrier", team: "Lietkabelis", position: "Forward", number: 23 },
   { name: "Gytis Nemeiksa", team: "Lietkabelis", position: "Forward", number: 50 },
   { name: "Veljko Ilic", team: "Lietkabelis", position: "Center", number: 8 },
-  { name: "Gabrielius Maldunas", team: "Lietkabelis", position: "Center", number: 12 }
+  { name: "Gabrielius Maldunas", team: "Lietkabelis", position: "Center", number: 12 },
+  // London Lions
+  { name: "Devante Jones", team: "London Lions", position: "Guard", number: 3 },
+  { name: "Mo Soluade", team: "London Lions", position: "Guard", number: 6 },
+  { name: "Tarik Phillip", team: "London Lions", position: "Guard", number: 22 },
+  { name: "Landrius Horton", team: "London Lions", position: "Guard", number: 23 },
+  { name: "Joel Scott", team: "London Lions", position: "Forward", number: 1 },
+  { name: "Maxwell Lewis III", team: "London Lions", position: "Forward", number: 2 },
+  { name: "Joshua O'Garro", team: "London Lions", position: "Forward", number: 7 },
+  { name: "Emilis Zibuda", team: "London Lions", position: "Forward", number: 8 },
+  { name: "Ethan Price", team: "London Lions", position: "Forward", number: 10 },
+  { name: "Keenan Evans", team: "London Lions", position: "Forward", number: 12 },
+  { name: "Aaryn Rai", team: "London Lions", position: "Forward", number: 21 },
+  { name: "Deane Williams", team: "London Lions", position: "Forward", number: 31 },
+  { name: "Thomas Kennedy", team: "London Lions", position: "Center", number: 54 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

@@ -48,6 +48,9 @@ window.EUROCUP_TEAMS = {
   },
   "Lietkabelis": {
     "country": "Lithuania"
+  },
+  "London Lions": {
+    "country": "Great Britain"
   }
 };
 
