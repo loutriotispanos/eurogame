@@ -2240,6 +2240,105 @@ window.EUROCUP_PLAYERS = [
     "number": 94
   },
   {
+    "name": "CJ Anthony Jr.",
+    "team": "Ratiopharm Ulm",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 186,
+    "birthYear": 2002,
+    "number": 25
+  },
+  {
+    "name": "Devin Schmidt",
+    "team": "Ratiopharm Ulm",
+    "nationality": "Germany",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1994,
+    "number": 8
+  },
+  {
+    "name": "Dwayne Koroma",
+    "team": "Ratiopharm Ulm",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 197,
+    "birthYear": 2001,
+    "number": 3
+  },
+  {
+    "name": "Ibi Watson",
+    "team": "Ratiopharm Ulm",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 194,
+    "birthYear": 1998,
+    "number": 2
+  },
+  {
+    "name": "Jaylen Sims",
+    "team": "Ratiopharm Ulm",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 194,
+    "birthYear": 1998,
+    "number": 30
+  },
+  {
+    "name": "Lenny Liedtke",
+    "team": "Ratiopharm Ulm",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 2004,
+    "number": 55
+  },
+  {
+    "name": "Lucas Fischer",
+    "team": "Ratiopharm Ulm",
+    "nationality": "France",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 2004,
+    "number": 43
+  },
+  {
+    "name": "Marvin Heckel",
+    "team": "Ratiopharm Ulm",
+    "nationality": "Germany",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 1997,
+    "number": 47
+  },
+  {
+    "name": "Michael Rataj",
+    "team": "Ratiopharm Ulm",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 200,
+    "birthYear": 2003,
+    "number": 12
+  },
+  {
+    "name": "Namori Omog",
+    "team": "Ratiopharm Ulm",
+    "nationality": "Germany",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 2006,
+    "number": 1
+  },
+  {
+    "name": "Simisola Shittu",
+    "team": "Ratiopharm Ulm",
+    "nationality": "Canada",
+    "position": "Center",
+    "height": 203,
+    "birthYear": 1999,
+    "number": 45
+  },
+  {
     "name": "Glynn Watson Jr.",
     "team": "Reyer Venezia",
     "nationality": "USA",
@@ -2249,6 +2348,186 @@ window.EUROCUP_PLAYERS = [
     "number": 30
   },
   {
+    "name": "Benjamin Shungu",
+    "team": "Riga Zelli",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1997,
+    "number": 2
+  },
+  {
+    "name": "Gustavs Kampuss",
+    "team": "Riga Zelli",
+    "nationality": "Latvia",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 1999,
+    "number": 6
+  },
+  {
+    "name": "Isaac Johnson",
+    "team": "Riga Zelli",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 213,
+    "birthYear": 2000,
+    "number": 33
+  },
+  {
+    "name": "Ivan Tkachenko",
+    "team": "Riga Zelli",
+    "nationality": "Ukraine",
+    "position": "Forward",
+    "height": 197,
+    "birthYear": 1997,
+    "number": 55
+  },
+  {
+    "name": "Janis Berzins",
+    "team": "Riga Zelli",
+    "nationality": "Latvia",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1993,
+    "number": 31
+  },
+  {
+    "name": "Klavs Cavars",
+    "team": "Riga Zelli",
+    "nationality": "Latvia",
+    "position": "Center",
+    "height": 206,
+    "birthYear": 1996,
+    "number": 15
+  },
+  {
+    "name": "Kristians Feierbergs",
+    "team": "Riga Zelli",
+    "nationality": "Latvia",
+    "position": "Forward",
+    "height": 202,
+    "birthYear": 2002,
+    "number": 11
+  },
+  {
+    "name": "Martynas Varnas",
+    "team": "Riga Zelli",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 1997,
+    "number": 13
+  },
+  {
+    "name": "Rolands Sulcs",
+    "team": "Riga Zelli",
+    "nationality": "Latvia",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 2006,
+    "number": 10
+  },
+  {
+    "name": "Toms Skuja",
+    "team": "Riga Zelli",
+    "nationality": "Latvia",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 2002,
+    "number": 3
+  },
+  {
+    "name": "Tony Perkins",
+    "team": "Riga Zelli",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 2001,
+    "number": 1
+  },
+  {
+    "name": "Tyler Wahl",
+    "team": "Riga Zelli",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 2001,
+    "number": 5
+  },
+  {
+    "name": "Andrea Mezzanotte",
+    "team": "Roma Basketball",
+    "nationality": "Italy",
+    "position": "Forward",
+    "height": 208,
+    "birthYear": 1998,
+    "number": 24
+  },
+  {
+    "name": "Arturs Strautins",
+    "team": "Roma Basketball",
+    "nationality": "Latvia",
+    "position": "Forward",
+    "height": 198,
+    "birthYear": 1998,
+    "number": 12
+  },
+  {
+    "name": "Corey Davis Jr.",
+    "team": "Roma Basketball",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 1997,
+    "number": 5
+  },
+  {
+    "name": "Erik Stevenson",
+    "team": "Roma Basketball",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1999,
+    "number": 10
+  },
+  {
+    "name": "Gerald Ayayi",
+    "team": "Roma Basketball",
+    "nationality": "France",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 2001,
+    "number": 11
+  },
+  {
+    "name": "Giovanni Emejuru",
+    "team": "Roma Basketball",
+    "nationality": "Italy",
+    "position": "Center",
+    "height": 210,
+    "birthYear": 2002,
+    "number": 7
+  },
+  {
+    "name": "Marko Simonovic",
+    "team": "Roma Basketball",
+    "nationality": "Montenegro",
+    "position": "Center",
+    "height": 213,
+    "birthYear": 1999,
+    "number": 19
+  },
+  {
+    "name": "Michael Iuzzolino",
+    "team": "Roma Basketball",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 191,
+    "birthYear": 2001,
+    "number": 33
+  },
+  {
     "name": "Nico Mannion",
     "team": "Roma Basketball",
     "nationality": "Italy",
@@ -2256,6 +2535,366 @@ window.EUROCUP_PLAYERS = [
     "height": 188,
     "birthYear": 2001,
     "number": 1
+  },
+  {
+    "name": "Paul Watson Jr.",
+    "team": "Roma Basketball",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1994,
+    "number": 3
+  },
+  {
+    "name": "Trentyn Flowers",
+    "team": "Roma Basketball",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 2005,
+    "number": 9
+  },
+  {
+    "name": "Artur Konontsuk",
+    "team": "Rostock Seawolves",
+    "nationality": "Estonia",
+    "position": "Forward",
+    "height": 202,
+    "birthYear": 2000,
+    "number": 34
+  },
+  {
+    "name": "Bent Leuchten",
+    "team": "Rostock Seawolves",
+    "nationality": "Germany",
+    "position": "Center",
+    "height": 214,
+    "birthYear": 2002,
+    "number": 51
+  },
+  {
+    "name": "DeAndre Lansdowne",
+    "team": "Rostock Seawolves",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 1989,
+    "number": 9
+  },
+  {
+    "name": "Dominic Lockhart",
+    "team": "Rostock Seawolves",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 199,
+    "birthYear": 1994,
+    "number": 3
+  },
+  {
+    "name": "Elias Baggette",
+    "team": "Rostock Seawolves",
+    "nationality": "Germany",
+    "position": "Guard",
+    "height": 181,
+    "birthYear": 2002,
+    "number": 4
+  },
+  {
+    "name": "Isayah Owens",
+    "team": "Rostock Seawolves",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 187,
+    "birthYear": 2002,
+    "number": 6
+  },
+  {
+    "name": "Johnathan Stove",
+    "team": "Rostock Seawolves",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1995,
+    "number": 22
+  },
+  {
+    "name": "Matthes Tilsen",
+    "team": "Rostock Seawolves",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 2006,
+    "number": 31
+  },
+  {
+    "name": "Owen Klassen",
+    "team": "Rostock Seawolves",
+    "nationality": "Canada",
+    "position": "Center",
+    "height": 208,
+    "birthYear": 1991,
+    "number": 29
+  },
+  {
+    "name": "Philipp Hartwich",
+    "team": "Rostock Seawolves",
+    "nationality": "Germany",
+    "position": "Center",
+    "height": 218,
+    "birthYear": 1995,
+    "number": 7
+  },
+  {
+    "name": "Robin Amaize",
+    "team": "Rostock Seawolves",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 196,
+    "birthYear": 1994,
+    "number": 15
+  },
+  {
+    "name": "TJ Crockett Jr.",
+    "team": "Rostock Seawolves",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 187,
+    "birthYear": 1999,
+    "number": 0
+  },
+  {
+    "name": "Todd Withers",
+    "team": "Rostock Seawolves",
+    "nationality": "USA",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1996,
+    "number": 33
+  },
+  {
+    "name": "Zach Copeland",
+    "team": "Rostock Seawolves",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1997,
+    "number": 2
+  },
+  {
+    "name": "Balsa Koprivica",
+    "team": "San Pablo Burgos",
+    "nationality": "Serbia",
+    "position": "Center",
+    "height": 216,
+    "birthYear": 2000,
+    "number": 7
+  },
+  {
+    "name": "Chase Audige",
+    "team": "San Pablo Burgos",
+    "nationality": "Jamaica",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1999,
+    "number": 1
+  },
+  {
+    "name": "Christian Sengfelder",
+    "team": "San Pablo Burgos",
+    "nationality": "Germany",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1995,
+    "number": 43
+  },
+  {
+    "name": "Daniel Diez",
+    "team": "San Pablo Burgos",
+    "nationality": "Spain",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 1993,
+    "number": 11
+  },
+  {
+    "name": "DJ Steward",
+    "team": "San Pablo Burgos",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 188,
+    "birthYear": 2001,
+    "number": 4
+  },
+  {
+    "name": "Dusan Radosavljevic",
+    "team": "San Pablo Burgos",
+    "nationality": "Serbia",
+    "position": "Forward",
+    "height": 201,
+    "birthYear": 2001,
+    "number": 15
+  },
+  {
+    "name": "Pablo Almazan",
+    "team": "San Pablo Burgos",
+    "nationality": "Spain",
+    "position": "Forward",
+    "height": 200,
+    "birthYear": 1989,
+    "number": 8
+  },
+  {
+    "name": "Raul Lobaco",
+    "team": "San Pablo Burgos",
+    "nationality": "Spain",
+    "position": "Guard",
+    "height": 190,
+    "birthYear": 2000,
+    "number": 55
+  },
+  {
+    "name": "Retin Obasohan",
+    "team": "San Pablo Burgos",
+    "nationality": "Belgium",
+    "position": "Guard",
+    "height": 185,
+    "birthYear": 1993,
+    "number": 32
+  },
+  {
+    "name": "Ruben Guerrero",
+    "team": "San Pablo Burgos",
+    "nationality": "Spain",
+    "position": "Center",
+    "height": 213,
+    "birthYear": 1995,
+    "number": 12
+  },
+  {
+    "name": "Sekou Doumbouya",
+    "team": "San Pablo Burgos",
+    "nationality": "France",
+    "position": "Center",
+    "height": 205,
+    "birthYear": 2000,
+    "number": 45
+  },
+  {
+    "name": "Ziga Samar",
+    "team": "San Pablo Burgos",
+    "nationality": "Slovenia",
+    "position": "Guard",
+    "height": 197,
+    "birthYear": 2001,
+    "number": 5
+  },
+  {
+    "name": "Cedric Henderson Jr.",
+    "team": "Siauliai",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 198,
+    "birthYear": 2000,
+    "number": 2
+  },
+  {
+    "name": "Dayvion McKnight",
+    "team": "Siauliai",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 2002,
+    "number": 20
+  },
+  {
+    "name": "Dovydas Romancenko",
+    "team": "Siauliai",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 206,
+    "birthYear": 1998,
+    "number": 25
+  },
+  {
+    "name": "Efton Reid",
+    "team": "Siauliai",
+    "nationality": "USA",
+    "position": "Center",
+    "height": 213,
+    "birthYear": 2002,
+    "number": 15
+  },
+  {
+    "name": "Erikas Venskus",
+    "team": "Siauliai",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 205,
+    "birthYear": 2000,
+    "number": 21
+  },
+  {
+    "name": "Karolis Lukosiunas",
+    "team": "Siauliai",
+    "nationality": "Lithuania",
+    "position": "Guard",
+    "height": 195,
+    "birthYear": 1997,
+    "number": 16
+  },
+  {
+    "name": "Martynas Pacevicius",
+    "team": "Siauliai",
+    "nationality": "Lithuania",
+    "position": "Center",
+    "height": 205,
+    "birthYear": 1997,
+    "number": 9
+  },
+  {
+    "name": "Michael Caffey",
+    "team": "Siauliai",
+    "nationality": "USA",
+    "position": "Guard",
+    "height": 183,
+    "birthYear": 1993,
+    "number": 55
+  },
+  {
+    "name": "Rokas Civilis",
+    "team": "Siauliai",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 195,
+    "birthYear": 2005,
+    "number": 77
+  },
+  {
+    "name": "Selim Fofana",
+    "team": "Siauliai",
+    "nationality": "Switzerland",
+    "position": "Guard",
+    "height": 193,
+    "birthYear": 1999,
+    "number": 7
+  },
+  {
+    "name": "Simas Jarumbauskas",
+    "team": "Siauliai",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 197,
+    "birthYear": 2000,
+    "number": 17
+  },
+  {
+    "name": "Tauras Jogela",
+    "team": "Siauliai",
+    "nationality": "Lithuania",
+    "position": "Forward",
+    "height": 203,
+    "birthYear": 1993,
+    "number": 22
   },
   {
     "name": "Alessandro Bertini",
