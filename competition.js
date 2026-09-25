@@ -5,8 +5,9 @@
  * choice is made here, up front, and switching competitions reloads the page.
  *
  * The choice lives in elg:comp ("euroleague" | "eurocup"); a ?comp= in the URL
- * sets it too. The EuroCup is only chosen once it has players; until then it
- * stays the coming-soon page and nothing here changes anything.
+ * sets it too. The EuroCup is only chosen once build_eurocup.js opens it
+ * (EUROCUP_OPEN) and it has players; until then it stays the coming-soon page
+ * and nothing here changes anything.
  *
  * In EuroCup mode:
  *   - window.PLAYERS / window.TEAMS become the EuroCup's, the EuroLeague's are
@@ -39,7 +40,7 @@
   try { fromURL = /[?&]comp=([a-z]+)/.exec(window.location.search || ""); fromURL = fromURL && fromURL[1]; } catch (e) {}
   if (NAMES[fromURL]) writePref(fromURL);
 
-  var ready = !!(window.EUROCUP_PLAYERS && window.EUROCUP_PLAYERS.length);
+  var ready = !!(window.EUROCUP_OPEN && window.EUROCUP_PLAYERS && window.EUROCUP_PLAYERS.length);
   var comp = (readPref() === "eurocup" && ready) ? "eurocup" : "euroleague";
 
   window.ELG_COMP = {

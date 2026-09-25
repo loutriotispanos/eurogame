@@ -93,6 +93,7 @@ eval(fs.readFileSync("eurocup_players.js", "utf8"));
 // with some EuroLeague saves already in storage that must stay untouched.
 var EC = !!process.env.ELG_EC;
 if (EC) {
+  window.EUROCUP_OPEN = true;
   window.EUROCUP_TEAMS = { "Test Club A": { country: "Spain" }, "Test Club B": { country: "Italy" }, "Test Club C": { country: "France" } };
   window.EUROCUP_PLAYERS = window.PLAYERS.slice(0, 30).map(function (p, i) {
     return { name: p.name, team: ["Test Club A", "Test Club B", "Test Club C"][i % 3], nationality: p.nationality,
@@ -2445,6 +2446,24 @@ fire(byId("oo-daily"), "click");
 ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way home from an archive replay");
 
 
+// --- The EuroCup database ------------------------------------------------------
+(function () {
+  var EC = window.EUROCUP_PLAYERS || [], clubs = {};
+  EC.forEach(function (p) { clubs[p.team] = 1; });
+  var names = Object.keys(clubs);
+  if (window.EUROCUP_OPEN) {
+    ok(names.length === Object.keys(window.EUROCUP_TEAMS).length && names.length >= 30 && EC.length > 300,
+       "the open EuroCup has every club filled (" + names.length + " clubs, " + EC.length + " players)");
+    ok(EC.every(function (p) { return p.birthYear < 2007; }), "…and no one born 2007 or later (the no-young-players rule)");
+    var rm = require("fs").readFileSync(__dirname + "/rostermaster.js", "utf8");
+    var noBadge = names.filter(function (t) { return rm.indexOf('"' + t + '":') === -1; });
+    ok(noBadge.length === 0, "…and every EuroCup club has its own Roster Master badge" + (noBadge.length ? " (missing: " + noBadge.join(", ") + ")" : ""));
+    var html = require("fs").readFileSync(__dirname + "/index.html", "utf8");
+    ok((html.match(/class="comp-text" data-ec="/g) || []).length >= 7 && /<li data-ec-hide><strong>Non-active<\/strong>/.test(html),
+       "…and the EuroCup's own words are in the page: taglines, rules, footer (and no Non-active rule)");
+  }
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};
@@ -2455,14 +2474,14 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
 })();
 
 // --- Competitions: the EuroLeague run (this one) and the EuroCup run ---------
-ok(window.ELG_COMP.id === "euroleague" && window.ELG_COMP.eurocupReady === (window.EUROCUP_PLAYERS.length > 0) && window.EL_PLAYERS === undefined,
+ok(window.ELG_COMP.id === "euroleague" && window.ELG_COMP.eurocupReady === !!(window.EUROCUP_OPEN && window.EUROCUP_PLAYERS.length) && window.EL_PLAYERS === undefined,
    "the EuroLeague is the competition by default, and its players are the games' players");
 ok(window.ELG_COMP.plays("thegrid") && window.ELG_COMP.plays("pathbetween"), "…where every game is offered");
 (function () {
   var saved = store["elg:comp"];
   store["elg:comp"] = JSON.stringify("eurocup");
   if (!window.ELG_COMP.eurocupReady) {
-    ok(window.PLAYERS.length > 200, "…and a saved EuroCup choice changes nothing while the EuroCup has no players");
+    ok(window.PLAYERS.length > 200, "…and a saved EuroCup choice changes nothing while the EuroCup isn't open");
     window.Hub._goComp("eurocup");
     ok(window.Hub._curView() === "eurocup", "…where choosing EuroCup still opens the coming-soon page");
   }

@@ -36,7 +36,41 @@
     "Real Madrid":      { code: "MAD", bg: "#eeb211", fg: "#1d1a14" },
     "Valencia":         { code: "VAL", bg: "#ee7623", fg: "#1d1a14" },
     "Virtus Bologna":   { code: "VIR", bg: "#1d1a14", fg: "#ffd100" },
-    "Zalgiris Kaunas":  { code: "ZAL", bg: "#00685e", fg: "#ffffff" }
+    "Zalgiris Kaunas":  { code: "ZAL", bg: "#00685e", fg: "#ffffff" },
+    // EuroCup clubs: the official three-letter codes (PAOK is PAK, since PAO is
+    // Panathinaikos), on the club colour, text only
+    "Aris Thessaloniki":  { code: "ARI", bg: "#ffd200", fg: "#1d1a14" },
+    "Derthona Tortona":   { code: "TRT", bg: "#1f3f8f", fg: "#ffffff" },
+    "Bahcesehir College": { code: "BAH", bg: "#0d1f5c", fg: "#ffffff" },
+    "Balkan Botevgrad":   { code: "BLK", bg: "#008c45", fg: "#ffffff" },
+    "Bosna Sarajevo":     { code: "BOS", bg: "#1c2b5a", fg: "#ffffff" },
+    "Buducnost":          { code: "BUD", bg: "#004a99", fg: "#ffffff" },
+    "Cedevita Olimpija":  { code: "LJU", bg: "#00843d", fg: "#ffffff" },
+    "JL Bourg-en-Bresse": { code: "BOU", bg: "#d6001c", fg: "#ffffff" },
+    "Trento":             { code: "TRN", bg: "#1d1a14", fg: "#ffffff" },
+    "Hapoel Jerusalem":   { code: "JER", bg: "#d71920", fg: "#ffffff" },
+    "Manresa":            { code: "MAN", bg: "#c8102e", fg: "#ffffff" },
+    "La Laguna Tenerife": { code: "TNF", bg: "#ffcc00", fg: "#1d1a14" },
+    "Le Mans":            { code: "LEM", bg: "#f15a24", fg: "#ffffff" },
+    "Lietkabelis":        { code: "LKB", bg: "#7a1f3d", fg: "#ffffff" },
+    "London Lions":       { code: "LLI", bg: "#1d1a14", fg: "#ffffff" },
+    "Maxima Roma":        { code: "MRO", bg: "#e6a532", fg: "#1d1a14" },
+    "Napoli Basketball":  { code: "NAP", bg: "#12a0d7", fg: "#ffffff" },
+    "Neptunas":           { code: "KLA", bg: "#1f3a7a", fg: "#ffffff" },
+    "Niners Chemnitz":    { code: "NIN", bg: "#1d1a14", fg: "#ffffff" },
+    "PAOK":               { code: "PAK", bg: "#000000", fg: "#ffffff" },
+    "Ratiopharm Ulm":     { code: "ULM", bg: "#ef7d00", fg: "#ffffff" },
+    "San Pablo Burgos":   { code: "BGS", bg: "#1e4fa3", fg: "#ffffff" },
+    "Riga Zelli":         { code: "RIG", bg: "#e6007e", fg: "#ffffff" },
+    "Roma Basketball":    { code: "BCR", bg: "#3d3d3d", fg: "#ffffff" },
+    "Rostock Seawolves":  { code: "RTK", bg: "#1b2a5c", fg: "#ffffff" },
+    "Siauliai":           { code: "SIA", bg: "#f0a030", fg: "#1d1a14" },
+    "Skyliners Frankfurt":{ code: "FRA", bg: "#005aa9", fg: "#ffffff" },
+    "Slask Wroclaw":      { code: "WRO", bg: "#00843d", fg: "#ffffff" },
+    "Tofas":              { code: "BUR", bg: "#3dbb3d", fg: "#1d1a14" },
+    "Turk Telekom":       { code: "TTK", bg: "#1a8fc7", fg: "#ffffff" },
+    "Cluj-Napoca":        { code: "CLU", bg: "#1d1a14", fg: "#ffffff" },
+    "Reyer Venezia":      { code: "VNC", bg: "#7a1c2e", fg: "#ffffff" }
   };
   function clubMeta(t) {
     if (CLUB_META[t]) return CLUB_META[t];
