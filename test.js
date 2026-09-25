@@ -89,32 +89,21 @@ eval(fs.readFileSync("legends.js", "utf8"));
 eval(fs.readFileSync("eurocup_players.js", "utf8"));
 eval(fs.readFileSync("careers.js", "utf8"));
 eval(fs.readFileSync("eurocup_careers.js", "utf8"));
+eval(fs.readFileSync("grids.js", "utf8"));
+eval(fs.readFileSync("eurocup_grids.js", "utf8"));
+eval(fs.readFileSync("paths.js", "utf8"));
+eval(fs.readFileSync("eurocup_paths.js", "utf8"));
 // `ELG_EC=1 node test.js` is the EuroCup run (the main run spawns it near the
-// end). The real EuroCup file is empty until the rosters are researched, so it
-// plays on a fixture: thirty EuroLeague records re-homed to three made-up clubs,
-// with some EuroLeague saves already in storage that must stay untouched.
+// end). It plays on the real EuroCup files, with some EuroLeague saves already
+// in storage that must stay untouched.
 var EC = !!process.env.ELG_EC;
 if (EC) {
-  window.EUROCUP_OPEN = true;
-  window.EUROCUP_TEAMS = { "Test Club A": { country: "Spain" }, "Test Club B": { country: "Italy" }, "Test Club C": { country: "France" } };
-  window.EUROCUP_PLAYERS = window.PLAYERS.slice(0, 30).map(function (p, i) {
-    return { name: p.name, team: ["Test Club A", "Test Club B", "Test Club C"][i % 3], nationality: p.nationality,
-             position: p.position, height: p.height, birthYear: p.birthYear, number: p.number };
-  });
-  // Their careers are their EuroLeague ones with the last stint moved to the made-up club.
-  var fixTeam = {};
-  window.EUROCUP_PLAYERS.forEach(function (p) { fixTeam[p.name] = p.team; });
-  window.EUROCUP_CAREERS = window.CAREERS.filter(function (c) { return fixTeam[c.name]; }).map(function (c) {
-    var career = c.career.map(function (s) { return { team: s.team, from: s.from, to: s.to }; });
-    career[career.length - 1] = { team: fixTeam[c.name], from: 2026, to: null };
-    return { name: c.name, nationality: c.nationality, position: c.position, active: true, career: career };
-  });
   store["elg:comp"] = JSON.stringify("eurocup");
   store["elg:stats"] = JSON.stringify({ played: 9, wins: 7, curStreak: 3, maxStreak: 5 });
   store["elg:theme"] = JSON.stringify("dark");
   win.location.reload = function () { win._reloaded = true; };
 }
-eval(fs.readFileSync("competition.js", "utf8"));   // EuroLeague unless a EuroCup fixture is loaded
+eval(fs.readFileSync("competition.js", "utf8"));   // EuroLeague unless the EuroCup run chose the EuroCup
 eval(fs.readFileSync("lineups.js", "utf8"));
 eval(fs.readFileSync("puzzles.js", "utf8"));
 eval(fs.readFileSync("oddones.js", "utf8"));
@@ -123,10 +112,8 @@ eval(fs.readFileSync("playerid.js", "utf8"));
 eval(fs.readFileSync("completefive.js", "utf8"));
 eval(fs.readFileSync("connections.js", "utf8"));
 eval(fs.readFileSync("careerorder.js", "utf8"));
-eval(fs.readFileSync("grids.js", "utf8"));
 eval(fs.readFileSync("thegrid.js", "utf8"));
 eval(fs.readFileSync("clubreveal.js", "utf8"));
-eval(fs.readFileSync("paths.js", "utf8"));
 eval(fs.readFileSync("pathbetween.js", "utf8"));
 eval(fs.readFileSync("oddoneout.js", "utf8"));
 eval(fs.readFileSync("higherlower.js", "utf8"));
@@ -142,14 +129,31 @@ function ok(c, m) { if (c) { pass++; console.log("  ok   " + m); } else { fail++
 if (EC) {
   var C = window.ELG_COMP;
   ok(C.id === "eurocup" && C.name === "EuroCup" && C.eurocupReady, "EC: with EuroCup players and elg:comp=eurocup, the EuroCup is the competition");
-  ok(window.PLAYERS === window.EUROCUP_PLAYERS && window.EL_PLAYERS.length > 200 && window.TEAMS["Test Club A"],
+  ok(window.PLAYERS === window.EUROCUP_PLAYERS && window.EL_PLAYERS.length > 200 && window.TEAMS["Aris Thessaloniki"] && !window.TEAMS["Real Madrid"],
      "EC: the games get the EuroCup's players and clubs; the EuroLeague's are kept aside");
   ok(window.LEGENDS.length === 0, "EC: no non-active pool, that is EuroLeague history");
   ok(C.plays("mystery") && C.plays("higherlower") && C.plays("rostermaster") && C.plays("playerid") && C.plays("careerorder")
-     && !C.plays("thegrid") && !C.plays("pathbetween") && !C.plays("connections") && !C.plays("completefive"),
-     "EC: the roster and career games are offered (the rest need lineups, puzzles or grid/path banks)");
-  ok(window.CAREERS === window.EUROCUP_CAREERS && window.CAREERS.length > 10 && window.EL_CAREERS.length > 400,
+     && C.plays("thegrid") && C.plays("pathbetween") && !C.plays("connections") && !C.plays("completefive") && !C.plays("clubreveal") && !C.plays("oddoneout"),
+     "EC: the roster and career games are offered (the rest need lineups or puzzles the EuroCup doesn't have)");
+  ok(window.CAREERS === window.EUROCUP_CAREERS && window.CAREERS.length > 300 && window.EL_CAREERS.length > 400,
      "EC: the games get the EuroCup's careers; the EuroLeague's are kept aside");
+  ok(window.GRIDS === window.EUROCUP_GRIDS && window.PATHS === window.EUROCUP_PATHS && window.EL_GRIDS.length && window.EL_PATHS.length,
+     "EC: and the EuroCup's grid and path banks, the EuroLeague's kept aside");
+  window.TheGrid.goDaily();
+  ok(window.EUROCUP_GRIDS.indexOf(window.TheGrid._peek().puzzle) >= 0, "EC: The Grid's daily board is a EuroCup board");
+  window.PathBetween.goDaily();
+  ok(window.EUROCUP_PATHS.some(function (q) { var k = window.PathBetween._peek(); return q.a === k.a && q.b === k.b; }),
+     "EC: Path Between's daily pair is a EuroCup pair");
+  // The banks were built from these same files through these same hooks; a
+  // later edit to the EuroCup careers must not leave a board or pair broken.
+  ok(window.EUROCUP_GRIDS.length >= 30 && window.EUROCUP_GRIDS.every(function (g) {
+       return g.rows.every(function (r) { return g.cols.every(function (c) {
+         return window.TheGrid._answers(r, c).length >= (r.t === "pos" || c.t === "pos" ? 4 : 2);
+       }); });
+     }), "EC: every EuroCup grid cell still has its minimum of right answers");
+  ok(window.EUROCUP_PATHS.length >= 100 && window.EUROCUP_PATHS.every(function (q) {
+       return window.PathBetween._bfs(q.a).dist[q.b] === q.par;
+     }), "EC: every EuroCup path still has exactly its par");
   var paintRule = /:root\[data-comp="eurocup"\] \.game-card((?::not\(\[data-game="[a-z]+"\]\))+) \{ display: none; \}/.exec(fs.readFileSync("index.html", "utf8"));
   var painted = paintRule ? paintRule[1].match(/"[a-z]+"/g).map(function (q) { return q.slice(1, -1); }).sort().join() : "";
   var offered = ["mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"]
@@ -187,11 +191,11 @@ if (EC) {
   ok(window.Mystery._applyChallenge() === false && win._reloaded && JSON.parse(store["elg:comp"]) === "euroleague",
      "EC: a EuroLeague challenge link switches back to the EuroLeague and reloads on the same link");
   store["elg:comp"] = JSON.stringify("eurocup"); win.location.hash = "";
-  window.Hub._showView("thegrid");
+  window.Hub._showView("connections");
   ok(window.Hub._curView() === "home", "EC: a link to a game the EuroCup doesn't offer lands on the hub");
   window.Hub._showView("records");
   ok(window.Hub._curView() === "records", "EC: Records still opens");
-  ok(window.Records._collect().dailies.map(function (d) { return d.id; }).join() === "mystery,playerid,careerorder,higherlower", "EC: Records lists only the EuroCup's dailies");
+  ok(window.Records._collect().dailies.map(function (d) { return d.id; }).join() === "mystery,playerid,careerorder,thegrid,pathbetween,higherlower", "EC: Records lists only the EuroCup's dailies");
   window.Hub._showView("eurocup");
   ok(window.Hub._curView() === "home", "EC: the coming-soon page is gone once the EuroCup plays");
   window.Hub._renderCompMenu();

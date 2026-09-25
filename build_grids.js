@@ -1,5 +1,7 @@
 /*
  * Generates grids.js (window.GRIDS) for The Grid — run `node build_grids.js`.
+ * `node build_grids.js --eurocup` writes eurocup_grids.js (window.EUROCUP_GRIDS)
+ * from the EuroCup careers instead.
  *
  * Each puzzle = 3 row criteria + 3 col criteria; every one of the 9 cells must
  * be answerable. Rows are always clubs; columns mix clubs / nationalities /
@@ -21,9 +23,13 @@
 const fs = require("fs");
 
 // --- Minimal browser stubs so the data files + thegrid.js load ---------------
+// `node build_grids.js --eurocup` builds the EuroCup bank (eurocup_grids.js)
+// instead: the data files load in index.html's order and competition.js runs
+// with the EuroCup chosen, so the generator sees exactly what the game does.
+const EC = process.argv.indexOf("--eurocup") >= 0;
 global.window = {
   addEventListener: function () {},
-  localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} }
+  localStorage: { getItem: function (k) { return EC && k === "elg:comp" ? JSON.stringify("eurocup") : null; }, setItem: function () {}, removeItem: function () {} }
 };
 global.document = {
   readyState: "complete",
@@ -35,6 +41,12 @@ global.document = {
 eval(fs.readFileSync("players.js", "utf8"));
 eval(fs.readFileSync("legends.js", "utf8"));
 eval(fs.readFileSync("careers.js", "utf8"));
+if (EC) {
+  eval(fs.readFileSync("eurocup_players.js", "utf8"));
+  eval(fs.readFileSync("eurocup_careers.js", "utf8"));
+  eval(fs.readFileSync("competition.js", "utf8"));
+  if (window.ELG_COMP.id !== "eurocup") { console.error("the EuroCup isn't open — nothing to build"); process.exit(1); }
+}
 eval(fs.readFileSync("lineups.js", "utf8"));
 eval(fs.readFileSync("clubs.js", "utf8"));   // same-club era names (Tau Ceramica = Baskonia) — thegrid.js folds them via CLUBS.canonical, and the generator must share that definition or the two disagree
 window.GRIDS = [];                       // not built yet — thegrid.js only needs the data
@@ -49,12 +61,22 @@ const MAX_USE = 22;                      // per criterion value, keeps variety
 const SEED = 20260709;
 
 // Column recipes (rows are always 3 clubs). Rotated per generated puzzle.
-const RECIPES = [
+// The EuroCup pool (350 careers, mostly one current club deep) can't feed two
+// nationality columns: nearly every one would need USA, which hits MAX_USE and
+// stalls the rotation. So its boards skip that recipe, and its row/column
+// clubs need fewer careers behind them (CLUB_MIN, MIN_COMPAT below). The
+// per-cell answer minimums above are the same for both.
+const RECIPES = EC ? [
+  ["club", "nat", "pos"],
+  ["club", "club", "nat"],
+  ["club", "club", "pos"]
+] : [
   ["club", "nat", "pos"],
   ["club", "club", "nat"],
   ["club", "nat", "nat"],
   ["club", "club", "pos"]
 ];
+const CLUB_MIN = EC ? 4 : 6;             // careers through a club before it can be a criterion
 
 // --- Seeded RNG (deterministic output) ----------------------------------------
 function mulberry32(a) {
@@ -77,17 +99,18 @@ for (const name in U) {
 }
 // Criteria use EuroLeague clubs only (window.TEAMS is the league registry), so
 // grids stay on-theme — answer players may still carry NBA/other clubs in their
-// careers, those just aren't used as row/column headers.
-const TEAMS = window.TEAMS || {};
+// careers, those just aren't used as row/column headers. A EuroCup board takes
+// its own clubs and the EuroLeague's: EuroCup careers run through both.
+const TEAMS = Object.assign({}, window.EL_TEAMS || {}, window.TEAMS || {});
 // Alias-source names (Tau Ceramica → Baskonia) stay valid as ANSWERS but must
 // not become criteria of their own: post-merge, a board pairing "Tau Ceramica"
 // with "Baskonia" is the same club twice, two near-identical criteria
 // competing for the same players under the each-player-once rule.
 const canonicalOnly = c => !window.CLUBS || window.CLUBS.canonical(c) === c;
-const CLUBS = Object.keys(clubCount).filter(c => TEAMS[c] && canonicalOnly(c) && clubCount[c] >= 6).sort();
+const CLUBS = Object.keys(clubCount).filter(c => TEAMS[c] && canonicalOnly(c) && clubCount[c] >= CLUB_MIN).sort();
 const NATS = Object.keys(natCount).filter(n => natCount[n] >= 6).sort();
 const POSITIONS = ["Guard", "Forward", "Center"];
-console.log("candidates: " + CLUBS.length + " EuroLeague clubs, " + NATS.length + " nationalities");
+console.log("candidates: " + CLUBS.length + " clubs, " + NATS.length + " nationalities");
 
 const used = {};                          // per criterion value → times used
 function useKey(c) { return c.t + ":" + c.v; }
@@ -142,7 +165,7 @@ function compatFor(col) {
   return m;
 }
 // Column candidates need a fighting chance: at least 6 compatible row clubs.
-const MIN_COMPAT = 6;
+const MIN_COMPAT = EC ? 3 : 6;
 const COL_CLUBS = CLUBS.filter(v => Object.keys(compatFor({ t: "club", v })).length >= MIN_COMPAT);
 const COL_NATS = NATS.filter(v => Object.keys(compatFor({ t: "nat", v })).length >= MIN_COMPAT);
 console.log("column candidates: " + COL_CLUBS.length + " clubs, " + COL_NATS.length + " nationalities (" + COL_NATS.join(", ") + ")");
@@ -191,9 +214,10 @@ while (puzzles.length < TARGET && attempts < ATTEMPTS) {
 console.log("built " + puzzles.length + " grids in " + attempts + " attempts");
 if (puzzles.length < 30) { console.error("too few grids — loosen the knobs"); process.exit(1); }
 
-const out = "/* AUTO-GENERATED by build_grids.js — do not edit by hand. Puzzles for The Grid. */\n" +
-  "window.GRIDS = [\n" +
+const FILE = EC ? "eurocup_grids.js" : "grids.js";
+const out = "/* AUTO-GENERATED by build_grids.js" + (EC ? " --eurocup" : "") + " — do not edit by hand. Puzzles for The Grid" + (EC ? " (EuroCup)" : "") + ". */\n" +
+  "window." + (EC ? "EUROCUP_GRIDS" : "GRIDS") + " = [\n" +
   puzzles.map(p => "  " + JSON.stringify(p)).join(",\n") +
   "\n];\n";
-fs.writeFileSync("grids.js", out);
-console.log("wrote grids.js (" + puzzles.length + " puzzles)");
+fs.writeFileSync(FILE, out);
+console.log("wrote " + FILE + " (" + puzzles.length + " puzzles)");
