@@ -45,6 +45,9 @@ window.EUROCUP_TEAMS = {
   },
   "Le Mans": {
     "country": "France"
+  },
+  "Lietkabelis": {
+    "country": "Lithuania"
   }
 };
 

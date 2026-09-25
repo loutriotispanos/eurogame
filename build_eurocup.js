@@ -43,7 +43,8 @@ const TEAMS = {
   "Hapoel Jerusalem": { country: "Israel" },
   "Manresa": { country: "Spain" },
   "La Laguna Tenerife": { country: "Spain" },
-  "Le Mans": { country: "France" }
+  "Le Mans": { country: "France" },
+  "Lietkabelis": { country: "Lithuania" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -259,7 +260,21 @@ const PENDING = [
   { name: "Swann Penda", team: "Le Mans", position: "Forward", number: 93 },
   { name: "Wilfried Yeguete", team: "Le Mans", position: "Center", number: 15 },
   { name: "Tyler Beracou", team: "Le Mans", position: "Center", number: 26 },
-  { name: "Tashawn Thomas", team: "Le Mans", position: "Center", number: 35 }
+  { name: "Tashawn Thomas", team: "Le Mans", position: "Center", number: 35 },
+  // Lietkabelis
+  { name: "Alexander Schumacher", team: "Lietkabelis", position: "Guard", number: 2 },
+  { name: "Nojus Radzius", team: "Lietkabelis", position: "Guard", number: 5 },
+  { name: "Ognjen Jaramaz", team: "Lietkabelis", position: "Guard", number: 10 },
+  { name: "Titas Katauskas", team: "Lietkabelis", position: "Guard", number: 72 },
+  { name: "Marius Valinskas", team: "Lietkabelis", position: "Guard", number: 99 },
+  { name: "Keondre Kennedy", team: "Lietkabelis", position: "Forward", number: 0 },
+  { name: "Zygimantas Simonis", team: "Lietkabelis", position: "Forward", number: 3 },
+  { name: "Daniel Baslyk", team: "Lietkabelis", position: "Forward", number: 9 },
+  { name: "Milos Ilic", team: "Lietkabelis", position: "Forward", number: 11 },
+  { name: "Ivan Fevrier", team: "Lietkabelis", position: "Forward", number: 23 },
+  { name: "Gytis Nemeiksa", team: "Lietkabelis", position: "Forward", number: 50 },
+  { name: "Veljko Ilic", team: "Lietkabelis", position: "Center", number: 8 },
+  { name: "Gabrielius Maldunas", team: "Lietkabelis", position: "Center", number: 12 }
 ];
 
 // The EuroLeague records a known player's bio is read from.
