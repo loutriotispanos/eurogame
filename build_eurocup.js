@@ -36,7 +36,8 @@ const TEAMS = {
   "Bahcesehir College": { country: "Turkey" },
   "Balkan Botevgrad": { country: "Bulgaria" },
   "Bosna Sarajevo": { country: "Bosnia and Herzegovina" },
-  "Buducnost": { country: "Montenegro" }
+  "Buducnost": { country: "Montenegro" },
+  "Cedevita Olimpija": { country: "Slovenia" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one
@@ -52,7 +53,9 @@ const PLAYERS = [
   { name: "Karim Jallow", team: "Derthona Tortona", number: 35 },
   // Bahcesehir College
   { name: "Aleksa Avramovic", team: "Bahcesehir College", number: 4 },
-  { name: "Isiaha Mike", team: "Bahcesehir College", number: 24 }
+  { name: "Isiaha Mike", team: "Bahcesehir College", number: 24 },
+  // Cedevita Olimpija
+  { name: "Jaka Blazic", team: "Cedevita Olimpija", number: 11 }
 ];
 
 // New to Euroball: researched in batches once every club is in, then moved to
@@ -137,7 +140,21 @@ const PENDING = [
   { name: "Axel Bouteille", team: "Buducnost", position: "Forward", number: 83 },
   { name: "Justin Smith", team: "Buducnost", position: "Center", number: 0 },
   { name: "Jerry Boutsiele", team: "Buducnost", position: "Center", number: 16 },
-  { name: "Stefan Dordevic", team: "Buducnost", position: "Center", number: 45 }
+  { name: "Stefan Dordevic", team: "Buducnost", position: "Center", number: 45 },
+  // Cedevita Olimpija
+  { name: "Anthony Cowan Jr.", team: "Cedevita Olimpija", position: "Guard", number: 1 },
+  { name: "Jordan Gainey", team: "Cedevita Olimpija", position: "Guard", number: 4 },
+  { name: "Rihards Lomazs", team: "Cedevita Olimpija", position: "Guard", number: 6 },
+  { name: "Derin Can Ustun", team: "Cedevita Olimpija", position: "Guard", number: 7 },
+  { name: "Urban Kroflic", team: "Cedevita Olimpija", position: "Guard", number: 23 },
+  { name: "Rok Radovic", team: "Cedevita Olimpija", position: "Forward", number: 3 },
+  { name: "Miha Cerkvenik", team: "Cedevita Olimpija", position: "Forward", number: 20 },
+  { name: "Matthew Hurt", team: "Cedevita Olimpija", position: "Forward", number: 21 },
+  { name: "Noah Kirkwood", team: "Cedevita Olimpija", position: "Forward", number: 22 },
+  { name: "Cameron Houindo", team: "Cedevita Olimpija", position: "Center", number: 8 },
+  { name: "Osayi Osifo", team: "Cedevita Olimpija", position: "Center", number: 14 },
+  { name: "David Skara", team: "Cedevita Olimpija", position: "Center", number: 24 },
+  { name: "Jayce Johnson", team: "Cedevita Olimpija", position: "Center", number: 34 }
 ];
 
 // The EuroLeague records a known player's bio is read from.

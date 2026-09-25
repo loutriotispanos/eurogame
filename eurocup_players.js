@@ -24,6 +24,9 @@ window.EUROCUP_TEAMS = {
   },
   "Buducnost": {
     "country": "Montenegro"
+  },
+  "Cedevita Olimpija": {
+    "country": "Slovenia"
   }
 };
 
@@ -90,6 +93,15 @@ window.EUROCUP_PLAYERS = [
     "height": 203,
     "birthYear": 1997,
     "number": 24
+  },
+  {
+    "name": "Jaka Blazic",
+    "team": "Cedevita Olimpija",
+    "nationality": "Slovenia",
+    "position": "Guard",
+    "height": 196,
+    "birthYear": 1990,
+    "number": 11
   },
   {
     "name": "Karim Jallow",
