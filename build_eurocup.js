@@ -45,7 +45,7 @@ const TEAMS = {
   "La Laguna Tenerife": { country: "Spain" },
   "Le Mans": { country: "France" },
   "Lietkabelis": { country: "Lithuania" },
-  "London Lions": { country: "Great Britain" }
+  "London Lions": { country: "United Kingdom" }
 };
 
 // { name, team, number } for a known player, or the full record for a new one

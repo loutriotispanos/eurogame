@@ -50,7 +50,7 @@ window.EUROCUP_TEAMS = {
     "country": "Lithuania"
   },
   "London Lions": {
-    "country": "Great Britain"
+    "country": "United Kingdom"
   }
 };
 
