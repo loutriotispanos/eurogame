@@ -21,7 +21,7 @@
 (function () {
   "use strict";
   var KEY = "elg:comp";
-  var SHARED = { "elg:comp": 1, "elg:theme": 1, "elg:fbname": 1, "elg:fbdraft": 1,
+  var SHARED = { "elg:comp": 1, "elg:theme": 1, "elg:fbname": 1, "elg:fbdraft": 1, "elg:consent": 1,
                  "elg:seenhelp": 1, "elg:hl:seenhelp": 1, "elg:rm:seenhelp": 1 };
   var COMP_GAMES = { eurocup: ["mystery", "higherlower", "rostermaster"] };
   var NAMES = { euroleague: "EuroLeague", eurocup: "EuroCup" };

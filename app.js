@@ -92,6 +92,32 @@
       items[i].innerHTML = (id === "eurocup" ? "EuroCup" : "EuroLeague") + ' <span class="comp-tag">' + tag + "</span>";
     }
   }
+  // --- Stats consent (Google Analytics) ----------------------------------------
+  // The loader in <head> reads elg:consent and only fetches gtag.js on "yes".
+  // This is the other half: the bar that asks once, and "Stats settings" in the
+  // colophon that brings it back. Saying no after a yes stops GA and clears its
+  // cookies (ELG_STATS.revoke).
+  function statsChoice() { var c = lsGet("elg:consent", null); return c === "yes" || c === "no" ? c : null; }
+  function setStatsBar(show) { var bar = $("stats-bar"); if (bar) bar.hidden = !show; }
+  function chooseStats(yes) {
+    var c = yes ? "yes" : "no";
+    lsSet("elg:consent", c);
+    var S = window.ELG_STATS;
+    if (S) {
+      S.choice = c;
+      if (yes && S.load) S.load();
+      if (!yes && S.revoke) S.revoke();
+    }
+    setStatsBar(false);
+  }
+  function wireStats() {
+    var y = $("stats-yes"), n = $("stats-no"), l = $("stats-link");
+    if (y) y.addEventListener("click", function () { chooseStats(true); });
+    if (n) n.addEventListener("click", function () { chooseStats(false); });
+    if (l) l.addEventListener("click", function (e) { if (e && e.preventDefault) e.preventDefault(); setStatsBar(true); });
+    setStatsBar(!statsChoice());          // ask only until there is an answer
+  }
+
   function wireCompetition() {
     renderCompMenu();
     COMP_SWITCHES.forEach(function (p) {
@@ -536,6 +562,7 @@
     var ab = $("archive-btn");
     if (ab) ab.addEventListener("click", function () { pushNav({ v: "archive" }); showView("archive"); });
     wireCompetition();
+    wireStats();
     // The colophon's "Send feedback". readVersion is async and refreshes the href
     // itself once Cache Storage answers, so a slow reply can't leave a stale link.
     readVersion();
@@ -842,6 +869,7 @@
     _getTheme: getTheme, _applyTheme: applyTheme, _toggleTheme: toggleTheme,
     _sendMail: sendMail, _openFeedback: openFeedback, _closeFeedback: closeFeedback,
     _copyAddress: copyAddress, _showView: showView, _pushNav: pushNav, _urlFor: urlFor,
+    _chooseStats: chooseStats, _wireStats: wireStats, _statsChoice: statsChoice,
     _goComp: goComp, _renderCompMenu: renderCompMenu, _curView: function () { return curView; },
     _isMode: isMode, _pageTitle: pageTitle, _modes: MODES,
     _slugs: SLUGS, _siteRoot: siteRoot, _titles: TITLES, _canon: CANON, _linkedGame: linkedGame,

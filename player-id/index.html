@@ -75,6 +75,46 @@
     document.head.appendChild(s);
   })();
 </script>
+<!-- Google Analytics — ONLY with the visitor's consent. Unlike the beacon above
+     it sets cookies (_ga) and keeps a profile, so under EU rules it may not run
+     until someone says yes. Nothing from Google is fetched before that: no
+     gtag.js, no request, no cookie. The choice is the stats bar (app.js), kept in
+     elg:consent ("yes" | "no"); "no" also clears any _ga cookie a past yes left.
+     Host-gated like the beacon, so dev sessions and the mirror stay out. -->
+<script>
+  (function () {
+    var GA_ID = "G-16K70W8SVX";
+    var live = location.hostname === "euroballgames.com" || location.hostname === "www.euroballgames.com";
+    function load() {
+      if (window.__elgGA || !live) return;
+      window.__elgGA = true;
+      window["ga-disable-" + GA_ID] = false;
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag("js", new Date());
+      window.gtag("config", GA_ID);
+    }
+    function revoke() {
+      window["ga-disable-" + GA_ID] = true;
+      var host = location.hostname, names = document.cookie.split(";").map(function (c) { return c.split("=")[0].trim(); });
+      names.forEach(function (n) {
+        if (n.indexOf("_ga") !== 0) return;
+        [host, "." + host.replace(/^www\./, "")].forEach(function (d) {
+          document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=" + d;
+        });
+        document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      });
+    }
+    var choice = null;
+    try { choice = JSON.parse(localStorage.getItem("elg:consent")); } catch (e) {}
+    window.ELG_STATS = { id: GA_ID, choice: choice, load: load, revoke: revoke };
+    if (choice === "yes") load();
+  })();
+</script>
 <style>
   /* =====================================================================
      Euroball — hand-set editorial stylesheet.
@@ -549,6 +589,21 @@
     text-decoration: underline; text-underline-offset: 2px;
   }
   .colophon-link:hover { color: var(--ink); }
+  /* The stats bar: a ruled strip over the bottom edge, in the paper's own grammar —
+     hairline above, ink pill for yes, outline for no. Fixed, so it never reflows
+     the hub; hidden until app.js decides it has to ask. */
+  .stats-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 18px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--paper); color: var(--ink); border-top: 1px solid var(--rule);
+    box-shadow: 0 -6px 18px rgba(0, 0, 0, .06); font-size: var(--t-6); line-height: var(--lh-prose);
+  }
+  .stats-bar[hidden] { display: none; }
+  .stats-bar p { margin: 0; max-width: 60ch; }
+  .stats-actions { display: flex; gap: 8px; }
+  #stats-yes { background: var(--pill-bg); color: var(--paper); border-color: var(--pill-bg); }
+  #stats-yes:hover { background: var(--pill-bg-hi); border-color: var(--pill-bg-hi); }
   /* The address is set as text by app.js at open time, so it still never appears
      in the served HTML. user-select: all makes one tap take the whole thing. */
   .fb-addr {
@@ -2187,10 +2242,23 @@
   <footer>
     Rosters are current to the <strong>2026–27 EuroLeague season</strong>, checked club by club at the season start; transfers since then are not reflected.<br />
     294 players · 20 clubs · 318 non-active players · compiled from official club rosters, Wikipedia, FIBA and Proballers.<br />
-    Published for the love of European basketball · No ads, no cookies, no account · Reads offline<br />
-    Anonymous page counts only (Cloudflare Web Analytics) — no cookies, no profile, nothing that follows you off this site.
+    Published for the love of European basketball · No ads, no account · Reads offline<br />
+    Anonymous page counts (Cloudflare Web Analytics, cookie-free) · Google Analytics only if you allow it
+    · <a id="stats-link" class="colophon-link" rel="nofollow">Stats settings</a>
     · <a id="feedback-link" class="colophon-link" rel="nofollow">Send feedback</a>
   </footer>
+
+  <!-- The stats bar: asks once, before Google Analytics may run (see the loader in
+       <head>). It sits over the bottom edge rather than in the flow, so the hub's
+       viewport-filling grid is never pushed around; "Stats settings" in the
+       colophon brings it back to change your mind. -->
+  <div id="stats-bar" class="stats-bar" role="region" aria-label="Usage statistics" hidden>
+    <p>Help improve Euroball with anonymous usage stats? They come from <strong>Google Analytics</strong>, which sets cookies, so it only runs if you say yes.</p>
+    <div class="stats-actions">
+      <button id="stats-no" type="button">No thanks</button>
+      <button id="stats-yes" type="button">Allow stats</button>
+    </div>
+  </div>
 
   <!-- Feedback. Now a form you can actually type into. Both earlier versions asked
        the reporter to write the mail themselves: the bare mailto resolved to
