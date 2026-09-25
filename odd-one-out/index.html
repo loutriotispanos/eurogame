@@ -231,6 +231,37 @@
     font-family: var(--font-display); font-style: italic; text-wrap: balance;
   }
   .dateline { margin-top: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  /* Competition switcher. Plain type in the paper's own grammar: the names are
+     descriptive text, never the competitions' logos (see the brand notes), and
+     nothing here dresses up as the official site's menu. */
+  .comp-switch { position: relative; display: inline-block; margin-bottom: 10px; }
+  .comp-btn {
+    font: inherit; font-family: var(--font-sans); font-weight: 700; font-size: var(--t-7);
+    letter-spacing: var(--track-label); text-transform: uppercase; line-height: 1;
+    color: var(--ink); background: none; border: 0; border-bottom: 2px solid var(--accent);
+    padding: 4px 2px 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    border-radius: 0;
+  }
+  .comp-btn:hover { border-color: var(--accent); }
+  .comp-btn svg { width: 10px; height: 10px; stroke: currentColor; fill: none; stroke-width: 2.4; transition: transform .15s; }
+  .comp-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .comp-menu {
+    position: absolute; left: 50%; transform: translateX(-50%); top: calc(100% + 6px); z-index: 30;
+    min-width: 190px; background: var(--paper); border: 1px solid var(--rule-strong);
+    box-shadow: 0 6px 18px rgba(0,0,0,.12); text-align: left; padding: 4px 0;
+  }
+  .comp-menu button {
+    display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px;
+    font: inherit; font-family: var(--font-sans); font-weight: 700; font-size: var(--t-6);
+    color: var(--ink); background: none; border: 0; border-radius: 0; padding: 10px 14px; cursor: pointer; text-align: left;
+  }
+  .comp-menu button + button { border-top: 1px solid var(--rule); }
+  .comp-menu button:hover, .comp-menu button:focus-visible { background: var(--rule); outline: none; }
+  .comp-menu .comp-tag { font-size: var(--t-7); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
+  .comp-menu [aria-checked="true"] .comp-tag { color: var(--accent); }
+  .soon-body { max-width: 46ch; margin: 28px auto 0; text-align: center; line-height: var(--lh-prose); }
+  .soon-body p { margin: 0 0 14px; }
+  .soon-body .soon-note { color: var(--muted); font-size: var(--t-6); }
   /* A Scotch rule: thick over thin, with a hair of daylight between them.
      Negative margins let it out past the padding to the full measure. */
   header::after {
@@ -327,12 +358,12 @@
   button:active { background: rgba(29, 26, 20, .07); }
   button:disabled { opacity: .4; cursor: default; }
   #new-game, #pid-next, #c5-next, #cv-next, #pb-next, #co-check, .cn-actions .cn-primary,
-  .banner-actions button, .share-btn, #feedback-send, #feedback-copy {
+  .banner-actions button, .share-btn, #feedback-send, #feedback-copy, #eurocup-back {
     background: var(--pill-bg); color: var(--paper); border-color: var(--pill-bg);
   }
   #new-game:hover, #pid-next:hover, #c5-next:hover, #cv-next:hover, #pb-next:hover, #co-check:hover:not(:disabled),
   .cn-actions .cn-primary:hover:not(:disabled), .banner-actions button:hover, .share-btn:hover,
-  #feedback-send:hover:not(:disabled), #feedback-copy:hover {
+  #feedback-send:hover:not(:disabled), #feedback-copy:hover, #eurocup-back:hover {
     background: var(--pill-bg-hi); border-color: var(--pill-bg-hi);
   }
   /* Mid-send the primary steps back to an outline, same as #co-check, rather than
@@ -1427,6 +1458,13 @@
   <!-- ===== HOME HUB ===== -->
   <div id="home-view" class="view">
     <header class="home-header">
+      <div class="comp-switch">
+        <button id="comp-btn" class="comp-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="comp-menu">EuroLeague<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5"/></svg></button>
+        <div id="comp-menu" class="comp-menu" role="menu" aria-label="Competition" hidden>
+          <button type="button" role="menuitemradio" aria-checked="true" data-comp="euroleague">EuroLeague <span class="comp-tag">✓ Playing</span></button>
+          <button type="button" role="menuitemradio" aria-checked="false" data-comp="eurocup">EuroCup <span class="comp-tag">Soon</span></button>
+        </div>
+      </div>
       <div class="kicker">Daily European Basketball Puzzles</div>
       <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-mystery"/></svg></span><span><span class="accent">Euro</span>ball</span></h1>
       <div class="tagline">A new daily in every game — which one first?</div>
@@ -1513,6 +1551,29 @@
       <div id="records-body" class="records" aria-live="polite"></div>
     </div>
   </div><!-- /records-view -->
+
+  <!-- ===== EUROCUP (coming soon) ===== -->
+  <div id="eurocup-view" class="view" hidden>
+    <header>
+      <div class="comp-switch">
+        <button id="ec-comp-btn" class="comp-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="ec-comp-menu">EuroCup<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5"/></svg></button>
+        <div id="ec-comp-menu" class="comp-menu" role="menu" aria-label="Competition" hidden>
+          <button type="button" role="menuitemradio" aria-checked="false" data-comp="euroleague">EuroLeague <span class="comp-tag">Playing</span></button>
+          <button type="button" role="menuitemradio" aria-checked="true" data-comp="eurocup">EuroCup <span class="comp-tag">✓ Soon</span></button>
+        </div>
+      </div>
+      <div class="kicker">Coming soon</div>
+      <h1><span class="accent">EuroCup</span></h1>
+      <div class="tagline">The second competition is on its way</div>
+    </header>
+    <div class="app">
+      <div class="soon-body">
+        <p>The same daily puzzles, played on the EuroCup: its clubs, its rosters and its careers. We are building the database now.</p>
+        <p class="soon-note">Until then, every game on Euroball plays on the EuroLeague.</p>
+        <p><button id="eurocup-back" type="button">Back to the EuroLeague games</button></p>
+      </div>
+    </div>
+  </div><!-- /eurocup-view -->
 
   <!-- ===== ARCHIVE (recent editions) ===== -->
   <div id="archive-view" class="view" hidden>

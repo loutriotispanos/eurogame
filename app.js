@@ -5,8 +5,8 @@
   "use strict";
   function $(id) { return document.getElementById(id); }
 
-  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster", "records", "archive"];
-  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view"), higherlower: $("higherlower-view"), rostermaster: $("rostermaster-view"), records: $("records-view"), archive: $("archive-view") };
+  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster", "records", "archive", "eurocup"];
+  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view"), higherlower: $("higherlower-view"), rostermaster: $("rostermaster-view"), records: $("records-view"), archive: $("archive-view"), eurocup: $("eurocup-view") };
 
   // Every in-app navigation pushes a history entry (URL untouched) so the
   // browser arrows retrace the user's own path.
@@ -42,7 +42,57 @@
 
   // mode: "practice" | "daily" (force a mode) | "archive:<YYYY-MM-DD>" (replay a
   // past daily) | undefined (plain open → resume last mode)
+  // The competition switcher. It sits on the hub (EuroLeague ticked) and on the
+  // EuroCup page (EuroCup ticked), so it always says which competition you are
+  // in and switches both ways. Only the EuroLeague is playable; EuroCup opens a
+  // "coming soon" page (a state of the app, like Records: ?game=eurocup, no
+  // generated page of its own).
+  var COMP_SWITCHES = [["comp-btn", "comp-menu"], ["ec-comp-btn", "ec-comp-menu"]];
+  function setCompMenu(open, btnId) {
+    COMP_SWITCHES.forEach(function (p) {
+      var btn = $(p[0]), menu = $(p[1]);
+      if (!btn || !menu) return;
+      var on = !!open && p[0] === btnId;
+      menu.hidden = !on;
+      btn.setAttribute("aria-expanded", on ? "true" : "false");
+    });
+  }
+  function goComp(comp) {
+    setCompMenu(false);
+    var v = comp === "eurocup" ? "eurocup" : "home";
+    if (v !== curView) { pushNav({ v: v }); showView(v); }
+  }
+  function wireCompetition() {
+    COMP_SWITCHES.forEach(function (p) {
+      var btn = $(p[0]), menu = $(p[1]);
+      if (!btn || !menu) return;
+      btn.addEventListener("click", function (e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        setCompMenu(menu.hidden, p[0]);
+      });
+      var items = menu.querySelectorAll("[data-comp]");
+      for (var i = 0; i < items.length; i++) items[i].addEventListener("click", function () {
+        goComp(this.getAttribute("data-comp"));
+      });
+    });
+    document.addEventListener("click", function (e) {
+      var t = e && e.target;
+      var inside = COMP_SWITCHES.some(function (p) { var m = $(p[1]); return m && !m.hidden && t && m.contains && m.contains(t); });
+      if (!inside) setCompMenu(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (!e || e.key !== "Escape") return;
+      COMP_SWITCHES.forEach(function (p) {
+        var btn = $(p[0]), menu = $(p[1]);
+        if (btn && menu && !menu.hidden) { setCompMenu(false); btn.focus(); }
+      });
+    });
+    var back = $("eurocup-back");
+    if (back) back.addEventListener("click", function () { pushNav({ v: "home" }); showView("home"); });
+  }
+
   function showView(name, mode) {
+    setCompMenu(false);
     if (VIEWS.indexOf(name) === -1) name = "home";
     VIEWS.forEach(function (v) { if (els[v]) els[v].hidden = (v !== name); });
     document.body.className = "view-" + name;
@@ -254,7 +304,7 @@
     connections: "Connections", careerorder: "Career Order", thegrid: "The Grid",
     clubreveal: "Common Club", pathbetween: "Path Between", oddoneout: "Odd One Out",
     higherlower: "Higher or Lower", rostermaster: "Roster Master",
-    records: "Records", archive: "Archive"
+    records: "Records", archive: "Archive", eurocup: "EuroCup"
   };
   var CANON = "https://euroballgames.com/";
 
@@ -444,6 +494,7 @@
     if (rb) rb.addEventListener("click", function () { pushNav({ v: "records" }); showView("records"); });
     var ab = $("archive-btn");
     if (ab) ab.addEventListener("click", function () { pushNav({ v: "archive" }); showView("archive"); });
+    wireCompetition();
     // The colophon's "Send feedback". readVersion is async and refreshes the href
     // itself once Cache Storage answers, so a slow reply can't leave a stale link.
     readVersion();

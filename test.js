@@ -1913,6 +1913,26 @@ ok(window.Hub._urlFor("home").indexOf("?game=") === -1 && window.Hub._urlFor("ho
 // them, and a path with no file behind it would 404 on refresh.
 ok(window.Hub._urlFor("records").indexOf("?game=records") > 0,
    "a viewer-only page keeps the query form — nothing was generated at a path for it");
+// The EuroCup "coming soon" page is the same kind of state: ?game=eurocup, no
+// generated page. The switcher names the competitions in plain text — never
+// their logos — and EuroLeague stays the one that plays.
+ok(window.Hub._urlFor("eurocup").indexOf("?game=eurocup") > 0 && window.Hub._titles.eurocup === "EuroCup",
+   "EuroCup is an addressable view with its own title, in the query form");
+(function () {
+  var html = require("fs").readFileSync(__dirname + "/index.html", "utf8");
+  ok(/id="comp-btn"[^>]*aria-haspopup="menu"/.test(html) && /id="comp-menu"[^>]*role="menu"[^>]*hidden/.test(html),
+     "the hub carries a competition switcher whose menu starts closed");
+  var compItem = function (c) { var m = html.match(new RegExp('<button[^>]*data-comp="' + c + '"[^>]*>')); return m ? m[0] : ""; };
+  ok(compItem("euroleague").indexOf('aria-checked="true"') > 0 && compItem("eurocup").indexOf('aria-checked="false"') > 0,
+     "…EuroLeague is the checked competition and EuroCup is offered, not selected");
+  var ecView = html.slice(html.indexOf('id="eurocup-view"'), html.indexOf("/eurocup-view"));
+  var ecItem = function (c) { var m = ecView.match(new RegExp('<button[^>]*data-comp="' + c + '"[^>]*>')); return m ? m[0] : ""; };
+  ok(/id="ec-comp-btn"[^>]*>EuroCup/.test(ecView) && ecItem("eurocup").indexOf('aria-checked="true"') > 0 && ecItem("euroleague").indexOf('aria-checked="false"') > 0,
+     "…the EuroCup page carries the same switcher, reading EuroCup, with EuroLeague one tap away");
+  ok(/id="eurocup-view"[^>]*hidden/.test(html) && html.indexOf('id="eurocup-back"') > 0,
+     "…and EuroCup opens a hidden-by-default coming-soon view with a way back");
+  ok(!/<img[^>]*(euroleague|eurocup)/i.test(html), "…with no competition logo anywhere: the names are text, the marks stay theirs");
+})();
 win._pushedURL = "sentinel";
 window.Hub._pushNav({ v: "thegrid" });
 ok(typeof win._pushedURL === "string" && win._pushedURL.indexOf("/the-grid/") >= 0,
