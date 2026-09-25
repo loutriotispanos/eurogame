@@ -2178,8 +2178,38 @@ var claims = [(fbHTML.match(/Published for the love[^<]*/) || [""])[0]]
 ok(claims.length === 4, "the promise appears in the footer and all three descriptions");
 ok(claims.every(function (c) { return c.indexOf("no tracking") === -1; }),
    "…and none of them still says 'no tracking' — the honest claim is the specific one");
-ok(claims.filter(function (c) { return /no cookies/.test(c); }).length === 4,
-   "…they all say 'no cookies' instead, which is exactly true of a cookieless beacon");
+ok(claims.every(function (c) { return c.indexOf("no cookies") === -1; }),
+   "…and none of them promises 'no cookies' any more: Google Analytics sets them once allowed");
+ok(/Google Analytics only if you allow it/.test(fbHTML) && /id="stats-link"/.test(fbHTML),
+   "the colophon says GA runs only with consent, and offers the way to change it");
+
+console.log("Google Analytics — only with consent");
+(function () {
+  var head = fbHTML.slice(0, fbHTML.indexOf("</head>"));
+  ok(head.indexOf("G-16K70W8SVX") > 0 && !/<script[^>]+src="https:\/\/www\.googletagmanager\.com/.test(fbHTML),
+     "the GA id is present, but no static <script src> for gtag.js: nothing is fetched before a yes");
+  ok(/if \(choice === "yes"\) load\(\);/.test(head), "the loader starts GA only on a stored yes");
+  ok(/location\.hostname === "euroballgames\.com"/.test(head), "…and only on the live domain");
+  ok(/id="stats-bar"[^>]*hidden/.test(fbHTML) && /id="stats-yes"/.test(fbHTML) && /id="stats-no"/.test(fbHTML),
+     "the stats bar ships hidden, with a yes and a no of equal standing");
+  var calls = [];
+  window.ELG_STATS = { load: function () { calls.push("load"); }, revoke: function () { calls.push("revoke"); } };
+  var bar = byId("stats-bar");
+  delete store["elg:consent"]; bar.hidden = true;
+  window.Hub._wireStats();
+  ok(bar.hidden === false && window.Hub._statsChoice() === null, "with no answer yet, the bar asks");
+  window.Hub._chooseStats(true);
+  ok(JSON.parse(store["elg:consent"]) === "yes" && calls.join() === "load" && bar.hidden === true,
+     "Allow stores yes, loads GA and closes the bar");
+  window.Hub._chooseStats(false);
+  ok(JSON.parse(store["elg:consent"]) === "no" && calls.join() === "load,revoke" && window.ELG_STATS.choice === "no",
+     "No thanks after a yes stores no and revokes (stops GA, clears its cookies)");
+  bar.hidden = true; window.Hub._wireStats();
+  ok(bar.hidden === true, "once answered, the bar stays away");
+  fire(byId("stats-link"), "click", { preventDefault: function () {} });
+  ok(bar.hidden === false, "Stats settings in the colophon brings it back");
+  delete store["elg:consent"]; delete window.ELG_STATS;
+})();
 ok(/if \(url\.origin !== self\.location\.origin\) return;/.test(swJS),
    "the worker leaves cross-origin requests alone — it would otherwise answer the beacon with index.html");
 
