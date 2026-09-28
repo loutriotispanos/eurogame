@@ -196,7 +196,7 @@
     if (els.check) els.check.disabled = over;
     var practice = (diff !== "daily");
     if (els.next) els.next.style.display = practice ? "" : "none";
-    if (els.giveup) els.giveup.style.display = practice ? "" : "none";
+    if (els.giveup) els.giveup.style.display = "";      // offered on the Daily too, to concede it
     if (els.giveup) els.giveup.disabled = over;
   }
   function dailyBannerNote() {          // warm closing line for the Daily banner
@@ -264,6 +264,7 @@
 
   function check() {
     if (over) return;
+    disarmGiveUp();
     var correct = correctCount();
     for (var i = 0; i < order.length; i++) if (order[i] === i && !inConfirmed(i)) confirmed.push(i);   // lock the correct ones green (sticky)
     if (correct === order.length) { won = true; over = true; finish(); return; }
@@ -279,10 +280,30 @@
     renderStats(); renderList(); updateCounter(); updateButtons(); showBanner();
     say((won ? "Correct! " : "Out of checks. ") + player.name + "'s clubs, earliest to latest: " + segments.map(function (s) { return s.team; }).join(", ") + ".");
   }
-  function giveUp() { if (over || diff === "daily") return; won = false; over = true; finish(); }
+  // Conceding the daily records the loss and reveals the answer, exactly as
+  // running out does. It costs this game its own daily record but NOT the hub
+  // streak: the hub counts a lost daily as played. The Daily arms first (there
+  // is no second puzzle today); practice stays one tap. Same as Path Between.
+  var giveArmed = false, giveTimer = null;
+  function disarmGiveUp() {
+    giveArmed = false;
+    if (giveTimer) { clearTimeout(giveTimer); giveTimer = null; }
+    if (els.giveup) { els.giveup.textContent = "Give up"; if (els.giveup.classList) els.giveup.classList.remove("armed"); }
+  }
+  function giveUp() {
+    if (over) return;
+    if (diff === "daily" && !giveArmed) {
+      giveArmed = true;
+      if (els.giveup) { els.giveup.textContent = "Sure?"; if (els.giveup.classList) els.giveup.classList.add("armed"); }
+      giveTimer = setTimeout(disarmGiveUp, 3000);
+      return;
+    }
+    disarmGiveUp();
+    won = false; over = true; finish();
+  }
 
   // --- Deal ------------------------------------------------------------------
-  function resetRound() { tries = 0; confirmed = []; showYears = false; over = false; won = false; dealt = true; if (els.banner) els.banner.hidden = true; say(""); }
+  function resetRound() { disarmGiveUp(); tries = 0; confirmed = []; showYears = false; over = false; won = false; dealt = true; if (els.banner) els.banner.hidden = true; say(""); }
   function setup(c, seed) {
     player = c;
     segments = buildSegments(c);
@@ -409,6 +430,7 @@
     _setOrder: function (arr) { if (arr && arr.length === order.length) { order = arr.slice(); sanitizeConfirmed(); renderList(); } },
     _move: moveRow,
     _check: check,
+    _giveUp: giveUp,
     _shareText: shareText,
     _solve: function () { order = identity(segments.length); confirmed = []; check(); }
   };
