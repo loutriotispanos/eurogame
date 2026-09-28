@@ -137,7 +137,7 @@ const SEASON_REMOVE = new Set([
   "Rolands Smits", "Brice Dessert", "Vincent Poirier",               // (Weiler-Babb → Crvena Zvezda)
   "Burak Can Yildizli", "Cole Swider",
   "Nico Mannion", "Lorenzo Brown", "Quinn Ellis",       // Olimpia Milano (Brooks → Valencia)
-  "Bryant Dunston",    // (Nebo → FC Barcelona, Shields → Fenerbahce, LeDay → Hapoel, Sestina → ASVEL)
+  // (Nebo → FC Barcelona, Shields → Fenerbahce, LeDay → Hapoel, Sestina → ASVEL; Dunston → Olympiacos, re-homed 2026-09-28)
   "Isaiah Canaan", "Nikola Kalinic",              // Crvena Zvezda (Miller-McIntyre → Olympiacos)
   "Donatas Motiejunas",   // (Bolomboy → ASVEL, Rivero → Valencia)
   "Nemanja Dangubic", "Aleksa Avramovic", "Awudu Abass",                 // Dubai BC
@@ -190,6 +190,8 @@ const SEASON_RETURN = [
 // Players new to the database for 2026-27 (researched in batches; careers
 // live in build_careers.js under "2026-27 new arrivals").
 const SEASON_ADD = [
+  // late signing (2026-09-28): Olympiacos, one-year deal. Greek-American, plays for Greece (debut 2023).
+  {"name":"George Papas","team":"Olympiacos","nationality":"Greece","position":"Guard","height":196,"birthYear":1998,"number":1},
   // batch 6 (2026-09-24): the last ten
   {"name":"Nikola Tanaskovic","team":"Partizan","nationality":"Serbia","position":"Center","height":204,"birthYear":1997,"number":10},
   {"name":"Maksym Shulga","team":"Real Madrid","nationality":"Ukraine","position":"Forward","height":193,"birthYear":2002,"number":2},
@@ -280,6 +282,7 @@ const SEASON_ADD = [
 ];
 
 const SEASON_MOVE = {
+  "Bryant Dunston":  { team: "Olympiacos", number: 42 },     // re-homed: non-active (ex-Milano), signed 2026-09-28
   "Mike James":      { team: "Anadolu Efes", number: 55 },   // from AS Monaco
   "Matthew Strazel": { team: "Anadolu Efes", number: 32 },   // from AS Monaco
   "Collin Malcolm":  { team: "Anadolu Efes", number: 17 },   // from Hapoel Tel Aviv

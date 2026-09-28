@@ -422,7 +422,10 @@
   function saveState() {
     if (challengeTarget) return;   // challenge games are transient — never persist / clobber a saved game
     var data = { guesses: guesses.map(function (g) { return g.name; }), done: over, won: won };
-    if (mode !== "daily") data.target = target ? target.name : null;
+    // Daily stores its answer too. The date picks it by index into PLAYERS, and a
+    // roster change mid-day moves that index: without this, a finished daily
+    // reloads against a different player.
+    data.target = target ? target.name : null;
     lsSet(savedKey(), data);
   }
 
@@ -452,6 +455,14 @@
       var t = findInPool(saved.target);
       if (!t) return false;            // saved target no longer in the pool — start fresh
       target = t;
+    } else {
+      // The daily's own answer wins over the date's, so a roster change can't
+      // re-answer a game already played. A save from before daily targets were
+      // stored still knows its answer if it was won: the last guess.
+      var g = saved.guesses || [];
+      var dt = saved.target ? findInPool(saved.target)
+             : (saved.done && saved.won && g.length ? findInPool(g[g.length - 1]) : null);
+      if (dt) target = dt;
     }
     applySaved(saved);
     return true;

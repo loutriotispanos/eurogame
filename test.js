@@ -240,8 +240,8 @@ function submitByName(name) {
 }
 
 console.log("data + init");
-ok(window.PLAYERS && window.PLAYERS.length === 294, "294 players loaded");
-ok(window.LEGENDS && window.LEGENDS.length === 318, "318 legends loaded");
+ok(window.PLAYERS && window.PLAYERS.length === 296, "296 players loaded");
+ok(window.LEGENDS && window.LEGENDS.length === 317, "317 legends loaded");
 ok(window.LEGENDS.every(function (p) { return ["Guard", "Forward", "Center"].indexOf(p.position) >= 0; }), "all legend positions valid");
 ok(window.LEGENDS.every(function (p) { return window.TEAMS[p.team]; }), "every legend team resolves in TEAMS");
 ok(window.TEAMS["AS Monaco"] && window.TEAMS["AS Monaco"].country === "France", "AS Monaco counts as France (plays in the French league)");
@@ -2181,7 +2181,7 @@ console.log("The EuroCup's own pages — a hub and one page per game it plays");
     var h = fs.readFileSync(f, "utf8");
     if (h.replace(/\r\n/g, "\n") !== BP.buildPage(bpShell, p).replace(/\r\n/g, "\n")) bad.push(rel + ":drift");
     if (h.indexOf('<link id="canonical" rel="canonical" href="https://euroballgames.com/' + rel + '" />') === -1) bad.push(rel + ":canonical");
-    if (!/^<!DOCTYPE html>[\s\S]*?<head>\n<script>window\.__ELG_COMP__ = "eurocup";<\/script>/.test(h)) bad.push(rel + ":comp");
+    if (!/^<!DOCTYPE html>[\s\S]*?<head>\r?\n<script>window\.__ELG_COMP__ = "eurocup";<\/script>/.test(h)) bad.push(rel + ":comp");
     if (h.indexOf('window.__ELG_ROOT__ = "' + (hub ? "../" : "../../") + '"') === -1) bad.push(rel + ":root");
     if (!hub && h.indexOf('window.__ELG_VIEW__ = "' + p.view + '"') === -1) bad.push(rel + ":view");
     if (/<script src="(?!\.\.\/)/.test(h) || (!hub && /<script src="\.\.\/[a-z]/.test(h))) bad.push(rel + ":scripts");
@@ -2201,7 +2201,7 @@ console.log("The EuroCup's own pages — a hub and one page per game it plays");
   ok(bad.length === 0, "each EuroCup page exists, is current, canonicalises to itself under /eurocup/, declares the EuroCup before anything runs, "
      + "reaches the root from its depth, shows only the EuroCup's tiles, already says EuroCup, and has its own title and FAQ" + (bad.length ? " — " + bad.join(", ") : ""));
   var elBad = BP.PAGES.filter(function (p) {
-    return !/<head>\n<script>window\.__ELG_COMP__ = "euroleague";<\/script>/.test(fs.readFileSync(p.slug + "/index.html", "utf8"));
+    return !/<head>\r?\n<script>window\.__ELG_COMP__ = "euroleague";<\/script>/.test(fs.readFileSync(p.slug + "/index.html", "utf8"));
   });
   ok(elBad.length === 0, "each EuroLeague game page declares the EuroLeague, so its address and its content always agree");
   ok(!/__ELG_COMP__ =/.test(bpShell), "…while the site hub declares nothing: it plays whichever competition the visitor last chose");
@@ -2682,6 +2682,30 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   var zv = BC.CLUBS.filter(function (c) { return c.name === "Crvena Zvezda"; })[0];
   ok(zv && zv.country === "Serbia", "a page says where a club is (Serbia), not the league the games group it with (ABA League)");
   ok(shell.indexOf('class="colophon-link info-link" href="clubs/"') >= 0, "the footer links /clubs/");
+})();
+
+// --- Mystery daily keeps its own answer across a roster change ---------------
+(function () {
+  console.log("Mystery Player — a roster change can't re-answer a daily already played");
+  window.Mystery.goDaily();
+  var day = window.Mystery._peekDay().day, key = "elg:daily:" + day, saved = store[key];
+  var dateAnswer = window.Mystery._target();
+  var other = window.PLAYERS.filter(function (p) { return p !== dateAnswer; })[0];
+  // A save that names its answer (what saveState writes now).
+  store[key] = JSON.stringify({ guesses: [other.name], done: true, won: true, target: other.name });
+  window.Mystery.goPractice(); window.Mystery.goDaily();
+  ok(window.Mystery._target() === other && window.Mystery._peekDay().won === true,
+     "a finished daily reloads against the answer it was played with, not the date's current pick");
+  // An older save with no target: a won game's last guess is its answer.
+  store[key] = JSON.stringify({ guesses: [dateAnswer.name, other.name], done: true, won: true });
+  window.Mystery.goPractice(); window.Mystery.goDaily();
+  ok(window.Mystery._target() === other, "…and a save from before targets were stored recovers it from the winning guess");
+  // Unfinished and unnamed: nothing to recover, so the date decides as before.
+  store[key] = JSON.stringify({ guesses: [other.name], done: false, won: false });
+  window.Mystery.goPractice(); window.Mystery.goDaily();
+  ok(window.Mystery._target() === dateAnswer, "…while an unfinished old save keeps the date's answer");
+  if (saved === undefined) delete store[key]; else store[key] = saved;
+  window.Mystery.goPractice(); window.Mystery.goDaily();
 })();
 
 // --- Nationality = the national team a player has played for -----------------

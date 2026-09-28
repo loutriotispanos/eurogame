@@ -75,7 +75,7 @@ window.PATHS = [
   {"a":"Nikos Rogkavopoulos","b":"Devon Dotson","par":3},
   {"a":"Rimas Kurtinaitis","b":"Bryant Dunston","par":3},
   {"a":"Zoran Planinic","b":"Niels Giffey","par":3},
-  {"a":"Nenad Krstic","b":"Tyson Ward","par":3},
+  {"a":"Nenad Krstic","b":"Melih Mahmutoglu","par":3},
   {"a":"Zoran Planinic","b":"Leopold Cavaliere","par":3},
   {"a":"Lonnie Walker IV","b":"Dejan Bodiroga","par":3},
   {"a":"Jimmy Clark III","b":"Victor Claver","par":3},
