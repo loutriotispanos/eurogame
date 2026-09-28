@@ -55,8 +55,62 @@
     "Wollongong Hawks": "Illawarra Hawks"
   };
 
+  function canonical(team) { return ALIAS[team] || team; }
+
+  // --- Club pages (/clubs/<slug>/, written by build_clubs.js) ------------------
+  // Names that are plainly the same club as a current EuroCup side, which only
+  // the club pages need (the games never meet them in a way that matters).
+  // Deliberately NOT merged: Cedevita / Cedevita Zagreb / Olimpija Ljubljana
+  // (Cedevita Olimpija is a 2019 merger, and a stint at either half isn't a stint
+  // at the merged club), Tizona Burgos (a different Burgos club), VEF Riga (not
+  // Riga Zelli), Virtus Roma (folded in 2020, not today's Roma clubs).
+  var PAGE_ALIAS = {
+    "Aris": "Aris Thessaloniki",
+    "Bahcesehir Koleji": "Bahcesehir College",
+    "Derthona Basket": "Derthona Tortona",
+    "KK Bosna": "Bosna Sarajevo",
+    "CB Canarias": "La Laguna Tenerife"
+  };
+  function pageName(team) { var c = canonical(team); return PAGE_ALIAS[c] || c; }
+  function slug(name) {
+    return String(name).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+  // A club has a page if it has a 2026-27 roster in either competition. The
+  // EuroCup mode swaps window.PLAYERS for the EuroCup's, keeping the EuroLeague
+  // list as EL_PLAYERS, so both are read from wherever they are right now.
+  function hasPage(name) {
+    var lists = [window.EL_PLAYERS || window.PLAYERS, window.EUROCUP_PLAYERS];
+    for (var i = 0; i < lists.length; i++) {
+      var L = lists[i] || [];
+      for (var j = 0; j < L.length; j++) if (L[j].team === name) return true;
+    }
+    return false;
+  }
+  // "clubs/real-madrid/", relative to the site root, or null for a club
+  // without a page (CSKA Moscow, Unicaja, an NBA team…).
+  function page(team) {
+    var name = pageName(team);
+    return hasPage(name) ? "clubs/" + slug(name) + "/" : null;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  // A club name as a link to its page, for an end-of-game banner, or the plain
+  // name if there's no page. The root comes from app.js, which fixes it once at
+  // load: the address bar moves under pushState and a relative link wouldn't.
+  function link(team, label) {
+    var p = page(team), text = esc(label == null ? team : label);
+    if (!p) return text;
+    var root = (window.Hub && window.Hub._siteRoot) ? window.Hub._siteRoot() : "/";
+    return '<a class="club-link" href="' + esc(root + p) + '">' + text + "</a>";
+  }
+
   window.CLUBS = {
     ALIAS: ALIAS,
-    canonical: function (team) { return ALIAS[team] || team; }
+    PAGE_ALIAS: PAGE_ALIAS,
+    canonical: canonical,
+    pageName: pageName,
+    slug: slug,
+    page: page,
+    link: link
   };
 })();

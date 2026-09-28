@@ -278,7 +278,7 @@
     // Naming the shared club is the answer; naming WHEN each of them was there is
     // the satisfying part, and it's the thing a player can't look up in the UI.
     var when = pair ? stintLine(pair[0]) + " · " + stintLine(pair[1]) : "";
-    sub.innerHTML = "<span class='pname'>" + club + "</span> — " +
+    sub.innerHTML = "<span class='pname'>" + (window.CLUBS && window.CLUBS.link ? window.CLUBS.link(club) : club) + "</span> — " +
       (won ? "named after " + scoreLine() + "." : "that was the club.") +
       (when ? "<br>" + when : "") + dailyBannerNote();
     var actions = document.createElement("div"); actions.className = "banner-actions";

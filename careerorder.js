@@ -229,7 +229,8 @@
     var title = document.createElement("div"); title.className = "banner-title";
     title.textContent = won ? (tries === 0 ? "🎯 First check — nailed it!" : "🎉 Correct order!") : "😅 A twisty career, that one!";
     var sub = document.createElement("div"); sub.className = "banner-sub";
-    sub.innerHTML = "<span class='pname'>" + player.name + "</span> — " + segments.map(function (s) { return s.team; }).join(" → ") +
+    sub.innerHTML = "<span class='pname'>" + player.name + "</span> — " +
+      segments.map(function (s) { return window.CLUBS && window.CLUBS.link ? window.CLUBS.link(s.team) : s.team; }).join(" → ") +
       dailyBannerNote();
     var actions = document.createElement("div"); actions.className = "banner-actions";
     var btn = document.createElement("button"); btn.type = "button";

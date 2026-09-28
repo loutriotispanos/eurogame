@@ -558,7 +558,7 @@
     // first pushState: on /the-grid/, having come from the hub at /, "about/"
     // would resolve to /the-grid/about/. So each one is pinned to the address it
     // resolves to NOW, before anything below moves the address bar.
-    var pinned = document.querySelectorAll("footer a.comp-link, footer a.info-link");
+    var pinned = document.querySelectorAll("footer a.comp-link, footer a.info-link, a.hub-clubs");
     for (var pi = 0; pi < pinned.length; pi++) {
       try { if (pinned[pi].href) pinned[pi].setAttribute("href", pinned[pi].href); } catch (e) {}
     }

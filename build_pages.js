@@ -445,6 +445,8 @@ function reroot(html, up, tiles) {
   html = html.replace(/(<a class="colophon-link comp-link" href=")([^"]*)(")/g, "$1" + up + "$2$3");
   // …and so are About, Contact and Privacy (build_info.js).
   html = html.replace(/(<a class="colophon-link info-link" href=")([^"]*)(")/g, "$1" + up + "$2$3");
+  // …and the clubs line under the hub tiles.
+  html = html.replace(/(<a class="hub-clubs" href=")([^"]*)(")/g, "$1" + up + "$2$3");
   // The hub tiles. They are links now precisely so a crawler can walk from the
   // lobby to all eleven games — but the lobby travels INSIDE every generated
   // page, and href="the-grid/" read from /path-between/ resolves to

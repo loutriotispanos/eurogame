@@ -254,8 +254,15 @@
     var tot = ROSTER[club].length, n = Object.keys(named).length, b = getBest(club);
     if (els.clubName) els.clubName.innerHTML = badgeHTML(club) + "<span>" + esc(club) + "</span>";
     if (els.progress) {
-      els.progress.textContent = n + "/" + tot + " named" + (b.n > 0 ? " · Best " + pct(b) + "%" : "") +
+      var line = n + "/" + tot + " named" + (b.n > 0 ? " · Best " + pct(b) + "%" : "") +
         (n === tot ? " — 🏆 complete!" : everGold(club) ? " ★" : "");
+      // The club page lists the whole roster, so it's offered only once the
+      // board is full: before that it would be the answer key.
+      if (n === tot && window.CLUBS && window.CLUBS.page && window.CLUBS.page(club)) {
+        els.progress.innerHTML = esc(line) + " · " + window.CLUBS.link(club, "Club page →");
+      } else {
+        els.progress.textContent = line;
+      }
       els.progress.className = "counter" + (everGold(club) ? " rm-gold-line" : "");
     }
     els.groups.innerHTML = "";

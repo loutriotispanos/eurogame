@@ -136,8 +136,12 @@
     var title = document.createElement("div"); title.className = "banner-title";
     title.textContent = won ? (guesses.length === 0 ? "🎯 First try!" : "🏆 Got him!") : "😔 He got away…";
     var sub = document.createElement("div"); sub.className = "banner-sub";
+    // Where he plays now, once the path has been solved or given up: the club
+    // page is the rest of the story. Only a current club gets a line.
+    var last = target.career && target.career[target.career.length - 1];
+    var now = last && last.to == null && window.CLUBS && window.CLUBS.page && window.CLUBS.page(last.team) ? "<br>Now at " + window.CLUBS.link(last.team) : "";
     sub.innerHTML = "<span class='pname'>" + target.name + "</span> — " + target.nationality + " · " + target.position +
-      dailyBannerNote();
+      now + dailyBannerNote();
     var actions = document.createElement("div"); actions.className = "banner-actions";
     var btn = document.createElement("button"); btn.type = "button";
     if (filter === "daily") { btn.textContent = "Practice mode"; btn.addEventListener("click", function () { setFilter("both"); }); }
