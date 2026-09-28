@@ -250,6 +250,15 @@
     text-align: center; margin: 8px 0 4px; width: 100%;
     max-width: var(--measure); padding: 0 var(--gutter);
   }
+  /* On a phone the corner buttons (Home + theme on the left, how-to and stats on
+     the right, fixed at the top) sit across the first line of a game's title:
+     at 375px, seven of the thirteen views had a button over their masthead. So
+     below 600px a game's header starts under the button row instead of beside
+     it. The hub is left alone: its header opens with the narrow competition
+     switch, which fits between the icons. */
+  @media (max-width: 600px) {
+    body:not(.view-home) header { padding-top: 38px; }
+  }
   .kicker { letter-spacing: .26em; color: var(--accent); margin-bottom: 8px; }
   h1 {
     margin: 0;
