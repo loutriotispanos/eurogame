@@ -52,25 +52,13 @@ for (var y = F4_FIRST; y <= F4_LAST; y++) if (!F4_SEASONS[y] && y !== 2020) F4_G
  * yellow). A page about the club should say where it is. */
 var COUNTRY = { "Crvena Zvezda": "Serbia", "Partizan": "Serbia", "Dubai BC": "United Arab Emirates" };
 
-/* Career lines use whatever name each source used. clubs.js already folds the
- * sponsor eras the games need (Tau Ceramica = Baskonia). These are the extra
- * names that are plainly the same club as a EuroCup side and matter only here.
- * Deliberately NOT merged: Cedevita / Cedevita Zagreb / Olimpija Ljubljana
- * (Cedevita Olimpija is a 2019 merger, and a stint at either half isn't a stint
- * at the merged club), Tizona Burgos (a different Burgos club), VEF Riga (not
- * Riga Zelli), Virtus Roma (folded in 2020, not today's Roma clubs). */
-var PAGE_ALIAS = {
-  "Aris": "Aris Thessaloniki",
-  "Bahcesehir Koleji": "Bahcesehir College",
-  "Derthona Basket": "Derthona Tortona",
-  "KK Bosna": "Bosna Sarajevo",
-  "CB Canarias": "La Laguna Tenerife"
-};
-function canon(team) { var c = W.CLUBS.canonical(team); return PAGE_ALIAS[c] || c; }
-
-function slugify(s) {
-  return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
+/* Career lines use whatever name each source used. clubs.js folds them: the
+ * sponsor eras the games need (Tau Ceramica = Baskonia), plus the older names of
+ * a few EuroCup sides that matter only here (CLUBS.PAGE_ALIAS). The same file
+ * gives the slug, so a page's address and the games' links to it are one
+ * definition (CLUBS.page), not two that could drift. */
+function canon(team) { return W.CLUBS.pageName(team); }
+var slugify = W.CLUBS.slug;
 
 // The clubs: the EuroLeague's 20 (a club counts if it has a roster) and the EuroCup's 32.
 var CLUBS = [];

@@ -235,7 +235,7 @@
     var sub = document.createElement("div");
     sub.className = "banner-sub";
     sub.innerHTML = "It was " +
-      "<span class='pname'>" + target.name + "</span> — " + target.team + "<br>" +
+      "<span class='pname'>" + target.name + "</span> — " + (window.CLUBS && window.CLUBS.link ? window.CLUBS.link(target.team) : target.team) + "<br>" +
       target.nationality + " · " + target.position + " · " + target.height +
       " cm · age " + ageOf(target) + " · #" + target.number;
 

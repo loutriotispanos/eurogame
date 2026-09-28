@@ -2708,6 +2708,57 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   window.Mystery.goPractice(); window.Mystery.goDaily();
 })();
 
+// --- Club links: from the games to the club pages ----------------------------
+(function () {
+  console.log("Club links — the games point at the club pages, once a game is over");
+  var fs2 = require("fs");
+  var C = window.CLUBS, BC = require(__dirname + "/build_clubs.js");
+  ok(C.page("Real Madrid") === "clubs/real-madrid/" && C.page("Crvena Zvezda") === "clubs/crvena-zvezda/",
+     "a current club maps to its page");
+  ok(C.page("Tau Ceramica") === "clubs/baskonia/" && C.page("Aris") === "clubs/aris-thessaloniki/",
+     "…and so do its older names (Tau Ceramica, Aris)");
+  ok(C.page("CSKA Moscow") === null && C.page("Cedevita") === null && C.page("Boston Celtics") === null,
+     "a club without a page gets no link (CSKA Moscow, a merger half, an NBA team)");
+  ok(BC.CLUBS.every(function (c) { return C.page(c.name) === c.path; }),
+     "the games and build_clubs.js agree on every one of the " + BC.CLUBS.length + " addresses — one definition, not two");
+  var root = window.Hub._siteRoot();
+  var a = C.link("Real Madrid");
+  ok(a === '<a class="club-link" href="' + root + 'clubs/real-madrid/">Real Madrid</a>',
+     "a link is rooted at the site root, which the address bar can't move");
+  ok(C.link("CSKA Moscow") === "CSKA Moscow" && C.link("A & B <x>") === "A &amp; B &lt;x&gt;",
+     "…a club with no page stays plain text, escaped");
+
+  // Mystery Player: a finished daily names the club as a link.
+  window.Mystery.goDaily();
+  var day = window.Mystery._peekDay().day, key = "elg:daily:" + day, saved = store[key];
+  var t = window.PLAYERS.filter(function (p) { return C.page(p.team); })[0];
+  store[key] = JSON.stringify({ guesses: [t.name], done: true, won: true, target: t.name });
+  window.Mystery.goPractice(); window.Mystery.goDaily();
+  var html = (byId("banner").children || []).map(function (el) { return el.innerHTML || ""; }).join("");
+  ok(html.indexOf('class="club-link" href="' + root + C.page(t.team) + '"') >= 0,
+     "Mystery Player's result links the answer's club (" + t.team + ")");
+  if (saved === undefined) delete store[key]; else store[key] = saved;
+  window.Mystery.goPractice(); window.Mystery.goDaily();
+
+  // Every other game builds its link in the end-of-game banner (or, for Roster
+  // Master, only when the board is complete), never in the play area.
+  var src = function (f) { return fs2.readFileSync(__dirname + "/" + f, "utf8"); };
+  function inBanner(f) { var s = src(f), i = s.indexOf("function showBanner"); return i >= 0 && s.indexOf("window.CLUBS.link(", i) > i && s.indexOf("window.CLUBS.link(", i) < s.indexOf("els.banner.hidden = false", i); }
+  ok(inBanner("playerid.js") && inBanner("careerorder.js") && inBanner("clubreveal.js"),
+     "Player ID, Career Order and Common Club link clubs in their result banners only");
+  ok(src("playerid.js").split("window.CLUBS.link(").length === 2 && src("careerorder.js").split("window.CLUBS.link(").length === 2,
+     "…and nowhere else (Player ID's career path is the clue, so it stays unlinked in play)");
+  ok(/if \(n === tot && window\.CLUBS/.test(src("rostermaster.js")), "Roster Master offers the club page only once the board is complete");
+
+  // The hub's clubs line, rerooted on every generated page.
+  var shell = fs2.readFileSync(__dirname + "/index.html", "utf8");
+  ok(shell.indexOf('<a class="hub-clubs" href="clubs/">') >= 0, "the hub has a clubs line under the tiles");
+  ok(fs2.readFileSync(__dirname + "/eurocup/the-grid/index.html", "utf8").indexOf('<a class="hub-clubs" href="../../clubs/">') >= 0 &&
+     fs2.readFileSync(__dirname + "/the-grid/index.html", "utf8").indexOf('<a class="hub-clubs" href="../clubs/">') >= 0,
+     "…which reaches /clubs/ from every page's depth");
+  ok(/a\.hub-clubs/.test(src("app.js")), "…and is pinned before the first pushState, like the footer links");
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};

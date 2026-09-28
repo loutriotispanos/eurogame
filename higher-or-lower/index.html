@@ -438,6 +438,8 @@
   .banner-title { font-family: var(--font-display); font-size: var(--t-2); font-weight: 700; letter-spacing: var(--track-display); text-wrap: balance; }
   .banner-sub { margin-top: 6px; font-size: var(--t-5); line-height: var(--lh-prose); }
   .banner-sub .pname { font-weight: 800; }
+  .club-link { color: inherit; text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .club-link:hover { text-decoration-color: currentColor; }
   .banner-actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
   .banner-hint { margin-top: 10px; font-size: var(--t-6); color: var(--muted); }
 
@@ -880,6 +882,17 @@
   .hs-freeze svg { width: 11px; height: 11px; }
   .hs-dot { opacity: .5; }
   .hs-sub { font-size: var(--t-6); color: var(--muted); font-style: italic; font-family: var(--font-display); }
+  /* The clubs line under the tiles: the streak strip turned upside down, a
+     top rule instead of a bottom one, small caps like a tile's PLAY →. */
+  .hub-clubs {
+    flex: none; width: 100%; max-width: var(--measure); margin: 12px auto 0; padding: 9px 6px 2px;
+    display: flex; align-items: baseline; justify-content: center; gap: 8px;
+    border-top: 1px solid var(--rule); color: var(--ink); text-decoration: none;
+  }
+  .hub-clubs .hc-lbl { font-weight: 700; font-size: var(--t-7); letter-spacing: .08em; text-transform: uppercase; }
+  .hub-clubs .hc-sub { color: var(--muted); font-family: var(--font-display); font-style: italic; font-size: var(--t-6); }
+  .hub-clubs .hc-go { font-weight: 700; color: var(--accent); }
+  .hub-clubs:hover .hc-lbl { text-decoration: underline; text-underline-offset: 3px; }
 
   /* Game tiles: left-aligned index cards with a colour spine.
      Everything inside is sized off the tile box the packer chose and published
@@ -1607,6 +1620,11 @@
         <span class="gc-daily" hidden></span>
       </a>
     </div>
+    <!-- The club pages, one line under the tiles. Not a tile (tiles are games)
+         and not a corner icon (a third one per side reaches the masthead at
+         375px). The grid above is flex: 1, so this simply takes its height
+         from the tiles and layoutHome() packs them into what is left. -->
+    <a class="hub-clubs" href="../clubs/"><span class="hc-lbl">The clubs</span> <span class="hc-sub">every 2026–27 roster</span> <span class="hc-go">→</span></a>
   </div>
 
   <!-- ===== RECORDS (the agate page) ===== -->
