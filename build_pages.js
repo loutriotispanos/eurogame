@@ -443,6 +443,8 @@ function reroot(html, up, tiles) {
   html = html.replace(/(<link\s+rel="apple-touch-icon"\s+href=")(icon-\d+\.png)(")/i, "$1" + up + "$2$3");
   // The footer's two competition links are written from the site root.
   html = html.replace(/(<a class="colophon-link comp-link" href=")([^"]*)(")/g, "$1" + up + "$2$3");
+  // …and so are About, Contact and Privacy (build_info.js).
+  html = html.replace(/(<a class="colophon-link info-link" href=")([^"]*)(")/g, "$1" + up + "$2$3");
   // The hub tiles. They are links now precisely so a crawler can walk from the
   // lobby to all eleven games — but the lobby travels INSIDE every generated
   // page, and href="the-grid/" read from /path-between/ resolves to
@@ -598,6 +600,9 @@ function hubData(p, url) {
 }
 
 function buildPage(shell, p) {
+  // The transforms anchor on a bare LF. A Windows checkout (core.autocrlf)
+  // hands index.html over with CRLF, and every one of them would then miss.
+  shell = shell.replace(/\r\n/g, "\n");
   var url = ORIGIN + "/" + pagePath(p);
   var desc = plain(p.desc);
   var hub = p.view === "home";

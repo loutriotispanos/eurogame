@@ -2056,7 +2056,7 @@ win.location.hash = chHash;
 var smXML = fs.readFileSync("sitemap.xml", "utf8");
 var smSlugs = (smXML.match(/<loc>https:\/\/euroballgames\.com\/([a-z0-9-]+)\/<\/loc>/g) || [])
   .map(function (s) { return s.replace(/^<loc>https:\/\/euroballgames\.com\//, "").replace(/\/<\/loc>$/, ""); })
-  .filter(function (s) { return s !== "eurocup"; });   // the EuroCup hub — its pages are checked below
+  .filter(function (s) { return s !== "eurocup" && ["about", "contact", "privacy"].indexOf(s) === -1; });   // the EuroCup hub — its pages are checked below
 var appGames = ["mystery", "playerid", "completefive", "connections", "careerorder", "thegrid",
                 "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"];
 var appSlugs = appGames.map(function (g) { return window.Hub._slugs[g]; });
@@ -2157,7 +2157,7 @@ ok(fbHTML.indexOf('<button class="game-card"') === -1, "no tile is left as a but
 // fact is written down.
 var swJS = fs.readFileSync("sw.js", "utf8");
 var swPages = ((swJS.match(/var PAGES = \[([\s\S]*?)\];/) || [])[1] || "").match(/"([a-z0-9-]+)\/"/g) || [];
-swPages = swPages.map(function (s) { return s.replace(/[",\/]/g, ""); }).filter(function (s) { return s !== "eurocup"; });
+swPages = swPages.map(function (s) { return s.replace(/[",\/]/g, ""); }).filter(function (s) { return s !== "eurocup" && ["about", "contact", "privacy"].indexOf(s) === -1; });
 ok(swPages.length === appGames.length && appGames.every(function (g) { return swPages.indexOf(window.Hub._slugs[g]) >= 0; }),
    "the service worker precaches every generated page, so an offline reload lands back on the same game");
 
@@ -2572,6 +2572,59 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   var html = fs2.readFileSync(__dirname + "/index.html", "utf8");
   ok(html.indexOf("adsbygoogle") === -1 && html.indexOf("googlesyndication") === -1,
      "…and no ad script is on the page yet: the 'No ads' promise still holds until ads are switched on");
+})();
+
+// --- About, Contact, Privacy: the standing pages AdSense review asks for -----
+(function () {
+  console.log("About, Contact, Privacy — the site's standing pages");
+  var fs2 = require("fs");
+  var BI = require(__dirname + "/build_info.js");
+  var sm = fs2.readFileSync(__dirname + "/sitemap.xml", "utf8");
+  var sw = fs2.readFileSync(__dirname + "/sw.js", "utf8");
+  var shell = fs2.readFileSync(__dirname + "/index.html", "utf8");
+  var addr = BI.MAIL[0] + "@" + BI.MAIL[1];
+  ["about", "contact", "privacy"].forEach(function (slug) {
+    var f = __dirname + "/" + slug + "/index.html";
+    var p = BI.PAGES.filter(function (x) { return x.slug === slug; })[0];
+    var h = fs2.existsSync(f) ? fs2.readFileSync(f, "utf8") : "";
+    ok(h && p && h.replace(/\r\n/g, "\n") === BI.buildInfo(p).replace(/\r\n/g, "\n"),
+       "/" + slug + "/ exists and matches build_info.js — re-run `node build_info.js` if not");
+    ok(h.indexOf('<link rel="canonical" href="https://euroballgames.com/' + slug + '/" />') >= 0 &&
+       /<title>[^<]+<\/title>/.test(h) && /<h1>[^<]+<\/h1>/.test(h),
+       "/" + slug + "/ has its own title, h1 and self-canonical");
+    ok(h.indexOf(addr) === -1, "/" + slug + "/ keeps the finished address out of its source (scraper guard)");
+    ok(h.indexOf("googletagmanager") === -1 && h.indexOf("adsbygoogle") === -1,
+       "/" + slug + "/ loads no Google script of its own");
+    ok(sm.indexOf("<loc>https://euroballgames.com/" + slug + "/</loc>") >= 0, "/" + slug + "/ is in the sitemap");
+    ok(sw.indexOf('"' + slug + '/"') >= 0, "/" + slug + "/ is precached for offline reading");
+    ok(shell.indexOf('class="colophon-link info-link" href="' + slug + '/"') >= 0, "the footer links /" + slug + "/");
+    var dead = (h.match(/href="\.\.\/[^"]*"/g) || []).map(function (m) { return m.slice(9, -1); })
+      .filter(function (r) { return !fs2.existsSync(__dirname + "/" + r + (r === "" || /\/$/.test(r) ? "index.html" : "")); });
+    ok(dead.length === 0, "/" + slug + "/ links only to pages that exist" + (dead.length ? " (dead: " + dead.join(", ") + ")" : ""));
+  });
+  var contact = fs2.readFileSync(__dirname + "/contact/index.html", "utf8");
+  ok(contact.indexOf(BI.MAIL[0] + " [at] ") >= 0 && contact.indexOf('data-u="' + BI.MAIL[0] + '"') >= 0,
+     "the contact page shows the address as text a person can read, and a script makes it a link");
+  var privacy = fs2.readFileSync(__dirname + "/privacy/index.html", "utf8");
+  ok(/Third-party vendors, including Google, use cookies/.test(privacy) &&
+     privacy.indexOf("adssettings.google.com") >= 0 && privacy.indexOf("policies.google.com/technologies/ads") >= 0,
+     "the privacy policy carries AdSense's required disclosures: vendor cookies, the Ads Settings opt-out, Google's cookie page");
+  ok(/No ads are served today/.test(privacy) === (shell.indexOf("adsbygoogle") === -1),
+     "…and says no ads are served for exactly as long as no ad script is on the page");
+  ok(privacy.indexOf("elg:") >= 0 && privacy.indexOf("_ga") >= 0 && /Web3Forms/.test(privacy) && /Cloudflare/.test(privacy),
+     "…and names every place data goes: local storage, the _ga cookie, the feedback relay, the host");
+  // The hub at / rewrites its address to /eurocup/ (or /the-grid/) without
+  // reloading; the root must not follow it, or tiles lead to /eurocup/eurocup/….
+  var r1 = window.Hub._siteRoot(), before = window.location.href;
+  try { window.location.href = new URL("eurocup/the-grid/", before).href; } catch (e) {}
+  var moved = window.location.href !== before;
+  ok(moved && window.Hub._siteRoot() === r1, "the site root is fixed at load: moving the address bar doesn't move it (was: /eurocup/eurocup/the-grid/)");
+  window.location.href = before;
+  var appSrc = fs2.readFileSync(__dirname + "/app.js", "utf8");
+  ok(/footer a\.comp-link, footer a\.info-link/.test(appSrc) && appSrc.indexOf("function wire() {") < appSrc.indexOf('setAttribute("href", pinned[pi].href)'),
+     "the footer links are pinned to absolute addresses in wire(), before the first push");
+  var grid = fs2.readFileSync(__dirname + "/eurocup/the-grid/index.html", "utf8");
+  ok(grid.indexOf('info-link" href="../../privacy/"') >= 0, "a page two levels down reaches the footer links back at the root");
 })();
 
 // --- Nationality = the national team a player has played for -----------------
