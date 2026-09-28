@@ -417,9 +417,19 @@
   // on euroballgames.com and "/eurogame/" on the github.io mirror WITHOUT either
   // being hardcoded. That is the whole reason the mirror still works off one
   // build; hardcoding "/" here would break every link on it.
+  //
+  // Worked out ONCE, from the address the page loaded at. __ELG_ROOT__ is
+  // relative to the DOCUMENT, and pushState moves the address without moving
+  // the document: the hub at / that has rewritten itself to /eurocup/ would
+  // otherwise resolve "./" to /eurocup/ and send its tiles to
+  // /eurocup/eurocup/the-grid/. The first call always comes before the first
+  // push, because every push is built from it.
+  var rootPath = null;
   function siteRoot() {
+    if (rootPath !== null) return rootPath;
     var rel = (typeof window.__ELG_ROOT__ === "string" && window.__ELG_ROOT__) || "./";
-    try { return new URL(rel, window.location.href).pathname; } catch (e) { return "/"; }
+    try { rootPath = new URL(rel, window.location.href).pathname; } catch (e) { rootPath = "/"; }
+    return rootPath;
   }
   // The EuroCup's pages are a directory of their own (build_pages.js): its hub
   // at /eurocup/, its games at /eurocup/the-grid/ and so on. __ELG_ROOT__ is
@@ -544,6 +554,14 @@
   }
 
   function wire() {
+    // The footer's links are relative to the document, which is right until the
+    // first pushState: on /the-grid/, having come from the hub at /, "about/"
+    // would resolve to /the-grid/about/. So each one is pinned to the address it
+    // resolves to NOW, before anything below moves the address bar.
+    var pinned = document.querySelectorAll("footer a.comp-link, footer a.info-link");
+    for (var pi = 0; pi < pinned.length; pi++) {
+      try { if (pinned[pi].href) pinned[pi].setAttribute("href", pinned[pi].href); } catch (e) {}
+    }
     applyTheme(getTheme());                              // reconcile the pre-paint theme + set the toggle label
     var tb = $("theme-btn");
     if (tb) tb.addEventListener("click", toggleTheme);
