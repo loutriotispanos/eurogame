@@ -2865,7 +2865,9 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
 
   // The hub's intro: on the hub, never on a game page; the EuroCup hub has its own.
   ok(read("index.html").indexOf('<section class="seo-copy hub-intro" data-seo-view="home">') >= 0, "the hub has its own intro, under the tiles");
-  ok(BP2.PAGES.every(function (p) { return read(p.slug + "/index.html").indexOf("hub-intro") === -1; }), "…which no game page repeats");
+  ok(BP2.PAGES.concat(BP2.EC_PAGES.map(function (p) { return { slug: "eurocup/" + p.slug }; })).every(function (p) {
+       return read(p.slug + "/index.html").indexOf('<section class="seo-copy hub-intro"') === -1; }),
+     "…which no game page repeats (the section, not the stylesheet rule every page shares)");
   ok(/Daily puzzles about the EuroCup/.test(read("eurocup/index.html")) && read("eurocup/index.html").indexOf("Daily puzzles about European basketball") === -1,
      "…and the EuroCup hub swaps in its own");
 
