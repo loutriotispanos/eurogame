@@ -121,9 +121,9 @@
     els.counter.textContent = diffLabel() + " · Who's the " + hiddenPos + "? · " + left + (left === 1 ? " guess left — make it count!" : " guesses left");
   }
   function updateNextBtn() {
-    var practice = (diff !== "daily");                  // Daily is one-per-day: no New-five / Give-up
+    var practice = (diff !== "daily");                  // Daily is one-per-day: no New five…
     if (els.next) els.next.style.display = practice ? "" : "none";
-    if (els.giveup) els.giveup.style.display = practice ? "" : "none";
+    if (els.giveup) { els.giveup.style.display = ""; els.giveup.disabled = over; }   // …but Give up is offered on it too, to concede
   }
 
   function dailyBannerNote() {          // warm closing line for the Daily banner
@@ -218,6 +218,7 @@
   }
   function submitGuess(name) {
     if (over || !name) return;
+    disarmGiveUp();                    // playing on withdraws a half-pressed concession
     els.input.value = ""; closeDropdown();
     if (name === target) { won = true; over = true; finish(); return; }
     guesses.push(name); renderGuesses();
@@ -226,6 +227,7 @@
   }
   function finish() {
     els.input.disabled = true;
+    if (els.giveup) els.giveup.disabled = true;
     if (diff === "daily") { recordDaily(won); saveDaily(); } else record(won);
     renderStats(); renderCourt(); updateCounter(); showBanner();
     if (els.sr) els.sr.textContent = (won ? "Correct! " : "Out of guesses. ") + target + ".";
@@ -234,6 +236,7 @@
   function setupTarget() { target = lineup.five.filter(function (p) { return p.pos === hiddenPos; })[0].name; }
   function resetRound() {
     guesses = []; over = false; won = false; dealt = true;
+    disarmGiveUp();
     els.input.disabled = false; els.input.value = ""; els.banner.hidden = true;
   }
   function dealDaily() {
@@ -261,7 +264,27 @@
     renderHeader(); renderCourt(); renderGuesses(); updateCounter(); updateNextBtn(); closeDropdown();
     els.input.focus();
   }
-  function giveUp() { if (over || diff === "daily") return; won = false; over = true; finish(); }   // reveal the answer (practice only)
+  // Conceding the daily records the loss and reveals the answer, exactly as
+  // running out does. It costs this game its own daily record but NOT the hub
+  // streak: the hub counts a lost daily as played. The Daily arms first (there
+  // is no second puzzle today); practice stays one tap. Same as Path Between.
+  var giveArmed = false, giveTimer = null;
+  function disarmGiveUp() {
+    giveArmed = false;
+    if (giveTimer) { clearTimeout(giveTimer); giveTimer = null; }
+    if (els.giveup) { els.giveup.textContent = "Give up"; if (els.giveup.classList) els.giveup.classList.remove("armed"); }
+  }
+  function giveUp() {
+    if (over) return;
+    if (diff === "daily" && !giveArmed) {
+      giveArmed = true;
+      if (els.giveup) { els.giveup.textContent = "Sure?"; if (els.giveup.classList) els.giveup.classList.add("armed"); }
+      giveTimer = setTimeout(disarmGiveUp, 3000);
+      return;
+    }
+    disarmGiveUp();
+    won = false; over = true; finish();
+  }
   function setDiff(d) {
     diff = ({ daily: 1, easy: 1, medium: 1, hard: 1 })[d] ? d : "daily";
     if (diff === "daily") { dayKey = pendingArchive || todayStr(); isArchive = !!pendingArchive; pendingArchive = null; }
@@ -380,6 +403,7 @@
     _deal: deal,
     _setDiff: setDiff,
     _guess: submitGuess,
+    _giveUp: giveUp,
     _shareText: shareText
   };
 

@@ -928,7 +928,7 @@
     _chooseStats: chooseStats, _wireStats: wireStats, _statsChoice: statsChoice,
     _applyCompText: applyCompText, _goComp: goComp, _renderCompMenu: renderCompMenu, _curView: function () { return curView; },
     _isMode: isMode, _pageTitle: pageTitle, _modes: MODES,
-    _slugs: SLUGS, _siteRoot: siteRoot, _ecDir: EC_DIR, _titles: TITLES, _canon: CANON, _linkedGame: linkedGame,
+    _slugs: SLUGS, _dailyState: dailyState, _siteRoot: siteRoot, _ecDir: EC_DIR, _titles: TITLES, _canon: CANON, _linkedGame: linkedGame,
     // The built title is captured once, at load. The harness needs to restate it
     // to drive both branches, since in tests the document is always index.html.
     _readSeoTitle: readSeoTitle,

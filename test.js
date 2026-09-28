@@ -585,7 +585,7 @@ ok(byId("c5-giveup").style.display !== "none", "Give up shown in CT5 practice");
 fire(byId("c5-giveup"), "click");
 ok(byId("c5-banner").hidden === false, "Give up reveals the answer (ends the game)");
 window.CompleteFive._setDiff("daily");
-ok(byId("c5-giveup").style.display === "none", "Give up hidden in CT5 Daily");
+ok(byId("c5-giveup").style.display === "", "Give up is offered on the CT5 Daily too (it asks once before conceding)");
 window.CompleteFive.goDaily();
 ok(window.CompleteFive._peek().diff === "daily", "CompleteFive.goDaily switches to Daily");
 window.PlayerID.goDaily();
@@ -771,7 +771,7 @@ ok(byId("co-giveup").style.display !== "none", "Give up shown in practice");
 fire(byId("co-giveup"), "click");
 ok(window.CareerOrder._peek().over === true && window.CareerOrder._peek().won === false, "Give up reveals the answer (loss)");
 window.CareerOrder._setDiff("daily");
-ok(byId("co-giveup").style.display === "none", "Give up hidden in Daily");
+ok(byId("co-giveup").style.display === "", "Give up is offered on the Career Order Daily too (it asks once before conceding)");
 window.CareerOrder._setDiff("easy");
 window.CareerOrder._solve();
 ok(window.CareerOrder._peek().over === true, "practice game finished");
@@ -2959,6 +2959,29 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   var put = function (k, v) { if (v === undefined) delete store[k]; else store[k] = v; };
   put("elg:rm:board:" + C, saveB); put("elg:rm:best:" + C, saveBest); put("elg:rm:rev:" + C, saveRev);
   window.RosterMaster._back();
+})();
+
+// --- Complete the Five + Career Order: the Daily can be conceded ---------------
+(function () {
+  console.log("Complete the Five + Career Order — Give up works on the Daily, asks once, keeps the streak");
+  function run(name, api, key, dstatsKey) {
+    api.goDaily();
+    var day = api._peek().day, k = key + day, saved = store[k], ds = store[dstatsKey];
+    delete store[k]; api.goPractice(); api.goDaily();
+    api._giveUp();
+    var s1 = store[k] ? JSON.parse(store[k]) : null;
+    ok(!(s1 && s1.done), name + ": the first tap on the Daily only arms it (nothing is conceded yet)");
+    api._giveUp();
+    var s2 = store[k] ? JSON.parse(store[k]) : null;
+    ok(s2 && s2.done === true && s2.won === false, name + ": the second tap concedes, and the save records a loss");
+    ok(window.Hub._dailyState(name === "Complete the Five" ? "completefive" : "careerorder") === "lost",
+       name + ": …which the hub reads as played, so the streak survives");
+    if (saved === undefined) delete store[k]; else store[k] = saved;
+    if (ds === undefined) delete store[dstatsKey]; else store[dstatsKey] = ds;
+    api.goPractice(); api.goDaily();
+  }
+  run("Complete the Five", window.CompleteFive, "elg:c5:daily:", "elg:c5:dstats");
+  run("Career Order", window.CareerOrder, "elg:co:daily:", "elg:co:dstats");
 })();
 
 // --- Nationality = the national team a player has played for -----------------
