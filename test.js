@@ -2890,6 +2890,14 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   ok(l18 && l18.champion && l18.five.filter(function (x) { return x.pos === "SF"; })[0].name === "Luka Doncic", "Complete the Five example: 2018 Real Madrid's small forward is Doncic");
 })();
 
+// --- Phones: a game's title starts under the corner buttons -------------------
+(function () {
+  console.log("Phones — the corner buttons never sit on a game's title");
+  var css = require("fs").readFileSync(__dirname + "/index.html", "utf8");
+  ok(/@media \(max-width: 600px\) \{\s*body:not\(\.view-home\) header \{ padding-top: 38px; \}/.test(css),
+     "below 600px a game's header clears the fixed button row (seven of thirteen views collided at 375px; measured in a browser)");
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};
