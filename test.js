@@ -2759,6 +2759,39 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   ok(/a\.hub-clubs/.test(src("app.js")), "…and is pinned before the first pushState, like the footer links");
 })();
 
+// --- Club crests: square tiles on /clubs/, a crest on every club page --------
+(function () {
+  console.log("Club crests — squares on /clubs/, one crest per club");
+  var fs2 = require("fs");
+  var BC = require(__dirname + "/build_clubs.js");
+  var src = JSON.parse(fs2.readFileSync(__dirname + "/crests/SOURCES.json", "utf8"));
+  var missing = [], heavy = [], unsourced = [];
+  BC.CLUBS.forEach(function (c) {
+    var f = __dirname + "/crests/" + c.slug + ".webp";
+    if (!fs2.existsSync(f)) { missing.push(c.slug); return; }
+    var b = fs2.readFileSync(f);
+    if (b.toString("ascii", 0, 4) !== "RIFF" || b.toString("ascii", 8, 12) !== "WEBP") missing.push(c.slug + ":not-webp");
+    if (b.length > 30 * 1024) heavy.push(c.slug + " " + Math.round(b.length / 1024) + "KB");
+    if (!src[c.name] || src[c.name].file !== "crests/" + c.slug + ".webp" || !/^https:\/\//.test(src[c.name].page || "")) unsourced.push(c.name);
+  });
+  ok(missing.length === 0, "every club has a WebP crest at crests/<slug>.webp" + (missing.length ? " (" + missing.join(", ") + ")" : ""));
+  ok(heavy.length === 0, "…each under 30 KB, so the 52 tiles stay light on a phone" + (heavy.length ? " (" + heavy.join(", ") + ")" : ""));
+  ok(unsourced.length === 0, "…and crests/SOURCES.json records where every one came from" + (unsourced.length ? " (" + unsourced.join(", ") + ")" : ""));
+
+  var hub = fs2.readFileSync(__dirname + "/clubs/index.html", "utf8");
+  ok((hub.match(/<a class="clubtile" href="\.\.\/clubs\/[a-z0-9-]+\/">/g) || []).length === BC.CLUBS.length,
+     "/clubs/ is a grid of " + BC.CLUBS.length + " square tiles, one per club");
+  ok(BC.CLUBS.every(function (c) { return hub.indexOf('<img src="../crests/' + c.slug + '.webp"') >= 0; }) && /loading="lazy"/.test(hub),
+     "…each with its crest, lazy-loaded");
+  ok(hub.indexOf("<h3>") === -1 && (hub.match(/<h2>/g) || []).length === 2,
+     "…in two sections (EuroLeague, EuroCup), not split by country");
+  var rm = fs2.readFileSync(__dirname + "/clubs/real-madrid/index.html", "utf8");
+  ok(rm.indexOf('<img src="../../crests/real-madrid.webp" width="96" height="96" alt="Real Madrid crest"') >= 0,
+     "a club page shows its crest above the name");
+  ok(/Club crests belong to their clubs/.test(hub) && /Club crests belong to their clubs/.test(rm),
+     "…and both say the crests belong to the clubs");
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};
