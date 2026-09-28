@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2251,6 +2258,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="rostermaster">
     <h2 class="seo-lede">Roster Master — all thirty-two EuroCup rosters, from memory</h2>
     <p>The only game here with no daily. Thirty-two EuroCup clubs, 391 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.</p>
@@ -2272,6 +2284,20 @@
       <dt>Is my EuroLeague progress affected?</dt>
       <dd>No. The EuroCup keeps its own boards, best scores and gold stars, separate from the EuroLeague's.</dd>
     </dl>
+    <h3>Getting better at Roster Master</h3>
+    <ul>
+      <li>Go position by position: the board shows exactly how many you are missing.</li>
+      <li>A surname is enough when it is unique on the roster.</li>
+      <li>Progress saves per club, so come back to a roster over several sittings.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>32 clubs and 391 players, taken club by club from the official 2026–27 EuroCup rosters. Every club also has its own page: see <a href="../../clubs/">the clubs</a>.</p>
+    <h3>If you like Roster Master</h3>
+    <ul>
+      <li><a href="../mystery-player/">Mystery Player</a>: Guess the mystery EuroCup player in 8 tries.</li>
+      <li><a href="../higher-or-lower/">Higher or Lower</a>: Two EuroCup players, one question: who is taller, who is older, whose shirt number is higher? Ten matchups a day, or an endless run that ends on your first mistake.</li>
+      <li><a href="../the-grid/">The Grid</a>: A 3×3 grid of clubs, nationalities and positions for the EuroCup.</li>
+    </ul>
     <p class="seo-more">Euroball has 7 daily EuroCup puzzles, and eleven for the EuroLeague. <a href="../">See the EuroCup games →</a></p>
   </section>
 

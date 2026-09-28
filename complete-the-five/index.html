@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="completefive">
     <h2 class="seo-lede">Complete the Five — name the missing Final Four starter</h2>
     <p>A real EuroLeague Final Four starting five, set out on a half-court in the positions they played — with one man missing. You get the club, the season, the hole he left, and the four teammates who stood beside him. Name him in two guesses.</p>
@@ -2290,6 +2302,23 @@
       <dt>Does the Daily count towards my streak?</dt>
       <dd>Yes. Solving any daily on the site keeps the single hub streak alive — you do not have to play all eleven games to keep it.</dd>
     </dl>
+    <h3>Getting better at Complete the Five</h3>
+    <ul>
+      <li>Start with where the gap is. A missing centre in a Final Four five is a short list; a missing small forward can be almost anyone.</li>
+      <li>Date the five from the teammates you recognise. Two names usually fix the season, and the season fixes the roster.</li>
+      <li>Remember that starters aren't always the stars. Coaches start defenders and bigs who played twenty minutes, and the famous sixth man is often not in the five at all.</li>
+      <li>On Easy the hidden man is the headline name. If the four on the floor feel like a supporting cast, the answer is probably the team's best player.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>56 real starting fives from 14 Final Fours between 2010 and 2025 (2020 was cancelled; 2022 isn't in the archive yet), set out on a half-court in the positions they started. The Final Four fives of today's EuroLeague clubs are also listed on their club pages.</p>
+    <h3>An example</h3>
+    <p>2018, Real Madrid, champions. Facundo Campazzo at the point, Fabien Causeur at shooting guard, Felipe Reyes at power forward and Gustavo Ayón at centre, with the small forward's spot empty. A Madrid title team from 2018 with a hole at the three has one answer fans remember: Luka Dončić, the EuroLeague's MVP that season.</p>
+    <h3>If you like Complete the Five</h3>
+    <ul>
+      <li><a href="../connections/">Connections</a>: Sixteen EuroLeague names hide four groups of four — a roster, a nationality, a Final Four five, a shared jersey number.</li>
+      <li><a href="../odd-one-out/">Odd One Out</a>: Four names, three with something in common and one without.</li>
+      <li><a href="../player-id/">Player ID</a>: A EuroLeague player's whole career laid out club by club, with the years.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 

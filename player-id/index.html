@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="playerid">
     <h2 class="seo-lede">Player ID — name the player from his career path</h2>
     <p>Every club he ever played for, in order, with the years he was there — and nothing else. No stats, no photo, no nationality. Just the route. Two guesses to say whose career you are looking at.</p>
@@ -2289,6 +2301,23 @@
       <dt>How many careers are in the game?</dt>
       <dd>613 full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2026–27 EuroLeague rosters.</dd>
     </dl>
+    <h3>Getting better at Player ID</h3>
+    <ul>
+      <li>Read the path from the end. The last club is where he is now or where he finished, and in the Active pool that alone leaves one roster to think about.</li>
+      <li>Look for the NBA gap. A run of American clubs in the middle of a European career dates it, and usually says he was rated highly at the time.</li>
+      <li>Count the countries. A career that never leaves Spain or Greece belongs to a different kind of player from one that crosses six leagues.</li>
+      <li>Use the era. A path that starts in the 1990s rules out every current player at once, and switching to Both mode is what makes that clue matter.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>613 career timelines, club by club with the years, compiled from official club rosters, Wikipedia, FIBA and Proballers. Practice draws from every career with at least two clubs (609 of them), and the Daily from the 513 with four or more, so the route always has a story in it.</p>
+    <h3>An example</h3>
+    <p>Maroussi 2001–2005, Panathinaikos 2005–2006, Houston Rockets 2006–2007, Panathinaikos 2007–2010, Olympiacos 2010–2021. A Greek start, one NBA season, a return, and then a move straight across Greek basketball's great rivalry, where he stayed eleven years. Nobody else has that route. It's Vassilis Spanoulis.</p>
+    <h3>If you like Player ID</h3>
+    <ul>
+      <li><a href="../career-order/">Career Order</a>: A player's clubs, shuffled.</li>
+      <li><a href="../mystery-player/">Mystery Player</a>: Guess the mystery EuroLeague player in 8 tries.</li>
+      <li><a href="../path-between/">Path Between</a>: Six degrees of European basketball.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 

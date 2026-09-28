@@ -32,6 +32,59 @@ var ORIGIN = "https://euroballgames.com";
 var ROOT = __dirname;
 
 /* ---------------------------------------------------------------------------
+ * THE NUMBERS.
+ *
+ * Every count the copy quotes is worked out here, from the data files, at
+ * build time, and the copy says {players} or {puzzles} rather than a figure.
+ * Hand-typed numbers went stale the moment the data moved: the Connections
+ * FAQ said "94 puzzles" long after the bank reached 128, and Career Order
+ * quoted 85 careers out of 379. test.js fails if a {placeholder} is left over.
+ * ------------------------------------------------------------------------- */
+var STATS = (function () {
+  var w = {};
+  ["clubs.js", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js", "oddones.js",
+   "eurocup_players.js", "eurocup_careers.js", "eurocup_grids.js", "eurocup_paths.js"].forEach(function (f) {
+    new Function("window", fs.readFileSync(path.join(ROOT, f), "utf8"))(w);
+  });
+  var canon = w.CLUBS.canonical;
+  function distinct(c) { var s = {}; for (var i = 0; i < c.career.length; i++) { if (s[c.career[i].team]) return false; s[c.career[i].team] = 1; } return true; }
+  function count(a, f) { return a.filter(f).length; }
+  var elTeams = {}; w.PLAYERS.forEach(function (p) { elTeams[p.team] = 1; });
+  var nats = {}; w.PLAYERS.forEach(function (p) { nats[p.nationality] = 1; });
+  var careerClubs = {}; w.CAREERS.forEach(function (c) { c.career.forEach(function (s) { careerClubs[canon(s.team)] = 1; }); });
+  // Common Club's answer set, the same rule as clubreveal.js answerClubs():
+  // today's EuroLeague clubs plus any club with four or more non-active players filed under it.
+  var answers = {}, legCount = {};
+  w.PLAYERS.forEach(function (p) { answers[canon(p.team)] = 1; });
+  w.LEGENDS.forEach(function (p) { var c = canon(p.team); legCount[c] = (legCount[c] || 0) + 1; });
+  Object.keys(legCount).forEach(function (c) { if (legCount[c] >= 4) answers[c] = 1; });
+  var seasons = {}; w.LINEUPS.forEach(function (l) { seasons[l.season] = 1; });
+  var ss = Object.keys(seasons).map(Number).sort(), gaps = [];
+  for (var y = ss[0]; y <= ss[ss.length - 1]; y++) if (!seasons[y] && y !== 2020) gaps.push(y);
+  var suit = w.CAREERS.filter(function (c) { return c.career.length >= 3 && distinct(c); });
+  var ecSuit = w.EUROCUP_CAREERS.filter(function (c) { return c.career.length >= 3 && distinct(c); });
+  function par(list, k) { return count(list, function (p) { return p.par === k; }); }
+  return {
+    players: w.PLAYERS.length, legends: w.LEGENDS.length, careers: w.CAREERS.length,
+    elClubs: Object.keys(elTeams).length, nats: Object.keys(nats).length,
+    pidPool: count(w.CAREERS, function (c) { return c.career.length >= 2; }),
+    pidDaily: count(w.CAREERS, function (c) { return c.career.length >= 4; }),
+    coSuit: suit.length, coDaily: count(suit, function (c) { return c.career.length >= 4 && c.career.length <= 7; }),
+    careerClubs: Object.keys(careerClubs).length, answerClubs: Object.keys(answers).length,
+    lineups: w.LINEUPS.length, f4seasons: ss.length, f4first: ss[0], f4last: ss[ss.length - 1],
+    f4gapNote: gaps.length ? "; " + gaps.join(" and ") + (gaps.length === 1 ? " isn't" : " aren't") + " in the archive yet" : "",
+    puzzles: w.PUZZLES.length, grids: w.GRIDS.length, oddones: w.ODDONES.length,
+    paths: w.PATHS.length, par2: par(w.PATHS, 2), par3: par(w.PATHS, 3), par4: par(w.PATHS, 4),
+    ecPlayers: w.EUROCUP_PLAYERS.length, ecClubs: Object.keys(w.EUROCUP_TEAMS).length, ecCareers: w.EUROCUP_CAREERS.length,
+    ecCoSuit: ecSuit.length, ecGrids: w.EUROCUP_GRIDS.length,
+    ecPaths: w.EUROCUP_PATHS.length, ecPar2: par(w.EUROCUP_PATHS, 2), ecPar3: par(w.EUROCUP_PATHS, 3), ecPar4: par(w.EUROCUP_PATHS, 4)
+  };
+})();
+function fill(s) {
+  return String(s).replace(/\{([a-zA-Z0-9]+)\}/g, function (m, k) { return k in STATS ? String(STATS[k]) : m; });
+}
+
+/* ---------------------------------------------------------------------------
  * THE COPY.
  *
  * view  — the internal view id app.js already uses (unchanged; localStorage
@@ -75,13 +128,13 @@ var PAGES = [
       ["Why only two guesses?", "Because the career path is a very strong clue once you read it properly. Two guesses keeps it a test of recognition rather than a process of elimination."],
       ["Do NBA years show up in the path?", "Yes. Many European careers pass through the NBA, and those stints appear in the timeline like any other club — often they are the clue that fixes the era for you."],
       ["What is the difference between Active, Non-active and Both?", "Active draws only from players on a 2026–27 EuroLeague roster. Non-active draws from players no longer on a current roster, retired greats included. Both mixes them, which is the hardest because the era is no longer a hint."],
-      ["How many careers are in the game?", "613 full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2026–27 EuroLeague rosters."]
+      ["How many careers are in the game?", "{careers} full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2026–27 EuroLeague rosters."]
     ]
   },
   {
     view: "completefive", slug: "complete-the-five", name: "Complete the Five",
     title: "Complete the Five — EuroLeague Final Four lineups | Euroball",
-    desc: "A real EuroLeague Final Four starting five with one starter hidden. Name him in two guesses, from the club, the season, his position and his four teammates. 56 lineups, 2010–2025.",
+    desc: "A real EuroLeague Final Four starting five with one starter hidden. Name him in two guesses, from the club, the season, his position and his four teammates. {lineups} lineups, 2010–2025.",
     h1: "Complete the Five — name the missing Final Four starter",
     intro: "A real EuroLeague Final Four starting five, set out on a half-court in the positions they played — with one man missing. You get the club, the season, the hole he left, and the four teammates who stood beside him. Name him in two guesses.",
     how: [
@@ -91,7 +144,7 @@ var PAGES = [
       "Two guesses. Type a name and pick it from the list."
     ],
     faq: [
-      ["Which seasons are covered?", "Fourteen seasons of Final Four basketball, 2010 through 2025 — 56 starting fives in all. 2020 is absent because the season was cancelled and no Final Four was played."],
+      ["Which seasons are covered?", "Fourteen seasons of Final Four basketball, 2010 through 2025 — {lineups} starting fives in all. 2020 is absent because the season was cancelled and no Final Four was played."],
       ["Are these the real starting fives?", "Yes. Every lineup is a genuine Final Four starting five, compiled from official box scores rather than reconstructed from memory."],
       ["What do Easy, Medium and Hard change?", "Who gets hidden. Easy hides the star of the five, the name you would list first. Hard hides the starter only a serious follower of that team would remember."],
       ["Does the Daily count towards my streak?", "Yes. Solving any daily on the site keeps the single hub streak alive — you do not have to play all eleven games to keep it."]
@@ -111,7 +164,7 @@ var PAGES = [
     ],
     faq: [
       ["What kinds of groups appear?", "Eleven category types: a club's current roster, a nationality, all guards or forwards or centers, a Final Four starting five, everyone at one Final Four, a birth decade, club legends, a club's ex-players, a shared jersey number, the 2.10&nbsp;m club, and journeymen."],
-      ["Is every puzzle solvable in only one way?", "Yes, and that is enforced rather than assumed. All 94 puzzles are machine-generated and then verified to have exactly one valid solution, with fairness checks that keep every group independently recognisable."],
+      ["Is every puzzle solvable in only one way?", "Yes, and that is enforced rather than assumed. All {puzzles} puzzles are machine-generated and then verified to have exactly one valid solution, with fairness checks that keep every group independently recognisable."],
       ["Why do some names look like they fit two groups?", "Because they genuinely do — a player's nationality, an old club and a shirt number can all be true at once. The single valid solution is what resolves it, and spotting which claim is the decoy is the puzzle."],
       ["Can I play more than one a day?", "Yes. The Daily is the same board for everyone and feeds your streak; Practice serves unlimited random puzzles from the same pool."]
     ]
@@ -132,7 +185,7 @@ var PAGES = [
       ["How do I play without dragging?", "Every club has ▲ and ▼ buttons beside it that move it one place. The whole puzzle is solvable with those alone, which also makes it keyboard- and screen-reader-friendly."],
       ["What happens when a club locks green?", "It is in the right place. It stays green through later checks unless you move it again, so each check narrows the problem instead of resetting it."],
       ["Do loan spells and NBA years count as separate stops?", "Yes. Anything recorded as a distinct stint in the career database appears as its own club, in the order it happened."],
-      ["How many careers can appear?", "85 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 613-career database the rest of the site plays by."]
+      ["How many careers can appear?", "{coSuit} careers are long and varied enough to make a fair ordering puzzle, drawn from the same {careers}-career database the rest of the site plays by."]
     ]
   },
   {
@@ -167,7 +220,7 @@ var PAGES = [
       "A club we cannot place is not a guess and costs you nothing."
     ],
     faq: [
-      ["What if I can think of two clubs they share?", "Then one of them is not in the database. A pair only becomes a puzzle if it shares exactly one club out of all 465 clubs on record — not merely one of the ~22 you would think to name — so the guarantee of a single right answer holds."],
+      ["What if I can think of two clubs they share?", "Then one of them is not in the database. A pair only becomes a puzzle if it shares exactly one club out of all {careerClubs} clubs on record — not merely one of the {answerClubs} you would think to name — so the guarantee of a single right answer holds."],
       ["Can the answer be an NBA team?", "No. The answer is always a EuroLeague club or a club with genuine retired greats, even though the database knows about NBA and other stints and uses them elsewhere."],
       ["Do the two players have to be from the same era?", "No, and Both mode leans on exactly that: a current EuroLeague player can be paired with a non-active player who played for the same club decades earlier."],
       ["Why is one player in the Daily always familiar?", "The Daily is anchored on a Final Four starter so there is always one name you can hold on to. Active, Non-active and Both drop that guarantee, and Both reaches widest of all."]
@@ -235,7 +288,7 @@ var PAGES = [
     title: "Roster Master — name every 2026-27 EuroLeague roster | Euroball",
     desc: "The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good.",
     h1: "Roster Master — all twenty rosters, from memory",
-    intro: "The big one, and the only game here with no daily. Twenty clubs, 296 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
+    intro: "The big one, and the only game here with no daily. Twenty clubs, {players} players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
     how: [
       "Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
       "Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.",
@@ -283,7 +336,7 @@ var EC_PAGES = [
       "You have eight guesses. Solve it and your hub streak survives another day."
     ],
     faq: [
-      ["Which players can be the answer?", "Anyone on a 2026–27 EuroCup roster: 391 players across 32 clubs, researched club by club from the official rosters. Nationality is the national team a player has played for."],
+      ["Which players can be the answer?", "Anyone on a 2026–27 EuroCup roster: {ecPlayers} players across {ecClubs} clubs, researched club by club from the official rosters. Nationality is the national team a player has played for."],
       ["What does a yellow square mean?", "Close, but the meaning depends on the column. On club it means a different club in the same country — Trento for Reyer Venezia, say. On height it means within 5&nbsp;cm, on age within 2 years, and on shirt number within 3."],
       ["Is it separate from the EuroLeague Mystery Player?", "Yes. The EuroCup keeps its own daily, its own stats and its own streaks, so playing one competition never touches the other. Switch between them from the competition menu at the top of the hub."],
       ["Is there a new one every day?", "Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice and Endless are unlimited if you want to keep going."]
@@ -301,7 +354,7 @@ var EC_PAGES = [
       "You get two guesses. A near-miss costs the same as a wild one, so read the whole path before committing."
     ],
     faq: [
-      ["How many careers are in the game?", "350 of the EuroCup's 391 players have a full career timeline, built from the official EuroCup player biographies. The Daily sticks to careers of four clubs or more so the route tells a story."],
+      ["How many careers are in the game?", "{ecCareers} of the EuroCup's {ecPlayers} players have a full career timeline, built from the official EuroCup player biographies. The Daily sticks to careers of four clubs or more so the route tells a story."],
       ["Do NBA years show up in the path?", "Yes. Sixty-one EuroCup careers pass through the NBA, and those stints appear in the timeline like any other club. College, G League and third-division stops are left out."],
       ["Why is there no Non-active mode?", "Because every EuroCup puzzle is a current player. The EuroLeague version adds retired and non-active players; the EuroCup plays on this season's rosters only."],
       ["Why only two guesses?", "Because the career path is a very strong clue once you read it properly. Two guesses keeps it a test of recognition rather than a process of elimination."]
@@ -320,7 +373,7 @@ var EC_PAGES = [
       "Easy, Medium and Hard are simply shorter and longer careers — more clubs means more ways to be wrong."
     ],
     faq: [
-      ["How many careers can appear?", "226 EuroCup careers are long enough, with three or more different clubs, to make a fair ordering puzzle."],
+      ["How many careers can appear?", "{ecCoSuit} EuroCup careers are long enough, with three or more different clubs, to make a fair ordering puzzle."],
       ["Is the last club always his EuroCup club?", "Yes — the 2026–27 club is always the latest stop, which is a free anchor. The work is everything before it."],
       ["How do I play without dragging?", "Every club has ▲ and ▼ buttons beside it that move it one place. The whole puzzle is solvable with those alone, which also makes it keyboard- and screen-reader-friendly."],
       ["Do NBA years count as separate stops?", "Yes. Anything recorded as a distinct stint in the career database appears as its own club, in the order it happened."]
@@ -339,9 +392,9 @@ var EC_PAGES = [
       "Each player can be used only once on the board, so spend your flexible names carefully. Every cell has at least two right answers."
     ],
     faq: [
-      ["Who counts as an answer?", "Any of the 350 EuroCup players whose full career is in the database. A player without a recorded career is not accepted even if he fits, which keeps every name the game offers accurately checkable."],
+      ["Who counts as an answer?", "Any of the {ecCareers} EuroCup players whose full career is in the database. A player without a recorded career is not accepted even if he fits, which keeps every name the game offers accurately checkable."],
       ["Why are there EuroLeague clubs on a EuroCup grid?", "Because that is where many EuroCup careers have been. Olympiacos, Partizan or Fenerbahce in a header asks who in this season's EuroCup once played there."],
-      ["How many grids are there?", "43 EuroCup boards, each verified to have enough answers per cell and a way to fill all nine cells with nine different players."],
+      ["How many grids are there?", "{ecGrids} EuroCup boards, each verified to have enough answers per cell and a way to fill all nine cells with nine different players."],
       ["Is it separate from the EuroLeague Grid?", "Yes: different boards, its own daily and its own streak. Switch competitions from the menu at the top of the hub."]
     ]
   },
@@ -359,7 +412,7 @@ var EC_PAGES = [
     ],
     faq: [
       ["What exactly counts as a teammate?", "A shared club with overlapping stint years, judged on the EuroCup players' careers. Two players who wore the same shirt in different seasons are not teammates here."],
-      ["How many puzzles are there?", "170 EuroCup pairs: 50 Easy (one player in between), 80 Medium, which is also the Daily's pool, and 40 Hard (three in between). Each has more than one shortest route."],
+      ["How many puzzles are there?", "{ecPaths} EuroCup pairs: {ecPar2} Easy (one player in between), {ecPar3} Medium, which is also the Daily's pool, and {ecPar4} Hard (three in between). Each has more than one shortest route."],
       ["What is par?", "The length of the shortest chain that actually exists between the two players, computed in advance. Your budget is par plus three."],
       ["What happens if I give up?", "The game reveals one shortest route. On the Daily it asks once before committing and records a loss, but the round still counts as played, so your hub streak survives."]
     ]
@@ -377,7 +430,7 @@ var EC_PAGES = [
       "Endless ends on your first wrong answer. Your best run is kept."
     ],
     faq: [
-      ["Where do the heights and ages come from?", "The official 2026–27 EuroCup rosters, researched club by club: heights, birth years and shirt numbers for all 391 players."],
+      ["Where do the heights and ages come from?", "The official 2026–27 EuroCup rosters, researched club by club: heights, birth years and shirt numbers for all {ecPlayers} players."],
       ["Can two players tie?", "No. A matchup is only used when there is a genuine gap between the values, so there is always a right answer."],
       ["How many do I need to pass the Daily?", "Seven out of ten."],
       ["Does Endless affect my streak?", "No. Only the Daily feeds the hub streak; Endless keeps its own best-run record on the Records page."]
@@ -388,7 +441,7 @@ var EC_PAGES = [
     title: "Roster Master — name every 2026-27 EuroCup roster | Euroball",
     desc: "The long game: name every player on all thirty-two 2026-27 EuroCup rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good.",
     h1: "Roster Master — all thirty-two EuroCup rosters, from memory",
-    intro: "The only game here with no daily. Thirty-two EuroCup clubs, 391 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
+    intro: "The only game here with no daily. Thirty-two EuroCup clubs, {ecPlayers} players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
     how: [
       "Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
       "Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.",
@@ -397,12 +450,227 @@ var EC_PAGES = [
     ],
     faq: [
       ["How current are the rosters?", "They are the 2026–27 EuroCup squads, taken club by club from the official rosters at the start of the season. Transfers made after that are not reflected."],
-      ["Which clubs are in it?", "All 32 EuroCup clubs, from Aris Thessaloniki and Turk Telekom to London Lions, Reyer Venezia and Slask Wroclaw."],
+      ["Which clubs are in it?", "All {ecClubs} EuroCup clubs, from Aris Thessaloniki and Turk Telekom to London Lions, Reyer Venezia and Slask Wroclaw."],
       ["Why is there no autocomplete?", "Because the game is recall. A name list would let you walk the roster instead of remembering it, which is the entire puzzle."],
       ["Is my EuroLeague progress affected?", "No. The EuroCup keeps its own boards, best scores and gold stars, separate from the EuroLeague's."]
     ]
   }
 ];
+
+
+/* ---------------------------------------------------------------------------
+ * THE LONGER COPY: tips, what's inside, a worked example, and related games.
+ *
+ * Each game page carried ~270 words of its own under ~2,500 shared with every
+ * other page (the app itself), which is thin by any search engine's measure,
+ * and thin is the most common reason AdSense turns a game site down. These
+ * sections are the page's own: how to get better at this game, what it is
+ * built from (in numbers from STATS), and one example worked through on real
+ * data. The examples use pairs and players that are not puzzles in the banks
+ * (the Path Between route below is checked against paths.js), or facts the
+ * club pages already show, so no copy gives away a daily.
+ * ------------------------------------------------------------------------- */
+var EXTRA = {
+  mystery: {
+    tips: [
+      "Open with a player who splits the field. A guard from a big basketball country tells you something whichever way it lands; an obscure centre from a small nation mostly tells you who it isn't.",
+      "A yellow club square is a gift. It means the answer plays in the same country as your guess, and in a twenty-club league that leaves one or two rosters. The ABA League clubs, Crvena Zvezda, Partizan and Dubai, count as one country here.",
+      "Use the arrows as a bracket. One guess taller than the answer and one shorter pins the height inside a few centimetres, and the same trick works for age and shirt number.",
+      "Don't spend guesses confirming what you know. Once position is green, every later guess should play that position. Hard mode enforces it, offering only names that fit every clue so far."
+    ],
+    inside: "The Daily and Practice draw from the {players} players on the {elClubs} 2026–27 EuroLeague rosters, from {nats} countries. Non-active mode swaps in the {legends} players who are no longer on a current roster, from all-time greats to last season's departures. Endless mixes both pools and keeps going until you miss. Nationality always means the national team a player has played for, not his passport or birthplace.",
+    example: "Say the answer were Kendrick Nunn and you opened with Evan Fournier. Club turns yellow: Fournier's Olympiacos is a different club in the same country, and the only other Greek club in the EuroLeague is Panathinaikos. Nationality is grey, because Fournier plays for France. Position is green, since both are guards. Height is grey with a ↓, because the answer is more than 5&nbsp;cm shorter than Fournier's 198&nbsp;cm. Age is grey with a ↓ too, and so is the shirt number, Fournier's 94 against something much lower. One guess in, you are looking for a younger, shorter Panathinaikos guard who isn't French, with a low number.",
+    related: ["playerid", "higherlower", "thegrid"]
+  },
+  playerid: {
+    tips: [
+      "Read the path from the end. The last club is where he is now or where he finished, and in the Active pool that alone leaves one roster to think about.",
+      "Look for the NBA gap. A run of American clubs in the middle of a European career dates it, and usually says he was rated highly at the time.",
+      "Count the countries. A career that never leaves Spain or Greece belongs to a different kind of player from one that crosses six leagues.",
+      "Use the era. A path that starts in the 1990s rules out every current player at once, and switching to Both mode is what makes that clue matter."
+    ],
+    inside: "{careers} career timelines, club by club with the years, compiled from official club rosters, Wikipedia, FIBA and Proballers. Practice draws from every career with at least two clubs ({pidPool} of them), and the Daily from the {pidDaily} with four or more, so the route always has a story in it.",
+    example: "Maroussi 2001–2005, Panathinaikos 2005–2006, Houston Rockets 2006–2007, Panathinaikos 2007–2010, Olympiacos 2010–2021. A Greek start, one NBA season, a return, and then a move straight across Greek basketball's great rivalry, where he stayed eleven years. Nobody else has that route. It's Vassilis Spanoulis.",
+    related: ["careerorder", "mystery", "pathbetween"]
+  },
+  completefive: {
+    tips: [
+      "Start with where the gap is. A missing centre in a Final Four five is a short list; a missing small forward can be almost anyone.",
+      "Date the five from the teammates you recognise. Two names usually fix the season, and the season fixes the roster.",
+      "Remember that starters aren't always the stars. Coaches start defenders and bigs who played twenty minutes, and the famous sixth man is often not in the five at all.",
+      "On Easy the hidden man is the headline name. If the four on the floor feel like a supporting cast, the answer is probably the team's best player."
+    ],
+    inside: "{lineups} real starting fives from {f4seasons} Final Fours between {f4first} and {f4last} (2020 was cancelled{f4gapNote}), set out on a half-court in the positions they started. The Final Four fives of today's EuroLeague clubs are also listed on their club pages.",
+    example: "2018, Real Madrid, champions. Facundo Campazzo at the point, Fabien Causeur at shooting guard, Felipe Reyes at power forward and Gustavo Ayón at centre, with the small forward's spot empty. A Madrid title team from 2018 with a hole at the three has one answer fans remember: Luka Dončić, the EuroLeague's MVP that season.",
+    related: ["connections", "oddoneout", "playerid"]
+  },
+  connections: {
+    tips: [
+      "Find the group that can't be anything else first, then work outwards. The hardest group usually hides among the other three.",
+      "When a name fits two groups, ask which group needs it. Each group has exactly four members, so a group that already has four candidates without him lets him go.",
+      "Treat “One away” as information, not a failure. Three of your four are right, and the wrong one is usually the most obvious name.",
+      "Shuffle when you stall. Seeing the names in a new order breaks the pairings your eye keeps making."
+    ],
+    inside: "{puzzles} boards, each built from the site's data and checked for exactly one solution. The categories run from current rosters and nationalities to Final Four starting fives, birth decades, shared shirt numbers, the 2.10&nbsp;m club and players who have played for six or more clubs. Every board is checked again whenever the data changes, so a transfer can't quietly give a board a second answer.",
+    example: "Kostas Sloukas is Greek, a guard, a former Olympiacos player and a current Panathinaikos one, all at once. A board never lets him fit two of its groups, so on the day he appears the question is only which of those facts this board is asking about. That is the whole game: every name is true in several ways, and only one of them is on the board.",
+    related: ["oddoneout", "thegrid", "completefive"]
+  },
+  careerorder: {
+    tips: [
+      "Place the anchors first. The club he is at now goes last, and a youth or hometown club usually goes first.",
+      "NBA spells tend to come in the middle of a European career, or at the start for players who were drafted young.",
+      "Use each check to learn. A club that locks green is fixed, so every check makes the problem smaller.",
+      "Think in eras. Clubs change their sponsor names, and knowing when a team was called what can place a stint on its own."
+    ],
+    inside: "{coSuit} careers are long and varied enough to make a fair puzzle: three or more clubs, and no club twice, since two identical tiles would make the order ambiguous. The Daily uses the {coDaily} with four to seven clubs. Easy has up to four, Medium five or six, and Hard seven or more.",
+    example: "Mike James: KK Zagreb, Paffoni Omegna, Baskonia, Panathinaikos, Phoenix Suns, Olimpia Milano, CSKA Moscow, AS Monaco, Anadolu Efes. Nine clubs is a Hard puzzle, but it comes apart quickly once you place the ends. He has just joined Efes, so that goes last, after the years at Monaco. The two small Croatian and Italian clubs are where it started. The NBA season in Phoenix sits between Panathinaikos and Milano.",
+    related: ["playerid", "pathbetween", "clubreveal"]
+  },
+  thegrid: {
+    tips: [
+      "Fill the hardest cells first. A small club crossed with a rare nationality may have a single answer; save your well-travelled names for the easy cells.",
+      "Journeymen are gold. A player who has been at eight clubs can answer cells nobody else can.",
+      "Short stints and NBA spells count, so think about loans and one-season stops, not just the clubs a player is known for.",
+      "Twelve guesses for nine cells makes a miss affordable. Using a player in the wrong cell is not, because each player can only go on the board once."
+    ],
+    inside: "{grids} daily grids built from the {careers} careers in the database. Every cell is checked to have at least one right answer, and most have several. Rows and columns mix clubs, nationalities and positions, and a player counts for a club if it appears anywhere in his career.",
+    example: "Take the cell where Olympiacos meets France. Evan Fournier is the obvious answer, but the database knows three more: Frank Ntilikina, Moustapha Fall and Kim Tillie. Since each player can be used only once, look at the rest of the board before you spend the famous one. A France or guard cell elsewhere may need him more.",
+    related: ["connections", "clubreveal", "pathbetween"]
+  },
+  clubreveal: {
+    tips: [
+      "Read the shorter career first. The fewer clubs a player had, the fewer candidates there are.",
+      "Keep the answer set in mind. It is always a current EuroLeague club or one with a real contingent of club greats, never an NBA team or a small stop along the way.",
+      "Think country, then era. Two careers that both run through one country usually cross there.",
+      "A miss still helps. The club you tried drops out of the list, and there are only {answerClubs} possible answers to begin with."
+    ],
+    inside: "Every one of the {careers} careers is read as a set of clubs, each counted once however many stints a player had there, across {careerClubs} clubs in all. A pair becomes a puzzle only if their sets meet at exactly one club, and only if that club is one of the {answerClubs} a fan could fairly be asked to name.",
+    example: "Vassilis Spanoulis (Maroussi, Panathinaikos, Houston Rockets, Olympiacos) and Dimitris Diamantidis (Iraklis, Panathinaikos). They were teammates at Panathinaikos from 2007 to 2010, but that isn't what makes it the answer here. What matters is that Panathinaikos is the only club on both lists.",
+    related: ["pathbetween", "thegrid", "careerorder"]
+  },
+  pathbetween: {
+    tips: [
+      "Work from both ends. Look at where the target has played and ask who from your side could have been there at the same time.",
+      "Big clubs are hubs. A long-serving player at Real Madrid, Olympiacos or CSKA Moscow links to a huge number of teammates.",
+      "Check the years, not just the badge. Two stints at the same club only link if they overlap.",
+      "Don't spend guesses on long shots. Par plus three is a small budget, and a dead end loses the round."
+    ],
+    inside: "{paths} pairs, each with its par worked out in advance by a shortest-route search over the teammate graph: {par2} Easy pairs at par 2, {par3} Medium at par 3, which is also the Daily's pool, and {par4} Hard at par 4. Clubs that changed their names are merged, so an Elan Chalon stint links to a Chalon one.",
+    example: "Sergio Llull to Kostas Sloukas takes two steps. Llull has only ever played for Manresa and Real Madrid; Sloukas for Olympiacos, Fenerbahce and Panathinaikos. They never shared a club, so you need someone who crossed from one side to the other: Guerschon Yabusele played with Llull at Real Madrid from 2021 to 2024 and joined Sloukas at Panathinaikos in 2026.",
+    related: ["clubreveal", "careerorder", "thegrid"]
+  },
+  oddoneout: {
+    tips: [
+      "Look for what three names share and one conspicuously lacks: a club, a country, a shirt number or a Final Four five.",
+      "If you spot two different connections, check they point at the same name. The game guarantees they do, so if yours don't, one of them isn't the real link.",
+      "Watch for nationality traps. Naturalised players count for the national team they play for, not for where they were born.",
+      "A wrong tap still teaches you something, because the shared link is revealed either way."
+    ],
+    inside: "{oddones} rounds, each checked so that every connection among the four names singles out the same intruder. They draw on four kinds of link, a shared club, a nationality, a shirt number and a Final Four starting five, judged against the same data as Connections.",
+    related: ["connections", "higherlower", "completefive"]
+  },
+  higherlower: {
+    tips: [
+      "Position is the best height clue. A centre is almost always taller than a guard, and the exceptions are worth remembering.",
+      "For age, think about career stage. A player on his sixth club is probably older than one still at his first.",
+      "Non-active players keep getting older: a retired great's age counts to today, so he is usually the older of the two.",
+      "In Endless, bank the easy ones quickly and slow down on the close calls. One miss ends the run."
+    ],
+    inside: "Matchups come from the {players} current and {legends} non-active players, compared on height, age or shirt number. A matchup is only used when there is a real gap between the two values, so a one-centimetre difference never decides a round.",
+    example: "Edy Tavares against Facundo Campazzo on height is the easy end of the scale: 220&nbsp;cm against 178. The hard end is two guards of similar build, and that is where knowing Campazzo is one of the shortest players in the league starts to pay.",
+    related: ["mystery", "oddoneout", "rostermaster"]
+  },
+  rostermaster: {
+    tips: [
+      "Go position by position. The board tells you exactly how many guards, forwards and centres you are missing.",
+      "Start from last season's roster and subtract. Most clubs keep a core, and the gaps are the summer's signings.",
+      "A surname is enough when it is unique on the roster, so type “Tavares”, not the full name.",
+      "Come back later. A name you couldn't recall today often turns up while you are watching a game."
+    ],
+    inside: "{elClubs} clubs and {players} players, cross-checked against the official 2026–27 rosters at the start of the season. Every club also has its own page with the full roster, the squad in numbers and its former players: see <a href=\"../clubs/\">the clubs</a>.",
+    related: ["mystery", "thegrid", "higherlower"]
+  }
+};
+
+// The EuroCup pages: their own numbers and their own links (only games the
+// EuroCup plays), no examples, since those would need EuroCup-specific checks.
+var EC_EXTRA = {
+  mystery: {
+    tips: [
+      "With {ecClubs} clubs, the club column is harder than in the EuroLeague. A yellow square still narrows it to the clubs of one country, but Italy alone has six, and Germany four.",
+      "Use the arrows as a bracket: one guess taller than the answer and one shorter pins the height inside a few centimetres.",
+      "Once position is green, keep every guess in that position. Hard mode will even enforce it."
+    ],
+    inside: "Every one of the {ecPlayers} players on the {ecClubs} 2026–27 EuroCup rosters can be the answer, researched club by club from the official rosters.",
+    related: ["playerid", "higherlower", "thegrid"]
+  },
+  playerid: {
+    tips: [
+      "The last club is always his 2026–27 EuroCup club, so start there and read backwards.",
+      "NBA stints appear like any other club, and in EuroCup careers they usually come early, right after college.",
+      "Count the countries. EuroCup careers often cross four or five leagues, and the order they come in says a lot."
+    ],
+    inside: "{ecCareers} of the EuroCup's {ecPlayers} players have a full career timeline, built from the official EuroCup player biographies.",
+    related: ["careerorder", "mystery", "pathbetween"]
+  },
+  careerorder: {
+    tips: [
+      "His 2026–27 EuroCup club is always last, so that tile is free. Work backwards from it.",
+      "Place NBA stints early or in the middle, and use each check to lock in what you know.",
+      "More clubs means more ways to be wrong, so start on Easy if the Daily feels long."
+    ],
+    inside: "{ecCoSuit} EuroCup careers have three or more different clubs, enough to make a fair ordering puzzle.",
+    related: ["playerid", "pathbetween", "thegrid"]
+  },
+  thegrid: {
+    tips: [
+      "Fill the hardest cells first and keep your most-travelled players for the easy ones.",
+      "EuroLeague clubs in a header are asking about the past: who in this season's EuroCup once played there.",
+      "Each player can go on the board once, so check the whole grid before spending an obvious name."
+    ],
+    inside: "{ecGrids} EuroCup boards, each checked to have enough answers in every cell and a way to fill all nine with nine different players.",
+    related: ["pathbetween", "playerid", "careerorder"]
+  },
+  pathbetween: {
+    tips: [
+      "This season's teammates count, so two players on the same EuroCup roster are always linked.",
+      "Big clubs from anywhere in a career are hubs, NBA teams included.",
+      "Check the years: two stints at the same club link only if they overlap."
+    ],
+    inside: "{ecPaths} EuroCup pairs: {ecPar2} Easy at par 2, {ecPar3} Medium at par 3, which is also the Daily's pool, and {ecPar4} Hard at par 4.",
+    related: ["careerorder", "thegrid", "playerid"]
+  },
+  higherlower: {
+    tips: [
+      "Position is the best height clue: centres are almost always taller than guards.",
+      "For age, think about how far into a career a player is.",
+      "In Endless, bank the easy ones and slow down on the close calls."
+    ],
+    inside: "Matchups come from the {ecPlayers} players on the {ecClubs} 2026–27 EuroCup rosters, compared on height, age or shirt number, and only where there is a real gap.",
+    related: ["mystery", "rostermaster", "playerid"]
+  },
+  rostermaster: {
+    tips: [
+      "Go position by position: the board shows exactly how many you are missing.",
+      "A surname is enough when it is unique on the roster.",
+      "Progress saves per club, so come back to a roster over several sittings."
+    ],
+    inside: "{ecClubs} clubs and {ecPlayers} players, taken club by club from the official 2026–27 EuroCup rosters. Every club also has its own page: see <a href=\"../../clubs/\">the clubs</a>.",
+    related: ["mystery", "higherlower", "thegrid"]
+  }
+};
+PAGES.forEach(function (p) { Object.assign(p, EXTRA[p.view] || {}); });
+EC_PAGES.forEach(function (p) { Object.assign(p, EC_EXTRA[p.view] || {}); });
+
+/* Numbers into the copy. Every string on every page goes through fill(), so a
+ * {placeholder} anywhere (FAQ answers included, which also feed the JSON-LD)
+ * comes out as today's count. */
+(function fillAll(o) {
+  Object.keys(o).forEach(function (k) {
+    if (typeof o[k] === "string") o[k] = fill(o[k]);
+    else if (o[k] && typeof o[k] === "object" && k !== "lineup") fillAll(o[k]);
+  });
+})({ a: PAGES, b: EC_PAGES, c: EC_HUB });
 
 /* ---------------------------------------------------------------------------
  * PLUMBING.
@@ -495,6 +763,21 @@ function replaceTag(html, re, next) {
   return html.replace(re, next);
 }
 
+/* The EuroCup hub's intro, in place of the root hub's. Same grammar, its own
+ * games and numbers; its links are relative to /eurocup/. */
+function ecHubIntro() {
+  var out = ['  <section class="seo-copy hub-intro" data-seo-view="home">'];
+  out.push('    <h2 class="seo-lede">Daily puzzles about the EuroCup</h2>');
+  out.push("    <p>" + fill("Seven of Euroball's games, played on the 2026–27 EuroCup: {ecPlayers} players across {ecClubs} clubs, researched club by club from the official rosters. Each game has a new daily puzzle at midnight, the same for everyone, and its own stats and streak, separate from the EuroLeague's.") + "</p>");
+  out.push("    <h3>The EuroCup games</h3>");
+  out.push("    <ul>");
+  EC_PAGES.forEach(function (g) { out.push('      <li><a href="' + g.slug + '/">' + esc(g.name) + "</a>: " + esc(plain(g.desc).split(/(?<=\.)\s/)[0]) + "</li>"); });
+  out.push("    </ul>");
+  out.push('    <p class="seo-more">Every EuroCup club has its own page, with its roster and former players. <a href="../clubs/">See the clubs →</a> · <a href="../?comp=euroleague">The EuroLeague games →</a></p>');
+  out.push("  </section>");
+  return out.join("\n");
+}
+
 function seoSection(p) {
   var out = [];
   out.push('  <section class="seo-copy" data-seo-view="' + p.view + '">');
@@ -517,6 +800,26 @@ function seoSection(p) {
     out.push("      <dd>" + qa[1] + "</dd>");
   });
   out.push("    </dl>");
+  if (p.tips) {
+    out.push("    <h3>Getting better at " + esc(p.name) + "</h3>");
+    out.push("    <ul>");
+    p.tips.forEach(function (li) { out.push("      <li>" + li + "</li>"); });
+    out.push("    </ul>");
+  }
+  if (p.inside) { out.push("    <h3>What's in the game</h3>"); out.push("    <p>" + p.inside + "</p>"); }
+  if (p.example) { out.push("    <h3>An example</h3>"); out.push("    <p>" + p.example + "</p>"); }
+  if (p.related && p.related.length) {
+    // Games that pull on the same knowledge. Links stay inside this page's
+    // competition: a EuroCup page only points at games the EuroCup plays.
+    var pool = p.comp === "eurocup" ? EC_PAGES : PAGES;
+    var rel = p.related.map(function (v) { return pool.filter(function (x) { return x.view === v; })[0]; }).filter(Boolean);
+    if (rel.length) {
+      out.push("    <h3>If you like " + esc(p.name) + "</h3>");
+      out.push("    <ul>");
+      rel.forEach(function (r) { out.push('      <li><a href="../' + r.slug + '/">' + esc(r.name) + "</a>: " + esc(plain(r.desc).split(/(?<=\.)\s/)[0]) + "</li>"); });
+      out.push("    </ul>");
+    }
+  }
   out.push(p.comp === "eurocup"
     ? '    <p class="seo-more">Euroball has ' + EC_PAGES.length + ' daily EuroCup puzzles, and eleven for the EuroLeague. <a href="../">See the EuroCup games →</a></p>'
     : '    <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>');
@@ -649,6 +952,7 @@ function buildPage(shell, p) {
   html = replaceTag(html, /<head>\n/, "<head>\n<script>window.__ELG_COMP__ = " + JSON.stringify(p.comp || "euroleague") + ";</script>\n");
 
   html = replaceTag(html, /<\/head>/, (hub ? hubData(p, url) : structuredData(p, url)) + "\n</head>");
+  html = replaceTag(html, /  <section class="seo-copy hub-intro"[\s\S]*?<\/section>\n\n/, hub ? ecHubIntro() + "\n\n" : "");
   if (!hub) html = replaceTag(html, /  <footer>/, seoSection(p) + "\n\n  <footer>");
 
   html = html.replace(/^<!DOCTYPE html>/,

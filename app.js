@@ -214,6 +214,19 @@
   function layoutHome() {
     var grid = document.querySelector("#home-view .game-cards");
     if (!grid || els.home.hidden) return;
+    // The first screen is the lobby plus the colophon, exactly the viewport.
+    // The hub's intro (.hub-intro) comes after both, so the page is taller than
+    // the screen, and flex: 1 alone would then hand the tiles only what the
+    // intro left over. So the view is told its height outright: the viewport,
+    // less the colophon and the body's bottom padding. The intro is below the fold.
+    try {
+      var foot = document.querySelector("body > footer");
+      var padB = parseFloat(window.getComputedStyle(document.body).paddingBottom) || 0;
+      var topY = els.home.getBoundingClientRect().top + (window.scrollY || 0);
+      var fh = foot ? foot.getBoundingClientRect().height + 12 : 0;      // + its hairline's breathing room
+      els.home.style.minHeight = Math.max(0, Math.floor(window.innerHeight - topY - fh - padB)) + "px";
+      els.home.style.flex = "none";
+    } catch (e) {}
     var n = grid.children.length;
     var W = grid.clientWidth, H = grid.clientHeight;
     if (!n || !W || !H) return;
@@ -558,7 +571,7 @@
     // first pushState: on /the-grid/, having come from the hub at /, "about/"
     // would resolve to /the-grid/about/. So each one is pinned to the address it
     // resolves to NOW, before anything below moves the address bar.
-    var pinned = document.querySelectorAll("footer a.comp-link, footer a.info-link, a.hub-clubs");
+    var pinned = document.querySelectorAll("footer a.comp-link, footer a.info-link, a.hub-clubs, .hub-intro a");
     for (var pi = 0; pi < pinned.length; pi++) {
       try { if (pinned[pi].href) pinned[pi].setAttribute("href", pinned[pi].href); } catch (e) {}
     }

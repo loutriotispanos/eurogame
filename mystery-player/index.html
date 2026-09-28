@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="mystery">
     <h2 class="seo-lede">Mystery Player — the daily EuroLeague Wordle</h2>
     <p>A Wordle for European basketball. One hidden player from the 2026–27 EuroLeague, eight tries, and a grid that tells you a little more each time. Guess a name and six columns light up at once: club, nationality, position, height, age and shirt number. Nothing is random — every colour narrows the field.</p>
@@ -2290,6 +2302,23 @@
       <dt>Is there a new one every day?</dt>
       <dd>Yes. The Daily resets at midnight in your own timezone and is the same player for everyone. Practice, Non-active and Endless are unlimited if you want to keep going.</dd>
     </dl>
+    <h3>Getting better at Mystery Player</h3>
+    <ul>
+      <li>Open with a player who splits the field. A guard from a big basketball country tells you something whichever way it lands; an obscure centre from a small nation mostly tells you who it isn't.</li>
+      <li>A yellow club square is a gift. It means the answer plays in the same country as your guess, and in a twenty-club league that leaves one or two rosters. The ABA League clubs, Crvena Zvezda, Partizan and Dubai, count as one country here.</li>
+      <li>Use the arrows as a bracket. One guess taller than the answer and one shorter pins the height inside a few centimetres, and the same trick works for age and shirt number.</li>
+      <li>Don't spend guesses confirming what you know. Once position is green, every later guess should play that position. Hard mode enforces it, offering only names that fit every clue so far.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>The Daily and Practice draw from the 296 players on the 20 2026–27 EuroLeague rosters, from 48 countries. Non-active mode swaps in the 317 players who are no longer on a current roster, from all-time greats to last season's departures. Endless mixes both pools and keeps going until you miss. Nationality always means the national team a player has played for, not his passport or birthplace.</p>
+    <h3>An example</h3>
+    <p>Say the answer were Kendrick Nunn and you opened with Evan Fournier. Club turns yellow: Fournier's Olympiacos is a different club in the same country, and the only other Greek club in the EuroLeague is Panathinaikos. Nationality is grey, because Fournier plays for France. Position is green, since both are guards. Height is grey with a ↓, because the answer is more than 5&nbsp;cm shorter than Fournier's 198&nbsp;cm. Age is grey with a ↓ too, and so is the shirt number, Fournier's 94 against something much lower. One guess in, you are looking for a younger, shorter Panathinaikos guard who isn't French, with a low number.</p>
+    <h3>If you like Mystery Player</h3>
+    <ul>
+      <li><a href="../player-id/">Player ID</a>: A EuroLeague player's whole career laid out club by club, with the years.</li>
+      <li><a href="../higher-or-lower/">Higher or Lower</a>: Two European basketball players, one question: who is taller, who is older, whose shirt number is higher? Ten matchups a day, or an endless run that ends on your first mistake.</li>
+      <li><a href="../the-grid/">The Grid</a>: A 3×3 grid of clubs, nationalities and positions.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 

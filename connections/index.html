@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -1424,7 +1431,7 @@
       "name": "Is every puzzle solvable in only one way?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, and that is enforced rather than assumed. All 94 puzzles are machine-generated and then verified to have exactly one valid solution, with fairness checks that keep every group independently recognisable."
+        "text": "Yes, and that is enforced rather than assumed. All 128 puzzles are machine-generated and then verified to have exactly one valid solution, with fairness checks that keep every group independently recognisable."
       }
     },
     {
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="connections">
     <h2 class="seo-lede">Connections — find the four groups of four</h2>
     <p>Sixteen names from European basketball, and four hidden groups of four. One might be a club's current roster, one a nationality, one a Final Four starting five, one a shared shirt number. Three mistakes is all you get, and the overlaps are deliberate.</p>
@@ -2284,12 +2296,29 @@
       <dt>What kinds of groups appear?</dt>
       <dd>Eleven category types: a club's current roster, a nationality, all guards or forwards or centers, a Final Four starting five, everyone at one Final Four, a birth decade, club legends, a club's ex-players, a shared jersey number, the 2.10&nbsp;m club, and journeymen.</dd>
       <dt>Is every puzzle solvable in only one way?</dt>
-      <dd>Yes, and that is enforced rather than assumed. All 94 puzzles are machine-generated and then verified to have exactly one valid solution, with fairness checks that keep every group independently recognisable.</dd>
+      <dd>Yes, and that is enforced rather than assumed. All 128 puzzles are machine-generated and then verified to have exactly one valid solution, with fairness checks that keep every group independently recognisable.</dd>
       <dt>Why do some names look like they fit two groups?</dt>
       <dd>Because they genuinely do — a player's nationality, an old club and a shirt number can all be true at once. The single valid solution is what resolves it, and spotting which claim is the decoy is the puzzle.</dd>
       <dt>Can I play more than one a day?</dt>
       <dd>Yes. The Daily is the same board for everyone and feeds your streak; Practice serves unlimited random puzzles from the same pool.</dd>
     </dl>
+    <h3>Getting better at Connections</h3>
+    <ul>
+      <li>Find the group that can't be anything else first, then work outwards. The hardest group usually hides among the other three.</li>
+      <li>When a name fits two groups, ask which group needs it. Each group has exactly four members, so a group that already has four candidates without him lets him go.</li>
+      <li>Treat “One away” as information, not a failure. Three of your four are right, and the wrong one is usually the most obvious name.</li>
+      <li>Shuffle when you stall. Seeing the names in a new order breaks the pairings your eye keeps making.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>128 boards, each built from the site's data and checked for exactly one solution. The categories run from current rosters and nationalities to Final Four starting fives, birth decades, shared shirt numbers, the 2.10&nbsp;m club and players who have played for six or more clubs. Every board is checked again whenever the data changes, so a transfer can't quietly give a board a second answer.</p>
+    <h3>An example</h3>
+    <p>Kostas Sloukas is Greek, a guard, a former Olympiacos player and a current Panathinaikos one, all at once. A board never lets him fit two of its groups, so on the day he appears the question is only which of those facts this board is asking about. That is the whole game: every name is true in several ways, and only one of them is on the board.</p>
+    <h3>If you like Connections</h3>
+    <ul>
+      <li><a href="../odd-one-out/">Odd One Out</a>: Four names, three with something in common and one without.</li>
+      <li><a href="../the-grid/">The Grid</a>: A 3×3 grid of clubs, nationalities and positions.</li>
+      <li><a href="../complete-the-five/">Complete the Five</a>: A real EuroLeague Final Four starting five with one starter hidden.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 

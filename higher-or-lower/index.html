@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="higherlower">
     <h2 class="seo-lede">Higher or Lower — taller, older, bigger number?</h2>
     <p>Two players side by side and one question about them. Who is taller? Who is older? Whose shirt number is higher? Tap your answer and both values are revealed. Ten matchups make a Daily; Endless runs until you get one wrong.</p>
@@ -2290,6 +2302,23 @@
       <dt>Does Endless affect my streak?</dt>
       <dd>No. Only the Daily feeds the hub streak; Endless keeps its own best-run record on the Records page.</dd>
     </dl>
+    <h3>Getting better at Higher or Lower</h3>
+    <ul>
+      <li>Position is the best height clue. A centre is almost always taller than a guard, and the exceptions are worth remembering.</li>
+      <li>For age, think about career stage. A player on his sixth club is probably older than one still at his first.</li>
+      <li>Non-active players keep getting older: a retired great's age counts to today, so he is usually the older of the two.</li>
+      <li>In Endless, bank the easy ones quickly and slow down on the close calls. One miss ends the run.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>Matchups come from the 296 current and 317 non-active players, compared on height, age or shirt number. A matchup is only used when there is a real gap between the two values, so a one-centimetre difference never decides a round.</p>
+    <h3>An example</h3>
+    <p>Edy Tavares against Facundo Campazzo on height is the easy end of the scale: 220&nbsp;cm against 178. The hard end is two guards of similar build, and that is where knowing Campazzo is one of the shortest players in the league starts to pay.</p>
+    <h3>If you like Higher or Lower</h3>
+    <ul>
+      <li><a href="../mystery-player/">Mystery Player</a>: Guess the mystery EuroLeague player in 8 tries.</li>
+      <li><a href="../odd-one-out/">Odd One Out</a>: Four names, three with something in common and one without.</li>
+      <li><a href="../roster-master/">Roster Master</a>: The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 

@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="oddoneout">
     <h2 class="seo-lede">Odd One Out — three belong together, one does not</h2>
     <p>Four names from European basketball. Three of them share something — a club they all played for, a nationality, a shirt number, a Final Four starting five. One does not. Tap the intruder. Five rounds a day, and three right is a pass.</p>
@@ -2290,6 +2302,21 @@
       <dt>Is there an unlimited version?</dt>
       <dd>Yes. Practice runs endless rounds and tracks your best streak separately from the Daily.</dd>
     </dl>
+    <h3>Getting better at Odd One Out</h3>
+    <ul>
+      <li>Look for what three names share and one conspicuously lacks: a club, a country, a shirt number or a Final Four five.</li>
+      <li>If you spot two different connections, check they point at the same name. The game guarantees they do, so if yours don't, one of them isn't the real link.</li>
+      <li>Watch for nationality traps. Naturalised players count for the national team they play for, not for where they were born.</li>
+      <li>A wrong tap still teaches you something, because the shared link is revealed either way.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>180 rounds, each checked so that every connection among the four names singles out the same intruder. They draw on four kinds of link, a shared club, a nationality, a shirt number and a Final Four starting five, judged against the same data as Connections.</p>
+    <h3>If you like Odd One Out</h3>
+    <ul>
+      <li><a href="../connections/">Connections</a>: Sixteen EuroLeague names hide four groups of four — a roster, a nationality, a Final Four five, a shared jersey number.</li>
+      <li><a href="../higher-or-lower/">Higher or Lower</a>: Two European basketball players, one question: who is taller, who is older, whose shirt number is higher? Ten matchups a day, or an endless run that ends on your first mistake.</li>
+      <li><a href="../complete-the-five/">Complete the Five</a>: A real EuroLeague Final Four starting five with one starter hidden.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 
