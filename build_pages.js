@@ -293,7 +293,8 @@ var PAGES = [
       "Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
       "Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.",
       "Progress saves automatically, per club. Come back whenever — this is not a single sitting.",
-      "Clear board starts a club over, but your best percentage survives on the club's card. Complete a roster once and the gold ★ is yours even if you clear it."
+      "Clear board starts a club over, but your best percentage survives on the club's card. Complete a roster once and the gold ★ is yours even if you clear it.",
+      "Stuck? Reveal missing shows the players you have not named yet. They earn nothing, not the score, not the gold ★, and Clear board lets you try the club again."
     ],
     faq: [
       ["Why is there no autocomplete?", "Because the game is recall. Every other game on the site offers a name list so you do not have to spell Spanoulis; here a list would let you walk the roster instead of remembering it, which is the entire puzzle."],
@@ -446,7 +447,8 @@ var EC_PAGES = [
       "Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
       "Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.",
       "Progress saves automatically, per club. Come back whenever — this is not a single sitting.",
-      "Clear board starts a club over, but your best percentage survives on the club's card. Complete a roster once and the gold ★ is yours even if you clear it."
+      "Clear board starts a club over, but your best percentage survives on the club's card. Complete a roster once and the gold ★ is yours even if you clear it.",
+      "Stuck? Reveal missing shows the players you have not named yet. They earn nothing, not the score, not the gold ★, and Clear board lets you try the club again."
     ],
     faq: [
       ["How current are the rosters?", "They are the 2026–27 EuroCup squads, taken club by club from the official rosters at the start of the season. Transfers made after that are not reflected."],
