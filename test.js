@@ -1573,9 +1573,16 @@ window.RosterMaster._back();
 var rmGold = 0;
 byId("rm-picker").children.forEach(function (c) { if (c.className && c.className.indexOf("gold") >= 0) rmGold++; });
 ok(rmGold === 1, "completed club stays GOLD on the picker even after Clear");
-var rmBadges = 0;
-byId("rm-picker").children.forEach(function (c) { if ((c.innerHTML || "").indexOf("rm-badge") >= 0) rmBadges++; });
-ok(rmBadges === 20, "every club chip carries its colour badge");
+// Every club tile shows its crest (the same file as its club page), and keeps
+// its colour badge's code and colours to fall back on if the image fails.
+var rmCrests = 0, rmRoot = window.Hub._siteRoot();
+byId("rm-picker").children.forEach(function (c) {
+  var h = c.innerHTML || "";
+  var m = /<img src='([^']+)'/.exec(h);
+  if (m && m[1].indexOf(rmRoot + "crests/") === 0 && /\.webp$/.test(m[1]) && /data-code='[A-Z]{3}'/.test(h) && /--bb:#/.test(h) &&
+      fs.existsSync(m[1].slice(rmRoot.length))) rmCrests++;
+});
+ok(rmCrests === 20, "every club tile carries its crest, with the colour badge kept as the fallback");
 
 console.log("Roster Master — Clear all boards");
 window.RosterMaster._open(RMC);

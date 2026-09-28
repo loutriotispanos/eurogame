@@ -1104,12 +1104,19 @@
   .hl-card.dim { opacity: .55; }
 
   /* Roster Master (completion board) — this view spreads to the full width */
-  body.view-rostermaster .app { max-width: min(1240px, 96vw); }
-  .rm-picker { width: 100%; min-width: 0; margin: 14px auto 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 10px; }
+  /* Roster Master takes the whole width: the picker is a screen of club tiles
+     packed by layoutPicker() in rostermaster.js (columns chosen to fill what
+     the viewport has left under the header, like the hub), and the board
+     spreads its slots across the same width. */
+  body.view-rostermaster .app { max-width: none; width: 100%; }
+  .rm-picker { width: 100%; min-width: 0; margin: 14px auto 0; display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); grid-auto-rows: minmax(118px, auto); }
+  .rm-picker > .rm-chip { grid-column-end: span 2; }   /* half-column tracks, set by the packer */
   .rm-picker[hidden] { display: none; }
   .rm-chip {
-    display: flex; align-items: center; gap: 11px; min-width: 0;
-    padding: 13px 14px; text-align: left;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: clamp(4px, calc(var(--rm-tile-h, 130px) * .05), 12px); min-width: 0; height: 100%;
+    padding: 10px 8px; text-align: center;
     border: 1px solid var(--rule); border-radius: var(--r); background: var(--card);
     cursor: pointer; transition: border-color var(--fast) var(--ease), background var(--fast) var(--ease);
   }
@@ -1120,16 +1127,31 @@
     font: 800 var(--t-7)/1 var(--font-sans); letter-spacing: .04em;
     border: 1px solid rgba(0,0,0,.18);
   }
-  .rm-chip-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-  .rm-chip-club { font-family: var(--font-display); font-weight: 700; font-size: var(--t-5); line-height: var(--lh-tight); color: var(--ink); }
+  /* The crest plate: light in both themes (half the crests are black ink), and
+     sized off the tile the packer chose, so a big screen gets big crests. */
+  .rm-crest {
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+    width: clamp(44px, min(calc(var(--rm-tile-h, 130px) * .48), calc(var(--rm-tile-w, 140px) * .62)), 132px);
+    aspect-ratio: 1; border-radius: 16%; background: #fffdf7;
+  }
+  :root:not([data-theme="dark"]) .rm-crest { box-shadow: inset 0 0 0 1px var(--rule); }
+  .rm-crest img { width: 84%; height: 84%; object-fit: contain; display: block; }
+  .rm-crest.off { background: var(--bb); color: var(--bf); border-radius: 50%; }
+  .rm-crest.off img { display: none; }
+  .rm-crest.off::after { content: attr(data-code); font: 800 var(--t-7)/1 var(--font-sans); letter-spacing: .04em; }
+  .rm-chip .rm-badge { width: clamp(34px, calc(var(--rm-tile-h, 130px) * .4), 96px); height: auto; aspect-ratio: 1; }
+  .rm-chip-text { display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0; }
+  .rm-chip-club { font-family: var(--font-display); font-weight: 700; line-height: var(--lh-tight); color: var(--ink);
+    font-size: clamp(13px, calc(var(--rm-tile-h, 130px) * .1), 22px); text-wrap: balance; }
   .rm-chip-meta { color: var(--muted); font-variant-numeric: tabular-nums; }
-  .rm-chip.started { border-left: 3px solid var(--accent); }
+  .rm-chip.started { box-shadow: inset 0 3px 0 var(--accent); }
   /* GOLD = the club has been fully named at least once (survives a Clear) */
-  .rm-chip.gold { border-color: var(--yellow); border-left: 3px solid var(--yellow); background: #f7efd4; }
+  .rm-chip.gold { border-color: var(--yellow); box-shadow: inset 0 3px 0 var(--yellow); background: #f7efd4; }
   .rm-chip.gold .rm-chip-meta { color: #8a6d1a; }
   .rm-chip.gold .rm-chip-club::after { content: " \2605"; color: #b28e1c; }
   .rm-gold-line { color: #8a6d1a !important; font-weight: 700; }
-  .rm-board { width: 100%; min-width: 0; max-width: 960px; margin: 0 auto; }
+  .rm-board { width: 100%; min-width: 0; margin: 0 auto; }
+  .rm-club .rm-crest { width: clamp(40px, 6vw, 56px); }
   .rm-board[hidden] { display: none; }
   .rm-board-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 0 0; }
   .rm-board-head button { padding: 8px 14px; font-size: var(--t-6); flex: none; }
