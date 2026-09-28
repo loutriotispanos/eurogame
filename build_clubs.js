@@ -60,6 +60,20 @@ var COUNTRY = { "Crvena Zvezda": "Serbia", "Partizan": "Serbia", "Dubai BC": "Un
 function canon(team) { return W.CLUBS.pageName(team); }
 var slugify = W.CLUBS.slug;
 
+/* The crest, on a light plate so a black crest still reads in night mode.
+ * crests/<slug>.webp is 128x128 (see crests/SOURCES.json for where each came
+ * from). A club without a file gets its initials instead of a broken image. */
+function crest(c, up, size, alt) {
+  var file = "crests/" + c.slug + ".webp";
+  if (!fs.existsSync(path.join(ROOT, file))) {
+    var ini = c.name.split(/[\s-]+/).map(function (w) { return w.charAt(0); }).join("").slice(0, 3).toUpperCase();
+    return '<span class="plate' + (size > 64 ? " big" : "") + '" aria-hidden="true"><span class="ini">' + esc(ini) + "</span></span>";
+  }
+  return '<span class="plate' + (size > 64 ? " big" : "") + '"><img src="' + up + file + '" width="' + size + '" height="' + size + '" alt="' + esc(alt || "") + '"' +
+    (size > 64 ? "" : ' loading="lazy"') + ' decoding="async"></span>';
+}
+var CREST_NOTE = '<p class="muted">Club crests belong to their clubs and are shown only to identify them.</p>';
+
 // The clubs: the EuroLeague's 20 (a club counts if it has a roster) and the EuroCup's 32.
 var CLUBS = [];
 Object.keys(W.TEAMS).forEach(function (t) {
@@ -264,7 +278,8 @@ function buildClub(c) {
   return info.renderDoc({
     path: c.path, by: "build_clubs.js", title: titleFor(c, f), desc: describe(c, f),
     ogTitle: c.name + " roster " + SEASON_TXT + " — Euroball", h1: c.name,
-    crumbs: [["Clubs", "clubs/"], [c.name, c.path]], ld: [team], body: body(c, f, up)
+    crumbs: [["Clubs", "clubs/"], [c.name, c.path]], ld: [team], body: body(c, f, up).concat([CREST_NOTE]),
+    pre: '<p class="crest-head">' + crest(c, up, 96, c.name + " crest") + "</p>"
   });
 }
 
@@ -276,16 +291,17 @@ function buildHub() {
     " players between them. Each page has the full roster, the squad in numbers, and every former player in the Euroball database; the EuroLeague's big names add their Final Four starting fives.</p>");
   [[el, "EuroLeague", ""], [ec, "EuroCup", "eurocup/"]].forEach(function (g) {
     out.push("<h2>" + g[1] + " " + SEASON_TXT + " · " + g[0].length + " clubs</h2>");
-    var byCountry = {};
-    g[0].forEach(function (c) { (byCountry[c.country] = byCountry[c.country] || []).push(c); });
-    Object.keys(byCountry).sort().forEach(function (k) {
-      out.push("<h3>" + esc(k) + "</h3>");
-      out.push('<ul class="clubgrid">' + byCountry[k].sort(function (a, b) { return a.name.localeCompare(b.name); }).map(function (c) {
-        return '<li><a href="' + up + c.path + '">' + esc(c.name) + '</a> <span class="muted">· ' + c.roster.length + " players</span></li>";
-      }).join("") + "</ul>");
+    // One grid of squares per competition, A to Z. The country is on each
+    // club's own page; grouping by it here only made the list longer.
+    out.push('<ul class="tiles">');
+    g[0].slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).forEach(function (c) {
+      out.push('  <li><a class="clubtile" href="' + up + c.path + '">' + crest(c, up, 64) +
+        '<span class="ct-name">' + esc(c.name) + '</span><span class="ct-meta">' + c.roster.length + " players</span></a></li>");
     });
+    out.push("</ul>");
     out.push('<p>Test yourself on them: <a href="' + up + g[2] + 'roster-master/">Roster Master</a> asks you to name a whole ' + g[1] + " roster from memory.</p>");
   });
+  out.push(CREST_NOTE);
   var list = {
     "@context": "https://schema.org",
     "@type": "ItemList",

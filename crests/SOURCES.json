@@ -1,0 +1,263 @@
+{
+ "_note": "Club crests, the property of their clubs, shown to identify them. Taken from each club's Wikipedia infobox (file + page below), resized to 128x128 WebP.",
+ "Real Madrid": {
+  "file": "crests/real-madrid.webp",
+  "source": "Real Madrid Baloncesto.png",
+  "page": "https://en.wikipedia.org/wiki/File:Real_Madrid_Baloncesto.png"
+ },
+ "FC Barcelona": {
+  "file": "crests/fc-barcelona.webp",
+  "source": "FC Barcelona (crest).svg",
+  "page": "https://en.wikipedia.org/wiki/File:FC_Barcelona_(crest).svg"
+ },
+ "Baskonia": {
+  "file": "crests/baskonia.webp",
+  "source": "Saski Baskonia.png",
+  "page": "https://en.wikipedia.org/wiki/File:Saski_Baskonia.png"
+ },
+ "Valencia": {
+  "file": "crests/valencia.webp",
+  "source": "Valencia Basket (40 anys).svg",
+  "page": "https://en.wikipedia.org/wiki/File:Valencia_Basket_(40_anys).svg"
+ },
+ "Panathinaikos": {
+  "file": "crests/panathinaikos.webp",
+  "source": "Panathinaikos BC logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Panathinaikos_BC_logo.svg"
+ },
+ "Olympiacos": {
+  "file": "crests/olympiacos.webp",
+  "source": "Olympiacos BC logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Olympiacos_BC_logo.svg"
+ },
+ "Fenerbahce": {
+  "file": "crests/fenerbahce.webp",
+  "source": "Fenerbahçe Men's Basketball logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Fenerbah%C3%A7e_Men%27s_Basketball_logo.svg"
+ },
+ "Anadolu Efes": {
+  "file": "crests/anadolu-efes.webp",
+  "source": "Anadolu Efes SK logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Anadolu_Efes_SK_logo.svg"
+ },
+ "Besiktas": {
+  "file": "crests/besiktas.webp",
+  "source": "Beşiktaş logo.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Be%C5%9Fikta%C5%9F_logo.png"
+ },
+ "Maccabi Tel Aviv": {
+  "file": "crests/maccabi-tel-aviv.webp",
+  "source": "Maccabi Tel Aviv BC logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Maccabi_Tel_Aviv_BC_logo.svg"
+ },
+ "Hapoel Tel Aviv": {
+  "file": "crests/hapoel-tel-aviv.webp",
+  "source": "Hapoel Tel Aviv.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Hapoel_Tel_Aviv.svg"
+ },
+ "Olimpia Milano": {
+  "file": "crests/olimpia-milano.webp",
+  "source": "Pallacanestro Olimpia Milano logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Pallacanestro_Olimpia_Milano_logo.svg"
+ },
+ "Virtus Bologna": {
+  "file": "crests/virtus-bologna.webp",
+  "source": "Virtus Bologna 2027.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Virtus_Bologna_2027.png"
+ },
+ "ASVEL": {
+  "file": "crests/asvel.webp",
+  "source": "LDLC ASVEL Basket.svg",
+  "page": "https://en.wikipedia.org/wiki/File:LDLC_ASVEL_Basket.svg"
+ },
+ "Paris Basketball": {
+  "file": "crests/paris-basketball.webp",
+  "source": "Logo_Paris_Basketball.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Logo_Paris_Basketball.svg"
+ },
+ "Bayern Munich": {
+  "file": "crests/bayern-munich.webp",
+  "source": "FC Bayern Munich (basketball) logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:FC_Bayern_Munich_(basketball)_logo.svg"
+ },
+ "Crvena Zvezda": {
+  "file": "crests/crvena-zvezda.webp",
+  "source": "KK Crvena zvezda logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:KK_Crvena_zvezda_logo.svg"
+ },
+ "Partizan": {
+  "file": "crests/partizan.webp",
+  "source": "KK Partizan logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:KK_Partizan_logo.svg"
+ },
+ "Zalgiris Kaunas": {
+  "file": "crests/zalgiris-kaunas.webp",
+  "source": "BC Žalgiris logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:BC_%C5%BDalgiris_logo.svg"
+ },
+ "Dubai BC": {
+  "file": "crests/dubai-bc.webp",
+  "source": "Dubai Basketball.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Dubai_Basketball.svg"
+ },
+ "Aris Thessaloniki": {
+  "file": "crests/aris-thessaloniki.webp",
+  "source": "Aris Betsson BC logo.png",
+  "page": "https://el.wikipedia.org/wiki/%CE%91%CF%81%CF%87%CE%B5%CE%AF%CE%BF:Aris_Betsson_BC_logo.png"
+ },
+ "Derthona Tortona": {
+  "file": "crests/derthona-tortona.webp",
+  "source": "Derthona Basket logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:Derthona_Basket_logo.png"
+ },
+ "Bahcesehir College": {
+  "file": "crests/bahcesehir-college.webp",
+  "source": "Bahçeşehir Koleji Spor Kulübü logo.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Bah%C3%A7e%C5%9Fehir_Koleji_Spor_Kul%C3%BCb%C3%BC_logo.png"
+ },
+ "Balkan Botevgrad": {
+  "file": "crests/balkan-botevgrad.webp",
+  "source": "BC Balkan logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:BC_Balkan_logo.png"
+ },
+ "Bosna Sarajevo": {
+  "file": "crests/bosna-sarajevo.webp",
+  "source": "KK Bosna Royal logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:KK_Bosna_Royal_logo.svg"
+ },
+ "Buducnost": {
+  "file": "crests/buducnost.webp",
+  "source": "KK Budućnost logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:KK_Budu%C4%87nost_logo.svg"
+ },
+ "Cedevita Olimpija": {
+  "file": "crests/cedevita-olimpija.webp",
+  "source": "Cedevita Olimpija Ljubljana logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:Cedevita_Olimpija_Ljubljana_logo.png"
+ },
+ "JL Bourg-en-Bresse": {
+  "file": "crests/jl-bourg-en-bresse.webp",
+  "source": "JL Bourg Basket logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:JL_Bourg_Basket_logo.png"
+ },
+ "Trento": {
+  "file": "crests/trento.webp",
+  "source": "Aquila Basket Trento logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Aquila_Basket_Trento_logo.svg"
+ },
+ "Hapoel Jerusalem": {
+  "file": "crests/hapoel-jerusalem.webp",
+  "source": "Hapoel Jerusalem BC logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Hapoel_Jerusalem_BC_logo.svg"
+ },
+ "Manresa": {
+  "file": "crests/manresa.webp",
+  "source": "Kids&Us Manresa.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Kids%26Us_Manresa.svg"
+ },
+ "La Laguna Tenerife": {
+  "file": "crests/la-laguna-tenerife.webp",
+  "source": "La Laguna Tenerife.svg",
+  "page": "https://en.wikipedia.org/wiki/File:La_Laguna_Tenerife.svg"
+ },
+ "Le Mans": {
+  "file": "crests/le-mans.webp",
+  "source": "Le Mans Sarthe Basket logo 2009.png",
+  "page": "https://en.wikipedia.org/wiki/File:Le_Mans_Sarthe_Basket_logo_2009.png"
+ },
+ "Lietkabelis": {
+  "file": "crests/lietkabelis.webp",
+  "source": "BC Lietkabelis logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:BC_Lietkabelis_logo.svg"
+ },
+ "London Lions": {
+  "file": "crests/london-lions.webp",
+  "source": "London Lions logo (2025).png",
+  "page": "https://en.wikipedia.org/wiki/File:London_Lions_logo_(2025).png"
+ },
+ "Maxima Roma": {
+  "file": "crests/maxima-roma.webp",
+  "source": "Maxima Roma Logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:Maxima_Roma_Logo.png"
+ },
+ "Napoli Basketball": {
+  "file": "crests/napoli-basketball.webp",
+  "source": "Napoli Basket 2026.png",
+  "page": "https://en.wikipedia.org/wiki/File:Napoli_Basket_2026.png"
+ },
+ "Neptunas": {
+  "file": "crests/neptunas.webp",
+  "source": "BC Neptūnas logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:BC_Nept%C5%ABnas_logo.png"
+ },
+ "Niners Chemnitz": {
+  "file": "crests/niners-chemnitz.webp",
+  "source": "BV Chemnitz 99 NEW.png",
+  "page": "https://en.wikipedia.org/wiki/File:BV_Chemnitz_99_NEW.png"
+ },
+ "PAOK": {
+  "file": "crests/paok.webp",
+  "source": "P.A.O.K. B.C. logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:P.A.O.K._B.C._logo.png"
+ },
+ "Ratiopharm Ulm": {
+  "file": "crests/ratiopharm-ulm.webp",
+  "source": "Ratiopharm Ulm logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:Ratiopharm_Ulm_logo.svg"
+ },
+ "San Pablo Burgos": {
+  "file": "crests/san-pablo-burgos.webp",
+  "source": "San Pablo Burgos.svg",
+  "page": "https://en.wikipedia.org/wiki/File:San_Pablo_Burgos.svg"
+ },
+ "Riga Zelli": {
+  "file": "crests/riga-zelli.webp",
+  "source": "RigasZelli.png",
+  "page": "https://en.wikipedia.org/wiki/File:RigasZelli.png"
+ },
+ "Roma Basketball": {
+  "file": "crests/roma-basketball.webp",
+  "source": "BC_Roma_logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:BC_Roma_logo.png"
+ },
+ "Rostock Seawolves": {
+  "file": "crests/rostock-seawolves.webp",
+  "source": "Rostock Seawolves.png",
+  "page": "https://en.wikipedia.org/wiki/File:Rostock_Seawolves.png"
+ },
+ "Siauliai": {
+  "file": "crests/siauliai.webp",
+  "source": "BC Šiauliai.svg",
+  "page": "https://lt.wikipedia.org/wiki/Vaizdas:BC_%C5%A0iauliai.svg"
+ },
+ "Skyliners Frankfurt": {
+  "file": "crests/skyliners-frankfurt.webp",
+  "source": "Fraport Skyliners logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:Fraport_Skyliners_logo.png"
+ },
+ "Slask Wroclaw": {
+  "file": "crests/slask-wroclaw.webp",
+  "source": "Śląsk Wrocław (basketball) logo.svg",
+  "page": "https://en.wikipedia.org/wiki/File:%C5%9Al%C4%85sk_Wroc%C5%82aw_(basketball)_logo.svg"
+ },
+ "Tofas": {
+  "file": "crests/tofas.webp",
+  "source": "Tofas 2016 logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:Tofas_2016_logo.png"
+ },
+ "Turk Telekom": {
+  "file": "crests/turk-telekom.webp",
+  "source": "Türk_Telekom_Basketbol_logo.png",
+  "page": "https://en.wikipedia.org/wiki/File:T%C3%BCrk_Telekom_Basketbol_logo.png"
+ },
+ "Cluj-Napoca": {
+  "file": "crests/cluj-napoca.webp",
+  "source": "Cfmuniversitateacluj.png",
+  "page": "https://commons.wikimedia.org/wiki/File:Cfmuniversitateacluj.png"
+ },
+ "Reyer Venezia": {
+  "file": "crests/reyer-venezia.webp",
+  "source": "Reyer Venezia logo 2022.png",
+  "page": "https://en.wikipedia.org/wiki/File:Reyer_Venezia_logo_2022.png"
+ }
+}

@@ -114,14 +114,14 @@
 <style>
   :root {
     --paper: #f7f3ea; --ink: #1d1a14; --muted: #6e6656; --rule: #d8cfbc; --rule-strong: #1d1a14;
-    --paper-2: #efe9db; --accent: #c65611;
+    --paper-2: #efe9db; --accent: #c65611; --card: #fffdf7;
     --font-display: "Rockwell", "Roboto Slab", "Bookman Old Style", "Iowan Old Style", Charter, Georgia, "Times New Roman", serif;
     --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     color-scheme: light;
   }
   :root[data-theme="dark"] {
     --paper: #15120c; --ink: #e6dfd0; --muted: #a29881; --rule: #4a4133; --rule-strong: #897f6b;
-    --paper-2: #2c2618; --accent: #cf7b41;
+    --paper-2: #2c2618; --accent: #cf7b41; --card: #241f16;
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
@@ -166,6 +166,25 @@
   .clubgrid li { break-inside: avoid; margin: 0 0 6px; }
   .muted { color: var(--muted); }
   .nw { white-space: nowrap; }
+  .tiles { list-style: none; padding: 0; margin: 12px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
+  .tiles li { margin: 0; display: flex; }
+  .tiles li > .clubtile { flex: 1; min-width: 0; }   /* a two-line name grows its row, and the row's other tiles follow */
+  .clubtile { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 10px 8px;
+              background: var(--card); border: 1px solid var(--rule); border-radius: 2px; color: var(--ink); text-decoration: none; text-align: center; }
+  .clubtile:hover { border-color: var(--ink); color: var(--ink); }
+  .plate { width: 72px; height: 72px; flex: none; display: flex; align-items: center; justify-content: center; background: #fffdf7; border-radius: 12px; }
+  .plate img { width: 60px; height: 60px; object-fit: contain; display: block; }
+  .plate.big { width: 112px; height: 112px; border-radius: 18px; }
+  .plate.big img { width: 96px; height: 96px; }
+  .plate .ini { font-family: var(--font-display); font-weight: 700; font-size: 20px; color: #1d1a14; }
+  :root[data-theme="light"] .plate { box-shadow: inset 0 0 0 1px var(--rule); }
+  .ct-name { font-family: var(--font-display); font-weight: 700; font-size: 15px; line-height: 1.15; }
+  .ct-meta { font-size: 12px; color: var(--muted); }
+  @media (max-width: 520px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .clubtile { padding: 8px 4px; gap: 4px; } .clubtile .plate { width: 58px; height: 58px; border-radius: 10px; }
+    .clubtile .plate img { width: 48px; height: 48px; } .ct-name { font-size: 13px; } .ct-meta { font-size: 11px; } }
+  .crest-head { display: flex; justify-content: center; margin: 22px 0 0; }
+  .crest-head + h1 { margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -179,6 +198,7 @@
       <a href="../../privacy/">Privacy</a>
     </nav>
     <main>
+    <p class="crest-head"><span class="plate big"><img src="../../crests/neptunas.webp" width="96" height="96" alt="Neptunas crest" decoding="async"></span></p>
     <h1>Neptunas</h1>
     <p class="crumbs"><a href="../../clubs/">Clubs</a> · EuroCup · Lithuania</p>
     <p class="lede">Neptunas play the 2026–27 EuroCup with a 12-man squad from 5 countries, 8 of them from Lithuania. Below: the full roster, then 11 former players whose careers we follow.</p>
@@ -232,6 +252,7 @@
     <h2>More clubs from Lithuania</h2>
     <p><a href="../../clubs/zalgiris-kaunas/">Zalgiris Kaunas</a> (EuroLeague) · <a href="../../clubs/lietkabelis/">Lietkabelis</a> (EuroCup) · <a href="../../clubs/siauliai/">Siauliai</a> (EuroCup)</p>
     <p class="muted">Rosters are as of the start of the 2026–27 season, checked against the official EuroCup rosters; transfers since then are not reflected. Spotted a mistake? <a href="../../contact/">Send a correction</a>.</p>
+    <p class="muted">Club crests belong to their clubs and are shown only to identify them.</p>
     </main>
     <footer>
       Euroball · daily European basketball puzzles · <a href="../../">euroballgames.com</a><br />
