@@ -14,8 +14,10 @@
 
   var TEAMS = (function () { var s = {}; PLAYERS.forEach(function (p) { s[p.team] = 1; }); return Object.keys(s).sort(); })();
 
-  // Club badges: colours + a 3-letter code only — REAL crests are trademarked
-  // artwork, so the roundels stay generic (colour + initials is safe ground).
+  // Club colours + the official 3-letter code. Since v101 the tiles show each
+  // club's crest (crests/<slug>.webp, owner's choice; see crests/SOURCES.json),
+  // and this badge is what a tile falls back to if a crest can't load, or for
+  // a club with no crest file.
   var CLUB_META = {
     "Anadolu Efes":     { code: "EFS", bg: "#003268", fg: "#ffffff" },
     "ASVEL":            { code: "ASV", bg: "#58585a", fg: "#ffffff" },
@@ -79,7 +81,56 @@
   }
   function badgeHTML(t) {
     var m = clubMeta(t);
-    return "<span class='rm-badge' style='background:" + m.bg + ";color:" + m.fg + "' aria-hidden='true'>" + m.code + "</span>";
+    var url = crestURL(t);
+    if (!url) return "<span class='rm-badge' style='background:" + m.bg + ";color:" + m.fg + "' aria-hidden='true'>" + m.code + "</span>";
+    // The club's crest (crests/<slug>.webp, the same files as the club pages),
+    // on a light plate so black crests read in night mode. If the file ever
+    // fails to load, the plate turns into the colour badge above: its colours
+    // and code ride along as CSS variables and a data attribute.
+    return "<span class='rm-crest' style='--bb:" + m.bg + ";--bf:" + m.fg + "' data-code='" + m.code + "' aria-hidden='true'>" +
+      "<img src='" + url + "' alt='' decoding='async' onerror=\"this.parentNode.className+=' off'\"></span>";
+  }
+  // Where a club's crest lives, from the site root that app.js fixes at load.
+  // Clubs with a page have a crest (test.js checks every one); others get null.
+  function crestURL(t) {
+    var C = window.CLUBS, p = C && C.page ? C.page(t) : null;
+    if (!p) return null;
+    var root = (window.Hub && window.Hub._siteRoot) ? window.Hub._siteRoot() : "/";
+    return root + "crests/" + p.slice("clubs/".length, -1) + ".webp";
+  }
+
+  // --- Full-screen picker -----------------------------------------------------
+  // The club tiles fill what the viewport has left under the header, the way
+  // the hub's game tiles do: try every column count, keep the one whose tiles
+  // are largest while every tile stays readable (MIN_W wide, MIN_H tall), and
+  // centre a short last row. Tracks are half-columns (each tile spans two) so a
+  // partial row can start half a tile in. On a screen too small to fit them all
+  // at the floor, the picker takes the most columns that fit and scrolls.
+  var MIN_W = 104, MIN_H = 118, GAP = 10;
+  function layoutPicker() {
+    var g = els.picker;
+    if (!g || g.hidden || !g.getBoundingClientRect || !window.innerHeight) return;
+    var n = g.children.length, W = g.clientWidth;
+    if (!n || !W) return;
+    var top = g.getBoundingClientRect().top + (window.scrollY || 0);
+    var below = els.pickerActions && els.pickerActions.offsetHeight ? els.pickerActions.offsetHeight + 28 : 70;
+    var H = window.innerHeight - top - below;
+    var best = null;
+    for (var c = 1; c <= n; c++) {
+      var r = Math.ceil(n / c), tw = (W - GAP * (c - 1)) / c, th = (H - GAP * (r - 1)) / r;
+      if (c > 1 && tw < MIN_W) break;
+      var fits = th >= MIN_H, size = Math.min(tw, th);
+      var better = !best || (fits !== best.fits ? fits
+        : fits ? (size > best.size * 1.05 || (size >= best.size * 0.95 && c > best.c)) : c > best.c);
+      if (better) best = { c: c, r: r, fits: fits, size: size, th: fits ? th : MIN_H, tw: tw };
+    }
+    g.style.gridTemplateColumns = "repeat(" + best.c * 2 + ", minmax(0, 1fr))";
+    g.style.gridAutoRows = best.th.toFixed(1) + "px";
+    g.style.setProperty("--rm-tile-h", best.th.toFixed(1) + "px");
+    g.style.setProperty("--rm-tile-w", best.tw.toFixed(1) + "px");
+    var rem = n % best.c;
+    for (var i = 0; i < n; i++) g.children[i].style.gridColumnStart = "";
+    if (rem) g.children[n - rem].style.gridColumnStart = String(best.c - rem + 1);
   }
 
   var ROSTER = {};                    // club → players (sorted by jersey number)
@@ -248,6 +299,7 @@
       btn.addEventListener("click", function () { openClub(t); });
       els.picker.appendChild(btn);
     });
+    layoutPicker();
   }
   function renderBoard() {
     if (!els.groups || !club) return;
@@ -366,6 +418,7 @@
     if (els.infoClose) els.infoClose.addEventListener("click", closeInfo);
     if (els.infoModal) els.infoModal.addEventListener("click", function (e) { if (e.target === els.infoModal) closeInfo(); });
     document.addEventListener("keydown", onModalKey);
+    if (window.addEventListener) window.addEventListener("resize", layoutPicker);   // no-op while a board is open
 
     renderPicker(); renderSummary();
   }
