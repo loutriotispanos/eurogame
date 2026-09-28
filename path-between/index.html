@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="pathbetween">
     <h2 class="seo-lede">Path Between — six degrees of European basketball</h2>
     <p>Two players at either end and a chain to build between them. Every name you add must have been a real teammate of the one before — the same club in the same seasons, not merely the same badge at different times. Par is the shortest chain that exists; you get par plus three guesses, and every guess costs one whether it lands or not.</p>
@@ -2290,6 +2302,23 @@
       <dt>What happens if I give up?</dt>
       <dd>The game reveals one shortest route between the pair. On the Daily it asks once before committing and records a loss, but the round still counts as played so your hub streak survives.</dd>
     </dl>
+    <h3>Getting better at Path Between</h3>
+    <ul>
+      <li>Work from both ends. Look at where the target has played and ask who from your side could have been there at the same time.</li>
+      <li>Big clubs are hubs. A long-serving player at Real Madrid, Olympiacos or CSKA Moscow links to a huge number of teammates.</li>
+      <li>Check the years, not just the badge. Two stints at the same club only link if they overlap.</li>
+      <li>Don't spend guesses on long shots. Par plus three is a small budget, and a dead end loses the round.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>170 pairs, each with its par worked out in advance by a shortest-route search over the teammate graph: 50 Easy pairs at par 2, 80 Medium at par 3, which is also the Daily's pool, and 40 Hard at par 4. Clubs that changed their names are merged, so an Elan Chalon stint links to a Chalon one.</p>
+    <h3>An example</h3>
+    <p>Sergio Llull to Kostas Sloukas takes two steps. Llull has only ever played for Manresa and Real Madrid; Sloukas for Olympiacos, Fenerbahce and Panathinaikos. They never shared a club, so you need someone who crossed from one side to the other: Guerschon Yabusele played with Llull at Real Madrid from 2021 to 2024 and joined Sloukas at Panathinaikos in 2026.</p>
+    <h3>If you like Path Between</h3>
+    <ul>
+      <li><a href="../common-club/">Common Club</a>: Two European basketball careers that cross at exactly one club.</li>
+      <li><a href="../career-order/">Career Order</a>: A player's clubs, shuffled.</li>
+      <li><a href="../the-grid/">The Grid</a>: A 3×3 grid of clubs, nationalities and positions.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 

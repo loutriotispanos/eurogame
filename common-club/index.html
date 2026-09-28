@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -1416,7 +1423,7 @@
       "name": "What if I can think of two clubs they share?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Then one of them is not in the database. A pair only becomes a puzzle if it shares exactly one club out of all 465 clubs on record — not merely one of the ~22 you would think to name — so the guarantee of a single right answer holds."
+        "text": "Then one of them is not in the database. A pair only becomes a puzzle if it shares exactly one club out of all 555 clubs on record — not merely one of the 25 you would think to name — so the guarantee of a single right answer holds."
       }
     },
     {
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="clubreveal">
     <h2 class="seo-lede">Common Club — name the club they share</h2>
     <p>Two players. Somewhere in their careers they wore the same shirt, at exactly one club — and that club is the answer. They may have been teammates, or they may have missed each other by twenty years. Three guesses, and the fewer you use the better the win.</p>
@@ -2282,7 +2294,7 @@
     <h3>Frequently asked questions</h3>
     <dl class="seo-faq">
       <dt>What if I can think of two clubs they share?</dt>
-      <dd>Then one of them is not in the database. A pair only becomes a puzzle if it shares exactly one club out of all 465 clubs on record — not merely one of the ~22 you would think to name — so the guarantee of a single right answer holds.</dd>
+      <dd>Then one of them is not in the database. A pair only becomes a puzzle if it shares exactly one club out of all 555 clubs on record — not merely one of the 25 you would think to name — so the guarantee of a single right answer holds.</dd>
       <dt>Can the answer be an NBA team?</dt>
       <dd>No. The answer is always a EuroLeague club or a club with genuine retired greats, even though the database knows about NBA and other stints and uses them elsewhere.</dd>
       <dt>Do the two players have to be from the same era?</dt>
@@ -2290,6 +2302,23 @@
       <dt>Why is one player in the Daily always familiar?</dt>
       <dd>The Daily is anchored on a Final Four starter so there is always one name you can hold on to. Active, Non-active and Both drop that guarantee, and Both reaches widest of all.</dd>
     </dl>
+    <h3>Getting better at Common Club</h3>
+    <ul>
+      <li>Read the shorter career first. The fewer clubs a player had, the fewer candidates there are.</li>
+      <li>Keep the answer set in mind. It is always a current EuroLeague club or one with a real contingent of club greats, never an NBA team or a small stop along the way.</li>
+      <li>Think country, then era. Two careers that both run through one country usually cross there.</li>
+      <li>A miss still helps. The club you tried drops out of the list, and there are only 25 possible answers to begin with.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>Every one of the 613 careers is read as a set of clubs, each counted once however many stints a player had there, across 555 clubs in all. A pair becomes a puzzle only if their sets meet at exactly one club, and only if that club is one of the 25 a fan could fairly be asked to name.</p>
+    <h3>An example</h3>
+    <p>Vassilis Spanoulis (Maroussi, Panathinaikos, Houston Rockets, Olympiacos) and Dimitris Diamantidis (Iraklis, Panathinaikos). They were teammates at Panathinaikos from 2007 to 2010, but that isn't what makes it the answer here. What matters is that Panathinaikos is the only club on both lists.</p>
+    <h3>If you like Common Club</h3>
+    <ul>
+      <li><a href="../path-between/">Path Between</a>: Six degrees of European basketball.</li>
+      <li><a href="../the-grid/">The Grid</a>: A 3×3 grid of clubs, nationalities and positions.</li>
+      <li><a href="../career-order/">Career Order</a>: A player's clubs, shuffled.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 

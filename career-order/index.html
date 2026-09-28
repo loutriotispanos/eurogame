@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -1440,7 +1447,7 @@
       "name": "How many careers can appear?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "85 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 613-career database the rest of the site plays by."
+        "text": "379 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 613-career database the rest of the site plays by."
       }
     }
   ]
@@ -2269,6 +2276,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="careerorder">
     <h2 class="seo-lede">Career Order — put the career back in order</h2>
     <p>You are given a player and every club he played for, scrambled. Put them back into the order he actually played for them, earliest at the top, latest at the bottom. The years stay hidden until you are done, so there is nothing to read off — only what you know about how the career went.</p>
@@ -2288,8 +2300,25 @@
       <dt>Do loan spells and NBA years count as separate stops?</dt>
       <dd>Yes. Anything recorded as a distinct stint in the career database appears as its own club, in the order it happened.</dd>
       <dt>How many careers can appear?</dt>
-      <dd>85 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 613-career database the rest of the site plays by.</dd>
+      <dd>379 careers are long and varied enough to make a fair ordering puzzle, drawn from the same 613-career database the rest of the site plays by.</dd>
     </dl>
+    <h3>Getting better at Career Order</h3>
+    <ul>
+      <li>Place the anchors first. The club he is at now goes last, and a youth or hometown club usually goes first.</li>
+      <li>NBA spells tend to come in the middle of a European career, or at the start for players who were drafted young.</li>
+      <li>Use each check to learn. A club that locks green is fixed, so every check makes the problem smaller.</li>
+      <li>Think in eras. Clubs change their sponsor names, and knowing when a team was called what can place a stint on its own.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>379 careers are long and varied enough to make a fair puzzle: three or more clubs, and no club twice, since two identical tiles would make the order ambiguous. The Daily uses the 259 with four to seven clubs. Easy has up to four, Medium five or six, and Hard seven or more.</p>
+    <h3>An example</h3>
+    <p>Mike James: KK Zagreb, Paffoni Omegna, Baskonia, Panathinaikos, Phoenix Suns, Olimpia Milano, CSKA Moscow, AS Monaco, Anadolu Efes. Nine clubs is a Hard puzzle, but it comes apart quickly once you place the ends. He has just joined Efes, so that goes last, after the years at Monaco. The two small Croatian and Italian clubs are where it started. The NBA season in Phoenix sits between Panathinaikos and Milano.</p>
+    <h3>If you like Career Order</h3>
+    <ul>
+      <li><a href="../player-id/">Player ID</a>: A EuroLeague player's whole career laid out club by club, with the years.</li>
+      <li><a href="../path-between/">Path Between</a>: Six degrees of European basketball.</li>
+      <li><a href="../common-club/">Common Club</a>: Two European basketball careers that cross at exactly one club.</li>
+    </ul>
     <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 

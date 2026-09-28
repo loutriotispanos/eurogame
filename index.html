@@ -557,6 +557,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -855,6 +859,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2172,6 +2179,32 @@
       </ul>
     </div>
   </div>
+
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
+  <section class="seo-copy hub-intro" data-seo-view="home">
+    <h2 class="seo-lede">Daily puzzles about European basketball</h2>
+    <p>Euroball is eleven free puzzle games about the EuroLeague, and seven of them can be played on the EuroCup too. Every game has a new daily puzzle at midnight, the same for everyone, plus unlimited practice for when one a day isn't enough. There is no account and nothing to install, though it can sit on a phone's home screen like an app and it works offline once it has loaded. Play any daily and your streak carries on; miss a day and one freeze saves it.</p>
+    <h3>The games</h3>
+    <ul>
+      <li><a href="mystery-player/">Mystery Player</a>: the daily EuroLeague Wordle. Eight tries, six clues a guess.</li>
+      <li><a href="player-id/">Player ID</a>: a whole career, club by club. Name the player in two guesses.</li>
+      <li><a href="complete-the-five/">Complete the Five</a>: a real Final Four starting five with one man missing.</li>
+      <li><a href="connections/">Connections</a>: sixteen names, four hidden groups of four, three mistakes.</li>
+      <li><a href="career-order/">Career Order</a>: a career's clubs, shuffled. Put them back in order.</li>
+      <li><a href="the-grid/">The Grid</a>: nine cells where clubs, nationalities and positions cross.</li>
+      <li><a href="common-club/">Common Club</a>: two careers that cross at exactly one club. Name it.</li>
+      <li><a href="path-between/">Path Between</a>: six degrees of European basketball, through real teammates.</li>
+      <li><a href="odd-one-out/">Odd One Out</a>: four names, three with something in common.</li>
+      <li><a href="higher-or-lower/">Higher or Lower</a>: who is taller, older, or wears the bigger number?</li>
+      <li><a href="roster-master/">Roster Master</a>: every 2026–27 roster, from memory, with no hints.</li>
+    </ul>
+    <h3>Built on real data</h3>
+    <p>Every roster is checked club by club against the official 2026–27 EuroLeague and EuroCup rosters at the start of the season. Behind them sit more than six hundred career timelines, compiled from club rosters, Wikipedia, FIBA and Proballers, and the starting fives of fourteen Final Fours. The puzzles are built from that data and checked before they ship: a Connections board has exactly one solution, a Path Between pair has a real route through teammates. Every club has its own page with its roster and former players: see <a href="clubs/">the clubs</a>, or read more <a href="about/">about Euroball</a>.</p>
+  </section>
 
   <footer>
     Rosters are current to the <strong>2026–27 <span class="comp-text" data-ec="EuroCup">EuroLeague</span> season</strong>, checked club by club at the season start; transfers since then are not reflected.<br />

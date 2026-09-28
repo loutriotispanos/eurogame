@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2223,6 +2230,27 @@
       </ul>
     </div>
   </div>
+
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
+  <section class="seo-copy hub-intro" data-seo-view="home">
+    <h2 class="seo-lede">Daily puzzles about the EuroCup</h2>
+    <p>Seven of Euroball's games, played on the 2026–27 EuroCup: 391 players across 32 clubs, researched club by club from the official rosters. Each game has a new daily puzzle at midnight, the same for everyone, and its own stats and streak, separate from the EuroLeague's.</p>
+    <h3>The EuroCup games</h3>
+    <ul>
+      <li><a href="mystery-player/">Mystery Player</a>: Guess the mystery EuroCup player in 8 tries.</li>
+      <li><a href="player-id/">Player ID</a>: A EuroCup player's whole career laid out club by club, with the years.</li>
+      <li><a href="career-order/">Career Order</a>: A EuroCup player's clubs, shuffled.</li>
+      <li><a href="the-grid/">The Grid</a>: A 3×3 grid of clubs, nationalities and positions for the EuroCup.</li>
+      <li><a href="path-between/">Path Between</a>: Six degrees of the EuroCup.</li>
+      <li><a href="higher-or-lower/">Higher or Lower</a>: Two EuroCup players, one question: who is taller, who is older, whose shirt number is higher? Ten matchups a day, or an endless run that ends on your first mistake.</li>
+      <li><a href="roster-master/">Roster Master</a>: The long game: name every player on all thirty-two 2026-27 EuroCup rosters from memory.</li>
+    </ul>
+    <p class="seo-more">Every EuroCup club has its own page, with its roster and former players. <a href="../clubs/">See the clubs →</a> · <a href="../?comp=euroleague">The EuroLeague games →</a></p>
+  </section>
 
   <footer>
     Rosters are current to the <strong>2026–27 <span class="comp-text" data-ec="EuroCup">EuroCup</span> season</strong>, checked club by club at the season start; transfers since then are not reflected.<br />

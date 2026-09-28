@@ -560,6 +560,10 @@
   .seo-copy ul { margin: 0; padding-left: 20px; }
   .seo-copy li { margin-bottom: 6px; }
   .seo-copy strong { color: var(--ink); }
+  /* Links in the running copy: ink with a hairline underline, like the colophon's.
+     Colour never carries meaning on this sheet, so the browser blue has to go. */
+  .seo-copy a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-2); text-underline-offset: 2px; }
+  .seo-copy a:hover { text-decoration-color: currentColor; }
   /* Q and A on one hairline-separated list, the way the agate page sets its
      rows — a definition list is what this actually is, so it gets to say so. */
   .seo-faq { margin: 0; }
@@ -858,6 +862,9 @@
   body.view-home { --measure: min(1400px, 100%); }
   .home-header { margin-top: 14px; }
   #home-view { flex: 1; min-height: 0; }
+  /* The hub's intro reads after the colophon, below the fold (DOM order puts it
+     before the footer, which is where build_pages.js expects to find it). */
+  .seo-copy.hub-intro { order: 1; }
 
   /* The streak is a dateline strip, not another card — and it takes only a
      bottom rule, because the masthead's Scotch rule already closed the header
@@ -2251,6 +2258,11 @@
     </div>
   </div>
 
+  <!-- The hub's own words, for a reader who scrolls and for a crawler. It sits
+       BELOW the viewport-filling tile grid, so the first screen is unchanged:
+       the lobby still fits without scrolling, and this is simply what is under
+       it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
+       it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="careerorder">
     <h2 class="seo-lede">Career Order — put the EuroCup career back in order</h2>
     <p>You are given a EuroCup player and every club he has played for, scrambled. Put them back into the order he actually played for them, earliest at the top, latest at the bottom. The years stay hidden until you are done, so there is nothing to read off — only what you know about how the career went.</p>
@@ -2272,6 +2284,20 @@
       <dt>Do NBA years count as separate stops?</dt>
       <dd>Yes. Anything recorded as a distinct stint in the career database appears as its own club, in the order it happened.</dd>
     </dl>
+    <h3>Getting better at Career Order</h3>
+    <ul>
+      <li>His 2026–27 EuroCup club is always last, so that tile is free. Work backwards from it.</li>
+      <li>Place NBA stints early or in the middle, and use each check to lock in what you know.</li>
+      <li>More clubs means more ways to be wrong, so start on Easy if the Daily feels long.</li>
+    </ul>
+    <h3>What's in the game</h3>
+    <p>226 EuroCup careers have three or more different clubs, enough to make a fair ordering puzzle.</p>
+    <h3>If you like Career Order</h3>
+    <ul>
+      <li><a href="../player-id/">Player ID</a>: A EuroCup player's whole career laid out club by club, with the years.</li>
+      <li><a href="../path-between/">Path Between</a>: Six degrees of the EuroCup.</li>
+      <li><a href="../the-grid/">The Grid</a>: A 3×3 grid of clubs, nationalities and positions for the EuroCup.</li>
+    </ul>
     <p class="seo-more">Euroball has 7 daily EuroCup puzzles, and eleven for the EuroLeague. <a href="../">See the EuroCup games →</a></p>
   </section>
 

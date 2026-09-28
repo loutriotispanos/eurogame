@@ -2822,6 +2822,72 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   ok(nat["Nikos Galis"] === "Greece", "Nikos Galis carries Greece, the national team he played for");
 })();
 
+// --- The longer copy: tips, numbers, examples, related games ------------------
+(function () {
+  console.log("Game-page copy — its own words, today's numbers, examples that are still true");
+  var fs2 = require("fs");
+  var BP2 = require(__dirname + "/build_pages.js");
+  var read = function (f) { return fs2.readFileSync(__dirname + "/" + f, "utf8"); };
+  var all = BP2.PAGES.map(function (p) { return p.slug + "/index.html"; })
+    .concat(["eurocup/index.html"], BP2.EC_PAGES.map(function (p) { return "eurocup/" + p.slug + "/index.html"; }), ["index.html"]);
+  var KEYS = /\{(players|legends|careers|puzzles|grids|paths|coSuit|coDaily|pidPool|pidDaily|careerClubs|answerClubs|lineups|f4[A-Za-z]+|oddones|ec[A-Za-z0-9]+|elClubs|nats|par[234])\}/;
+  ok(all.every(function (f) { return !KEYS.test(read(f)); }), "no {placeholder} is left unfilled on any page");
+
+  function words(f) {
+    var seo = (read(f).match(/<section class="seo-copy[\s\S]*?<\/section>/g) || []).join(" ");
+    return (seo.replace(/<[^>]+>/g, " ").match(/[A-Za-zÀ-ž0-9'’-]{2,}/g) || []).length;
+  }
+  var thinEL = BP2.PAGES.filter(function (p) { return words(p.slug + "/index.html") < 420; }).map(function (p) { return p.slug; });
+  var thinEC = BP2.EC_PAGES.filter(function (p) { return words("eurocup/" + p.slug + "/index.html") < 320; }).map(function (p) { return p.slug; });
+  ok(thinEL.length === 0 && thinEC.length === 0, "every game page carries a real amount of its own copy" + (thinEL.concat(thinEC).length ? " (thin: " + thinEL.concat(thinEC).join(", ") + ")" : ""));
+  ok(BP2.PAGES.every(function (p) { var h = read(p.slug + "/index.html"); return h.indexOf("<h3>Getting better at ") >= 0 && h.indexOf("<h3>What's in the game</h3>") >= 0; }),
+     "…with tips and a what's-inside section on every EuroLeague game");
+
+  // The numbers the copy quotes are today's.
+  ok(read("connections/index.html").indexOf("All " + window.PUZZLES.length + " puzzles") >= 0 && read("connections/index.html").indexOf("94 puzzles") === -1,
+     "Connections quotes the real size of its bank (" + window.PUZZLES.length + "), not the stale 94");
+  ok(read("path-between/index.html").indexOf(window.PATHS.length + " pairs") >= 0, "…and Path Between the real number of pairs");
+
+  // Related links go to pages that exist, inside the page's own competition.
+  var dead = [];
+  all.forEach(function (f) {
+    var dir = f.replace(/index\.html$/, "");
+    var sec = (read(f).match(/<section class="seo-copy[\s\S]*?<\/section>/g) || []).join(" ");
+    (sec.match(/href="([^"#?]+)"/g) || []).forEach(function (m) {
+      var href = m.slice(6, -1); if (/^https?:/.test(href)) return;
+      var target = require("path").normalize(__dirname + "/" + dir + href + (href.endsWith("/") ? "index.html" : ""));
+      if (!fs2.existsSync(target)) dead.push(f + " → " + href);
+    });
+  });
+  ok(dead.length === 0, "every link in the copy leads to a page that exists" + (dead.length ? " (" + dead.slice(0, 4).join(", ") + ")" : ""));
+  var ecCopy = BP2.EC_PAGES.map(function (p) { return (read("eurocup/" + p.slug + "/index.html").match(/<h3>If you like[\s\S]*?<\/ul>/) || [""])[0]; }).join(" ");
+  ok(!/complete-the-five|connections|common-club|odd-one-out/.test(ecCopy), "…and a EuroCup page only suggests games the EuroCup plays");
+
+  // The hub's intro: on the hub, never on a game page; the EuroCup hub has its own.
+  ok(read("index.html").indexOf('<section class="seo-copy hub-intro" data-seo-view="home">') >= 0, "the hub has its own intro, under the tiles");
+  ok(BP2.PAGES.every(function (p) { return read(p.slug + "/index.html").indexOf("hub-intro") === -1; }), "…which no game page repeats");
+  ok(/Daily puzzles about the EuroCup/.test(read("eurocup/index.html")) && read("eurocup/index.html").indexOf("Daily puzzles about European basketball") === -1,
+     "…and the EuroCup hub swaps in its own");
+
+  // The worked examples are claims about the data, so they are checked against it.
+  var P = {}; window.PLAYERS.concat(window.LEGENDS).forEach(function (p) { if (!P[p.name]) P[p.name] = p; });
+  var fou = P["Evan Fournier"], nun = P["Kendrick Nunn"], TE = window.TEAMS;
+  ok(fou && nun && fou.team !== nun.team && TE[fou.team].country === TE[nun.team].country && fou.nationality !== nun.nationality &&
+     fou.position === nun.position && fou.height - nun.height > 5 && nun.birthYear - fou.birthYear > 2 && fou.number - nun.number > 3,
+     "Mystery example: Fournier against Nunn still shows yellow club, grey nationality, green position, grey ↓ height, age and number");
+  var pb = window.PathBetween;
+  var inBank = window.PATHS.some(function (x) { return (x.a === "Sergio Llull" && x.b === "Kostas Sloukas") || (x.a === "Kostas Sloukas" && x.b === "Sergio Llull"); });
+  ok(pb._link("Sergio Llull", "Guerschon Yabusele") && pb._link("Guerschon Yabusele", "Kostas Sloukas") && !pb._link("Sergio Llull", "Kostas Sloukas") && !inBank,
+     "Path Between example: Llull → Yabusele → Sloukas is a real route, and not a puzzle in the bank");
+  var clubsOf = function (n) { var c = window.CAREERS.filter(function (x) { return x.name === n; })[0], s = {}; c.career.forEach(function (e) { s[window.CLUBS.canonical(e.team)] = 1; }); return s; };
+  var sp = clubsOf("Vassilis Spanoulis"), di = clubsOf("Dimitris Diamantidis");
+  ok(Object.keys(sp).filter(function (k) { return di[k]; }).join() === "Panathinaikos", "Common Club example: Spanoulis and Diamantidis share Panathinaikos and nothing else");
+  var ol = window.CAREERS.filter(function (c) { return (P[c.name] || {}).nationality === "France" && c.career.some(function (e) { return window.CLUBS.canonical(e.team) === "Olympiacos"; }); }).map(function (c) { return c.name; }).sort();
+  ok(ol.join() === ["Evan Fournier", "Frank Ntilikina", "Kim Tillie", "Moustapha Fall"].sort().join(), "The Grid example: Olympiacos × France is still exactly the four names the copy lists");
+  var l18 = window.LINEUPS.filter(function (l) { return l.season === 2018 && l.team === "Real Madrid"; })[0];
+  ok(l18 && l18.champion && l18.five.filter(function (x) { return x.pos === "SF"; })[0].name === "Luka Doncic", "Complete the Five example: 2018 Real Madrid's small forward is Doncic");
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};
