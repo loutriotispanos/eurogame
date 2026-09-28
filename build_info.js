@@ -53,7 +53,7 @@ var PAGES = [
       "<p class=\"lede\">Euroball is a free set of daily puzzle games about European basketball: the EuroLeague first, and the EuroCup too. Every game has a new puzzle each day, the same one for everyone, and unlimited practice if one a day isn't enough.</p>",
       "<h2>The games</h2>",
       gameList(),
-      "<p>Seven of them can also be played on EuroCup players, from the <a href=\"../eurocup/\">EuroCup hub</a>.</p>",
+      "<p>Seven of them can also be played on EuroCup players, from the <a href=\"../eurocup/\">EuroCup hub</a>. And every club in both competitions has a page of its own, with its roster and former players: see <a href=\"../clubs/\">the clubs</a>.</p>",
       "<h2>Where the data comes from</h2>",
       "<p>Every player, club, career and lineup in the games was compiled by hand: from official club rosters and the official EuroLeague and EuroCup rosters, Wikipedia, FIBA and Proballers, then cross-checked source against source. Rosters are updated club by club at the start of each season. Transfers in the middle of a season aren't reflected until the next update.</p>",
       "<p>The puzzles are built from that data by scripts that check each one before it ships. A Connections board has exactly one solution, a Path Between pair has a real route through teammates, and a Grid square has at least one right answer.</p>",
@@ -171,31 +171,66 @@ var CSS = [
   "code { font-size: .9em; background: var(--paper-2); padding: 1px 4px; border-radius: 2px; }",
   ".addr { font-size: 19px; font-weight: 700; overflow-wrap: anywhere; }",
   "footer { margin-top: 44px; padding-top: 12px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; text-align: center; }",
-  "footer a { color: var(--muted); }"
+  "footer a { color: var(--muted); }",
+  // Club pages: the roster is a box score, rule-separated like the app's lists.
+  ".crumbs { margin: 18px 0 0; font-size: 14px; color: var(--muted); text-align: center; }",
+  ".crumbs a { color: var(--muted); }",
+  ".box { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; margin-top: 8px; }",
+  ".box th { text-align: left; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); padding: 6px 6px 4px 0; }",
+  ".box td { border-bottom: 1px solid var(--rule); padding: 7px 6px 7px 0; vertical-align: top; }",
+  ".box td.n { color: var(--muted); width: 2.2em; }",
+  ".box .opt { white-space: nowrap; }",
+  "@media (max-width: 480px) { .box .wide { display: none; } }",
+  ".facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0 18px; margin: 10px 0 0; padding: 0; list-style: none; }",
+  ".facts li { border-top: 1px solid var(--rule); padding: 8px 0; margin: 0; }",
+  ".facts b { display: block; font-family: var(--font-display); font-size: 22px; line-height: 1.2; }",
+  ".facts span { color: var(--muted); font-size: 13px; }",
+  ".cols { columns: 2 220px; column-gap: 24px; padding-left: 0; list-style: none; }",
+  ".cols li { break-inside: avoid; margin: 0 0 6px; }",
+  ".cols .yrs, .five .pos { color: var(--muted); font-size: 14px; }",
+  ".five { margin: 6px 0 14px; padding: 0; list-style: none; }",
+  ".five li { margin: 2px 0; }",
+  "h3 { font-family: var(--font-display); font-size: 18px; margin: 18px 0 4px; }",
+  ".clubgrid { columns: 2 200px; column-gap: 24px; padding: 0; list-style: none; }",
+  ".clubgrid li { break-inside: avoid; margin: 0 0 6px; }",
+  ".muted { color: var(--muted); }",
+  ".nw { white-space: nowrap; }"
 ].join("\n  ");
 
-function nav(current) {
-  return [["../", "Play the games"], ["../about/", "About"], ["../contact/", "Contact"], ["../privacy/", "Privacy"]]
+/* The site's own links, from wherever the page sits. `up` is the way back to
+ * the root: "../" from /about/, "../../" from /clubs/real-madrid/. */
+function nav(up, section) {
+  return [["", "Play the games"], ["clubs/", "Clubs"], ["about/", "About"], ["contact/", "Contact"], ["privacy/", "Privacy"]]
     .map(function (l) {
-      var here = l[0] === "../" + current + "/";
-      return '<a href="' + l[0] + '"' + (here ? ' aria-current="page"' : "") + ">" + l[1] + "</a>";
+      var here = l[0] && l[0] === section + "/";
+      return '<a href="' + up + l[0] + '"' + (here ? ' aria-current="page"' : "") + ">" + l[1] + "</a>";
     }).join("\n      ");
 }
 
-function buildInfo(p) {
-  var url = ORIGIN + "/" + p.slug + "/";
+function ldScript(o) {
+  return "<script type=\"application/ld+json\">\n" + JSON.stringify(o, null, 2).replace(/<\//g, "<\\/") + "\n</script>";
+}
+
+/* One standing page, shared by build_info.js and build_clubs.js so every page
+ * outside the app wears the same masthead, nav, type and night mode.
+ *
+ * d.path   — the page's directory from the root, e.g. "about/" or "clubs/baskonia/"
+ * d.crumbs — [[name, path], …] after "Euroball", ending with this page
+ * d.ld     — any structured data beyond the breadcrumbs
+ * d.by     — the generator, named in the do-not-edit banner */
+function renderDoc(d) {
+  var url = ORIGIN + "/" + d.path;
+  var up = d.path.split("/").filter(Boolean).map(function () { return "../"; }).join("");
   var crumbs = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Euroball", item: ORIGIN + "/" },
-      { "@type": "ListItem", position: 2, name: p.name, item: url }
-    ]
+    itemListElement: [{ "@type": "ListItem", position: 1, name: "Euroball", item: ORIGIN + "/" }].concat(
+      d.crumbs.map(function (c, i) { return { "@type": "ListItem", position: i + 2, name: c[0], item: ORIGIN + "/" + c[1] }; }))
   };
   return [
     "<!DOCTYPE html>",
-    "<!-- GENERATED by build_info.js — do not edit. Change the copy in build_info.js",
-    "     and re-run `node build_info.js`. -->",
+    "<!-- GENERATED by " + (d.by || "build_info.js") + " — do not edit. Change the copy in " + (d.by || "build_info.js"),
+    "     and re-run `node " + (d.by || "build_info.js") + "`. -->",
     "<html lang=\"en\">",
     "<head>",
     "<meta charset=\"UTF-8\" />",
@@ -203,33 +238,33 @@ function buildInfo(p) {
     // The same pre-paint line as index.html, cut to the theme: no flash of the
     // wrong paper on a visitor who plays in night mode.
     "<script>(function(){try{var t=localStorage.getItem(\"elg:theme\");if(t)t=JSON.parse(t);if(t!==\"dark\"&&t!==\"light\")t=(window.matchMedia&&window.matchMedia(\"(prefers-color-scheme: dark)\").matches)?\"dark\":\"light\";document.documentElement.setAttribute(\"data-theme\",t);}catch(e){}})();</script>",
-    "<title>" + esc(p.title) + "</title>",
-    "<meta name=\"description\" content=\"" + esc(p.desc) + "\" />",
+    "<title>" + esc(d.title) + "</title>",
+    "<meta name=\"description\" content=\"" + esc(d.desc) + "\" />",
     "<link rel=\"canonical\" href=\"" + url + "\" />",
     "<meta name=\"theme-color\" content=\"#f7f3ea\" />",
     "<link rel=\"icon\" href=\"data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%8F%80%3C/text%3E%3C/svg%3E\" />",
-    "<link rel=\"apple-touch-icon\" href=\"../icon-192.png\" />",
+    "<link rel=\"apple-touch-icon\" href=\"" + up + "icon-192.png\" />",
     "<meta property=\"og:type\" content=\"website\" />",
     "<meta property=\"og:site_name\" content=\"Euroball\" />",
-    "<meta property=\"og:title\" content=\"" + esc(p.name) + " — Euroball\" />",
-    "<meta property=\"og:description\" content=\"" + esc(p.desc) + "\" />",
+    "<meta property=\"og:title\" content=\"" + esc(d.ogTitle) + "\" />",
+    "<meta property=\"og:description\" content=\"" + esc(d.desc) + "\" />",
     "<meta property=\"og:url\" content=\"" + url + "\" />",
     "<meta property=\"og:image\" content=\"" + ORIGIN + "/og-image.png\" />",
-    "<script type=\"application/ld+json\">\n" + JSON.stringify(crumbs, null, 2).replace(/<\//g, "<\\/") + "\n</script>",
+    [crumbs].concat(d.ld || []).map(ldScript).join("\n"),
     "<style>\n  " + CSS + "\n</style>",
     "</head>",
     "<body>",
     "  <div class=\"wrap\">",
-    "    <a class=\"brand\" href=\"../\">🏀 Euroball</a>",
+    "    <a class=\"brand\" href=\"" + up + "\">🏀 Euroball</a>",
     "    <nav aria-label=\"Site\">",
-    "      " + nav(p.slug),
+    "      " + nav(up, d.path.split("/")[0]),
     "    </nav>",
     "    <main>",
-    "    <h1>" + esc(p.name === "Privacy" ? "Privacy policy" : p.name === "About" ? "About Euroball" : "Contact") + "</h1>",
-    "    " + p.body().join("\n    "),
+    "    <h1>" + esc(d.h1) + "</h1>",
+    "    " + d.body.join("\n    "),
     "    </main>",
     "    <footer>",
-    "      Euroball · daily European basketball puzzles · <a href=\"../\">euroballgames.com</a><br />",
+    "      Euroball · daily European basketball puzzles · <a href=\"" + up + "\">euroballgames.com</a><br />",
     "      An independent fan project, not affiliated with Euroleague Basketball.",
     "    </footer>",
     "  </div>",
@@ -242,6 +277,14 @@ function buildInfo(p) {
   ].join("\n");
 }
 
+function buildInfo(p) {
+  return renderDoc({
+    path: p.slug + "/", title: p.title, desc: p.desc, ogTitle: p.name + " — Euroball",
+    h1: p.name === "Privacy" ? "Privacy policy" : p.name === "About" ? "About Euroball" : "Contact",
+    crumbs: [[p.name, p.slug + "/"]], body: p.body()
+  });
+}
+
 function main() {
   PAGES.forEach(function (p) {
     var dir = path.join(ROOT, p.slug);
@@ -252,5 +295,5 @@ function main() {
   console.log("build_info: wrote " + PAGES.length + " pages");
 }
 
-module.exports = { PAGES: PAGES, buildInfo: buildInfo, MAIL: MAIL };
+module.exports = { PAGES: PAGES, buildInfo: buildInfo, renderDoc: renderDoc, esc: esc, MAIL: MAIL, ORIGIN: ORIGIN };
 if (require.main === module) main();
