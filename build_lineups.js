@@ -254,6 +254,32 @@ const RAW = [
     { name: "Luigi Datome", pos: "SF", fame: 3 }, { name: "Nicolo Melli", pos: "PF", fame: 5 },
     { name: "Jan Vesely", pos: "C", fame: 1 } ] },
 
+  // ===== 2022 Final Four (Belgrade) =====
+  // Added 2026-09-28, the season the archive was missing. Each team's starting
+  // five in its SEMI-FINAL (19 May 2022), every five confirmed by two sources:
+  // Wikipedia's 2022 EuroLeague Final Four box scores, plus Gigantes' live report
+  // ("El Barça sale con Calathes, Laprovittola, Exum, Mirotic, Sanli"; "Pablo
+  // Laso apuesta por Williams-Goss, Causeur, Hanga, Deck y Yabusele", Tavares
+  // from the bench) and Fotomaç ("Walkup, Dorsey, Papanikolaou, Vezenkov and
+  // Fall ilk beşiyle başladı"; Efes "Larkin, Micic, Anderson, Moerman and Pleiss").
+  // Positions as the box scores list them. Efes beat Real Madrid 58-57 in the final.
+  { team: "Anadolu Efes", season: 2022, champion: true, five: [
+    { name: "Shane Larkin", pos: "PG", fame: 2 }, { name: "Vasilije Micic", pos: "SG", fame: 1 },
+    { name: "James Anderson", pos: "SF", fame: 4 }, { name: "Adrien Moerman", pos: "PF", fame: 5 },
+    { name: "Tibor Pleiss", pos: "C", fame: 3 } ] },
+  { team: "Real Madrid", season: 2022, champion: false, five: [
+    { name: "Nigel Williams-Goss", pos: "PG", fame: 4 }, { name: "Fabien Causeur", pos: "SG", fame: 3 },
+    { name: "Adam Hanga", pos: "SF", fame: 5 }, { name: "Gabriel Deck", pos: "PF", fame: 2 },
+    { name: "Guerschon Yabusele", pos: "C", fame: 1 } ] },
+  { team: "FC Barcelona", season: 2022, champion: false, five: [
+    { name: "Nick Calathes", pos: "PG", fame: 2 }, { name: "Nicolas Laprovittola", pos: "SG", fame: 3 },
+    { name: "Dante Exum", pos: "SF", fame: 4 }, { name: "Nikola Mirotic", pos: "PF", fame: 1 },
+    { name: "Sertac Sanli", pos: "C", fame: 5 } ] },
+  { team: "Olympiacos", season: 2022, champion: false, five: [
+    { name: "Thomas Walkup", pos: "PG", fame: 3 }, { name: "Tyler Dorsey", pos: "SG", fame: 5 },
+    { name: "Kostas Papanikolaou", pos: "SF", fame: 2 }, { name: "Sasha Vezenkov", pos: "PF", fame: 1 },
+    { name: "Moustapha Fall", pos: "C", fame: 4 } ] },
+
   // ===== 2021 Final Four (Cologne) =====
   { team: "Anadolu Efes", season: 2021, champion: true, five: [
     { name: "Vasilije Micic", pos: "PG", fame: 1 }, { name: "Shane Larkin", pos: "SG", fame: 2 },

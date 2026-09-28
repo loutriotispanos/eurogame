@@ -144,7 +144,7 @@ var PAGES = [
       "Two guesses. Type a name and pick it from the list."
     ],
     faq: [
-      ["Which seasons are covered?", "Fourteen seasons of Final Four basketball, 2010 through 2025 — {lineups} starting fives in all. 2020 is absent because the season was cancelled and no Final Four was played."],
+      ["Which seasons are covered?", "{f4seasons} seasons of Final Four basketball, 2010 through 2025 — {lineups} starting fives in all. 2020 is absent because the season was cancelled and no Final Four was played."],
       ["Are these the real starting fives?", "Yes. Every lineup is a genuine Final Four starting five, compiled from official box scores rather than reconstructed from memory."],
       ["What do Easy, Medium and Hard change?", "Who gets hidden. Easy hides the star of the five, the name you would list first. Hard hides the starter only a serious follower of that team would remember."],
       ["Does the Daily count towards my streak?", "Yes. Solving any daily on the site keeps the single hub streak alive — you do not have to play all eleven games to keep it."]
