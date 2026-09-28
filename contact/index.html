@@ -71,6 +71,28 @@
   .addr { font-size: 19px; font-weight: 700; overflow-wrap: anywhere; }
   footer { margin-top: 44px; padding-top: 12px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; text-align: center; }
   footer a { color: var(--muted); }
+  .crumbs { margin: 18px 0 0; font-size: 14px; color: var(--muted); text-align: center; }
+  .crumbs a { color: var(--muted); }
+  .box { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; margin-top: 8px; }
+  .box th { text-align: left; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); padding: 6px 6px 4px 0; }
+  .box td { border-bottom: 1px solid var(--rule); padding: 7px 6px 7px 0; vertical-align: top; }
+  .box td.n { color: var(--muted); width: 2.2em; }
+  .box .opt { white-space: nowrap; }
+  @media (max-width: 480px) { .box .wide { display: none; } }
+  .facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0 18px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .facts li { border-top: 1px solid var(--rule); padding: 8px 0; margin: 0; }
+  .facts b { display: block; font-family: var(--font-display); font-size: 22px; line-height: 1.2; }
+  .facts span { color: var(--muted); font-size: 13px; }
+  .cols { columns: 2 220px; column-gap: 24px; padding-left: 0; list-style: none; }
+  .cols li { break-inside: avoid; margin: 0 0 6px; }
+  .cols .yrs, .five .pos { color: var(--muted); font-size: 14px; }
+  .five { margin: 6px 0 14px; padding: 0; list-style: none; }
+  .five li { margin: 2px 0; }
+  h3 { font-family: var(--font-display); font-size: 18px; margin: 18px 0 4px; }
+  .clubgrid { columns: 2 200px; column-gap: 24px; padding: 0; list-style: none; }
+  .clubgrid li { break-inside: avoid; margin: 0 0 6px; }
+  .muted { color: var(--muted); }
+  .nw { white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -78,6 +100,7 @@
     <a class="brand" href="../">🏀 Euroball</a>
     <nav aria-label="Site">
       <a href="../">Play the games</a>
+      <a href="../clubs/">Clubs</a>
       <a href="../about/">About</a>
       <a href="../contact/" aria-current="page">Contact</a>
       <a href="../privacy/">Privacy</a>

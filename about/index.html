@@ -71,6 +71,28 @@
   .addr { font-size: 19px; font-weight: 700; overflow-wrap: anywhere; }
   footer { margin-top: 44px; padding-top: 12px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 14px; text-align: center; }
   footer a { color: var(--muted); }
+  .crumbs { margin: 18px 0 0; font-size: 14px; color: var(--muted); text-align: center; }
+  .crumbs a { color: var(--muted); }
+  .box { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; margin-top: 8px; }
+  .box th { text-align: left; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--ink); padding: 6px 6px 4px 0; }
+  .box td { border-bottom: 1px solid var(--rule); padding: 7px 6px 7px 0; vertical-align: top; }
+  .box td.n { color: var(--muted); width: 2.2em; }
+  .box .opt { white-space: nowrap; }
+  @media (max-width: 480px) { .box .wide { display: none; } }
+  .facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0 18px; margin: 10px 0 0; padding: 0; list-style: none; }
+  .facts li { border-top: 1px solid var(--rule); padding: 8px 0; margin: 0; }
+  .facts b { display: block; font-family: var(--font-display); font-size: 22px; line-height: 1.2; }
+  .facts span { color: var(--muted); font-size: 13px; }
+  .cols { columns: 2 220px; column-gap: 24px; padding-left: 0; list-style: none; }
+  .cols li { break-inside: avoid; margin: 0 0 6px; }
+  .cols .yrs, .five .pos { color: var(--muted); font-size: 14px; }
+  .five { margin: 6px 0 14px; padding: 0; list-style: none; }
+  .five li { margin: 2px 0; }
+  h3 { font-family: var(--font-display); font-size: 18px; margin: 18px 0 4px; }
+  .clubgrid { columns: 2 200px; column-gap: 24px; padding: 0; list-style: none; }
+  .clubgrid li { break-inside: avoid; margin: 0 0 6px; }
+  .muted { color: var(--muted); }
+  .nw { white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -78,6 +100,7 @@
     <a class="brand" href="../">🏀 Euroball</a>
     <nav aria-label="Site">
       <a href="../">Play the games</a>
+      <a href="../clubs/">Clubs</a>
       <a href="../about/" aria-current="page">About</a>
       <a href="../contact/">Contact</a>
       <a href="../privacy/">Privacy</a>
@@ -99,7 +122,7 @@
       <li><a href="../higher-or-lower/">Higher or Lower</a>: Two European basketball players, one question: who is taller, who is older, whose shirt number is higher? Ten matchups a day, or an endless run that ends on your first mistake.</li>
       <li><a href="../roster-master/">Roster Master</a>: The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory.</li>
     </ul>
-    <p>Seven of them can also be played on EuroCup players, from the <a href="../eurocup/">EuroCup hub</a>.</p>
+    <p>Seven of them can also be played on EuroCup players, from the <a href="../eurocup/">EuroCup hub</a>. And every club in both competitions has a page of its own, with its roster and former players: see <a href="../clubs/">the clubs</a>.</p>
     <h2>Where the data comes from</h2>
     <p>Every player, club, career and lineup in the games was compiled by hand: from official club rosters and the official EuroLeague and EuroCup rosters, Wikipedia, FIBA and Proballers, then cross-checked source against source. Rosters are updated club by club at the start of each season. Transfers in the middle of a season aren't reflected until the next update.</p>
     <p>The puzzles are built from that data by scripts that check each one before it ships. A Connections board has exactly one solution, a Path Between pair has a real route through teammates, and a Grid square has at least one right answer.</p>

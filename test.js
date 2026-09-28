@@ -2056,7 +2056,7 @@ win.location.hash = chHash;
 var smXML = fs.readFileSync("sitemap.xml", "utf8");
 var smSlugs = (smXML.match(/<loc>https:\/\/euroballgames\.com\/([a-z0-9-]+)\/<\/loc>/g) || [])
   .map(function (s) { return s.replace(/^<loc>https:\/\/euroballgames\.com\//, "").replace(/\/<\/loc>$/, ""); })
-  .filter(function (s) { return s !== "eurocup" && ["about", "contact", "privacy"].indexOf(s) === -1; });   // the EuroCup hub — its pages are checked below
+  .filter(function (s) { return s !== "eurocup" && ["about", "contact", "privacy", "clubs"].indexOf(s) === -1; });   // the EuroCup hub — its pages are checked below
 var appGames = ["mystery", "playerid", "completefive", "connections", "careerorder", "thegrid",
                 "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"];
 var appSlugs = appGames.map(function (g) { return window.Hub._slugs[g]; });
@@ -2157,7 +2157,7 @@ ok(fbHTML.indexOf('<button class="game-card"') === -1, "no tile is left as a but
 // fact is written down.
 var swJS = fs.readFileSync("sw.js", "utf8");
 var swPages = ((swJS.match(/var PAGES = \[([\s\S]*?)\];/) || [])[1] || "").match(/"([a-z0-9-]+)\/"/g) || [];
-swPages = swPages.map(function (s) { return s.replace(/[",\/]/g, ""); }).filter(function (s) { return s !== "eurocup" && ["about", "contact", "privacy"].indexOf(s) === -1; });
+swPages = swPages.map(function (s) { return s.replace(/[",\/]/g, ""); }).filter(function (s) { return s !== "eurocup" && ["about", "contact", "privacy", "clubs"].indexOf(s) === -1; });
 ok(swPages.length === appGames.length && appGames.every(function (g) { return swPages.indexOf(window.Hub._slugs[g]) >= 0; }),
    "the service worker precaches every generated page, so an offline reload lands back on the same game");
 
@@ -2625,6 +2625,63 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
      "the footer links are pinned to absolute addresses in wire(), before the first push");
   var grid = fs2.readFileSync(__dirname + "/eurocup/the-grid/index.html", "utf8");
   ok(grid.indexOf('info-link" href="../../privacy/"') >= 0, "a page two levels down reaches the footer links back at the root");
+})();
+
+// --- Club pages: /clubs/ and one per 2026-27 club, all from the game data ----
+(function () {
+  console.log("Club pages — a page per club, every word from the data");
+  var fs2 = require("fs");
+  var BC = require(__dirname + "/build_clubs.js");
+  var sm = fs2.readFileSync(__dirname + "/sitemap.xml", "utf8");
+  var shell = fs2.readFileSync(__dirname + "/index.html", "utf8");
+  var el = BC.CLUBS.filter(function (c) { return c.comp === "euroleague"; }), ec = BC.CLUBS.filter(function (c) { return c.comp === "eurocup"; });
+  var elTeams = {}, ecTeams = {};
+  window.PLAYERS.forEach(function (p) { elTeams[p.team] = 1; });
+  (window.EUROCUP_PLAYERS || []).forEach(function (p) { ecTeams[p.team] = 1; });
+  ok(el.length === Object.keys(elTeams).length && ec.length === Object.keys(ecTeams).length,
+     "one page for every club with a 2026-27 roster (" + el.length + " EuroLeague, " + ec.length + " EuroCup)");
+  var slugs = {};
+  BC.CLUBS.forEach(function (c) { slugs[c.slug] = (slugs[c.slug] || 0) + 1; });
+  ok(Object.keys(slugs).every(function (k) { return slugs[k] === 1; }), "…with no two clubs sharing a directory");
+
+  var hub = fs2.existsSync(__dirname + "/clubs/index.html") ? fs2.readFileSync(__dirname + "/clubs/index.html", "utf8") : "";
+  ok(hub.replace(/\r\n/g, "\n") === BC.buildHub().replace(/\r\n/g, "\n"), "/clubs/ matches build_clubs.js — re-run `node build_clubs.js` if not");
+  ok(BC.CLUBS.every(function (c) { return hub.indexOf('href="../' + c.path + '"') >= 0; }), "…and links every club page");
+
+  var drift = [], unmapped = [], bad = [], dead = [];
+  BC.CLUBS.forEach(function (c) {
+    var f = __dirname + "/" + c.path + "index.html";
+    var h = fs2.existsSync(f) ? fs2.readFileSync(f, "utf8") : "";
+    if (h.replace(/\r\n/g, "\n") !== BC.buildClub(c).replace(/\r\n/g, "\n")) drift.push(c.slug);
+    if (sm.indexOf("<loc>https://euroballgames.com/" + c.path + "</loc>") === -1) unmapped.push(c.slug);
+    // The roster on the page IS the roster in the data: every player, nobody else.
+    var rows = (h.match(/<tr><td class="n">/g) || []).length;
+    if (rows !== c.roster.length || !c.roster.every(function (p) { return h.indexOf("<td>" + p.name.replace(/&/g, "&amp;") + "</td>") >= 0; })) bad.push(c.slug);
+    if (h.indexOf('<link rel="canonical" href="https://euroballgames.com/' + c.path + '" />') === -1) bad.push(c.slug + ":canonical");
+    (h.match(/href="\.\.\/\.\.\/[^"]*"/g) || []).forEach(function (m) {
+      var r = m.slice(12, -1);
+      if (!fs2.existsSync(__dirname + "/" + r + (r === "" || /\/$/.test(r) ? "index.html" : ""))) dead.push(c.slug + "→" + r);
+    });
+  });
+  ok(drift.length === 0, "no club page has drifted from the data" + (drift.length ? " (stale: " + drift.slice(0, 5).join(", ") + ")" : ""));
+  ok(unmapped.length === 0 && sm.indexOf("<loc>https://euroballgames.com/clubs/</loc>") >= 0, "the sitemap lists /clubs/ and every club page" + (unmapped.length ? " (missing: " + unmapped.join(", ") + ")" : ""));
+  ok(bad.length === 0, "each page lists exactly its club's roster, and canonicalises to itself" + (bad.length ? " (" + bad.join(", ") + ")" : ""));
+  ok(dead.length === 0, "every link on every club page leads to a page that exists" + (dead.length ? " (dead: " + dead.slice(0, 5).join(", ") + ")" : ""));
+
+  // The claims that went wrong in the first draft, pinned.
+  var rm = fs2.readFileSync(__dirname + "/clubs/real-madrid/index.html", "utf8");
+  ok(rm.indexOf("reached the EuroLeague Final Four") === -1 && /2022 isn.t in the archive yet/.test(rm),
+     "a page counts only the Final Fours the archive holds, and names the season it's missing (2022)");
+  ok(rm.indexOf("Club legends") === -1, "…and doesn't call the non-active pool 'legends' (it includes last season's departures)");
+  var fcounts = BC.facts(BC.CLUBS.filter(function (c) { return c.name === "Real Madrid"; })[0]);
+  var filed = {};
+  fcounts.legends.forEach(function (l) { filed[l.name] = 1; });
+  ok(fcounts.former.every(function (h) { return !filed[h.name]; }), "…and lists each former player once, not in both sections");
+  ok(BC.canon("Aris") === "Aris Thessaloniki" && BC.canon("Tau Ceramica") === "Baskonia" && BC.canon("Cedevita") === "Cedevita",
+     "old names fold into the club they are (Aris, Tau Ceramica), and a merger's halves don't (Cedevita)");
+  var zv = BC.CLUBS.filter(function (c) { return c.name === "Crvena Zvezda"; })[0];
+  ok(zv && zv.country === "Serbia", "a page says where a club is (Serbia), not the league the games group it with (ABA League)");
+  ok(shell.indexOf('class="colophon-link info-link" href="clubs/"') >= 0, "the footer links /clubs/");
 })();
 
 // --- Nationality = the national team a player has played for -----------------
