@@ -2677,8 +2677,13 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
 
   // The claims that went wrong in the first draft, pinned.
   var rm = fs2.readFileSync(__dirname + "/clubs/real-madrid/index.html", "utf8");
-  ok(rm.indexOf("reached the EuroLeague Final Four") === -1 && /2022 isn.t in the archive yet/.test(rm),
-     "a page counts only the Final Fours the archive holds, and names the season it's missing (2022)");
+  // The archive had a hole (2022) until 2026-09-28. A page counts only what the
+  // archive holds and names any season it lacks; with the hole filled it names
+  // none, and Madrid's 2022 five is on its page.
+  var rmFives = window.LINEUPS.filter(function (l) { return l.team === "Real Madrid"; }).length;
+  ok(rm.indexOf("reached the EuroLeague Final Four") === -1 && !/in the archive yet/.test(rm) &&
+     rm.indexOf("holds " + rmFives + " Final Four starting fives for Real Madrid") >= 0 && /<h3>2022<\/h3>/.test(rm),
+     "a page counts only the Final Fours the archive holds (" + rmFives + " for Madrid, 2022 included), with no gap left to name");
   ok(rm.indexOf("Club legends") === -1, "…and doesn't call the non-active pool 'legends' (it includes last season's departures)");
   var fcounts = BC.facts(BC.CLUBS.filter(function (c) { return c.name === "Real Madrid"; })[0]);
   var filed = {};
