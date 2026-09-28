@@ -29,7 +29,7 @@ window.LEGENDS = [
   {"name":"Tibor Pleiss","team":"Anadolu Efes","nationality":"Germany","position":"Center","height":221,"birthYear":1989,"number":21},
   {"name":"Cole Swider","team":"Anadolu Efes","nationality":"USA","position":"Forward","height":208,"birthYear":1999,"number":21},
   // --- Aris ---
-  {"name":"Nikos Galis","team":"Aris","nationality":"USA","position":"Guard","height":183,"birthYear":1957,"number":6},
+  {"name":"Nikos Galis","team":"Aris","nationality":"Greece","position":"Guard","height":183,"birthYear":1957,"number":6},
   {"name":"Panagiotis Giannakis","team":"Aris","nationality":"Greece","position":"Guard","height":193,"birthYear":1959,"number":6},
   // --- AS Monaco ---
   {"name":"Sergii Gladyr","team":"AS Monaco","nationality":"Ukraine","position":"Guard","height":196,"birthYear":1988,"number":8},
