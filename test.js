@@ -2181,7 +2181,7 @@ console.log("The EuroCup's own pages — a hub and one page per game it plays");
     var h = fs.readFileSync(f, "utf8");
     if (h.replace(/\r\n/g, "\n") !== BP.buildPage(bpShell, p).replace(/\r\n/g, "\n")) bad.push(rel + ":drift");
     if (h.indexOf('<link id="canonical" rel="canonical" href="https://euroballgames.com/' + rel + '" />') === -1) bad.push(rel + ":canonical");
-    if (!/^<!DOCTYPE html>[\s\S]*?<head>\n<script>window\.__ELG_COMP__ = "eurocup";<\/script>/.test(h)) bad.push(rel + ":comp");
+    if (!/^<!DOCTYPE html>[\s\S]*?<head>\r?\n<script>window\.__ELG_COMP__ = "eurocup";<\/script>/.test(h)) bad.push(rel + ":comp");
     if (h.indexOf('window.__ELG_ROOT__ = "' + (hub ? "../" : "../../") + '"') === -1) bad.push(rel + ":root");
     if (!hub && h.indexOf('window.__ELG_VIEW__ = "' + p.view + '"') === -1) bad.push(rel + ":view");
     if (/<script src="(?!\.\.\/)/.test(h) || (!hub && /<script src="\.\.\/[a-z]/.test(h))) bad.push(rel + ":scripts");
@@ -2201,7 +2201,7 @@ console.log("The EuroCup's own pages — a hub and one page per game it plays");
   ok(bad.length === 0, "each EuroCup page exists, is current, canonicalises to itself under /eurocup/, declares the EuroCup before anything runs, "
      + "reaches the root from its depth, shows only the EuroCup's tiles, already says EuroCup, and has its own title and FAQ" + (bad.length ? " — " + bad.join(", ") : ""));
   var elBad = BP.PAGES.filter(function (p) {
-    return !/<head>\n<script>window\.__ELG_COMP__ = "euroleague";<\/script>/.test(fs.readFileSync(p.slug + "/index.html", "utf8"));
+    return !/<head>\r?\n<script>window\.__ELG_COMP__ = "euroleague";<\/script>/.test(fs.readFileSync(p.slug + "/index.html", "utf8"));
   });
   ok(elBad.length === 0, "each EuroLeague game page declares the EuroLeague, so its address and its content always agree");
   ok(!/__ELG_COMP__ =/.test(bpShell), "…while the site hub declares nothing: it plays whichever competition the visitor last chose");
