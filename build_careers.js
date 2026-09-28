@@ -757,7 +757,8 @@ const RAW = [
     { team: "Bnei Herzliya", from: 2011, to: 2011 }, { team: "Hapoel Holon", from: 2011, to: 2012 },
     { team: "Varese", from: 2012, to: 2013 }, { team: "Olympiacos", from: 2013, to: 2015 },
     { team: "Anadolu Efes", from: 2015, to: 2023 }, { team: "Virtus Bologna", from: 2023, to: 2024 },
-    { team: "Zalgiris Kaunas", from: 2024, to: 2025 }, { team: "Olimpia Milano", from: 2025, to: null } ] },
+    { team: "Zalgiris Kaunas", from: 2024, to: 2025 }, { team: "Olimpia Milano", from: 2025, to: 2026 },
+    { team: "Olympiacos", from: 2026, to: null } ] },   // back at Olympiacos 2026-27 (re-homed from non-active)
   { name: "Stefano Tonut", career: [
     { team: "Pallacanestro Trieste", from: 2012, to: 2015 }, { team: "Reyer Venezia", from: 2015, to: 2022 },
     { team: "Olimpia Milano", from: 2022, to: null } ] },
@@ -1815,6 +1816,12 @@ RAW.push(
 
 // --- 2026-27 new arrivals (researched in batches; bios in build_players.js SEASON_ADD) ---
 RAW.push(
+  // late signing (2026-09-28). Promitheas (Jan-Jun 2024) and Panionios (10 games, autumn 2025)
+  // sit inside the neighbouring stints and are absorbed by clean(), like every short spell.
+  { name: "George Papas", career: [
+    { team: "Olympiacos", from: 2022, to: 2024 }, { team: "Promitheas Patras", from: 2024, to: 2024 },
+    { team: "Peristeri", from: 2024, to: 2025 }, { team: "Panionios", from: 2025, to: 2025 },
+    { team: "Maroussi", from: 2025, to: 2026 }, { team: "Olympiacos", from: 2026, to: null } ] },
   // batch 6 (2026-09-24)
   { name: "Nikola Tanaskovic", career: [
     { team: "Partizan", from: 2016, to: 2018 }, { team: "Mladost Zemun", from: 2018, to: 2019 }, { team: "Mega", from: 2019, to: 2020 }, { team: "Borac Banja Luka", from: 2020, to: 2021 }, { team: "Igokea", from: 2021, to: 2023 }, { team: "Breogan", from: 2022, to: 2023 }, { team: "Buducnost", from: 2023, to: 2026 }, { team: "Partizan", from: 2026, to: null } ] },

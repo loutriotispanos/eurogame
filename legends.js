@@ -219,7 +219,6 @@ window.LEGENDS = [
   {"name":"Antonello Riva","team":"Olimpia Milano","nationality":"Italy","position":"Forward","height":196,"birthYear":1962,"number":12},
   {"name":"Bob McAdoo","team":"Olimpia Milano","nationality":"USA","position":"Center","height":206,"birthYear":1951,"number":15},
   {"name":"Kyle Hines","team":"Olimpia Milano","nationality":"USA","position":"Center","height":198,"birthYear":1986,"number":42},
-  {"name":"Bryant Dunston","team":"Olimpia Milano","nationality":"Armenia","position":"Center","height":203,"birthYear":1986,"number":42},
   // --- Olimpija Ljubljana ---
   {"name":"Rasho Nesterovic","team":"Olimpija Ljubljana","nationality":"Slovenia","position":"Center","height":213,"birthYear":1976,"number":8},
   {"name":"Marko Milic","team":"Olimpija Ljubljana","nationality":"Slovenia","position":"Forward","height":199,"birthYear":1977,"number":12},

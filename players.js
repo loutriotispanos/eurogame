@@ -150,6 +150,7 @@ window.PLAYERS = [
   {"name":"Moustapha Fall","team":"Panathinaikos","nationality":"France","position":"Center","height":218,"birthYear":1992,"number":93},
   // --- Olympiacos ---
   {"name":"Codi Miller-McIntyre","team":"Olympiacos","nationality":"USA","position":"Guard","height":191,"birthYear":1994,"number":0},
+  {"name":"George Papas","team":"Olympiacos","nationality":"Greece","position":"Guard","height":196,"birthYear":1998,"number":1},
   {"name":"Tyson Ward","team":"Olympiacos","nationality":"USA","position":"Forward","height":198,"birthYear":1997,"number":3},
   {"name":"Jean Montero","team":"Olympiacos","nationality":"Dominican Republic","position":"Guard","height":190,"birthYear":2003,"number":8},
   {"name":"Nikolaos Plotas","team":"Olympiacos","nationality":"Greece","position":"Guard","height":195,"birthYear":2004,"number":9},
@@ -161,6 +162,7 @@ window.PLAYERS = [
   {"name":"Antonis Karagiannidis","team":"Olympiacos","nationality":"Greece","position":"Center","height":206,"birthYear":2002,"number":29},
   {"name":"Nikola Milutinov","team":"Olympiacos","nationality":"Serbia","position":"Center","height":212,"birthYear":1994,"number":33},
   {"name":"Cory Joseph","team":"Olympiacos","nationality":"Canada","position":"Guard","height":191,"birthYear":1991,"number":34},
+  {"name":"Bryant Dunston","team":"Olympiacos","nationality":"Armenia","position":"Center","height":203,"birthYear":1986,"number":42},
   {"name":"Donta Hall","team":"Olympiacos","nationality":"Azerbaijan","position":"Center","height":208,"birthYear":1997,"number":45},
   {"name":"Tyrique Jones","team":"Olympiacos","nationality":"USA","position":"Center","height":206,"birthYear":1997,"number":88},
   {"name":"Evan Fournier","team":"Olympiacos","nationality":"France","position":"Guard","height":198,"birthYear":1992,"number":94},
