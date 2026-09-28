@@ -2898,6 +2898,39 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
      "below 600px a game's header clears the fixed button row (seven of thirteen views collided at 375px; measured in a browser)");
 })();
 
+// --- Career Order + Complete the Five: a daily keeps its own answer -----------
+(function () {
+  console.log("Career Order + Complete the Five — a data change can't re-answer a daily already played");
+  // Career Order: the save names its player.
+  window.CareerOrder.goDaily();
+  var co = window.CareerOrder._peek(), coKey = "elg:co:daily:" + co.day, coSaved = store[coKey];
+  var other = window.CAREERS.filter(function (c) { return c.name !== co.name && c.career.length >= 4 && c.career.length <= 7; })[0];
+  var n = other.career.length, ident = []; for (var i = 0; i < n; i++) ident.push(i);
+  store[coKey] = JSON.stringify({ player: other.name, order: ident, tries: 1, confirmed: ident, done: true, won: true });
+  window.CareerOrder.goPractice(); window.CareerOrder.goDaily();
+  ok(window.CareerOrder._peek().name === other.name, "Career Order: a finished daily reloads against the player it was played with");
+  store[coKey] = JSON.stringify({ order: ident, tries: 0, confirmed: [], done: false, won: false });
+  window.CareerOrder.goPractice(); window.CareerOrder.goDaily();
+  ok(window.CareerOrder._peek().name === co.name, "…while a save from before names were stored keeps the date's player");
+  if (coSaved === undefined) delete store[coKey]; else store[coKey] = coSaved;
+  window.CareerOrder.goPractice(); window.CareerOrder.goDaily();
+
+  // Complete the Five: the save names its lineup and hidden slot.
+  window.CompleteFive.goDaily();
+  var c5 = window.CompleteFive._peek(), c5Key = "elg:c5:daily:" + c5.day, c5Saved = store[c5Key];
+  var L = window.LINEUPS.filter(function (l) { return l.team !== c5.team; })[0];
+  store[c5Key] = JSON.stringify({ team: L.team, season: L.season, pos: "C", guesses: [], done: true, won: true });
+  window.CompleteFive.goPractice(); window.CompleteFive.goDaily();
+  var p5 = window.CompleteFive._peek();
+  ok(p5.team === L.team && p5.hiddenPos === "C" && p5.target === L.five.filter(function (x) { return x.pos === "C"; })[0].name,
+     "Complete the Five: a finished daily reloads against the lineup and slot it was played with");
+  store[c5Key] = JSON.stringify({ guesses: [], done: false, won: false });
+  window.CompleteFive.goPractice(); window.CompleteFive.goDaily();
+  ok(window.CompleteFive._peek().team === c5.team, "…while a save from before they were stored keeps the date's lineup");
+  if (c5Saved === undefined) delete store[c5Key]; else store[c5Key] = c5Saved;
+  window.CompleteFive.goPractice(); window.CompleteFive.goDaily();
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};

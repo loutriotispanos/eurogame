@@ -257,7 +257,10 @@
     var t = order[i]; order[i] = order[j]; order[j] = t;
     renderList(); updateCounter(); updateButtons();
   }
-  function saveDaily() { lsSet(K.daily(dayKey), { order: order.slice(), tries: tries, confirmed: confirmed.slice(), done: over, won: won }); }
+  // The save names its player. The date picks him by index into POOLS.daily, and
+  // any change to the careers (a signing, a new career) moves that index: without
+  // the name, a board saved against one player would reload against another.
+  function saveDaily() { lsSet(K.daily(dayKey), { player: player ? player.name : null, order: order.slice(), tries: tries, confirmed: confirmed.slice(), done: over, won: won }); }
 
   function check() {
     if (over) return;
@@ -289,9 +292,13 @@
   function dealDaily() {
     var p = POOLS.daily;
     if (!p.length) { if (els.counter) els.counter.textContent = "No players loaded."; return; }
-    setup(dailyPlayer(), hashStr(dayKey + "#order"));
-    resetRound();
     var saved = lsGet(K.daily(dayKey), null);
+    // A save that names its player replays that player, even if today's pick
+    // has since moved. A save from before names were stored falls back to the
+    // date, and the length check below still keeps a mismatched order out.
+    var who = saved && saved.player ? CAREERS.filter(function (c) { return c.name === saved.player; })[0] : null;
+    setup(who || dailyPlayer(), hashStr(dayKey + "#order"));
+    resetRound();
     if (saved && saved.order && saved.order.length === segments.length) {
       order = saved.order.slice(); tries = saved.tries || 0; confirmed = (saved.confirmed || []).slice(); over = !!saved.done; won = !!saved.won;
       if (over) { showYears = true; order = identity(segments.length); confirmed = identity(segments.length); }
