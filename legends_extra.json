@@ -61,7 +61,7 @@
   { "name": "Juan Antonio Corbalan", "team": "Real Madrid", "teamCountry": "Spain", "nationality": "Spain", "position": "Guard", "height": 184, "birthYear": 1954, "number": 11,
     "career": [ {"team":"Real Madrid","from":1971,"to":1988}, {"team":"Forum Valladolid","from":1990,"to":1991} ] },
 
-  { "name": "Nikos Galis", "team": "Aris", "teamCountry": "Greece", "nationality": "USA", "position": "Guard", "height": 183, "birthYear": 1957, "number": 6,
+  { "name": "Nikos Galis", "team": "Aris", "teamCountry": "Greece", "nationality": "Greece", "position": "Guard", "height": 183, "birthYear": 1957, "number": 6,
     "career": [ {"team":"Aris","from":1979,"to":1992}, {"team":"Panathinaikos","from":1992,"to":1994} ] },
   { "name": "Panagiotis Giannakis", "team": "Aris", "teamCountry": "Greece", "nationality": "Greece", "position": "Guard", "height": 193, "birthYear": 1959, "number": 6,
     "career": [ {"team":"Ionikos Nikaias","from":1973,"to":1984}, {"team":"Aris","from":1984,"to":1993}, {"team":"Panionios","from":1993,"to":1994}, {"team":"Panathinaikos","from":1994,"to":1996} ] },

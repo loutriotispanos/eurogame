@@ -2799,6 +2799,29 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
      "…and both say the crests belong to the clubs");
 })();
 
+// --- Connections boards still hold under today's data ------------------------
+// puzzles.js is generated once and kept (regenerating reshuffles every daily),
+// so the data can move under it. Galis was filed as USA while he played for
+// Greece: fixing the fact broke board #103's "USA" group, and nothing noticed
+// the reverse either. build_puzzles.verify re-applies the generator's own
+// guarantees to every stored board.
+(function () {
+  console.log("Connections — every stored board still has exactly one solution");
+  var BP = require(__dirname + "/build_puzzles.js");
+  var bad = [];
+  window.PUZZLES.forEach(function (p, i) { var pr = BP.verify(p); if (pr.length) bad.push("#" + i + ": " + pr.join("; ")); });
+  ok(bad.length === 0, "all " + window.PUZZLES.length + " boards: each name fits its own group, no other, and can be judged" +
+     (bad.length ? " — " + bad.slice(0, 3).join(" | ") : ""));
+  // The checker has to be able to fail: put Galis back in a USA group and it must object.
+  var probe = JSON.parse(JSON.stringify(window.PUZZLES[103]));
+  probe.groups.forEach(function (g) { if (g.theme === "USA") g.members[1] = "Nikos Galis"; });
+  ok(BP.verify(probe).some(function (m) { return /Nikos Galis no longer fits "USA"/.test(m); }),
+     "…and the checker catches a name that no longer fits (Galis in a USA group)");
+  var nat = {};
+  window.LEGENDS.forEach(function (p) { nat[p.name] = p.nationality; });
+  ok(nat["Nikos Galis"] === "Greece", "Nikos Galis carries Greece, the national team he played for");
+})();
+
 // --- Nationality = the national team a player has played for -----------------
 (function () {
   var nat = {};

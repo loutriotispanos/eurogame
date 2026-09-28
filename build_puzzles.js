@@ -215,6 +215,54 @@ function makePuzzle(cats, seed) {
   return groups;
 }
 
+// --- Re-check a stored board against today's data --------------------------
+// puzzles.js is generated once and then kept (regenerating reshuffles every
+// daily), while the data under it keeps moving: a roster change, a
+// nationality fix. verify() turns each stored group's theme back into its
+// predicate and re-applies the generator's own guarantees: every member fits
+// its group and no other group on the board, and every name can be judged
+// by the categories on it (the fairness flags). test.js runs it on every
+// board, so a data change that breaks one can't ship silently.
+function catFromTheme(theme, level) {
+  var m;
+  if ((m = /^Current (.+)$/.exec(theme))) return { type: "club", value: m[1] };
+  if ((m = /^(Guard|Forward|Center)s$/.exec(theme))) return { type: "pos", value: m[1] };
+  if ((m = /^(\d{4}) (.+) · Final Four$/.exec(theme))) {
+    var L = LINEUPS.filter(function (x) { return x.season === +m[1] && x.team === m[2]; })[0];
+    return L ? { type: "f4", value: m[1] + " " + m[2], lineup: L } : { type: "missing", value: theme };
+  }
+  if ((m = /^Started at the (\d{4}) Final Four$/.exec(theme))) return { type: "f4season", value: +m[1] };
+  if ((m = /^Born in the (\d{4})s$/.exec(theme))) return { type: "decade", value: +m[1], fullProfileOnly: true };
+  if ((m = /^#(\d+) on the jersey$/.exec(theme))) return { type: "number", value: +m[1], fullProfileOnly: true };
+  if (theme === "2.10 m or taller") return { type: "tall", value: 210, fullProfileOnly: true };
+  if (theme === "Played for 6+ clubs") return { type: "journeys", value: 6, careersOnly: true };
+  if ((m = /^Ex-(.+)$/.exec(theme))) return { type: "exclub", value: m[1], careersOnly: true };
+  if ((m = /^(.+) legends$/.exec(theme))) return { type: "legend", value: m[1] };
+  return level === 2 ? { type: "nat", value: theme, fullProfileOnly: true } : { type: "missing", value: theme };
+}
+function verify(puzzle) {
+  var cats = puzzle.groups.map(function (g) { return catFromTheme(g.theme, g.level); });
+  var problems = [];
+  cats.forEach(function (c, i) { if (c.type === "missing") problems.push("unknown theme: " + puzzle.groups[i].theme); });
+  if (problems.length) return problems;
+  var preds = cats.map(predicate);
+  var needProfile = cats.some(function (c) { return c.fullProfileOnly; });
+  var needCareers = cats.some(function (c) { return c.careersOnly; });
+  puzzle.groups.forEach(function (g, i) {
+    g.members.forEach(function (n) {
+      if (!preds[i](n)) problems.push(n + " no longer fits \"" + g.theme + "\"");
+      preds.forEach(function (q, j) { if (j !== i && q(n)) problems.push(n + " also fits \"" + puzzle.groups[j].theme + "\" (two answers)"); });
+      if (needProfile && !PROFILE[n]) problems.push(n + " has no profile, so an attribute group can't judge them");
+      if (needCareers && !CAREER_BY[n]) problems.push(n + " has no career, so a career group can't judge them");
+    });
+  });
+  return problems;
+}
+
+module.exports = { verify: verify, catFromTheme: catFromTheme, predicate: predicate };
+if (require.main === module) generate();
+
+function generate() {
 // --- Generate a varied, deterministic set of puzzles ------------------------
 // Level buckets — each puzzle takes ONE category per level, so the type mix varies
 // (30 possible recipes) while colours keep meaning easiest→hardest.
@@ -290,3 +338,4 @@ puzzles.slice(0, 4).forEach(function (p, i) {
   console.log("  #" + (i + 1));
   p.groups.forEach(function (g) { console.log("    L" + g.level + " " + g.theme + ": " + g.members.join(", ")); });
 });
+}
