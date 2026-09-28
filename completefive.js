@@ -209,7 +209,13 @@
   }
 
   // --- Game flow -------------------------------------------------------------
-  function saveDaily() { lsSet(K.daily(dayKey), { guesses: guesses, done: over, won: won }); }
+  // The save names its lineup (club + season) and the hidden slot. The date picks
+  // them by index into LINEUPS, so adding a Final Four would otherwise re-answer
+  // a daily already played.
+  function saveDaily() {
+    lsSet(K.daily(dayKey), { team: lineup ? lineup.team : null, season: lineup ? lineup.season : null, pos: hiddenPos,
+                             guesses: guesses, done: over, won: won });
+  }
   function submitGuess(name) {
     if (over || !name) return;
     els.input.value = ""; closeDropdown();
@@ -231,11 +237,15 @@
     els.input.disabled = false; els.input.value = ""; els.banner.hidden = true;
   }
   function dealDaily() {
-    lineup = dailyLineup();
-    hiddenPos = dailyHiddenPos(lineup.five);
+    var saved = lsGet(K.daily(dayKey), null);
+    // A save that names its lineup and slot replays exactly that; one from before
+    // they were stored falls back to the date's pick.
+    var was = saved && saved.team != null ? LINEUPS.filter(function (l) { return l.team === saved.team && l.season === saved.season; })[0] : null;
+    if (was && !was.five.some(function (p) { return p.pos === saved.pos; })) was = null;
+    lineup = was || dailyLineup();
+    hiddenPos = was ? saved.pos : dailyHiddenPos(lineup.five);
     setupTarget();
     resetRound();
-    var saved = lsGet(K.daily(dayKey), null);
     if (saved) { (saved.guesses || []).forEach(function (n) { guesses.push(n); }); over = !!saved.done; won = !!saved.won; }
     renderHeader(); renderCourt(); renderGuesses(); closeDropdown(); updateNextBtn();
     if (over) { els.input.disabled = true; showBanner(); updateCounter(); }
