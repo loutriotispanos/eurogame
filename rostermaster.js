@@ -174,6 +174,7 @@
   var K = {
     board: function (c) { return "elg:rm:board:" + c; },
     best: function (c) { return "elg:rm:best:" + c; },
+    revealed: function (c) { return "elg:rm:rev:" + c; },
     open: "elg:rm:open", seen: "elg:rm:seenhelp"
   };
   function lsGet(k, f) { try { var v = window.localStorage.getItem(k); return v == null ? f : JSON.parse(v); } catch (e) { return f; } }
@@ -185,6 +186,7 @@
 
   var club = null;                    // open club, or null → picker
   var named = {};                     // canonical names filled on the open board
+  var revealed = {};                  // …and the ones given away by Reveal missing (they never count)
   var lastFocus = null, inited = false;
 
   function validNames(c) { var v = {}; ROSTER[c].forEach(function (p) { v[p.name] = 1; }); return v; }
@@ -194,6 +196,14 @@
     return out;
   }
   function saveBoard() { if (club) lsSet(K.board(club), Object.keys(named)); }
+  // Revealed names are kept with the board, so a reload can't un-reveal them and
+  // let them be typed in for credit. Clear board is the way to start over.
+  function loadRevealed(c) {
+    var v = validNames(c), out = {};
+    (lsGet(K.revealed(c), []) || []).forEach(function (n) { if (v[n]) out[n] = 1; });
+    return out;
+  }
+  function saveRevealed() { if (club) lsSet(K.revealed(club), Object.keys(revealed)); }
   function savedCount(c) {
     if (c === club) return Object.keys(named).length;
     var v = validNames(c), n = 0;
@@ -214,10 +224,10 @@
     if (!club) return "empty";
     var g = norm(text);
     if (!g) return "empty";
-    var fresh = [], done = [];
+    var fresh = [], done = [], given = [];
     ROSTER[club].forEach(function (p) {
       if (!ALIAS[p.name][g]) return;
-      (named[p.name] ? done : fresh).push(p);
+      (named[p.name] ? done : revealed[p.name] ? given : fresh).push(p);
     });
     if (fresh.length === 1) {
       var p = fresh[0];
@@ -231,6 +241,7 @@
     }
     if (fresh.length > 1) { if (loud) flash("Two players match — be more specific.", "err"); return "ambiguous"; }
     if (done.length) { if (loud) flash("Already named.", "err"); return "dup"; }
+    if (given.length) { if (loud) flash("Revealed, so that one doesn't count. Clear board to try the club again.", "err"); return "revealed"; }
     if (loud) flash("No match on this roster.", "err");
     return "miss";
   }
@@ -245,10 +256,32 @@
   }
   function performClear() {
     var b = getBest(club);
-    named = {}; saveBoard();
-    disarmClear(); renderBoard();
+    named = {}; saveBoard(); revealed = {}; saveRevealed();
+    disarmClear(); disarmReveal(); renderBoard();
     flash(b.n > 0 ? "Board cleared — best " + pct(b) + "% kept." : "Board cleared.", "ok");
     say("Board cleared.");
+  }
+
+  // --- Reveal missing (two-click arm) -------------------------------------------------
+  // For when you are stuck: shows the players not yet named, in their slots, set
+  // apart from the ones you got. They earn nothing (no points, no best, no gold),
+  // and they stay shown until Clear board starts the club over.
+  var armedReveal = false;
+  function missing() { return ROSTER[club].filter(function (p) { return !named[p.name] && !revealed[p.name]; }); }
+  function disarmReveal() { armedReveal = false; if (els.reveal) { els.reveal.classList.remove("armed"); els.reveal.textContent = "Reveal missing"; } }
+  function onReveal() {
+    if (!club) return;
+    var m = missing();
+    if (!m.length) return;
+    if (!armedReveal) { armedReveal = true; els.reveal.classList.add("armed"); els.reveal.textContent = "Show all " + m.length + "?"; return; }
+    performReveal();
+  }
+  function performReveal() {
+    var m = missing();
+    m.forEach(function (p) { revealed[p.name] = 1; });
+    saveRevealed(); disarmReveal(); disarmClear(); renderBoard();
+    flash(m.length ? "Revealed " + m.length + ". They don't count; Clear board to try again." : "", "ok");
+    say(m.length + " players revealed.");
   }
 
   // Clear ALL boards from the picker — same contract: bests (and gold) survive.
@@ -259,8 +292,8 @@
     performClearAll();
   }
   function performClearAll() {
-    TEAMS.forEach(function (t) { lsSet(K.board(t), []); });
-    if (club) named = {};
+    TEAMS.forEach(function (t) { lsSet(K.board(t), []); lsSet(K.revealed(t), []); });
+    if (club) { named = {}; revealed = {}; }
     disarmClearAll();
     renderPicker(); renderSummary();
     say("All boards cleared. Best scores kept.");
@@ -303,14 +336,14 @@
   }
   function renderBoard() {
     if (!els.groups || !club) return;
-    var tot = ROSTER[club].length, n = Object.keys(named).length, b = getBest(club);
+    var tot = ROSTER[club].length, n = Object.keys(named).length, b = getBest(club), r = Object.keys(revealed).length;
     if (els.clubName) els.clubName.innerHTML = badgeHTML(club) + "<span>" + esc(club) + "</span>";
     if (els.progress) {
       var line = n + "/" + tot + " named" + (b.n > 0 ? " · Best " + pct(b) + "%" : "") +
-        (n === tot ? " — 🏆 complete!" : everGold(club) ? " ★" : "");
+        (r ? " · " + r + " revealed" : "") + (n === tot ? " — 🏆 complete!" : everGold(club) ? " ★" : "");
       // The club page lists the whole roster, so it's offered only once the
       // board is full: before that it would be the answer key.
-      if (n === tot && window.CLUBS && window.CLUBS.page && window.CLUBS.page(club)) {
+      if (n + r >= tot && window.CLUBS && window.CLUBS.page && window.CLUBS.page(club)) {   // every slot filled, named or revealed
         els.progress.innerHTML = esc(line) + " · " + window.CLUBS.link(club, "Club page →");
       } else {
         els.progress.textContent = line;
@@ -332,10 +365,18 @@
         d.innerHTML = "<span class='rm-num'>#" + p.number + "</span>" + esc(p.name);
         list.appendChild(d);
       });
-      for (var i = got.length; i < members.length; i++) { var e = document.createElement("div"); e.className = "rm-slot"; e.innerHTML = "&nbsp;"; list.appendChild(e); }
+      var shown = members.filter(function (p) { return !named[p.name] && revealed[p.name]; });
+      shown.forEach(function (p) {
+        var d = document.createElement("div"); d.className = "rm-slot revealed"; d.title = "Revealed, not named";
+        d.innerHTML = "<span class='rm-num'>#" + p.number + "</span>" + esc(p.name);
+        list.appendChild(d);
+      });
+      for (var i = got.length + shown.length; i < members.length; i++) { var e = document.createElement("div"); e.className = "rm-slot"; e.innerHTML = "&nbsp;"; list.appendChild(e); }
       sec.appendChild(list);
       els.groups.appendChild(sec);
     });
+    // The reveal is offered only while something is still missing.
+    if (els.reveal) els.reveal.hidden = n + r >= tot;
     renderSummary();
   }
 
@@ -346,9 +387,9 @@
   function pushNav(state) { try { if (window.history && window.history.pushState) window.history.pushState(state, "", ""); } catch (e) {} }
   function openClub(t, fromHist) {
     if (!fromHist) pushNav({ v: "rostermaster", club: t });
-    club = t; named = loadBoard(t); bumpBest();          // reconcile best with any pre-existing board
+    club = t; named = loadBoard(t); revealed = loadRevealed(t); bumpBest();          // reconcile best with any pre-existing board
     lsSet(K.open, t);
-    disarmClear(); disarmClearAll(); flash("");
+    disarmClear(); disarmClearAll(); disarmReveal(); flash("");
     if (els.picker) els.picker.hidden = true;
     if (els.pickerActions) els.pickerActions.hidden = true;
     if (els.board) els.board.hidden = false;
@@ -358,7 +399,7 @@
   function backToPicker(fromHist) {
     if (!fromHist && club) pushNav({ v: "rostermaster" });
     saveBoard();
-    club = null; lsSet(K.open, null);
+    club = null; revealed = {}; lsSet(K.open, null);
     disarmClear(); disarmClearAll(); flash("");
     if (els.board) els.board.hidden = true;
     if (els.picker) els.picker.hidden = false;
@@ -413,6 +454,8 @@
     }
     if (els.back) els.back.addEventListener("click", backToPicker);
     if (els.clear) els.clear.addEventListener("click", onClear);
+    els.reveal = $("rm-reveal");
+    if (els.reveal) els.reveal.addEventListener("click", onReveal);
     if (els.clearAll) els.clearAll.addEventListener("click", onClearAll);
     if (els.infoBtn) els.infoBtn.addEventListener("click", openInfo);
     if (els.infoClose) els.infoClose.addEventListener("click", closeInfo);
@@ -439,10 +482,10 @@
     chipLabel: chipLabel,
     _open: openClub, _back: backToPicker,
     _guess: function (t) { return tryGuess(t, true); },
-    _clear: performClear, _clearAll: performClearAll, _meta: clubMeta,
+    _clear: performClear, _clearAll: performClearAll, _meta: clubMeta, _reveal: performReveal,
     _peek: function () {
       return { club: club, teams: TEAMS.length, total: club ? ROSTER[club].length : 0,
-        named: club ? Object.keys(named).length : 0, best: club ? getBest(club) : null };
+        named: club ? Object.keys(named).length : 0, revealed: club ? Object.keys(revealed).length : 0, best: club ? getBest(club) : null };
     }
   };
 

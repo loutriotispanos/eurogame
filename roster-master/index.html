@@ -1187,6 +1187,13 @@
   .rm-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
   .rm-slot { border: 1px dashed var(--rule); border-radius: var(--r); padding: 7px 10px; font-size: var(--t-6); min-height: 33px; color: var(--ink); }
   .rm-slot.filled { border-style: solid; background: var(--card); font-weight: 700; animation: cv-in .18s var(--ease) both; }
+  /* A revealed player: in his slot but plainly not one you named, shaded, set
+     in italic and dropped to the muted ink. */
+  .rm-slot.revealed { border-style: solid; background: var(--paper-2); color: var(--muted); font-style: italic; }
+  .rm-reveal-row { display: flex; justify-content: center; margin: 18px 0 0; }
+  .rm-reveal-row button { padding: 8px 16px; font-size: var(--t-6); }
+  .rm-reveal-row button[hidden] { display: none; }
+  #rm-reveal.armed { background: var(--ink); border-color: var(--ink); color: var(--paper); }
   .rm-slot .rm-num { color: var(--muted); font-size: var(--t-7); font-weight: 700; margin-right: 5px; font-variant-numeric: tabular-nums; }
 
   .cn-actions { max-width: 560px; margin: 14px auto 0; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
@@ -2110,6 +2117,7 @@
         <div id="rm-flash" class="rm-flash" role="status" aria-live="polite"></div>
         <div id="rm-sr" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
         <div id="rm-groups" class="rm-groups"></div>
+        <div class="rm-reveal-row"><button id="rm-reveal" type="button">Reveal missing</button></div>
       </div>
     </div>
   </div><!-- /rostermaster-view -->
@@ -2181,6 +2189,7 @@
         <li>Pick a club — its board shows <strong>empty slots</strong> under Guards, Forwards and Centers, so you always know how many you're missing.</li>
         <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type a name and a match fills its slot instantly. A surname is enough when it's unique on that roster; accents and dots don't matter.</li>
         <li>Your progress <strong>saves automatically</strong>, per club. Come back any time.</li>
+        <li>Stuck? <strong>Reveal missing</strong> shows the players you haven't named. They don't count toward your score or the gold ★; <strong>Clear board</strong> lets you try that club again.</li>
         <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card. <em>Clear all boards</em> on the club list does the same for all <span class="comp-text" data-ec="{c}">twenty</span> at once.</li>
         <li>Name a full roster once and that club turns <strong>gold ★ — for good</strong>, even if you clear it. Collect all <span class="comp-text" data-ec="{c}">twenty</span>.</li>
       </ul>
@@ -2299,6 +2308,7 @@
       <li>Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.</li>
       <li>Progress saves automatically, per club. Come back whenever — this is not a single sitting.</li>
       <li>Clear board starts a club over, but your best percentage survives on the club's card. Complete a roster once and the gold ★ is yours even if you clear it.</li>
+      <li>Stuck? Reveal missing shows the players you have not named yet. They earn nothing, not the score, not the gold ★, and Clear board lets you try the club again.</li>
     </ul>
     <h3>Frequently asked questions</h3>
     <dl class="seo-faq">

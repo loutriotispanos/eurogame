@@ -2755,7 +2755,7 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
      "Player ID, Career Order and Common Club link clubs in their result banners only");
   ok(src("playerid.js").split("window.CLUBS.link(").length === 2 && src("careerorder.js").split("window.CLUBS.link(").length === 2,
      "…and nowhere else (Player ID's career path is the clue, so it stays unlinked in play)");
-  ok(/if \(n === tot && window\.CLUBS/.test(src("rostermaster.js")), "Roster Master offers the club page only once the board is complete");
+  ok(/if \(n \+ r >= tot && window\.CLUBS/.test(src("rostermaster.js")), "Roster Master offers the club page only once every slot is filled, named or revealed");
 
   // The hub's clubs line, rerooted on every generated page.
   var shell = fs2.readFileSync(__dirname + "/index.html", "utf8");
@@ -2929,6 +2929,36 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   ok(window.CompleteFive._peek().team === c5.team, "…while a save from before they were stored keeps the date's lineup");
   if (c5Saved === undefined) delete store[c5Key]; else store[c5Key] = c5Saved;
   window.CompleteFive.goPractice(); window.CompleteFive.goDaily();
+})();
+
+// --- Roster Master: Reveal missing -----------------------------------------------
+(function () {
+  console.log("Roster Master — Reveal missing shows the rest, and it never counts");
+  var C = "Panathinaikos", ros = window.PLAYERS.filter(function (p) { return p.team === C; });
+  var saveB = store["elg:rm:board:" + C], saveBest = store["elg:rm:best:" + C], saveRev = store["elg:rm:rev:" + C];
+  window.RosterMaster._open(C);
+  window.RosterMaster._clear();
+  var first = ros[0], second = ros[1];
+  ok(window.RosterMaster._guess(first.name) === "hit", "(setup) one player named");
+  var bestBefore = window.RosterMaster._peek().best.n;
+  window.RosterMaster._reveal();
+  var pk = window.RosterMaster._peek();
+  ok(pk.named === 1 && pk.revealed === ros.length - 1, "reveal shows every player not yet named, and names none of them");
+  ok(window.RosterMaster._peek().best.n === bestBefore, "…the best score doesn't move");
+  ok(window.RosterMaster._guess(second.name) === "revealed" && window.RosterMaster._peek().named === 1,
+     "…and typing a revealed player afterwards earns nothing");
+  var slots = byId("rm-groups").innerHTML || "";
+  var revSlots = (byId("rm-groups").children || []).reduce(function (n, sec) {
+    return n + ((sec.children && sec.children[1] && sec.children[1].children) || []).filter(function (s) { return /revealed/.test(s.className || ""); }).length;
+  }, 0);
+  ok(revSlots === ros.length - 1, "…each revealed player sits in his slot, marked as revealed (" + revSlots + ")");
+  window.RosterMaster._back(); window.RosterMaster._open(C);
+  ok(window.RosterMaster._peek().revealed === ros.length - 1, "…and it survives leaving and reopening the club, so a reload can't un-reveal");
+  window.RosterMaster._clear();
+  ok(window.RosterMaster._peek().revealed === 0 && window.RosterMaster._peek().named === 0, "Clear board wipes the reveal too, so the club can be tried again");
+  var put = function (k, v) { if (v === undefined) delete store[k]; else store[k] = v; };
+  put("elg:rm:board:" + C, saveB); put("elg:rm:best:" + C, saveBest); put("elg:rm:rev:" + C, saveRev);
+  window.RosterMaster._back();
 })();
 
 // --- Nationality = the national team a player has played for -----------------
