@@ -54,6 +54,29 @@
   }
   function clueText(p) { return clueHTML(p).replace(/<[^>]+>/g, ""); }
 
+  // Why a name missed, half by half: "Joel Bolomboy played for ASVEL, but is
+  // listed as a Forward". A bare "doesn't fit" on a player who plainly wore the
+  // shirt reads like a wrong answer key; naming the half that failed shows it
+  // isn't. It only describes the player just guessed, so it gives nothing away.
+  function holds(c) {
+    if (c.t === "club") return "played for " + c.v;
+    if (c.t === "nat") return "plays for " + c.v;
+    return "is a " + c.v;
+  }
+  function fails(e, c) {
+    if (c.t === "club") return "never played for " + c.v;
+    if (c.t === "nat") return "plays for " + (e.nat || "another country");
+    return "is listed as a " + (e.pos || "different position");
+  }
+  function whyNot(name, p) {
+    p = p || puzzle;
+    var e = GRID._universe()[name] || {}, yes = [], no = [];
+    [p.a, p.b].forEach(function (c) { (GRID._fits(name, c) ? yes : no).push(c); });
+    if (!no.length) return name + " doesn't fit";
+    return name + " " + (yes.length ? yes.map(holds).join(" and ") + ", but " : "") +
+      no.map(function (c) { return fails(e, c); }).join(" and ");
+  }
+
   var els = {};
   function $(id) { return document.getElementById(id); }
 
@@ -126,11 +149,6 @@
     }
     els.strikes.setAttribute("aria-label", strikesLeft() + " of " + STRIKES + " misses left");
   }
-  function renderMisses() {
-    if (!els.misses) return;
-    els.misses.textContent = misses.length ? "Not in it: " + misses.join(", ") : "";
-    els.misses.hidden = !misses.length;
-  }
   function updateCounter() {
     if (over) { els.counter.textContent = modeLabel() + " · " + (won ? "Six of a kind! 🎉" : found.length + "/" + NEED + " named"); return; }
     var left = strikesLeft();
@@ -142,7 +160,7 @@
     if (els.giveup) els.giveup.style.display = over ? "none" : "";
   }
   function flash(msg, cls) { if (els.flash) { els.flash.textContent = msg; els.flash.className = "sk-flash" + (cls ? " " + cls : ""); els.flash.hidden = !msg; } }
-  function paint() { renderSlots(); renderStrikes(); renderMisses(); updateCounter(); updateNextBtn(); }
+  function paint() { renderSlots(); renderStrikes(); updateCounter(); updateNextBtn(); }
 
   // Every name that fit, yours first — the end-of-game list is the payoff, the
   // part that teaches you the ones you forgot.
@@ -285,8 +303,9 @@
       if (found.length >= NEED) { won = true; finish(); return; }
     } else {
       misses.push(name);
-      flash("✗ " + name + " doesn't fit", "err");
-      if (els.sr) els.sr.textContent = name + " doesn't fit. " + strikesLeft() + " misses left.";
+      var why = whyNot(name);
+      flash("✗ " + why, "err");
+      if (els.sr) els.sr.textContent = why + ". " + strikesLeft() + " misses left.";
       if (misses.length >= STRIKES) { won = false; finish(); return; }
     }
     if (mode === "daily") saveDaily();
@@ -431,7 +450,7 @@
 
   function init() {
     els.input = $("sk-input"); els.dropdown = $("sk-dropdown"); els.clue = $("sk-clue"); els.count = $("sk-count");
-    els.slots = $("sk-slots"); els.strikes = $("sk-strikes"); els.misses = $("sk-misses"); els.answers = $("sk-answers");
+    els.slots = $("sk-slots"); els.strikes = $("sk-strikes"); els.answers = $("sk-answers");
     els.counter = $("sk-counter"); els.banner = $("sk-banner"); els.flash = $("sk-flash");
     els.next = $("sk-next"); els.giveup = $("sk-giveup"); els.stats = $("sk-stats"); els.sr = $("sk-sr");
     els.modeRow = $("sk-modes"); els.tabDaily = $("sk-daily"); els.tabPractice = $("sk-practice");
@@ -474,6 +493,7 @@
     _giveUp: giveUp,
     _shareText: shareText,
     _clue: clueText,
+    _whyNot: whyNot,
     _demonyms: DEMONYM
   };
 

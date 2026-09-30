@@ -1663,6 +1663,15 @@ console.log("Six of a Kind — one category, name six");
   var wrong = outsider(d.answers);
   SK._submit(wrong);
   ok(SK._peek().misses.length === 1 && SK._peek().found.length === 0, "a name that doesn't fit costs a miss");
+  ok(byId("sk-flash").textContent.indexOf("✗ " + wrong + " ") === 0 && /never played for|plays for|is listed as a/.test(byId("sk-flash").textContent),
+     "…and the miss says which half of the category failed");
+  var asvelC = { a: { t: "club", v: "ASVEL" }, b: { t: "pos", v: "Center" } };
+  ok(SK._whyNot("Joel Bolomboy", asvelC) === "Joel Bolomboy played for ASVEL, but is listed as a Forward",
+     "a player who wore the shirt but plays another position is told exactly that");
+  ok(SK._whyNot("Vassilis Spanoulis", asvelC) === "Vassilis Spanoulis never played for ASVEL and is listed as a Guard",
+     "…and one who fails both halves hears both");
+  ok(SK._whyNot("Kostas Sloukas", { a: { t: "club", v: "Olympiacos" }, b: { t: "club", v: "Real Madrid" } }) === "Kostas Sloukas played for Olympiacos, but never played for Real Madrid",
+     "…club + club names the club he never joined");
   SK._submit(wrong);
   ok(SK._peek().misses.length === 1, "…and trying it again costs nothing");
   SK._submit(d.answers[0]);
