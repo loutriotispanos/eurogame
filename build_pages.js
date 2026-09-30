@@ -134,7 +134,7 @@ var PAGES = [
   {
     view: "completefive", slug: "complete-the-five", name: "Complete the Five",
     title: "Complete the Five — EuroLeague Final Four lineups | Euroball",
-    desc: "A real EuroLeague Final Four starting five with one starter hidden. Name him in two guesses, from the club, the season, his position and his four teammates. {lineups} lineups, 2010–2025.",
+    desc: "A real EuroLeague Final Four starting five with one starter hidden. Name him in two guesses, from the club, the season, his position and his four teammates. {lineups} lineups, {f4first}–{f4last}.",
     h1: "Complete the Five — name the missing Final Four starter",
     intro: "A real EuroLeague Final Four starting five, set out on a half-court in the positions they played — with one man missing. You get the club, the season, the hole he left, and the four teammates who stood beside him. Name him in two guesses.",
     how: [
@@ -144,8 +144,8 @@ var PAGES = [
       "Two guesses. Type a name and pick it from the list."
     ],
     faq: [
-      ["Which seasons are covered?", "{f4seasons} seasons of Final Four basketball, 2010 through 2025 — {lineups} starting fives in all. 2020 is absent because the season was cancelled and no Final Four was played."],
-      ["Are these the real starting fives?", "Yes. Every lineup is a genuine Final Four starting five, compiled from official box scores rather than reconstructed from memory."],
+      ["Which seasons are covered?", "{f4seasons} seasons of Final Four basketball, {f4first} through {f4last} — {lineups} starting fives in all. 2020 is absent because the season was cancelled and no Final Four was played."],
+      ["Are these the real starting fives?", "Yes. Every lineup is the five a team started in its Final Four semi-final, taken from the official EuroLeague box score rather than reconstructed from memory."],
       ["What do Easy, Medium and Hard change?", "Who gets hidden. Easy hides the star of the five, the name you would list first. Hard hides the starter only a serious follower of that team would remember."],
       ["Does the Daily count towards my streak?", "Yes. Solving any daily on the site keeps the single hub streak alive — you do not have to play all twelve games to keep it."]
     ]
@@ -522,7 +522,7 @@ var EXTRA = {
       "On Easy the hidden man is the headline name. If the four on the floor feel like a supporting cast, the answer is probably the team's best player."
     ],
     inside: "{lineups} real starting fives from {f4seasons} Final Fours between {f4first} and {f4last} (2020 was cancelled{f4gapNote}), set out on a half-court in the positions they started. The Final Four fives of today's EuroLeague clubs are also listed on their club pages.",
-    example: "2018, Real Madrid, champions. Facundo Campazzo at the point, Fabien Causeur at shooting guard, Felipe Reyes at power forward and Gustavo Ayón at centre, with the small forward's spot empty. A Madrid title team from 2018 with a hole at the three has one answer fans remember: Luka Dončić, the EuroLeague's MVP that season.",
+    example: "2018, Real Madrid, champions. Facundo Campazzo at the point, Jeffery Taylor at small forward, Felipe Reyes at power forward and Gustavo Ayón at centre, with the shooting guard's spot empty. A Madrid title team from 2018 with a hole beside Campazzo has one answer fans remember: Luka Dončić, the EuroLeague's MVP that season.",
     related: ["connections", "oddoneout", "playerid"]
   },
   connections: {

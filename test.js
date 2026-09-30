@@ -519,7 +519,8 @@ ok(window.LINEUPS.every(function (L) { var p = {}; L.five.forEach(function (x) {
 // passes for verified mid-season joiners.
 (function () {
   var MIDSEASON = { "Gabriel Lundberg@2021 CSKA Moscow": 1,   // joined Feb 2021, started the 3rd-place game
-                    "Daniel Theis@2025 AS Monaco": 1 };       // joined Feb 2025 from the NBA
+                    "Daniel Theis@2025 AS Monaco": 1,         // joined Feb 2025 from the NBA
+                    "Andrei Kirilenko@2015 CSKA Moscow": 1 }; // rejoined Feb 2015, started the semi-final (official box score)
   var CB = {}; window.CAREERS.forEach(function (c) { CB[c.name] = c; });
   var bad = [];
   window.LINEUPS.forEach(function (L) {
@@ -3047,7 +3048,7 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   var ol = window.CAREERS.filter(function (c) { return (P[c.name] || {}).nationality === "France" && c.career.some(function (e) { return window.CLUBS.canonical(e.team) === "Olympiacos"; }); }).map(function (c) { return c.name; }).sort();
   ok(ol.join() === ["Evan Fournier", "Frank Ntilikina", "Kim Tillie", "Moustapha Fall"].sort().join(), "The Grid example: Olympiacos × France is still exactly the four names the copy lists");
   var l18 = window.LINEUPS.filter(function (l) { return l.season === 2018 && l.team === "Real Madrid"; })[0];
-  ok(l18 && l18.champion && l18.five.filter(function (x) { return x.pos === "SF"; })[0].name === "Luka Doncic", "Complete the Five example: 2018 Real Madrid's small forward is Doncic");
+  ok(l18 && l18.champion && l18.five.filter(function (x) { return x.pos === "SG"; })[0].name === "Luka Doncic" && l18.five.filter(function (x) { return x.pos === "SF"; })[0].name === "Jeffery Taylor", "Complete the Five example: 2018 Real Madrid's shooting guard is Doncic, Taylor at the three (official semi-final five)");
 })();
 
 // --- Phones: a game's title starts under the corner buttons -------------------
