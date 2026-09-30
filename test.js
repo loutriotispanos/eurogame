@@ -1687,6 +1687,7 @@ console.log("Six of a Kind — one category, name six");
   ok(ds.played === 1 && ds.solved === 1 && ds.curStreak === 1, "the win is recorded in the daily stats");
   ok(window.Hub._dailyState("sixofakind") === "won", "the hub tile shows it solved");
   ok(byId("sk-answers").hidden === false && byId("sk-banner").hidden === false, "the end shows the banner and everyone who fit");
+  ok(byId("sk-controls").hidden === true, "…and hides the search bar, since there is nothing left to type");
   var sh = SK._shareText();
   ok(sh.indexOf("Six of a Kind 🏀 " + today) === 0 && sh.indexOf("🟩🟩🟩🟩🟩🟩 · 1 miss") > 0 && sh.indexOf(SK._clue(d.puzzle)) > 0,
      "the share names the date, the category and the six");
@@ -1719,6 +1720,7 @@ console.log("Six of a Kind — one category, name six");
   ok(JSON.parse(store["elg:sk:stats"]).played === 1, "Practice keeps its own stats");
   SK._deal();
   ok(!SK._peek().over, "New category deals again");
+  ok(byId("sk-controls").hidden === false, "…and brings the search bar back");
   SK._giveUp();
   ok(SK._peek().over, "Practice gives up in one tap");
   SK._setMode("daily");

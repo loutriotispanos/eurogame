@@ -1279,7 +1279,7 @@
   .sk-flash.ok { color: var(--green); }
   .sk-flash.err { color: var(--red-ink); }
   .sk-answers { max-width: 620px; width: 100%; min-width: 0; margin: 14px auto 0; }
-  .sk-answers[hidden] { display: none; }
+  .sk-answers[hidden], #sk-controls[hidden] { display: none; }
   .sk-answers-head { font-size: var(--t-6); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
     border-bottom: 1px solid var(--rule); padding-bottom: 6px; margin-bottom: 8px; }
   .sk-answers-list { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -2089,7 +2089,7 @@
       <div id="sk-flash" class="sk-flash" role="status" aria-live="polite" hidden></div>
       <div id="sk-banner" class="banner" hidden></div>
       <div id="sk-answers" class="sk-answers" hidden></div>
-      <div class="controls">
+      <div id="sk-controls" class="controls">
         <div class="search">
           <input id="sk-input" type="text" autocomplete="off" spellcheck="false"
                  placeholder="Name a player who fits…"

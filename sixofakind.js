@@ -157,7 +157,9 @@
   }
   function updateNextBtn() {
     if (els.next) els.next.style.display = (mode === "daily") ? "none" : "";   // one category a day
-    if (els.giveup) els.giveup.style.display = over ? "none" : "";
+    // A finished round has nothing left to type: the search bar goes, and the
+    // banner carries the way on (Practice mode / New category).
+    if (els.controls) els.controls.hidden = over;
   }
   function flash(msg, cls) { if (els.flash) { els.flash.textContent = msg; els.flash.className = "sk-flash" + (cls ? " " + cls : ""); els.flash.hidden = !msg; } }
   function paint() { renderSlots(); renderStrikes(); updateCounter(); updateNextBtn(); }
@@ -450,7 +452,7 @@
 
   function init() {
     els.input = $("sk-input"); els.dropdown = $("sk-dropdown"); els.clue = $("sk-clue"); els.count = $("sk-count");
-    els.slots = $("sk-slots"); els.strikes = $("sk-strikes"); els.answers = $("sk-answers");
+    els.controls = $("sk-controls"); els.slots = $("sk-slots"); els.strikes = $("sk-strikes"); els.answers = $("sk-answers");
     els.counter = $("sk-counter"); els.banner = $("sk-banner"); els.flash = $("sk-flash");
     els.next = $("sk-next"); els.giveup = $("sk-giveup"); els.stats = $("sk-stats"); els.sr = $("sk-sr");
     els.modeRow = $("sk-modes"); els.tabDaily = $("sk-daily"); els.tabPractice = $("sk-practice");
