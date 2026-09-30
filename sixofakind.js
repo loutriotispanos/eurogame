@@ -73,8 +73,11 @@
     var e = GRID._universe()[name] || {}, yes = [], no = [];
     [p.a, p.b].forEach(function (c) { (GRID._fits(name, c) ? yes : no).push(c); });
     if (!no.length) return name + " doesn't fit";
-    return name + " " + (yes.length ? yes.map(holds).join(" and ") + ", but " : "") +
-      no.map(function (c) { return fails(e, c); }).join(" and ");
+    // Both halves clubs he never joined reads as one clause: "never played for A or B".
+    var bad = no.length === 2 && no[0].t === "club" && no[1].t === "club"
+      ? "never played for " + no[0].v + " or " + no[1].v
+      : no.map(function (c) { return fails(e, c); }).join(" and ");
+    return name + " " + (yes.length ? yes.map(holds).join(" and ") + ", but " : "") + bad;
   }
 
   var els = {};

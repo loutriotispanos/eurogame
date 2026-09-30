@@ -1672,6 +1672,8 @@ console.log("Six of a Kind — one category, name six");
      "…and one who fails both halves hears both");
   ok(SK._whyNot("Kostas Sloukas", { a: { t: "club", v: "Olympiacos" }, b: { t: "club", v: "Real Madrid" } }) === "Kostas Sloukas played for Olympiacos, but never played for Real Madrid",
      "…club + club names the club he never joined");
+  ok(SK._whyNot("Mike James", { a: { t: "club", v: "Crvena Zvezda" }, b: { t: "club", v: "Olympiacos" } }) === "Mike James never played for Crvena Zvezda or Olympiacos",
+     "…and two clubs he never joined read as one clause");
   SK._submit(wrong);
   ok(SK._peek().misses.length === 1, "…and trying it again costs nothing");
   SK._submit(d.answers[0]);
