@@ -224,6 +224,10 @@
     guesses = []; over = false; won = false; dealt = true;
     els.input.value = ""; els.input.disabled = false; els.banner.hidden = true;
     var saved = lsGet(K.daily(dayKey), null);
+    // The date picks by index into the careers, so a new signing mid-day shifts
+    // the pick. A save keeps the answer it was played on, as Career Order's do.
+    var savedCareer = saved && saved.target ? CAREERS.filter(function (c) { return c.name === saved.target; })[0] : null;
+    if (savedCareer) target = savedCareer;
     if (saved && saved.target === target.name) {
       (saved.guesses || []).forEach(function (n) { guesses.push(n); });
       over = !!saved.done; won = !!saved.won;

@@ -460,6 +460,9 @@
     // Only restores a save that holds THIS pair — a save left by the old roster
     // game, or by a different day, can't accidentally match.
     var saved = lsGet(K.daily(dayKey), null);
+    // The date picks by index (clubs, then pairs), so a new signing mid-day can
+    // shift it. A save replays the pair it was played on.
+    if (saved && saved.club && byName(saved.a) && byName(saved.b)) { club = saved.club; pair = [byName(saved.a), byName(saved.b)]; }
     if (saved && saved.club === club && saved.a === pair[0].name && saved.b === pair[1].name) {
       guesses = (saved.guesses || []).slice(0, MAX);
       over = !!saved.done; won = !!saved.won;

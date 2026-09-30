@@ -195,7 +195,6 @@ window.LEGENDS = [
   {"name":"Marcus Brown","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":191,"birthYear":1974,"number":0},
   {"name":"Oded Kattash","team":"Maccabi Tel Aviv","nationality":"Israel","position":"Guard","height":194,"birthYear":1974,"number":0},
   {"name":"Jordan Farmar","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":188,"birthYear":1986,"number":1},
-  {"name":"Marcio Santos","team":"Maccabi Tel Aviv","nationality":"Brazil","position":"Center","height":204,"birthYear":2002,"number":3},
   {"name":"Tyrese Rice","team":"Maccabi Tel Aviv","nationality":"USA","position":"Guard","height":185,"birthYear":1987,"number":4},
   {"name":"Devin Smith","team":"Maccabi Tel Aviv","nationality":"USA","position":"Forward","height":198,"birthYear":1983,"number":6},
   {"name":"Nikola Vujcic","team":"Maccabi Tel Aviv","nationality":"Croatia","position":"Center","height":211,"birthYear":1978,"number":7},

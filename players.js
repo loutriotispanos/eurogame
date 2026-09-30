@@ -71,6 +71,7 @@ window.TEAMS = {
 
 window.PLAYERS = [
   // --- Real Madrid ---
+  {"name":"Nick Smith Jr.","team":"Real Madrid","nationality":"USA","position":"Guard","height":188,"birthYear":2004,"number":1},
   {"name":"Maksym Shulga","team":"Real Madrid","nationality":"Ukraine","position":"Forward","height":193,"birthYear":2002,"number":2},
   {"name":"Timothe Luwawu-Cabarrot","team":"Real Madrid","nationality":"France","position":"Forward","height":198,"birthYear":1995,"number":3},
   {"name":"Jaime Pradilla","team":"Real Madrid","nationality":"Spain","position":"Forward","height":205,"birthYear":2001,"number":4},
@@ -112,6 +113,7 @@ window.PLAYERS = [
   {"name":"Rodions Kurucs","team":"Baskonia","nationality":"Latvia","position":"Forward","height":206,"birthYear":1998,"number":7},
   {"name":"Tadas Sedekerskis","team":"Baskonia","nationality":"Lithuania","position":"Forward","height":206,"birthYear":1998,"number":8},
   {"name":"Matteo Spagnolo","team":"Baskonia","nationality":"Italy","position":"Guard","height":192,"birthYear":2003,"number":10},
+  {"name":"Marcio Santos","team":"Baskonia","nationality":"Brazil","position":"Center","height":204,"birthYear":2002,"number":11},
   {"name":"Damion Baugh","team":"Baskonia","nationality":"USA","position":"Guard","height":191,"birthYear":2000,"number":12},
   {"name":"Clement Frisch","team":"Baskonia","nationality":"France","position":"Forward","height":201,"birthYear":2002,"number":25},
   {"name":"Kenneth Faried","team":"Baskonia","nationality":"USA","position":"Forward","height":203,"birthYear":1989,"number":35},
@@ -237,11 +239,11 @@ window.PLAYERS = [
   {"name":"Khadeen Carrington","team":"Hapoel Tel Aviv","nationality":"Israel","position":"Guard","height":193,"birthYear":1995,"number":5},
   {"name":"Amir Coffey","team":"Hapoel Tel Aviv","nationality":"USA","position":"Guard","height":201,"birthYear":1997,"number":7},
   {"name":"Bar Timor","team":"Hapoel Tel Aviv","nationality":"Israel","position":"Guard","height":190,"birthYear":1992,"number":10},
+  {"name":"Ish Wainright","team":"Hapoel Tel Aviv","nationality":"Uganda","position":"Forward","height":196,"birthYear":1994,"number":12},
   {"name":"Tomas Satoransky","team":"Hapoel Tel Aviv","nationality":"Czech Republic","position":"Guard","height":200,"birthYear":1991,"number":13},
   {"name":"Zach LeDay","team":"Hapoel Tel Aviv","nationality":"Azerbaijan","position":"Forward","height":202,"birthYear":1994,"number":16},
   {"name":"Tai Odiase","team":"Hapoel Tel Aviv","nationality":"Puerto Rico","position":"Center","height":206,"birthYear":1995,"number":21},
   {"name":"Vasilije Micic","team":"Hapoel Tel Aviv","nationality":"Serbia","position":"Guard","height":191,"birthYear":1994,"number":22},
-  {"name":"Ish Wainright","team":"Hapoel Tel Aviv","nationality":"Uganda","position":"Forward","height":196,"birthYear":1994,"number":24},
   {"name":"Daniel Oturu","team":"Hapoel Tel Aviv","nationality":"USA","position":"Center","height":208,"birthYear":1999,"number":25},
   {"name":"Tomer Ginat","team":"Hapoel Tel Aviv","nationality":"Israel","position":"Forward","height":202,"birthYear":1994,"number":41},
   {"name":"Bruno Caboclo","team":"Hapoel Tel Aviv","nationality":"Brazil","position":"Forward","height":208,"birthYear":1995,"number":51},
@@ -354,6 +356,7 @@ window.PLAYERS = [
   {"name":"Derek Willis","team":"Partizan","nationality":"USA","position":"Forward","height":206,"birthYear":1995,"number":35},
   {"name":"Alessandro Pajola","team":"Partizan","nationality":"Italy","position":"Guard","height":194,"birthYear":1999,"number":66},
   {"name":"Joffrey Lauvergne","team":"Partizan","nationality":"France","position":"Center","height":211,"birthYear":1991,"number":77},
+  {"name":"Bandja Sy","team":"Partizan","nationality":"France","position":"Forward","height":205,"birthYear":1990,"number":95},
   // --- Zalgiris Kaunas ---
   {"name":"Sterling Brown","team":"Zalgiris Kaunas","nationality":"USA","position":"Guard","height":196,"birthYear":1995,"number":0},
   {"name":"Nigel Williams-Goss","team":"Zalgiris Kaunas","nationality":"USA","position":"Guard","height":188,"birthYear":1994,"number":1},
