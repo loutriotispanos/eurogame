@@ -1680,6 +1680,49 @@ console.log("Search boxes never invite the browser's personal autofill");
   ok(bad.length === 0, "every guess box uses its own autocomplete token and never says 'name'" + (bad.length ? " — " + bad.join("; ") : ""));
 })();
 
+console.log("History — every completed EuroLeague season since 2000-01 (history.js)");
+(function () {
+  // Step 0 of the expansion: no game loads history.js yet, so it's read in a sandbox.
+  var H = {}; new Function("window", fs.readFileSync("history.js", "utf8"))(H); H = H.HISTORY;
+  var n = H.seasons.length;
+  ok(n >= 26 && H.seasons[0] === "2000-01" && H.seasons.every(function (x, i) { return +x.slice(0, 4) === 2000 + i; }),
+     "history holds " + n + " consecutive completed seasons, from 2000-01 to " + H.seasons[n - 1]);
+  ok(+H.seasons[n - 1].slice(0, 4) < 2026, "…and never the current season, which stays our own approved data (players.js)");
+  var P = H.people, bad = [];
+  H.boards.forEach(function (b, j) {
+    if (!(b[0] >= 0 && b[0] < n) || !b[1] || !b[2] || !b[3].length) bad.push("board " + j);
+    b[3].forEach(function (x) { if (!P[x[0]]) bad.push("board " + j + " → person " + x[0]); });
+  });
+  ok(bad.length === 0, "every roster points at a real season and real people (" + H.boards.length + " club-season rosters)" + (bad.length ? " — " + bad.slice(0, 3).join(", ") : ""));
+  var used = {}; H.boards.forEach(function (b) { b[3].forEach(function (x) { used[x[0]] = 1; }); });
+  ok(P.every(function (p, i) { return used[i]; }), "every one of the " + P.length + " people played in at least one of those rosters");
+  var names = {}, dup = [];
+  P.forEach(function (p) { var k = p[0].toLowerCase(); if (names[k]) dup.push(p[0]); names[k] = 1; });
+  ok(dup.length === 0, "no two people share a name (namesakes carry their birth year)" + (dup.length ? " — " + dup.slice(0, 3).join(", ") : ""));
+  var ours = {}; window.PLAYERS.concat(window.LEGENDS).forEach(function (p) { ours[p.name] = p; });
+  var drift = P.filter(function (p) { return p[5] && (!ours[p[0]] || ours[p[0]].nationality !== p[1]); }).map(function (p) { return p[0]; });
+  ok(drift.length === 0, "a person already in our database carries our name and nationality (our overrides beat the feed)" + (drift.length ? " — " + drift.slice(0, 3).join(", ") : ""));
+  var lost = [];
+  window.LINEUPS.filter(function (l) { return l.season > 2000 && l.season - 1 < 2000 + n; }).forEach(function (l) {
+    l.five.forEach(function (x) { if (!names[x.name.toLowerCase()]) lost.push(l.season + " " + l.team + ": " + x.name); });
+  });
+  ok(lost.length === 0, "every Final Four starter since 2002 is a person in the history (the name matching holds)" + (lost.length ? " — " + lost.join("; ") : ""));
+  // Frozen seasons: a snapshot changing is an alarm, not an update.
+  var man = JSON.parse(fs.readFileSync("history_raw/MANIFEST.json", "utf8")), changed = [];
+  Object.keys(man).forEach(function (f) {
+    var h = require("crypto").createHash("sha256").update(fs.readFileSync("history_raw/" + f, "utf8").replace(/\r\n/g, "\n")).digest("hex").slice(0, 16);
+    if (h !== man[f]) changed.push(f);
+  });
+  ok(Object.keys(man).length === n && changed.length === 0, "all " + Object.keys(man).length + " frozen season snapshots are unchanged" + (changed.length ? " — CHANGED: " + changed.join(", ") : ""));
+  var chk = require("child_process").spawnSync(process.execPath, ["build_history.js", "--check"], { encoding: "utf8" });
+  ok(chk.status === 0, "history.js is current with its snapshots and decisions — else run `node build_history.js`");
+  var gz = require("zlib").gzipSync(fs.readFileSync("history.js")).length;
+  ok(gz < 150 * 1024, "history.js stays light: " + Math.round(gz / 1024) + " KB compressed (limit 150)");
+  var shell = fs.readFileSync("index.html", "utf8");
+  ok(shell.indexOf("history.js") === -1 && fs.readFileSync("sw.js", "utf8").indexOf("history.js") === -1,
+     "…and nothing loads it yet: it arrives on demand with the first game that uses it");
+})();
+
 console.log("Six of a Kind — one category, name six");
 (function () {
   var SK = window.SixOfAKind, GR = window.TheGrid, SIXES = window.SIXES;
