@@ -4,7 +4,13 @@
  *
  * WHAT IT HOLDS: every completed EuroLeague season since 2000-01, as club-season
  * boards (who was on each roster, with his shirt number), over one shared list
- * of people. Only players with at least one EuroLeague game that season count.
+ * of people. THE ROSTER RULE (the owner's): a player who played at least one
+ * EuroLeague game anywhere counts for every official roster he was on, 0 minutes
+ * there included; someone registered who never played a EuroLeague game is out.
+ *
+ * It also writes history_stints.json: EuroLeague club-seasons our hand-built
+ * careers are missing, as "stint" (fits the career's empty years) or "also" (inside
+ * another club's years: a mid-season move or a loan). build_careers.js adds them.
  * The current season is NOT here: it stays players.js, our approved data.
  *
  * HOW IT JOINS OUR DATA: a person the feed knows is matched to our database by
@@ -109,6 +115,8 @@ const OUR_CAREER = {}; window.CAREERS.forEach(c => { OUR_CAREER[c.name] = c; });
 // --- read every frozen season -----------------------------------------------------
 const files = fs.readdirSync(RAW).filter(f => /^E\d{4}\.json$/.test(f)).sort();
 const seasons = [], people = {}, boards = [], clubNames = {};
+const EVER_PLAYED = {};
+files.forEach(f => JSON.parse(fs.readFileSync(path.join(RAW, f), "utf8")).players.forEach(p => { if (p.games) EVER_PLAYED[p.code] = 1; }));
 files.forEach((f, si) => {
   const s = JSON.parse(fs.readFileSync(path.join(RAW, f), "utf8"));
   seasons.push(s.label);
@@ -120,10 +128,13 @@ files.forEach((f, si) => {
     byClub[c.code] = { s: si, club: ours, name: c.name, code: c.code, players: [] };
   });
   s.players.forEach(p => {
-    if (!p.games) return;                          // registered, never played: not in
-    const P = people[p.code] = people[p.code] || { code: p.code, feed: p.name, height: p.height, birth: p.birth, country: p.country, pos: {}, seasons: [], clubs: {} };
-    P.pos[p.position] = (P.pos[p.position] || 0) + p.games;
+    // The owner's rule: a player who played at least one EuroLeague game ANYWHERE counts for
+    // every roster he was on, 0 minutes there included. Registered-only, never played: out.
+    if (!EVER_PLAYED[p.code]) return;
+    const P = people[p.code] = people[p.code] || { code: p.code, feed: p.name, height: p.height, birth: p.birth, country: p.country, pos: {}, seasons: [], clubs: {}, spots: [] };
+    P.pos[p.position] = (P.pos[p.position] || 0) + p.games + 0.01;
     P.seasons.push(si); P.clubs[byClub[p.club].club] = 1;
+    P.spots.push({ y: +s.label.slice(0, 4), club: byClub[p.club].club, games: p.games });
     if (!P.height && p.height) P.height = p.height;
     if (!P.birth && p.birth) P.birth = p.birth;
     byClub[p.club].players.push({ code: p.code, dorsal: p.dorsal, games: p.games });
@@ -255,3 +266,32 @@ const gz = require("zlib").gzipSync(out).length;
 console.log("history.js: " + order.length + " players, " + boards.length + " boards, " + (out.length / 1024).toFixed(0) + " KB (" + (gz / 1024).toFixed(0) + " KB gzipped)");
 console.log("report: " + report.unmatchedOurs.length + " unmatched, " + report.contradictions.length + " career contradictions, " + report.oddNames.length + " odd names, " +
   report.autoAliases.length + " auto-matched, " + report.collisions.length + " name collisions");
+
+// --- career gaps: EuroLeague club-seasons our hand-built careers don't have ----------
+// (owner's decision: add them all). A gap in years the career leaves empty slots
+// straight into the timeline; one inside another club's years (a mid-season move, a
+// loan) can't be ordered, so it's kept as "also on the roster of".
+if (process.argv.indexOf("--check") < 0) {
+  const gaps = {};
+  all.filter(P => P.ours && OUR_CAREER[P.ours]).forEach(P => {
+    const c = OUR_CAREER[P.ours].career;
+    const covers = (e, y) => { const end = e.to == null ? 9999 : Math.max(e.to, e.from + 1); return y >= e.from && y < end; };
+    const byClub = {};
+    P.spots.forEach(sp => {
+      if (c.some(e => canon(e.team) === canon(sp.club))) return;   // the club is in his career already
+      (byClub[sp.club] = byClub[sp.club] || []).push(sp.y);
+    });
+    Object.keys(byClub).forEach(club => {
+      const ys = byClub[club].sort((a, b) => a - b);
+      // consecutive seasons make one stint
+      const runs = []; ys.forEach(y => { const r = runs[runs.length - 1]; if (r && y === r.to) r.to = y + 1; else runs.push({ from: y, to: y + 1 }); });
+      runs.forEach(r => {
+        const inside = c.some(e => { for (let y = r.from; y < r.to; y++) if (covers(e, y)) return true; return false; });
+        (gaps[P.ours] = gaps[P.ours] || []).push({ team: club, from: r.from, to: r.to, kind: inside ? "also" : "stint" });
+      });
+    });
+  });
+  fs.writeFileSync(path.join(__dirname, "history_stints.json"), JSON.stringify(gaps, null, 1) + "\n");
+  const flat = [].concat(...Object.keys(gaps).map(n => gaps[n].map(g => Object.assign({ name: n }, g))));
+  console.log("career gaps: " + flat.length + " (" + flat.filter(g => g.kind === "stint").length + " slot into the timeline, " + flat.filter(g => g.kind === "also").length + " overlap another club)");
+}

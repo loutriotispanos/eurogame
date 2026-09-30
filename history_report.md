@@ -19,7 +19,7 @@ Yes → add `"code": "Our Name"` to `aliases`. No → add the code to `notSame`.
 For each: is one of the candidates the same person? (→ `aliases`) Or is he genuinely not in the feed?
 
 
-## 2. Our careers vs the feed (54)
+## 2. Our careers vs the feed (56)
 
 The feed has the player on this club's EuroLeague roster (with games played), but his career in careers.js never mentions the club. Usually a missing stint, sometimes a wrong match.
 
@@ -43,11 +43,11 @@ The feed has the player on this club's EuroLeague roster (with games played), bu
 - Roko Ukic: the feed has him at Cedevita Zagreb, his career doesn't
 - Sofoklis Schortsanitis: the feed has him at Crvena Zvezda, his career doesn't
 - Drew Nicholas: the feed has him at CSKA Moscow, his career doesn't
+- Vladimir Stimac: the feed has him at Zalgiris Kaunas, his career doesn't
+- Vladimir Stimac: the feed has him at Fenerbahce, his career doesn't
 - Anton Ponkrashov: the feed has him at Lokomotiv Kuban, his career doesn't
 - Anton Ponkrashov: the feed has him at Khimki, his career doesn't
 - Milenko Tepic: the feed has him at Lietuvos Rytas, his career doesn't
-- Vladimir Stimac: the feed has him at Zalgiris Kaunas, his career doesn't
-- Vladimir Stimac: the feed has him at Fenerbahce, his career doesn't
 - Nihad Djedovic: the feed has him at FC Barcelona, his career doesn't
 - Nihad Djedovic: the feed has him at Lottomatica Roma, his career doesn't
 - Laurent Sciarra: the feed has him at Orleans, his career doesn't
@@ -59,6 +59,7 @@ The feed has the player on this club's EuroLeague roster (with games played), bu
 - Zoran Dragic: the feed has him at Zalgiris Kaunas, his career doesn't
 - Vasilije Micic: the feed has him at Crvena Zvezda, his career doesn't
 - Trey Thompkins: the feed has him at Crvena Zvezda, his career doesn't
+- Leon Kratzer: the feed has him at Brose Bamberg, his career doesn't
 - Dzanan Musa: the feed has him at Cedevita Zagreb, his career doesn't
 - Dzanan Musa: the feed has him at Anadolu Efes, his career doesn't
 - Nicolas Laprovittola: the feed has him at Baskonia, his career doesn't
@@ -67,10 +68,11 @@ The feed has the player on this club's EuroLeague roster (with games played), bu
 - Aleksej Pokusevski: the feed has him at Olympiacos, his career doesn't
 - Kevin Punter: the feed has him at Olympiacos, his career doesn't
 - Jordan Loyd: the feed has him at Maccabi Tel Aviv, his career doesn't
-- Aleksa Radanov: the feed has him at Partizan, his career doesn't
 - Rafa Villar: the feed has him at FC Barcelona, his career doesn't
+- Aleksa Radanov: the feed has him at Partizan, his career doesn't
 - Chima Moneke: the feed has him at AS Monaco, his career doesn't
 - Yam Madar: the feed has him at Bayern Munich, his career doesn't
+- Mitar Bosnjakovic: the feed has him at Real Madrid, his career doesn't
 - David McCormack: the feed has him at Alba Berlin, his career doesn't
 - Bruno Fernando: the feed has him at Real Madrid, his career doesn't
 - Saben Lee: the feed has him at Maccabi Tel Aviv, his career doesn't
