@@ -1628,6 +1628,23 @@ fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
 ok(byId("rm-info-modal").hidden === true, "Escape closes it");
 Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
 
+console.log("Search boxes never invite the browser's personal autofill");
+(function () {
+  // Chrome ignores autocomplete="off" for address autofill, and a field whose
+  // placeholder or label says "name" is read as a personal-name field: it
+  // offered the user's own name under Six of a Kind's "Name a player who fits".
+  // Every guess box gets a token Chrome doesn't know, and no "name" wording.
+  var html = fs.readFileSync("index.html", "utf8"), bad = [];
+  (html.match(/<input id="[a-z0-9-]+-input"[\s\S]*?\/>/g) || []).forEach(function (tag) {
+    var id = tag.match(/id="([^"]+)"/)[1];
+    var ac = (tag.match(/autocomplete="([^"]*)"/) || [])[1];
+    var words = ((tag.match(/placeholder="([^"]*)"/) || [])[1] || "") + " " + ((tag.match(/aria-label="([^"]*)"/) || [])[1] || "");
+    if (!ac || ac === "off" || ac === "on" || ac === "name") bad.push(id + ": autocomplete=" + ac);
+    if (/\bname/i.test(words)) bad.push(id + ": says '" + words.trim() + "'");
+  });
+  ok(bad.length === 0, "every guess box uses its own autocomplete token and never says 'name'" + (bad.length ? " — " + bad.join("; ") : ""));
+})();
+
 console.log("Six of a Kind — one category, name six");
 (function () {
   var SK = window.SixOfAKind, GR = window.TheGrid, SIXES = window.SIXES;
