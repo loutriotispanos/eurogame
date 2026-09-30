@@ -74,6 +74,7 @@ const NATIONALITY_OVERRIDES = {
   "Semi Ojeleye":   "Nigeria",
   "Carlik Jones":   "South Sudan",
   "Nick Calathes":  "Greece",
+  "Tyler Dorsey":   "Greece",           // EuroBasket 2022 and the 2023 World Cup for Greece
   "Terry Tarpey":   "France",
   "Alpha Diallo":   "Guinea",
 };

@@ -157,7 +157,7 @@ window.PLAYERS = [
   {"name":"Alexandros Vezenkov","team":"Olympiacos","nationality":"Bulgaria","position":"Forward","height":206,"birthYear":1995,"number":14},
   {"name":"Kostas Papanikolaou","team":"Olympiacos","nationality":"Greece","position":"Forward","height":203,"birthYear":1990,"number":16},
   {"name":"Omiros Netzipoglou","team":"Olympiacos","nationality":"Greece","position":"Guard","height":195,"birthYear":2002,"number":21},
-  {"name":"Tyler Dorsey","team":"Olympiacos","nationality":"USA","position":"Guard","height":196,"birthYear":1996,"number":22},
+  {"name":"Tyler Dorsey","team":"Olympiacos","nationality":"Greece","position":"Guard","height":196,"birthYear":1996,"number":22},
   {"name":"Mbaye Ndiaye","team":"Olympiacos","nationality":"Senegal","position":"Forward","height":203,"birthYear":1999,"number":24},
   {"name":"Antonis Karagiannidis","team":"Olympiacos","nationality":"Greece","position":"Center","height":206,"birthYear":2002,"number":29},
   {"name":"Nikola Milutinov","team":"Olympiacos","nationality":"Serbia","position":"Center","height":212,"birthYear":1994,"number":33},
