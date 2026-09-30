@@ -197,7 +197,7 @@ var PAGES = [
     how: [
       "Tap a cell, then name any player who fits its row and its column together.",
       "Twelve guesses cover nine cells, so you can afford three misses. Right or wrong, every guess costs one.",
-      "A player counts for a club if it appears anywhere in his career — short stints and NBA spells included.",
+      "A player counts for a club if it appears anywhere in his career — short stints and NBA spells included — or if he was ever on its official EuroLeague roster since 2000, even without playing a minute there.",
       "Each player can be used only once on the board, so spend your flexible names carefully. Most cells have several right answers."
     ],
     faq: [
@@ -317,7 +317,7 @@ var PAGES = [
     ],
     faq: [
       ["Why was my answer rejected when the player really did fit?", "Like The Grid, Six of a Kind only knows well-travelled players, current and non-active, whose full career is in the database. A newcomer still at his first club is turned down even when he genuinely fits, which keeps every name accurately checkable in both directions."],
-      ["Does a short stint count?", "Yes. A player counts for a club if it appears anywhere in his career, loans and one-season stops included."],
+      ["Does a short stint count?", "Yes. A player counts for a club if it appears anywhere in his career, loans and one-season stops included, or if he was ever on that club's official EuroLeague roster since 2000, even without playing a minute there."],
       ["How hard can a category be?", "Never impossible and never a giveaway: every one of the {sixes} categories has between ten and forty right answers, so six always means digging past the obvious names."],
       ["Can I give up on the Daily?", "Yes. Give up ends the round and shows everyone who fitted. It asks once before it commits, records a loss for Six of a Kind, but still counts as played, so the hub streak survives."]
     ]

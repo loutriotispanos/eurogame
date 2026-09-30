@@ -67,8 +67,9 @@ var SLOT_POS = { PG: "Guard", SG: "Guard", SF: "Forward", PF: "Forward", C: "Cen
 LINEUPS.forEach(function (L) { L.five.forEach(function (p) { if (!POS_OF[p.name]) POS_OF[p.name] = SLOT_POS[p.pos]; }); });
 PLAYERS.concat(LEGENDS).forEach(function (p) { POS_OF[p.name] = p.position; });
 
+// "Played for 6+ clubs" counts the career itself: a 0-minute registration ("also") doesn't make a journeyman
 function distinctClubs(c) { var s = {}, n = 0; c.career.forEach(function (e) { if (!s[e.team]) { s[e.team] = 1; n++; } }); return n; }
-function playedFor(name, club) { var c = CAREER_BY[name]; return !!(c && c.career.some(function (e) { return e.team === club; })); }
+function playedFor(name, club) { var c = CAREER_BY[name]; return !!(c && c.career.concat(c.also || []).some(function (e) { return e.team === club; })); }
 function isEx(name, club) { return playedFor(name, club) && CURRENT_TEAM[name] !== club; }
 
 // --- Predicate helpers (do the DATA membership tests) -----------------------
@@ -161,7 +162,7 @@ var exclubCats = [];
   var byClub = {};
   CAREERS.forEach(function (c) {
     var seen = {};
-    c.career.forEach(function (e) {
+    c.career.concat(c.also || []).forEach(function (e) {
       if (seen[e.team]) return; seen[e.team] = 1;
       if (isEx(c.name, e.team)) (byClub[e.team] = byClub[e.team] || []).push(c.name);
     });
