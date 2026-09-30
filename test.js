@@ -54,7 +54,7 @@ var doc = {
   addEventListener: function (t, fn) { (doc._listeners[t] = doc._listeners[t] || []).push(fn); }
 };
 var overlays = [];   // every .modal-overlay, for doc.querySelectorAll above
-["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal", "oo-info-modal", "hl-info-modal", "rm-info-modal", "feedback-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); overlays.push(m); }); // modals start hidden + need a dialog child
+["info-modal", "stats-modal", "cn-info-modal", "co-info-modal", "pid-info-modal", "c5-info-modal", "gr-info-modal", "cv-info-modal", "pb-info-modal", "oo-info-modal", "hl-info-modal", "rm-info-modal", "sk-info-modal", "feedback-modal"].forEach(function (id) { var m = mk(id); m.hidden = true; m.appendChild(new El("div")); overlays.push(m); }); // modals start hidden + need a dialog child
 
 var store = {}, captured = "", reduceMotion = false;
 var win = {
@@ -107,6 +107,7 @@ eval(fs.readFileSync("competition.js", "utf8"));   // EuroLeague unless the Euro
 eval(fs.readFileSync("lineups.js", "utf8"));
 eval(fs.readFileSync("puzzles.js", "utf8"));
 eval(fs.readFileSync("oddones.js", "utf8"));
+eval(fs.readFileSync("sixes.js", "utf8"));
 eval(fs.readFileSync("game.js", "utf8"));
 eval(fs.readFileSync("playerid.js", "utf8"));
 eval(fs.readFileSync("completefive.js", "utf8"));
@@ -118,6 +119,7 @@ eval(fs.readFileSync("pathbetween.js", "utf8"));
 eval(fs.readFileSync("oddoneout.js", "utf8"));
 eval(fs.readFileSync("higherlower.js", "utf8"));
 eval(fs.readFileSync("rostermaster.js", "utf8"));
+eval(fs.readFileSync("sixofakind.js", "utf8"));
 eval(fs.readFileSync("records.js", "utf8"));
 eval(fs.readFileSync("archive.js", "utf8"));
 win.__ELG_NO_WIRE__ = true;   // drive window.Hub directly; skip app.js DOM wiring
@@ -1626,11 +1628,100 @@ fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
 ok(byId("rm-info-modal").hidden === true, "Escape closes it");
 Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
 
+console.log("Six of a Kind — one category, name six");
+(function () {
+  var SK = window.SixOfAKind, GR = window.TheGrid, SIXES = window.SIXES;
+  ok(SIXES.length >= 60, "the bank holds " + SIXES.length + " categories");
+  var sigs = {}, badCount = [], badType = [], dupes = 0, noDem = [];
+  SIXES.forEach(function (p) {
+    var n = GR._answers(p.a, p.b).length;
+    if (n < 10 || n > 40) badCount.push(JSON.stringify(p) + "=" + n);
+    var t = p.a.t + "/" + p.b.t;
+    if (["club/club", "club/nat", "club/pos", "nat/pos"].indexOf(t) < 0) badType.push(t);
+    var sig = [p.a.t + ":" + p.a.v, p.b.t + ":" + p.b.v].sort().join("|");
+    if (sigs[sig]) dupes++; sigs[sig] = 1;
+    [p.a, p.b].forEach(function (c) { if (c.t === "nat" && !SK._demonyms[c.v]) noDem.push(c.v); });
+  });
+  ok(badCount.length === 0, "every category has 10–40 answers by The Grid's own predicates" + (badCount.length ? " — " + badCount.slice(0, 3).join(", ") : ""));
+  ok(badType.length === 0 && dupes === 0, "only the four category shapes, and no category twice");
+  ok(noDem.length === 0, "every nationality in the bank reads as an adjective in the clue" + (noDem.length ? " — missing " + noDem.join(", ") : ""));
+  ok(SK._clue({ a: { t: "club", v: "FC Barcelona" }, b: { t: "nat", v: "Serbia" } }) === "Serbian players who played for FC Barcelona" &&
+     SK._clue({ a: { t: "club", v: "Olympiacos" }, b: { t: "club", v: "Panathinaikos" } }) === "Played for both Olympiacos and Panathinaikos" &&
+     SK._clue({ a: { t: "club", v: "CSKA Moscow" }, b: { t: "pos", v: "Center" } }) === "Centers who played for CSKA Moscow" &&
+     SK._clue({ a: { t: "nat", v: "Greece" }, b: { t: "pos", v: "Guard" } }) === "Greek guards",
+     "the clue reads as a sentence for all four shapes");
+
+  var U = GR._universe();
+  function outsider(ans) { for (var n in U) if (ans.indexOf(n) < 0) return n; return null; }
+
+  // Daily: seeded, plays to a win, saves, restores.
+  Object.keys(store).forEach(function (k) { if (k.indexOf("elg:sk:") === 0) delete store[k]; });
+  store["elg:sk:seenhelp"] = "true";
+  SK._setMode("daily");
+  var d = SK._peek(), today = d.day;
+  ok(d.mode === "daily" && d.puzzle === SIXES[d.pIdx] && d.answers.length >= 10 && !d.over, "the Daily deals a bank category with its answers ready");
+  var wrong = outsider(d.answers);
+  SK._submit(wrong);
+  ok(SK._peek().misses.length === 1 && SK._peek().found.length === 0, "a name that doesn't fit costs a miss");
+  SK._submit(wrong);
+  ok(SK._peek().misses.length === 1, "…and trying it again costs nothing");
+  SK._submit(d.answers[0]);
+  SK._submit(d.answers[0]);
+  ok(SK._peek().found.length === 1 && SK._peek().misses.length === 1, "a name that fits fills a slot; repeating it is free");
+  var mid = JSON.parse(store["elg:sk:daily:" + today]);
+  ok(mid.done === false && mid.found.length === 1 && mid.cat && mid.cat.a.v === d.puzzle.a.v, "a daily in progress is saved with its own category");
+  ok(window.Hub._dailyState("sixofakind") === "playing", "the hub tile says Resume mid-daily");
+  for (var i = 1; i < 6; i++) SK._submit(d.answers[i]);
+  var w = SK._peek();
+  ok(w.over && w.won && w.found.length === 6, "six names win the Daily");
+  var ds = JSON.parse(store["elg:sk:dstats"]);
+  ok(ds.played === 1 && ds.solved === 1 && ds.curStreak === 1, "the win is recorded in the daily stats");
+  ok(window.Hub._dailyState("sixofakind") === "won", "the hub tile shows it solved");
+  ok(byId("sk-answers").hidden === false && byId("sk-banner").hidden === false, "the end shows the banner and everyone who fit");
+  var sh = SK._shareText();
+  ok(sh.indexOf("Six of a Kind 🏀 " + today) === 0 && sh.indexOf("🟩🟩🟩🟩🟩🟩 · 1 miss") > 0 && sh.indexOf(SK._clue(d.puzzle)) > 0,
+     "the share names the date, the category and the six");
+  SK._submit(d.answers[6]);
+  ok(SK._peek().found.length === 6, "nothing more can be entered once it's over");
+  SK._deal();
+  ok(SK._peek().over && SK._peek().won && SK._peek().found.length === 6, "reopening the Daily restores the finished game");
+
+  // A save keeps its own category even if the bank moves under it.
+  var other = SIXES[(d.pIdx + 1) % SIXES.length];
+  var HYs = (function () { var x = new Date(); x.setDate(x.getDate() - 3); var p = function (n) { return n < 10 ? "0" + n : "" + n; }; return x.getFullYear() + "-" + p(x.getMonth() + 1) + "-" + p(x.getDate()); })();
+  store["elg:sk:daily:" + HYs] = JSON.stringify({ puzzle: -5, cat: other, found: [], misses: [], done: false, won: false });
+  SK.goArchive(HYs);
+  var a = SK._peek();
+  ok(a.archive && a.day === HYs && a.puzzle.a.v === other.a.v && a.puzzle.b.v === other.b.v, "an archive day replays the category its save recorded");
+  var dsBefore = store["elg:sk:dstats"];
+  SK._giveUp(); ok(!SK._peek().over, "the Daily's give-up asks first");
+  SK._giveUp(); ok(SK._peek().over && !SK._peek().won, "…and concedes on the second tap");
+  ok(store["elg:sk:dstats"] === dsBefore, "an archive replay never touches the daily stats");
+  SK.goDaily();
+  ok(!SK._peek().archive && SK._peek().day === today, "goDaily returns to today");
+
+  // Practice: three misses lose.
+  SK._setMode("practice");
+  var p = SK._peek();
+  ok(p.mode === "practice" && !p.over && p.found.length === 0, "Practice deals a fresh category");
+  var outs = []; for (var n in U) { if (p.answers.indexOf(n) < 0) outs.push(n); if (outs.length === 3) break; }
+  outs.forEach(function (n) { SK._submit(n); });
+  ok(SK._peek().over && !SK._peek().won && SK._peek().misses.length === 3, "three misses end it");
+  ok(JSON.parse(store["elg:sk:stats"]).played === 1, "Practice keeps its own stats");
+  SK._deal();
+  ok(!SK._peek().over, "New category deals again");
+  SK._giveUp();
+  ok(SK._peek().over, "Practice gives up in one tap");
+  SK._setMode("daily");
+  ok(window.Hub._slugs.sixofakind === "six-of-a-kind" && window.Hub._titles.sixofakind === "Six of a Kind", "the router knows the game's address and title");
+})();
+Object.keys(store).forEach(function (k) { if (k.indexOf("elg:sk:") === 0) delete store[k]; });
+
 console.log("hub streak (unified, all games)");
 function hpad(n) { return n < 10 ? "0" + n : "" + n; }
 function hdate(off) { var d = new Date(); d.setDate(d.getDate() - off); return d.getFullYear() + "-" + hpad(d.getMonth() + 1) + "-" + hpad(d.getDate()); }
 var HTODAY = hdate(0), HY = hdate(1), HY2 = hdate(2), HY3 = hdate(3);
-var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:", "elg:pb:daily:", "elg:oo:daily:", "elg:hl:daily:"];
+var DAILY_PREFIXES = ["elg:daily:", "elg:pid:daily:", "elg:c5:daily:", "elg:cn:daily:", "elg:co:daily:", "elg:gr:daily:", "elg:cv:daily:", "elg:pb:daily:", "elg:oo:daily:", "elg:hl:daily:", "elg:sk:daily:"];
 function clearToday() { DAILY_PREFIXES.forEach(function (p) { delete store[p + HTODAY]; }); }
 function markDoneToday() { store["elg:gr:daily:" + HTODAY] = JSON.stringify({ puzzle: 0, done: true, won: true }); }
 clearToday();
@@ -2065,7 +2156,7 @@ var smSlugs = (smXML.match(/<loc>https:\/\/euroballgames\.com\/([a-z0-9-]+)\/<\/
   .map(function (s) { return s.replace(/^<loc>https:\/\/euroballgames\.com\//, "").replace(/\/<\/loc>$/, ""); })
   .filter(function (s) { return s !== "eurocup" && ["about", "contact", "privacy", "clubs"].indexOf(s) === -1; });   // the EuroCup hub — its pages are checked below
 var appGames = ["mystery", "playerid", "completefive", "connections", "careerorder", "thegrid",
-                "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster"];
+                "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster", "sixofakind"];
 var appSlugs = appGames.map(function (g) { return window.Hub._slugs[g]; });
 ok(smSlugs.length === appSlugs.length && appSlugs.every(function (s) { return smSlugs.indexOf(s) >= 0; }),
    "sitemap lists every one of the eleven games, and nothing that isn't one");
@@ -2323,10 +2414,10 @@ var MODE_APIS = {
   mystery: window.Mystery, playerid: window.PlayerID, completefive: window.CompleteFive,
   connections: window.Connections, careerorder: window.CareerOrder, thegrid: window.TheGrid,
   clubreveal: window.ClubReveal, pathbetween: window.PathBetween, oddoneout: window.OddOneOut,
-  higherlower: window.HigherLower
+  higherlower: window.HigherLower, sixofakind: window.SixOfAKind
 };
 var mdGames = Object.keys(window.Hub._modes);
-ok(mdGames.length === 10, "ten games have modes");
+ok(mdGames.length === 11, "eleven games have modes");
 ok(mdGames.filter(function (g) { return typeof (MODE_APIS[g] || {}).goMode !== "function"; }).length === 0,
    "every one of them exposes goMode — app.js can open an arbitrary mode without reaching for a test hook");
 ok(!window.Hub._modes.rostermaster, "Roster Master is absent: it has a chosen club, not modes");
@@ -2488,7 +2579,7 @@ store["elg:hl:dstats"] = JSON.stringify({ played: 4, solved: 3, curStreak: 2, ma
 store["elg:stats"] = JSON.stringify({ played: 10, wins: 8, curStreak: 1, maxStreak: 5, dist: [0, 0, 0, 0, 0, 0, 0, 0], lastDate: HTODAY, lastWon: true, lastGuessCount: 3 });
 store["elg:hl:stats"] = JSON.stringify({ runs: 7, best: 12 });
 var rc = window.Records._collect();
-ok(rc.dailies.length === 10, "all ten daily games are on the sheet");
+ok(rc.dailies.length === 11, "all eleven daily games are on the sheet");
 var rcHL = rc.dailies.filter(function (r) { return r.id === "higherlower"; })[0];
 ok(rcHL.played === 4 && rcHL.won === 3 && rcHL.pct === 75 && rcHL.best === 3, "a daily row aggregates played/solved/win%/best from dstats");
 ok(rc.dailies[0].won === 8 && rc.dailies[0].pct === 80, "Mystery's row reads wins from its older elg:stats shape");

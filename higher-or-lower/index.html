@@ -38,12 +38,12 @@
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Euroball — eleven daily European basketball puzzles" />
+<meta property="og:image:alt" content="Euroball — twelve daily European basketball puzzles" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Higher or Lower — Euroball" />
 <meta name="twitter:description" content="Two European basketball players, one question: who is taller, who is older, whose shirt number is higher? Ten matchups a day, or an endless run that ends on your first mistake." />
 <meta name="twitter:image" content="https://euroballgames.com/og-image.png" />
-<meta name="twitter:image:alt" content="Euroball — eleven daily European basketball puzzles" />
+<meta name="twitter:image:alt" content="Euroball — twelve daily European basketball puzzles" />
 
 <!-- Anonymous page counts (Cloudflare Web Analytics). No cookies, no localStorage,
      no fingerprint, no cross-site profile — it reports a URL, a referrer and a
@@ -427,7 +427,7 @@
   }
   /* An armed give-up is the one place colour paints a button: it's about to do
      something irreversible, so it stops looking like every other control. */
-  #give-up.armed, #gr-giveup.armed, #pb-giveup.armed, #cv-giveup.armed {
+  #give-up.armed, #gr-giveup.armed, #pb-giveup.armed, #cv-giveup.armed, #sk-giveup.armed {
     background: var(--red); border-color: var(--red); color: #fff;
   }
 
@@ -795,6 +795,7 @@
   body.view-oddoneout    { --accent: #9a3f7d; --accent-2: #82356a; }
   body.view-higherlower  { --accent: #6e7b2f; --accent-2: #5c672a; }
   body.view-rostermaster { --accent: #875327; --accent-2: #714523; }
+  body.view-sixofakind   { --accent: #4b4a9e; --accent-2: #3f3e86; }
   body.view-records { --accent: #6e6656; --accent-2: #5b5445; }   /* agate — sober, no paint */
   body.view-archive { --accent: #6e6656; --accent-2: #5b5445; }
 
@@ -844,6 +845,7 @@
   :root[data-theme="dark"] body.view-oddoneout    { --accent: #c46da8; --accent-2: #b0578f; }
   :root[data-theme="dark"] body.view-higherlower  { --accent: #a8b85e; --accent-2: #97a74e; }
   :root[data-theme="dark"] body.view-rostermaster { --accent: #c99a62; --accent-2: #b78a52; }
+  :root[data-theme="dark"] body.view-sixofakind   { --accent: #9493e0; --accent-2: #8180cf; }
   :root[data-theme="dark"] body.view-records      { --accent: #a29881; --accent-2: #8f866f; }
   :root[data-theme="dark"] body.view-archive      { --accent: #a29881; --accent-2: #8f866f; }
   /* What's left are the genuinely bespoke bits: colours that carry meaning of
@@ -966,6 +968,7 @@
   .game-card[data-game="oddoneout"]    { --gc: #9a3f7d; }
   .game-card[data-game="higherlower"]  { --gc: #6e7b2f; }
   .game-card[data-game="rostermaster"] { --gc: #875327; }
+  .game-card[data-game="sixofakind"]   { --gc: #4b4a9e; }
   .game-card:hover { border-color: var(--gc); background: var(--card-hi); }
   .game-card:active { background: var(--paper-2); }
   .gc-ico svg, .h1-ico svg, .icon-btn svg, .hub-streak svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
@@ -1262,6 +1265,32 @@
   .gr-cell:disabled { cursor: default; }
   .gr-flash { text-align: center; font-size: var(--t-6); font-weight: 700; color: var(--red-ink); margin: 8px 2px 0; }
 
+  /* ---------- Six of a Kind ------------------------------------------------- */
+  .sk-clue { max-width: 620px; margin: 14px auto 0; text-align: center; font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(19px, 5vw, 27px); line-height: var(--lh-tight); letter-spacing: var(--track-display); text-wrap: balance; color: var(--ink); }
+  .sk-clue b { color: var(--accent); font-weight: 800; }
+  .sk-count { text-align: center; color: var(--muted); font-size: var(--t-6); margin: 6px 2px 0; }
+  .sk-slots { max-width: 620px; width: 100%; min-width: 0; margin: 14px auto 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .sk-slot { border: 1px dashed var(--rule); border-radius: var(--r); padding: 10px 8px; min-height: 48px; display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: var(--t-6); color: var(--muted); font-variant-numeric: tabular-nums; line-height: var(--lh-ui); overflow-wrap: anywhere; }
+  .sk-slot.filled { border-style: solid; border-color: var(--green); background: var(--green-wash); color: var(--ink); font-weight: 700; animation: cv-in .18s var(--ease) both; }
+  .sk-strikes { display: flex; justify-content: center; gap: 6px; margin: 12px auto 0; }
+  .sk-strike { width: 22px; height: 22px; border: 1px solid var(--rule); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #fff; }
+  .sk-strike.used { background: var(--red); border-color: var(--red); }
+  .sk-misses { text-align: center; color: var(--muted); font-size: var(--t-6); margin: 6px 2px 0; }
+  .sk-flash { text-align: center; font-size: var(--t-6); font-weight: 700; margin: 8px 2px 0; min-height: 18px; }
+  .sk-flash.ok { color: var(--green); }
+  .sk-flash.err { color: var(--red-ink); }
+  .sk-answers { max-width: 620px; width: 100%; min-width: 0; margin: 14px auto 0; }
+  .sk-answers[hidden] { display: none; }
+  .sk-answers-head { font-size: var(--t-6); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid var(--rule); padding-bottom: 6px; margin-bottom: 8px; }
+  .sk-answers-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sk-ans { border: 1px solid var(--rule); border-radius: var(--r); padding: 4px 9px; font-size: var(--t-6); color: var(--ink); background: var(--card); }
+  .sk-ans.mine { border-color: var(--green); background: var(--green-wash); font-weight: 700; }
+  @media (max-width: 420px) { .sk-slots { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
   /* ---------- Common Club ---------------------------------------------------- */
   /* Two names, set as the two halves of one question. The names carry the weight
      — bigger than the old roster rows, because there are two of them now rather
@@ -1371,7 +1400,7 @@
   "name": "Euroball",
   "alternateName": "Euroball Games",
   "url": "https://euroballgames.com/",
-  "description": "Eleven free daily puzzle games about European basketball and the EuroLeague.",
+  "description": "Twelve free daily puzzle games about European basketball and the EuroLeague.",
   "inLanguage": "en"
 }
 </script>
@@ -1380,7 +1409,7 @@
   "@context": "https://schema.org",
   "@type": "ItemList",
   "name": "Euroball daily basketball games",
-  "numberOfItems": 11,
+  "numberOfItems": 12,
   "itemListElement": [
     { "@type": "ListItem", "position": 1,  "name": "Mystery Player",    "url": "https://euroballgames.com/mystery-player/" },
     { "@type": "ListItem", "position": 2,  "name": "Player ID",         "url": "https://euroballgames.com/player-id/" },
@@ -1392,7 +1421,8 @@
     { "@type": "ListItem", "position": 8,  "name": "Path Between",      "url": "https://euroballgames.com/path-between/" },
     { "@type": "ListItem", "position": 9,  "name": "Odd One Out",       "url": "https://euroballgames.com/odd-one-out/" },
     { "@type": "ListItem", "position": 10, "name": "Higher or Lower",   "url": "https://euroballgames.com/higher-or-lower/" },
-    { "@type": "ListItem", "position": 11, "name": "Roster Master",     "url": "https://euroballgames.com/roster-master/" }
+    { "@type": "ListItem", "position": 11, "name": "Roster Master",     "url": "https://euroballgames.com/roster-master/" },
+    { "@type": "ListItem", "position": 12, "name": "Six of a Kind",     "url": "https://euroballgames.com/six-of-a-kind/" }
   ]
 }
 </script>
@@ -1556,6 +1586,12 @@
       <path d="M9.2 4.5 V3.4 A1.4 1.4 0 0 1 10.6 2 H13.4 A1.4 1.4 0 0 1 14.8 3.4 V4.5"/>
       <path d="M8.5 10 H15.5 M8.5 13.5 H15.5 M8.5 17 H12.5"/>
     </symbol>
+    <symbol id="ico-sixofakind" viewBox="0 0 24 24">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="3"/>
+      <circle cx="8.6" cy="7.9" r="1.35" data-fill="1"/><circle cx="15.4" cy="7.9" r="1.35" data-fill="1"/>
+      <circle cx="8.6" cy="12" r="1.35" data-fill="1"/><circle cx="15.4" cy="12" r="1.35" data-fill="1"/>
+      <circle cx="8.6" cy="16.1" r="1.35" data-fill="1"/><circle cx="15.4" cy="16.1" r="1.35" data-fill="1"/>
+    </symbol>
     <symbol id="ico-flame" viewBox="0 0 24 24">
       <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
     </symbol>
@@ -1662,6 +1698,12 @@
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-rostermaster"/></svg></span>
         <span class="gc-text"><span class="gc-title">Roster Master</span>
           <span class="gc-desc">The 2026-27 rosters, from memory — name every player, club by club. Your best score sticks.</span></span>
+        <span class="gc-daily" hidden></span>
+      </a>
+      <a class="game-card" href="../six-of-a-kind/" data-game="sixofakind">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-sixofakind"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Six of a Kind</span>
+          <span class="gc-desc">One category — say, Serbians who played for Barcelona. Name any six who fit before three misses.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
     </div>
@@ -2122,6 +2164,43 @@
     </div>
   </div><!-- /rostermaster-view -->
 
+  <!-- ===== GAME 12: SIX OF A KIND ===== -->
+  <div id="sixofakind-view" class="view" hidden>
+    <header>
+      <button id="sk-info-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">i</button>
+      <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-sixofakind"/></svg></span><span><span class="accent">Six</span> of a Kind</span></h1>
+      <div class="tagline">One category — name any six players who fit</div>
+    </header>
+    <div class="app">
+      <div class="modes" id="sk-modes" role="tablist" aria-label="Game mode">
+        <button id="sk-daily" type="button" role="tab" aria-selected="true" tabindex="0">Daily</button>
+        <button id="sk-practice" type="button" role="tab" aria-selected="false" tabindex="-1">Practice</button>
+      </div>
+      <div id="sk-stats" class="pid-stats"></div>
+      <div id="sk-clue" class="sk-clue"></div>
+      <div id="sk-count" class="sk-count"></div>
+      <div id="sk-slots" class="sk-slots" aria-label="Your six"></div>
+      <div id="sk-strikes" class="sk-strikes" role="img"></div>
+      <div id="sk-counter" class="counter" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div id="sk-sr" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div id="sk-flash" class="sk-flash" role="status" aria-live="polite" hidden></div>
+      <div id="sk-misses" class="sk-misses" hidden></div>
+      <div id="sk-banner" class="banner" hidden></div>
+      <div id="sk-answers" class="sk-answers" hidden></div>
+      <div class="controls">
+        <div class="search">
+          <input id="sk-input" type="text" autocomplete="off" spellcheck="false"
+                 placeholder="Name a player who fits…"
+                 role="combobox" aria-expanded="false" aria-controls="sk-dropdown"
+                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Name a player who fits the category" />
+          <div id="sk-dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
+        </div>
+        <button id="sk-giveup" type="button">Give up</button>
+        <button id="sk-next" type="button">New category</button>
+      </div>
+    </div>
+  </div><!-- /sixofakind-view -->
+
   <div id="pb-info-modal" class="modal-overlay" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Path Between" tabindex="-1">
       <button id="pb-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
@@ -2194,6 +2273,28 @@
         <li>Name a full roster once and that club turns <strong>gold ★ — for good</strong>, even if you clear it. Collect all <span class="comp-text" data-ec="{c}">twenty</span>.</li>
       </ul>
       <p class="modal-note">Rosters are our cross-checked 2026-27 database — the exact squads the other games play by. No daily here; this is the long game.</p>
+    </div>
+  </div>
+
+  <div id="sk-info-modal" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Six of a Kind" tabindex="-1">
+      <button id="sk-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
+      <h2>How to play</h2>
+      <p>One category — say, <em>Serbian players who played for FC Barcelona</em>. Name <strong>any six players</strong> who fit it.</p>
+      <ul>
+        <li>Categories cross a club with a <strong>nationality</strong>, a <strong>position</strong> or <strong>another club</strong>, or a nationality with a position. Every one has at least ten right answers, and the game tells you how many.</li>
+        <li><strong>Three wrong names and it's over.</strong> A name you've already tried costs nothing.</li>
+        <li>Names suggest themselves as you type. The list holds <strong>every</strong> player we know, so it spells for you but never says who fits.</li>
+        <li>A player counts for a club if it's anywhere in his career, short stints included.</li>
+        <li>When it ends you see <strong>everyone who fit</strong>, so you learn the ones you forgot.</li>
+        <li><strong>Give up</strong> ends it and shows the full list. On the Daily it asks once before it commits, and records a loss, but it still counts as <em>played</em>, so your hub streak survives.</li>
+      </ul>
+      <h3>Game modes</h3>
+      <ul>
+        <li><strong>Daily</strong> — one category a day, the same for everyone. Keep your streak alive.</li>
+        <li><strong>Practice</strong> — random categories, as many as you like.</li>
+      </ul>
+      <p class="modal-note">Like The Grid, Six of a Kind only counts <strong>well-travelled players, current and non-active,</strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
     </div>
   </div>
 
@@ -2339,7 +2440,7 @@
       <li><a href="../odd-one-out/">Odd One Out</a>: Four names, three with something in common and one without.</li>
       <li><a href="../roster-master/">Roster Master</a>: The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory.</li>
     </ul>
-    <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>
+    <p class="seo-more">Euroball has twelve daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 
   <footer>
@@ -2514,6 +2615,7 @@
   <script src="../lineups.js"></script>
   <script src="../puzzles.js"></script>
   <script src="../oddones.js"></script>
+  <script src="../sixes.js"></script>
   <script src="../game.js"></script>
   <script src="../playerid.js"></script>
   <script src="../completefive.js"></script>
@@ -2525,6 +2627,7 @@
   <script src="../oddoneout.js"></script>
   <script src="../higherlower.js"></script>
   <script src="../rostermaster.js"></script>
+  <script src="../sixofakind.js"></script>
   <script src="../records.js"></script>
   <script src="../archive.js"></script>
   <!-- Where the site root is, relative to THIS document. The hub is the root, so

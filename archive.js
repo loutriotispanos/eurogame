@@ -18,7 +18,8 @@
     { id: "clubreveal",   name: "Common Club",       k: "elg:cv:daily:" },
     { id: "pathbetween",  name: "Path Between",      k: "elg:pb:daily:" },
     { id: "oddoneout",    name: "Odd One Out",       k: "elg:oo:daily:" },
-    { id: "higherlower",  name: "Higher or Lower",   k: "elg:hl:daily:" }
+    { id: "higherlower",  name: "Higher or Lower",   k: "elg:hl:daily:" },
+    { id: "sixofakind",   name: "Six of a Kind",     k: "elg:sk:daily:" }
   ];
 
   function $(id) { return document.getElementById(id); }
