@@ -124,7 +124,7 @@ var ST = 16, TLx = 84, TLy = 146;
 stamp("EURO", TLx, TLy, ST, 2);
 stamp("BALL", TLx + textWidth("EURO", ST) + ST, TLy, ST, 1); // continue same word, one char gap
 var TAGy = TLy + 7 * ST + 34, TAGs = 4;
-stamp("ELEVEN DAILY BASKETBALL PUZZLES", TLx, TAGy, TAGs, 3);
+stamp("TWELVE DAILY BASKETBALL PUZZLES", TLx, TAGy, TAGs, 3);
 // Names games rather than one game's modes — the card sells the hub now. No "+N
 // MORE": the font has no "+" and a missing glyph stamps a silent blank.
 var MODES = "MYSTERY PLAYER · THE GRID · CONNECTIONS · PATH BETWEEN · ODD ONE OUT";

@@ -22,7 +22,8 @@
     { id: "clubreveal",   name: "Common Club",       d: "elg:cv:dstats" },
     { id: "pathbetween",  name: "Path Between",      d: "elg:pb:dstats" },
     { id: "oddoneout",    name: "Odd One Out",       d: "elg:oo:dstats" },
-    { id: "higherlower",  name: "Higher or Lower",   d: "elg:hl:dstats" }
+    { id: "higherlower",  name: "Higher or Lower",   d: "elg:hl:dstats" },
+    { id: "sixofakind",   name: "Six of a Kind",     d: "elg:sk:dstats" }
   ];
 
   function dailyRow(g) {

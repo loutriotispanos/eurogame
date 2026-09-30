@@ -74,6 +74,28 @@ const NATIONALITY_OVERRIDES = {
   "Semi Ojeleye":   "Nigeria",
   "Carlik Jones":   "South Sudan",
   "Nick Calathes":  "Greece",
+  "Tyler Dorsey":   "Greece",           // EuroBasket 2022 and the 2023 World Cup for Greece
+  // 2026-09-30 research pass: every one of our players checked against the squads of
+  // EuroBasket 2007-2025, the World Cups 2006-2023, the Olympics and Olympic qualifiers
+  // 2008-2024, AmeriCup, AfroBasket and Asia Cup 2021-2025 (Wikipedia squad pages), and
+  // the 2027 World Cup European Qualifier rosters (fiba.basketball, windows 1-4).
+  "Darius Thompson":     "Italy",               // EuroBasket 2025, WCQ 2027
+  "Thomas Walkup":       "Greece",              // 2023 World Cup, 2024 Olympics
+  "Nick Weiler-Babb":    "Germany",             // EuroBasket 2022, 2024 Olympics
+  "Kamar Baldwin":       "Georgia",             // EuroBasket 2025
+  "Kyle Allman":         "Montenegro",          // EuroBasket 2025
+  "Khadeen Carrington":  "Israel",              // EuroBasket 2025, WCQ 2027
+  "Tremont Waters":      "Puerto Rico",         // 2023 World Cup, 2024 Olympics
+  "Ethan Thompson":      "Puerto Rico",         // 2022 AmeriCup, 2023 World Cup
+  "Kevin Kokila":        "Angola",              // 2023 World Cup, AfroBasket 2025
+  "Both Gach":           "South Sudan",         // AfroBasket 2025
+  "Kevarrius Hayes":     "Central African Republic",   // AfroBasket 2021
+  "Matt Costello":       "Ivory Coast",         // AfroBasket 2021 and 2025
+  "Nate Reuvers":        "Hungary",             // WCQ 2027
+  "Daron Russell":       "Romania",             // WCQ 2027
+  "Codi Miller-McIntyre": "Bulgaria",           // EuroBasket 2025 qualifiers (naturalised 2023)
+  "Umoja Gibson":        "Bulgaria",            // EuroBasket 2029 pre-qualifiers
+  "David DeJulius":      "Slovakia",            // EuroBasket 2029 pre-qualifiers
   "Terry Tarpey":   "France",
   "Alpha Diallo":   "Guinea",
 };

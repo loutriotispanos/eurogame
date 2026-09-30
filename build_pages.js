@@ -42,7 +42,7 @@ var ROOT = __dirname;
  * ------------------------------------------------------------------------- */
 var STATS = (function () {
   var w = {};
-  ["clubs.js", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js", "oddones.js",
+  ["clubs.js", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js", "oddones.js", "sixes.js",
    "eurocup_players.js", "eurocup_careers.js", "eurocup_grids.js", "eurocup_paths.js"].forEach(function (f) {
     new Function("window", fs.readFileSync(path.join(ROOT, f), "utf8"))(w);
   });
@@ -73,7 +73,7 @@ var STATS = (function () {
     careerClubs: Object.keys(careerClubs).length, answerClubs: Object.keys(answers).length,
     lineups: w.LINEUPS.length, f4seasons: ss.length, f4first: ss[0], f4last: ss[ss.length - 1],
     f4gapNote: gaps.length ? "; " + gaps.join(" and ") + (gaps.length === 1 ? " isn't" : " aren't") + " in the archive yet" : "",
-    puzzles: w.PUZZLES.length, grids: w.GRIDS.length, oddones: w.ODDONES.length,
+    puzzles: w.PUZZLES.length, grids: w.GRIDS.length, oddones: w.ODDONES.length, sixes: w.SIXES.length,
     paths: w.PATHS.length, par2: par(w.PATHS, 2), par3: par(w.PATHS, 3), par4: par(w.PATHS, 4),
     ecPlayers: w.EUROCUP_PLAYERS.length, ecClubs: Object.keys(w.EUROCUP_TEAMS).length, ecCareers: w.EUROCUP_CAREERS.length,
     ecCoSuit: ecSuit.length, ecGrids: w.EUROCUP_GRIDS.length,
@@ -147,7 +147,7 @@ var PAGES = [
       ["Which seasons are covered?", "{f4seasons} seasons of Final Four basketball, 2010 through 2025 — {lineups} starting fives in all. 2020 is absent because the season was cancelled and no Final Four was played."],
       ["Are these the real starting fives?", "Yes. Every lineup is a genuine Final Four starting five, compiled from official box scores rather than reconstructed from memory."],
       ["What do Easy, Medium and Hard change?", "Who gets hidden. Easy hides the star of the five, the name you would list first. Hard hides the starter only a serious follower of that team would remember."],
-      ["Does the Daily count towards my streak?", "Yes. Solving any daily on the site keeps the single hub streak alive — you do not have to play all eleven games to keep it."]
+      ["Does the Daily count towards my streak?", "Yes. Solving any daily on the site keeps the single hub streak alive — you do not have to play all twelve games to keep it."]
     ]
   },
   {
@@ -301,6 +301,25 @@ var PAGES = [
       ["How current are the rosters?", "They are the 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season. Transfers made after that check are not reflected."],
       ["Does Roster Master affect my hub streak?", "No. It has no daily, so it sits outside the streak entirely. Your best score per club is kept on the Records page."],
       ["What happens if I clear a board by accident?", "You lose the filled slots but not your record. The best percentage stays on the club card, and a gold ★ once earned is permanent."]
+    ]
+  },
+  {
+    view: "sixofakind", slug: "six-of-a-kind", name: "Six of a Kind",
+    title: "Six of a Kind — name six EuroLeague players who fit | Euroball",
+    desc: "One category a day, like Serbian players who played for FC Barcelona. Name any six European basketball players who fit it before you make three mistakes. New category daily.",
+    h1: "Six of a Kind — one category, six names",
+    intro: "One question and six empty slots. The category crosses a club with a nationality, a position or a second club — Serbians who played for FC Barcelona, centers who played for Olympiacos, anyone who wore both Real Madrid and Barcelona shirts — and you name any six players who fit. Three wrong names and it is over. When it ends, you see everyone who fitted, including the ones you forgot.",
+    how: [
+      "Read the category and start typing. Names suggest themselves from every player in the database, so the list spells for you without giving anything away.",
+      "A name that fits fills a slot. A name that does not costs one of your three misses. A name you already tried costs nothing.",
+      "Every category has at least ten right answers, and the game tells you exactly how many there are.",
+      "Name six and you win. The Daily is the same category for everyone and keeps your hub streak alive."
+    ],
+    faq: [
+      ["Why was my answer rejected when the player really did fit?", "Like The Grid, Six of a Kind only knows well-travelled players, current and non-active, whose full career is in the database. A newcomer still at his first club is turned down even when he genuinely fits, which keeps every name accurately checkable in both directions."],
+      ["Does a short stint count?", "Yes. A player counts for a club if it appears anywhere in his career, loans and one-season stops included."],
+      ["How hard can a category be?", "Never impossible and never a giveaway: every one of the {sixes} categories has between ten and forty right answers, so six always means digging past the obvious names."],
+      ["Can I give up on the Daily?", "Yes. Give up ends the round and shows everyone who fitted. It asks once before it commits, records a loss for Six of a Kind, but still counts as played, so the hub streak survives."]
     ]
   }
 ];
@@ -591,6 +610,17 @@ var EXTRA = {
     ],
     inside: "{elClubs} clubs and {players} players, cross-checked against the official 2026–27 rosters at the start of the season. Every club also has its own page with the full roster, the squad in numbers and its former players: see <a href=\"../clubs/\">the clubs</a>.",
     related: ["mystery", "thegrid", "higherlower"]
+  },
+  sixofakind: {
+    tips: [
+      "Bank the obvious names first, then slow down. The first three come quickly; the last three are where the misses happen.",
+      "Think in eras. A club's great sides of the 2000s are as valid as this season's roster, and they are often the names nobody else thinks of.",
+      "Journeymen are your friends. A player who has been at seven clubs fits a surprising number of categories.",
+      "Check the nationality twice. It is the national team a player plays for, so a naturalised player counts for his adopted country."
+    ],
+    inside: "{sixes} categories, each crossing two of the same criteria The Grid uses: a club with a nationality, a position or a second club, or a nationality with a position. Every one has between ten and forty right answers among the {careers} careers in the database.",
+    example: "Take centers who played for CSKA Moscow. Nikola Milutinov and Kyle Hines are the easy start, and Boban Marjanovic, Nenad Krstic, David Andersen and Sasha Kaun make six. The database knows only nine, fewer than the ten every real category needs, which is why this one is an example here and never a puzzle.",
+    related: ["thegrid", "rostermaster", "connections"]
   }
 };
 
@@ -823,8 +853,8 @@ function seoSection(p) {
     }
   }
   out.push(p.comp === "eurocup"
-    ? '    <p class="seo-more">Euroball has ' + EC_PAGES.length + ' daily EuroCup puzzles, and eleven for the EuroLeague. <a href="../">See the EuroCup games →</a></p>'
-    : '    <p class="seo-more">Euroball has eleven daily European basketball puzzles. <a href="../">See them all →</a></p>');
+    ? '    <p class="seo-more">Euroball has ' + EC_PAGES.length + ' daily EuroCup puzzles, and twelve for the EuroLeague. <a href="../">See the EuroCup games →</a></p>'
+    : '    <p class="seo-more">Euroball has twelve daily European basketball puzzles. <a href="../">See them all →</a></p>');
   out.push("  </section>");
   return out.join("\n");
 }

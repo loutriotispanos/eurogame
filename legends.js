@@ -337,7 +337,7 @@ window.LEGENDS = [
   {"name":"Florent Pietrus","team":"Valencia","nationality":"France","position":"Forward","height":202,"birthYear":1981,"number":11},
   {"name":"Victor Luengo","team":"Valencia","nationality":"Spain","position":"Forward","height":196,"birthYear":1974,"number":15},
   {"name":"Rafa Martinez","team":"Valencia","nationality":"Spain","position":"Guard","height":190,"birthYear":1982,"number":17},
-  {"name":"Matt Costello","team":"Valencia","nationality":"USA","position":"Forward","height":208,"birthYear":1993,"number":24},
+  {"name":"Matt Costello","team":"Valencia","nationality":"Ivory Coast","position":"Forward","height":208,"birthYear":1993,"number":24},
   {"name":"Isaac Nogues","team":"Valencia","nationality":"Spain","position":"Guard","height":196,"birthYear":2004,"number":32},
   {"name":"Matthew Nielsen","team":"Valencia","nationality":"Australia","position":"Forward","height":208,"birthYear":1978,"number":44},
   // --- Varese ---

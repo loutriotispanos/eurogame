@@ -5,8 +5,8 @@
   "use strict";
   function $(id) { return document.getElementById(id); }
 
-  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster", "records", "archive", "eurocup"];
-  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view"), higherlower: $("higherlower-view"), rostermaster: $("rostermaster-view"), records: $("records-view"), archive: $("archive-view"), eurocup: $("eurocup-view") };
+  var VIEWS = ["home", "mystery", "playerid", "completefive", "connections", "careerorder", "thegrid", "clubreveal", "pathbetween", "oddoneout", "higherlower", "rostermaster", "sixofakind", "records", "archive", "eurocup"];
+  var els = { home: $("home-view"), mystery: $("mystery-view"), playerid: $("playerid-view"), completefive: $("completefive-view"), connections: $("connections-view"), careerorder: $("careerorder-view"), thegrid: $("thegrid-view"), clubreveal: $("clubreveal-view"), pathbetween: $("pathbetween-view"), oddoneout: $("oddoneout-view"), higherlower: $("higherlower-view"), rostermaster: $("rostermaster-view"), sixofakind: $("sixofakind-view"), records: $("records-view"), archive: $("archive-view"), eurocup: $("eurocup-view") };
 
   // Every in-app navigation pushes a history entry (URL untouched) so the
   // browser arrows retrace the user's own path.
@@ -182,7 +182,7 @@
     updateHead(name, isMode(name, mode) ? mode : null);
     updateFeedbackHref();                        // so the report names the screen they were on
     if (name === "home") { refreshDailyChips(); renderHubStreak(); layoutHome(); }   // state may have changed while playing
-    var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : name === "records" ? window.Records : name === "archive" ? window.Archive : null;
+    var api = name === "mystery" ? window.Mystery : name === "playerid" ? window.PlayerID : name === "completefive" ? window.CompleteFive : name === "connections" ? window.Connections : name === "careerorder" ? window.CareerOrder : name === "thegrid" ? window.TheGrid : name === "clubreveal" ? window.ClubReveal : name === "pathbetween" ? window.PathBetween : name === "oddoneout" ? window.OddOneOut : name === "higherlower" ? window.HigherLower : name === "rostermaster" ? window.RosterMaster : name === "sixofakind" ? window.SixOfAKind : name === "records" ? window.Records : name === "archive" ? window.Archive : null;
     if (api) {
       if (mode && mode.indexOf("archive:") === 0 && api.goArchive) api.goArchive(mode.slice(8));
       else if (mode === "daily" && api.goDaily) api.goDaily();
@@ -295,7 +295,7 @@
 
   // --- Per-tile daily status --------------------------------------------------
   // Each game stores its daily under a per-game key; the hub only peeks.
-  var DAILY_KEY = { mystery: "elg:daily:", playerid: "elg:pid:daily:", completefive: "elg:c5:daily:", connections: "elg:cn:daily:", careerorder: "elg:co:daily:", thegrid: "elg:gr:daily:", clubreveal: "elg:cv:daily:", pathbetween: "elg:pb:daily:", oddoneout: "elg:oo:daily:", higherlower: "elg:hl:daily:" };
+  var DAILY_KEY = { mystery: "elg:daily:", playerid: "elg:pid:daily:", completefive: "elg:c5:daily:", connections: "elg:cn:daily:", careerorder: "elg:co:daily:", thegrid: "elg:gr:daily:", clubreveal: "elg:cv:daily:", pathbetween: "elg:pb:daily:", oddoneout: "elg:oo:daily:", higherlower: "elg:hl:daily:", sixofakind: "elg:sk:daily:" };
   function dailyState(game) {           // "ready" | "playing" (started, not done) | "won" | "lost"
     var v = lsGet(DAILY_KEY[game] + todayStr(), null);
     if (!v) return "ready";
@@ -394,7 +394,7 @@
     mystery: "Mystery Player", playerid: "Player ID", completefive: "Complete the Five",
     connections: "Connections", careerorder: "Career Order", thegrid: "The Grid",
     clubreveal: "Common Club", pathbetween: "Path Between", oddoneout: "Odd One Out",
-    higherlower: "Higher or Lower", rostermaster: "Roster Master",
+    higherlower: "Higher or Lower", rostermaster: "Roster Master", sixofakind: "Six of a Kind",
     records: "Records", archive: "Archive", eurocup: "EuroCup"
   };
   var CANON = "https://euroballgames.com/";
@@ -421,7 +421,7 @@
     mystery: "mystery-player", playerid: "player-id", completefive: "complete-the-five",
     connections: "connections", careerorder: "career-order", thegrid: "the-grid",
     clubreveal: "common-club", pathbetween: "path-between", oddoneout: "odd-one-out",
-    higherlower: "higher-or-lower", rostermaster: "roster-master"
+    higherlower: "higher-or-lower", rostermaster: "roster-master", sixofakind: "six-of-a-kind"
   };
 
   // Where the site root is, as an absolute path. Each document declares its own
@@ -467,7 +467,8 @@
     clubreveal: ["daily", "active", "legends", "both"],
     pathbetween: ["daily", "easy", "medium", "hard"],
     oddoneout: ["daily", "practice"],
-    higherlower: ["daily", "endless"]
+    higherlower: ["daily", "endless"],
+    sixofakind: ["daily", "practice"]
   };
   function isMode(view, mode) { return !!(mode && MODES[view] && MODES[view].indexOf(mode) >= 0); }
   function linkedMode(view) {

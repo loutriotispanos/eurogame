@@ -3,18 +3,18 @@
      transform in build_pages.js and re-run `node build_pages.js`. -->
 <html lang="en">
 <head>
-<script>window.__ELG_COMP__ = "eurocup";</script>
+<script>window.__ELG_COMP__ = "euroleague";</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<link rel="manifest" href="../../manifest.webmanifest" />
+<link rel="manifest" href="../manifest.webmanifest" />
 <meta name="theme-color" content="#f7f3ea" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <!-- Night mode: set the saved (or OS-preferred) theme BEFORE first paint to avoid a flash. -->
 <script>(function(){try{var t=localStorage.getItem("elg:theme");if(t)t=JSON.parse(t);if(t!=="dark"&&t!=="light")t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";document.documentElement.setAttribute("data-theme",t);var c=window.__ELG_COMP__?JSON.stringify(window.__ELG_COMP__):localStorage.getItem("elg:comp");if(c&&JSON.parse(c)==="eurocup")document.documentElement.setAttribute("data-comp","eurocup");}catch(e){}})();</script>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Euroball" />
-<link rel="apple-touch-icon" href="../../icon-192.png" />
-<title>The Grid — the daily EuroCup basketball grid game | Euroball</title>
+<link rel="apple-touch-icon" href="../icon-192.png" />
+<title>Six of a Kind — name six EuroLeague players who fit | Euroball</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%8F%80%3C/text%3E%3C/svg%3E" />
 
 <!-- SEO + social preview. og:image / twitter:image are ABSOLUTE now the domain is
@@ -27,21 +27,21 @@
      NOTE: og: tags are NOT updated per game. Social scrapers don't run JS, so a
      dynamic og:title would be read as the default anyway — per-game previews
      would need real static pages per game. -->
-<link id="canonical" rel="canonical" href="https://euroballgames.com/eurocup/the-grid/" />
-<meta name="description" content="A 3×3 grid of clubs, nationalities and positions for the EuroCup. Name a EuroCup player who fits both the row and the column in every cell, with twelve guesses for nine cells. New grid daily." />
+<link id="canonical" rel="canonical" href="https://euroballgames.com/six-of-a-kind/" />
+<meta name="description" content="One category a day, like Serbian players who played for FC Barcelona. Name any six European basketball players who fit it before you make three mistakes. New category daily." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Euroball" />
-<meta property="og:url" content="https://euroballgames.com/eurocup/the-grid/" />
-<meta property="og:title" content="The Grid — Euroball EuroCup" />
-<meta property="og:description" content="A 3×3 grid of clubs, nationalities and positions for the EuroCup. Name a EuroCup player who fits both the row and the column in every cell, with twelve guesses for nine cells. New grid daily." />
+<meta property="og:url" content="https://euroballgames.com/six-of-a-kind/" />
+<meta property="og:title" content="Six of a Kind — Euroball" />
+<meta property="og:description" content="One category a day, like Serbian players who played for FC Barcelona. Name any six European basketball players who fit it before you make three mistakes. New category daily." />
 <meta property="og:image" content="https://euroballgames.com/og-image.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Euroball — twelve daily European basketball puzzles" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="The Grid — Euroball EuroCup" />
-<meta name="twitter:description" content="A 3×3 grid of clubs, nationalities and positions for the EuroCup. Name a EuroCup player who fits both the row and the column in every cell, with twelve guesses for nine cells. New grid daily." />
+<meta name="twitter:title" content="Six of a Kind — Euroball" />
+<meta name="twitter:description" content="One category a day, like Serbian players who played for FC Barcelona. Name any six European basketball players who fit it before you make three mistakes. New category daily." />
 <meta name="twitter:image" content="https://euroballgames.com/og-image.png" />
 <meta name="twitter:image:alt" content="Euroball — twelve daily European basketball puzzles" />
 
@@ -1429,9 +1429,9 @@
 {
   "@context": "https://schema.org",
   "@type": "VideoGame",
-  "name": "The Grid — Euroball",
-  "url": "https://euroballgames.com/eurocup/the-grid/",
-  "description": "A 3×3 grid of clubs, nationalities and positions for the EuroCup. Name a EuroCup player who fits both the row and the column in every cell, with twelve guesses for nine cells. New grid daily.",
+  "name": "Six of a Kind — Euroball",
+  "url": "https://euroballgames.com/six-of-a-kind/",
+  "description": "One category a day, like Serbian players who played for FC Barcelona. Name any six European basketball players who fit it before you make three mistakes. New category daily.",
   "inLanguage": "en",
   "genre": [
     "Puzzle",
@@ -1449,7 +1449,7 @@
   },
   "about": {
     "@type": "SportsOrganization",
-    "name": "EuroCup"
+    "name": "EuroLeague Basketball"
   },
   "isPartOf": {
     "@type": "WebSite",
@@ -1465,34 +1465,34 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Who counts as an answer?",
+      "name": "Why was my answer rejected when the player really did fit?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Any of the 350 EuroCup players whose full career is in the database. A player without a recorded career is not accepted even if he fits, which keeps every name the game offers accurately checkable."
+        "text": "Like The Grid, Six of a Kind only knows well-travelled players, current and non-active, whose full career is in the database. A newcomer still at his first club is turned down even when he genuinely fits, which keeps every name accurately checkable in both directions."
       }
     },
     {
       "@type": "Question",
-      "name": "Why are there EuroLeague clubs on a EuroCup grid?",
+      "name": "Does a short stint count?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Because that is where many EuroCup careers have been. Olympiacos, Partizan or Fenerbahce in a header asks who in this season's EuroCup once played there."
+        "text": "Yes. A player counts for a club if it appears anywhere in his career, loans and one-season stops included."
       }
     },
     {
       "@type": "Question",
-      "name": "How many grids are there?",
+      "name": "How hard can a category be?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "43 EuroCup boards, each verified to have enough answers per cell and a way to fill all nine cells with nine different players."
+        "text": "Never impossible and never a giveaway: every one of the 140 categories has between ten and forty right answers, so six always means digging past the obvious names."
       }
     },
     {
       "@type": "Question",
-      "name": "Is it separate from the EuroLeague Grid?",
+      "name": "Can I give up on the Daily?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes: different boards, its own daily and its own streak. Switch competitions from the menu at the top of the hub."
+        "text": "Yes. Give up ends the round and shows everyone who fitted. It asks once before it commits, records a loss for Six of a Kind, but still counts as played, so the hub streak survives."
       }
     }
   ]
@@ -1512,14 +1512,8 @@
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "EuroCup",
-      "item": "https://euroballgames.com/eurocup/"
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": "The Grid",
-      "item": "https://euroballgames.com/eurocup/the-grid/"
+      "name": "Six of a Kind",
+      "item": "https://euroballgames.com/six-of-a-kind/"
     }
   ]
 }
@@ -1642,13 +1636,25 @@
       <a class="game-card" href="../mystery-player/" data-game="mystery">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-mystery"/></svg></span>
         <span class="gc-text"><span class="gc-title">Mystery Player</span>
-          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — <span class="comp-text" data-ec="Daily, Practice &amp; Endless.">Daily, Practice &amp; Endless.</span></span></span>
+          <span class="gc-desc">Guess the mystery player from a colour-coded stat grid in 8 tries — <span class="comp-text" data-ec="Daily, Practice &amp; Endless.">Daily, Practice, Non-active &amp; Endless.</span></span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="../player-id/" data-game="playerid">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-playerid"/></svg></span>
         <span class="gc-text"><span class="gc-title">Player ID</span>
           <span class="gc-desc">Guess the player from his career path — the clubs and years he played — in just 2 guesses.</span></span>
+        <span class="gc-daily" hidden></span>
+      </a>
+      <a class="game-card" href="../complete-the-five/" data-game="completefive">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-completefive"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Complete the Five</span>
+          <span class="gc-desc">A Final Four team's starting five with one starter missing — name him in 2 guesses.</span></span>
+        <span class="gc-daily" hidden></span>
+      </a>
+      <a class="game-card" href="../connections/" data-game="connections">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-connections"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Connections</span>
+          <span class="gc-desc">Sixteen names hide four groups of four — rosters, nations, Final Fours, ex-clubs, jersey numbers &amp; more. Find them all in 3 mistakes.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="../career-order/" data-game="careerorder">
@@ -1663,10 +1669,22 @@
           <span class="gc-desc">Nine cells, twelve guesses — name a player who fits both the row and the column.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
+      <a class="game-card" href="../common-club/" data-game="clubreveal">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-clubreveal"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Common Club</span>
+          <span class="gc-desc">Two players, exactly one club in common — name it in three guesses.</span></span>
+        <span class="gc-daily" hidden></span>
+      </a>
       <a class="game-card" href="../path-between/" data-game="pathbetween">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-pathbetween"/></svg></span>
         <span class="gc-text"><span class="gc-title">Path Between</span>
           <span class="gc-desc">Two players, one hidden chain — connect them through shared teammates in as few steps as possible.</span></span>
+        <span class="gc-daily" hidden></span>
+      </a>
+      <a class="game-card" href="../odd-one-out/" data-game="oddoneout">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-oddoneout"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Odd One Out</span>
+          <span class="gc-desc">Four names, three belong together, one doesn't — spot the intruder. Five a day, or play on.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="../higher-or-lower/" data-game="higherlower">
@@ -1681,12 +1699,18 @@
           <span class="gc-desc">The 2026-27 rosters, from memory — name every player, club by club. Your best score sticks.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
+      <a class="game-card" href="../six-of-a-kind/" data-game="sixofakind">
+        <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-sixofakind"/></svg></span>
+        <span class="gc-text"><span class="gc-title">Six of a Kind</span>
+          <span class="gc-desc">One category — say, Serbians who played for Barcelona. Name any six who fit before three misses.</span></span>
+        <span class="gc-daily" hidden></span>
+      </a>
     </div>
     <!-- The club pages, one line under the tiles. Not a tile (tiles are games)
          and not a corner icon (a third one per side reaches the masthead at
          375px). The grid above is flex: 1, so this simply takes its height
          from the tiles and layoutHome() packs them into what is left. -->
-    <a class="hub-clubs" href="../../clubs/"><span class="hc-lbl">The clubs</span> <span class="hc-sub">every 2026–27 roster</span> <span class="hc-go">→</span></a>
+    <a class="hub-clubs" href="../clubs/"><span class="hc-lbl">The clubs</span> <span class="hc-sub">every 2026–27 roster</span> <span class="hc-go">→</span></a>
   </div>
 
   <!-- ===== RECORDS (the agate page) ===== -->
@@ -1741,7 +1765,7 @@
     <button id="stats-btn" class="icon-btn stats" type="button" aria-label="Statistics" title="Statistics"><svg viewBox="0 0 24 24"><use href="#ico-stats"/></svg></button>
     <button id="info-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">i</button>
     <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-mystery"/></svg></span><span><span class="accent">Mystery</span> Player</span></h1>
-    <div class="tagline">Guess the mystery <span class="comp-text" data-ec="EuroCup">EuroCup</span> player in 8 tries</div>
+    <div class="tagline">Guess the mystery <span class="comp-text" data-ec="EuroCup">EuroLeague</span> player in 8 tries</div>
   </header>
 
   <div class="app">
@@ -2219,7 +2243,7 @@
     <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Higher or Lower" tabindex="-1">
       <button id="hl-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
       <h2>How to play</h2>
-      <p>Two <span class="comp-text" data-ec="EuroCup">EuroCup</span> players, one question — <strong>who is taller</strong>, <strong>who is older</strong>, or <strong>whose jersey number is higher</strong>? Tap your answer and the values are revealed.</p>
+      <p>Two <span class="comp-text" data-ec="EuroCup">EuroLeague</span> players, one question — <strong>who is taller</strong>, <strong>who is older</strong>, or <strong>whose jersey number is higher</strong>? Tap your answer and the values are revealed.</p>
       <ul>
         <li>Every matchup has a real gap — no ties, no 1&nbsp;cm coin flips.</li>
         <li>The pool mixes <strong>today's players and non-active ones</strong>, so eras collide.</li>
@@ -2243,8 +2267,8 @@
         <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type a name and a match fills its slot instantly. A surname is enough when it's unique on that roster; accents and dots don't matter.</li>
         <li>Your progress <strong>saves automatically</strong>, per club. Come back any time.</li>
         <li>Stuck? <strong>Reveal missing</strong> shows the players you haven't named. They don't count toward your score or the gold ★; <strong>Clear board</strong> lets you try that club again.</li>
-        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card. <em>Clear all boards</em> on the club list does the same for all <span class="comp-text" data-ec="{c}">32</span> at once.</li>
-        <li>Name a full roster once and that club turns <strong>gold ★ — for good</strong>, even if you clear it. Collect all <span class="comp-text" data-ec="{c}">32</span>.</li>
+        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card. <em>Clear all boards</em> on the club list does the same for all <span class="comp-text" data-ec="{c}">twenty</span> at once.</li>
+        <li>Name a full roster once and that club turns <strong>gold ★ — for good</strong>, even if you clear it. Collect all <span class="comp-text" data-ec="{c}">twenty</span>.</li>
       </ul>
       <p class="modal-note">Rosters are our cross-checked 2026-27 database — the exact squads the other games play by. No daily here; this is the long game.</p>
     </div>
@@ -2312,7 +2336,7 @@
         <li><strong>Daily</strong> — one grid a day, the same board for everyone. Keep your streak alive.</li>
         <li><strong>Practice</strong> — random grids, as many as you like.</li>
       </ul>
-      <p class="modal-note">To keep answers fair, The Grid only uses <strong><span class="comp-text" data-ec="this season's EuroCup players">this season's EuroCup players</span></strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
+      <p class="modal-note">To keep answers fair, The Grid only uses <strong><span class="comp-text" data-ec="this season's EuroCup players">well-travelled players, current and non-active,</span></strong> whose full career we know — so a newcomer still at his first club won't be accepted even if he'd fit.</p>
     </div>
   </div>
 
@@ -2348,7 +2372,7 @@
       <h3>Game modes</h3>
       <ul>
         <li><strong>Daily</strong> — one career a day, the same for everyone. Keep your streak alive.</li>
-        <li><strong><span class="comp-text" data-ec="Active">Active</span></strong> — unlimited practice with <span class="comp-text" data-ec="this season's EuroCup players.">this season's EuroCup players.</span></li>
+        <li><strong><span class="comp-text" data-ec="Active">Active / Non-active / Both</span></strong> — unlimited practice with <span class="comp-text" data-ec="this season's EuroCup players.">today's players, non-active ones, or everyone.</span></li>
       </ul>
     </div>
   </div>
@@ -2376,49 +2400,52 @@
        the lobby still fits without scrolling, and this is simply what is under
        it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
        it from every game page and gives the EuroCup hub its own. -->
-  <section class="seo-copy" data-seo-view="thegrid">
-    <h2 class="seo-lede">The Grid — nine cells, twelve guesses, EuroCup players only</h2>
-    <p>Three rows, three columns, and nine cells where they cross. Each cell wants one 2026–27 EuroCup player who satisfies both sides at once — played for Olympiacos and is American, say. The headers can be EuroCup clubs or EuroLeague ones, because EuroCup careers run through both. Twelve guesses for nine cells, no player twice.</p>
-    <h3>How to play The Grid</h3>
+  <section class="seo-copy" data-seo-view="sixofakind">
+    <h2 class="seo-lede">Six of a Kind — one category, six names</h2>
+    <p>One question and six empty slots. The category crosses a club with a nationality, a position or a second club — Serbians who played for FC Barcelona, centers who played for Olympiacos, anyone who wore both Real Madrid and Barcelona shirts — and you name any six players who fit. Three wrong names and it is over. When it ends, you see everyone who fitted, including the ones you forgot.</p>
+    <h3>How to play Six of a Kind</h3>
     <ul>
-      <li>Tap a cell, then name any EuroCup player who fits its row and its column together.</li>
-      <li>Twelve guesses cover nine cells, so you can afford three misses. Right or wrong, every guess costs one.</li>
-      <li>A player counts for a club if it appears anywhere in his career — short stints and NBA spells included.</li>
-      <li>Each player can be used only once on the board, so spend your flexible names carefully. Every cell has at least two right answers.</li>
+      <li>Read the category and start typing. Names suggest themselves from every player in the database, so the list spells for you without giving anything away.</li>
+      <li>A name that fits fills a slot. A name that does not costs one of your three misses. A name you already tried costs nothing.</li>
+      <li>Every category has at least ten right answers, and the game tells you exactly how many there are.</li>
+      <li>Name six and you win. The Daily is the same category for everyone and keeps your hub streak alive.</li>
     </ul>
     <h3>Frequently asked questions</h3>
     <dl class="seo-faq">
-      <dt>Who counts as an answer?</dt>
-      <dd>Any of the 350 EuroCup players whose full career is in the database. A player without a recorded career is not accepted even if he fits, which keeps every name the game offers accurately checkable.</dd>
-      <dt>Why are there EuroLeague clubs on a EuroCup grid?</dt>
-      <dd>Because that is where many EuroCup careers have been. Olympiacos, Partizan or Fenerbahce in a header asks who in this season's EuroCup once played there.</dd>
-      <dt>How many grids are there?</dt>
-      <dd>43 EuroCup boards, each verified to have enough answers per cell and a way to fill all nine cells with nine different players.</dd>
-      <dt>Is it separate from the EuroLeague Grid?</dt>
-      <dd>Yes: different boards, its own daily and its own streak. Switch competitions from the menu at the top of the hub.</dd>
+      <dt>Why was my answer rejected when the player really did fit?</dt>
+      <dd>Like The Grid, Six of a Kind only knows well-travelled players, current and non-active, whose full career is in the database. A newcomer still at his first club is turned down even when he genuinely fits, which keeps every name accurately checkable in both directions.</dd>
+      <dt>Does a short stint count?</dt>
+      <dd>Yes. A player counts for a club if it appears anywhere in his career, loans and one-season stops included.</dd>
+      <dt>How hard can a category be?</dt>
+      <dd>Never impossible and never a giveaway: every one of the 140 categories has between ten and forty right answers, so six always means digging past the obvious names.</dd>
+      <dt>Can I give up on the Daily?</dt>
+      <dd>Yes. Give up ends the round and shows everyone who fitted. It asks once before it commits, records a loss for Six of a Kind, but still counts as played, so the hub streak survives.</dd>
     </dl>
-    <h3>Getting better at The Grid</h3>
+    <h3>Getting better at Six of a Kind</h3>
     <ul>
-      <li>Fill the hardest cells first and keep your most-travelled players for the easy ones.</li>
-      <li>EuroLeague clubs in a header are asking about the past: who in this season's EuroCup once played there.</li>
-      <li>Each player can go on the board once, so check the whole grid before spending an obvious name.</li>
+      <li>Bank the obvious names first, then slow down. The first three come quickly; the last three are where the misses happen.</li>
+      <li>Think in eras. A club's great sides of the 2000s are as valid as this season's roster, and they are often the names nobody else thinks of.</li>
+      <li>Journeymen are your friends. A player who has been at seven clubs fits a surprising number of categories.</li>
+      <li>Check the nationality twice. It is the national team a player plays for, so a naturalised player counts for his adopted country.</li>
     </ul>
     <h3>What's in the game</h3>
-    <p>43 EuroCup boards, each checked to have enough answers in every cell and a way to fill all nine with nine different players.</p>
-    <h3>If you like The Grid</h3>
+    <p>140 categories, each crossing two of the same criteria The Grid uses: a club with a nationality, a position or a second club, or a nationality with a position. Every one has between ten and forty right answers among the 613 careers in the database.</p>
+    <h3>An example</h3>
+    <p>Take centers who played for CSKA Moscow. Nikola Milutinov and Kyle Hines are the easy start, and Boban Marjanovic, Nenad Krstic, David Andersen and Sasha Kaun make six. The database knows only nine, fewer than the ten every real category needs, which is why this one is an example here and never a puzzle.</p>
+    <h3>If you like Six of a Kind</h3>
     <ul>
-      <li><a href="../path-between/">Path Between</a>: Six degrees of the EuroCup.</li>
-      <li><a href="../player-id/">Player ID</a>: A EuroCup player's whole career laid out club by club, with the years.</li>
-      <li><a href="../career-order/">Career Order</a>: A EuroCup player's clubs, shuffled.</li>
+      <li><a href="../the-grid/">The Grid</a>: A 3×3 grid of clubs, nationalities and positions.</li>
+      <li><a href="../roster-master/">Roster Master</a>: The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory.</li>
+      <li><a href="../connections/">Connections</a>: Sixteen EuroLeague names hide four groups of four — a roster, a nationality, a Final Four five, a shared jersey number.</li>
     </ul>
-    <p class="seo-more">Euroball has 7 daily EuroCup puzzles, and twelve for the EuroLeague. <a href="../">See the EuroCup games →</a></p>
+    <p class="seo-more">Euroball has twelve daily European basketball puzzles. <a href="../">See them all →</a></p>
   </section>
 
   <footer>
-    Rosters are current to the <strong>2026–27 <span class="comp-text" data-ec="EuroCup">EuroCup</span> season</strong>, checked club by club at the season start; transfers since then are not reflected.<br />
-    <span class="comp-text" data-ec="{n} players · {c} clubs · compiled from the official EuroCup rosters, FIBA and Wikipedia.">391 players · 32 clubs · compiled from the official EuroCup rosters, FIBA and Wikipedia.</span><br />
-    Play the <a class="colophon-link comp-link" href="../../?comp=euroleague">EuroLeague games</a> · the <a class="colophon-link comp-link" href="../../eurocup/">EuroCup games</a>
-    · <a class="colophon-link info-link" href="../../clubs/">Clubs</a> · <a class="colophon-link info-link" href="../../about/">About</a> · <a class="colophon-link info-link" href="../../contact/">Contact</a> · <a class="colophon-link info-link" href="../../privacy/">Privacy</a><br />
+    Rosters are current to the <strong>2026–27 <span class="comp-text" data-ec="EuroCup">EuroLeague</span> season</strong>, checked club by club at the season start; transfers since then are not reflected.<br />
+    <span class="comp-text" data-ec="{n} players · {c} clubs · compiled from the official EuroCup rosters, FIBA and Wikipedia.">296 players · 20 clubs · 317 non-active players · compiled from official club rosters, Wikipedia, FIBA and Proballers.</span><br />
+    Play the <a class="colophon-link comp-link" href="../?comp=euroleague">EuroLeague games</a> · the <a class="colophon-link comp-link" href="../eurocup/">EuroCup games</a>
+    · <a class="colophon-link info-link" href="../clubs/">Clubs</a> · <a class="colophon-link info-link" href="../about/">About</a> · <a class="colophon-link info-link" href="../contact/">Contact</a> · <a class="colophon-link info-link" href="../privacy/">Privacy</a><br />
     Published for the love of European basketball · No ads, no account · Reads offline<br />
     Anonymous page counts (Cloudflare Web Analytics, cookie-free) · Google Analytics only if you allow it
     · <a id="stats-link" class="colophon-link" rel="nofollow">Stats settings</a>
@@ -2487,7 +2514,7 @@
     <div class="modal" role="dialog" aria-modal="true" aria-label="How to play" tabindex="-1">
       <button id="info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
       <h2>How to play</h2>
-      <p>Guess the mystery <strong><span class="comp-text" data-ec="EuroCup">EuroCup</span> player</strong> in <strong>8 tries</strong>. Start typing a name and pick from the list. After each guess, every column is coloured to show how close you are.</p>
+      <p>Guess the mystery <strong><span class="comp-text" data-ec="EuroCup">EuroLeague</span> player</strong> in <strong>8 tries</strong>. Start typing a name and pick from the list. After each guess, every column is coloured to show how close you are.</p>
 
       <h3>Colours</h3>
       <ul>
@@ -2514,7 +2541,7 @@
       <ul>
         <li><strong>Daily</strong> — one mystery player a day, the same for everyone. Keep your streak alive.</li>
         <li><strong>Practice</strong> — unlimited random players from the active rosters.</li>
-        <li data-ec-hide hidden><strong>Non-active</strong> — players off the current rosters, retired greats included; filter by era.</li>
+        <li data-ec-hide><strong>Non-active</strong> — players off the current rosters, retired greats included; filter by era.</li>
         <li><strong>Endless</strong> — solve players back-to-back and build the longest run you can. One loss ends the run.</li>
       </ul>
 
@@ -2572,41 +2599,41 @@
     </div>
   </div>
 
-  <script src="../../clubs.js"></script>
-  <script src="../../players.js"></script>
-  <script src="../../legends.js"></script>
-  <script src="../../eurocup_players.js"></script>
-  <script src="../../careers.js"></script>
-  <script src="../../eurocup_careers.js"></script>
-  <script src="../../grids.js"></script>
-  <script src="../../eurocup_grids.js"></script>
-  <script src="../../paths.js"></script>
-  <script src="../../eurocup_paths.js"></script>
-  <script src="../../competition.js"></script>
-  <script src="../../lineups.js"></script>
-  <script src="../../puzzles.js"></script>
-  <script src="../../oddones.js"></script>
-  <script src="../../sixes.js"></script>
-  <script src="../../game.js"></script>
-  <script src="../../playerid.js"></script>
-  <script src="../../completefive.js"></script>
-  <script src="../../connections.js"></script>
-  <script src="../../careerorder.js"></script>
-  <script src="../../thegrid.js"></script>
-  <script src="../../clubreveal.js"></script>
-  <script src="../../pathbetween.js"></script>
-  <script src="../../oddoneout.js"></script>
-  <script src="../../higherlower.js"></script>
-  <script src="../../rostermaster.js"></script>
-  <script src="../../sixofakind.js"></script>
-  <script src="../../records.js"></script>
-  <script src="../../archive.js"></script>
+  <script src="../clubs.js"></script>
+  <script src="../players.js"></script>
+  <script src="../legends.js"></script>
+  <script src="../eurocup_players.js"></script>
+  <script src="../careers.js"></script>
+  <script src="../eurocup_careers.js"></script>
+  <script src="../grids.js"></script>
+  <script src="../eurocup_grids.js"></script>
+  <script src="../paths.js"></script>
+  <script src="../eurocup_paths.js"></script>
+  <script src="../competition.js"></script>
+  <script src="../lineups.js"></script>
+  <script src="../puzzles.js"></script>
+  <script src="../oddones.js"></script>
+  <script src="../sixes.js"></script>
+  <script src="../game.js"></script>
+  <script src="../playerid.js"></script>
+  <script src="../completefive.js"></script>
+  <script src="../connections.js"></script>
+  <script src="../careerorder.js"></script>
+  <script src="../thegrid.js"></script>
+  <script src="../clubreveal.js"></script>
+  <script src="../pathbetween.js"></script>
+  <script src="../oddoneout.js"></script>
+  <script src="../higherlower.js"></script>
+  <script src="../rostermaster.js"></script>
+  <script src="../sixofakind.js"></script>
+  <script src="../records.js"></script>
+  <script src="../archive.js"></script>
   <!-- Where the site root is, relative to THIS document. The hub is the root, so
        "./"; a generated game page one directory down says "../". app.js resolves
        it against the document rather than hardcoding "/", which is what keeps the
        github.io mirror (served from /eurogame/) working off the same build. -->
-  <script>window.__ELG_ROOT__ = "../../"; window.__ELG_VIEW__ = "thegrid";</script>
-  <script src="../../app.js"></script>
+  <script>window.__ELG_ROOT__ = "../"; window.__ELG_VIEW__ = "sixofakind";</script>
+  <script src="../app.js"></script>
   <script>
     /* Register the offline service worker (only runs over https / localhost).
        The URL is resolved HERE, while this script parses, and not inside the load
