@@ -48,7 +48,7 @@
     CAREERS.forEach(function (c) {
       u[c.name] = {
         name: c.name,
-        stints: c.career.map(function (s) { return { club: club(s.team), from: s.from, to: s.to == null ? INF : s.to }; })
+        stints: c.career.concat(c.also || []).map(function (s) { return { club: club(s.team), from: s.from, to: s.to == null ? INF : s.to }; })
       };
     });
     UNIVERSE = u;

@@ -50,8 +50,8 @@ PLAYERS.concat(LEGENDS).forEach(function (p) { if (!PROFILE[p.name]) PROFILE[p.n
 var CAREER_BY = {};                   // name → CAREERS entry
 CAREERS.forEach(function (c) { CAREER_BY[c.name] = c; });
 
-function playedFor(name, club) { var c = CAREER_BY[name]; return !!(c && c.career.some(function (e) { return e.team === club; })); }
-function clubsOf(name) { var c = CAREER_BY[name], s = {}, out = []; if (!c) return out; c.career.forEach(function (e) { if (!s[e.team]) { s[e.team] = 1; out.push(e.team); } }); return out; }
+function playedFor(name, club) { var c = CAREER_BY[name]; return !!(c && c.career.concat(c.also || []).some(function (e) { return e.team === club; })); }
+function clubsOf(name) { var c = CAREER_BY[name], s = {}, out = []; if (!c) return out; c.career.concat(c.also || []).forEach(function (e) { if (!s[e.team]) { s[e.team] = 1; out.push(e.team); } }); return out; }
 function inFive(name, L) { return L.five.some(function (p) { return p.name === name; }); }
 function decadeOf(name) { var p = PROFILE[name]; return p ? Math.floor(p.birthYear / 10) * 10 : null; }
 

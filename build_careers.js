@@ -2042,6 +2042,7 @@ function find(name) {
   return null;
 }
 var CAREERS = [], errors = [], seen = {};
+var HISTORY_STINTS = fs.existsSync(__dirname + "/history_stints.json") ? JSON.parse(fs.readFileSync(__dirname + "/history_stints.json", "utf8")) : {};
 // 2025-26 official-roster cross-check: these players were removed from players.js
 // (not on the official roster / did not play a EuroLeague game), so drop any
 // career we had for them — otherwise find() would fail them as "not in PLAYERS".
@@ -2073,7 +2074,14 @@ RAW.forEach(function (r) {
   if (!f) { errors.push(r.name + " (not found in PLAYERS/LEGENDS)"); return; }
   if (seen[r.name]) { errors.push(r.name + " (duplicate RAW entry)"); return; }
   seen[r.name] = 1;
-  var career = clean(r.career);
+  // EuroLeague club-seasons the official rosters show and our research missed
+  // (history_stints.json, from build_history.js). "stint" fits the empty years and
+  // joins the timeline; "also" sits inside another club's years (a mid-season move,
+  // a loan, a 0-minute registration) and is kept beside it: it counts wherever
+  // "played for" is asked, but it's not a step in the ordered career.
+  var gaps = HISTORY_STINTS[r.name] || [];
+  var career = clean(r.career.concat(gaps.filter(function (g) { return g.kind === "stint"; }).map(function (g) { return { team: g.team, from: g.from, to: g.to }; })));
+  var also = gaps.filter(function (g) { return g.kind === "also"; }).map(function (g) { return { team: fixTeam(g.team), from: g.from, to: g.to }; });
   if (career.length < 1) { errors.push(r.name + " (empty career after clean)"); return; }
   // Consistency invariants (the audit caught real bugs here — keep them fatal):
   // an active player's path must END at his current players.js club, still open;
@@ -2091,7 +2099,9 @@ RAW.forEach(function (r) {
     if (i && s.from < career[i - 1].from) errors.push(r.name + " (out of order at " + s.team + ")");
     if (f.p.birthYear && s.from < f.p.birthYear + 14) errors.push(r.name + " (stint " + s.team + " starts at age " + (s.from - f.p.birthYear) + ")");
   }
-  CAREERS.push({ name: r.name, nationality: f.p.nationality, position: f.p.position, active: f.active, career: career });
+  var out = { name: r.name, nationality: f.p.nationality, position: f.p.position, active: f.active, career: career };
+  if (also.length) out.also = also;
+  CAREERS.push(out);
 });
 if (errors.length) { console.error("ERRORS:\n  " + errors.join("\n  ")); process.exit(1); }
 

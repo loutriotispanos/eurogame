@@ -82,7 +82,9 @@
     UNI = []; BY_NAME = {};
     CAREERS.forEach(function (c) {
       var set = {}, list = [];
-      c.career.forEach(function (s) {
+      // "also" (on a roster inside another club's years) counts: the one-shared-club
+      // guarantee must see every club a player was ever at
+      c.career.concat(c.also || []).forEach(function (s) {
         var k = canon(s.team);
         if (!set[k]) { set[k] = 1; list.push(k); }     // one stint or three, it's one club
       });
@@ -301,7 +303,7 @@
     var src = null;
     CAREERS.forEach(function (c) { if (c.name === p.name) src = c; });
     if (!src) return p.name;
-    var spans = src.career.filter(function (s) { return canon(s.team) === club; })
+    var spans = src.career.concat(src.also || []).filter(function (s) { return canon(s.team) === club; }).sort(function (a, b) { return a.from - b.from; })
       .map(function (s) { return s.from + "–" + (s.to == null ? "" : String(s.to).slice(2)); });
     return p.name + " " + spans.join(", ");
   }

@@ -52,7 +52,7 @@
     var u = {};
     CAREERS.forEach(function (c) {
       var e = u[c.name] = { name: c.name, nat: c.nationality, pos: c.position, clubs: {} };
-      c.career.forEach(function (s) { e.clubs[s.team] = 1; e.clubs[canonClub(s.team)] = 1; });
+      c.career.concat(c.also || []).forEach(function (s) { e.clubs[s.team] = 1; e.clubs[canonClub(s.team)] = 1; });   // "also": on the roster, inside another club's years
     });
     function addClub(name, team) { if (u[name]) { u[name].clubs[team] = 1; u[name].clubs[canonClub(team)] = 1; } }
     PLAYERS.forEach(function (p) { addClub(p.name, p.team); });

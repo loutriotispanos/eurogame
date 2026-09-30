@@ -1057,7 +1057,7 @@ function cvSets() {
   var out = {};
   window.CAREERS.forEach(function (c) {
     var s = {};
-    c.career.forEach(function (st) { s[window.CLUBS.canonical(st.team)] = 1; });
+    c.career.concat(c.also || []).forEach(function (st) { s[window.CLUBS.canonical(st.team)] = 1; });   // "also" rosters count too
     out[c.name] = s;
   });
   return out;
@@ -1396,8 +1396,8 @@ ok(window.ODDONES.every(function (r) { return r.theme && r.axis; }), "every roun
   var PROF = {}; window.PLAYERS.concat(window.LEGENDS).forEach(function (p) { if (!PROF[p.name]) PROF[p.name] = p; });
   var CB = {}; window.CAREERS.forEach(function (c) { CB[c.name] = c; });
   var LU = window.LINEUPS;
-  function playedFor(n, c) { var x = CB[n]; return !!(x && x.career.some(function (e) { return e.team === c; })); }
-  function clubsOf(n) { var x = CB[n], s = {}, o = []; if (!x) return o; x.career.forEach(function (e) { if (!s[e.team]) { s[e.team] = 1; o.push(e.team); } }); return o; }
+  function playedFor(n, c) { var x = CB[n]; return !!(x && x.career.concat(x.also || []).some(function (e) { return e.team === c; })); }
+  function clubsOf(n) { var x = CB[n], s = {}, o = []; if (!x) return o; x.career.concat(x.also || []).forEach(function (e) { if (!s[e.team]) { s[e.team] = 1; o.push(e.team); } }); return o; }
   function inFive(n, L) { return L.five.some(function (p) { return p.name === n; }); }
   function dec(n) { return PROF[n] ? Math.floor(PROF[n].birthYear / 10) * 10 : null; }
   function exVal(S, f) { var by = {}; S.forEach(function (n) { var k = f(n); if (k == null) return; (by[k] = by[k] || []).push(n); }); var o = []; Object.keys(by).forEach(function (k) { if (by[k].length === 3) o.push(S.filter(function (n) { return by[k].indexOf(n) < 0; })[0]); }); return o; }
