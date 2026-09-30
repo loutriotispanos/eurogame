@@ -684,7 +684,7 @@ const RAW = [
     { team: "Bnei Herzliya", from: 2024, to: 2025 }, { team: "Maccabi Tel Aviv", from: 2025, to: null } ] },
   { name: "Marcio Santos", career: [
     { team: "Franca", from: 2018, to: 2024 }, { team: "Ratiopharm Ulm", from: 2024, to: 2025 },
-    { team: "Maccabi Tel Aviv", from: 2025, to: null } ] },
+    { team: "Maccabi Tel Aviv", from: 2025, to: 2026 }, { team: "Baskonia", from: 2026, to: null } ] },
   { name: "Amit Ebo", career: [
     { team: "Hapoel Eilat", from: 2017, to: 2018 }, { team: "Maccabi Rishon LeZion", from: 2018, to: 2019 },
     { team: "Maccabi Ashdod", from: 2019, to: 2020 }, { team: "Ironi Ness Ziona", from: 2020, to: 2021 },
@@ -1815,6 +1815,18 @@ RAW.push(
 );
 
 // --- 2026-27 new arrivals (researched in batches; bios in build_players.js SEASON_ADD) ---
+// late signings, 2026-09-30
+RAW.push(
+  { name: "Bandja Sy", career: [
+    { team: "Pau-Orthez", from: 2013, to: 2014 }, { team: "SLUC Nancy", from: 2014, to: 2016 },
+    { team: "ASVEL", from: 2016, to: 2017 }, { team: "AEK Athens", from: 2017, to: 2018 },
+    { team: "Partizan", from: 2018, to: 2019 }, { team: "Andorra", from: 2019, to: 2021 },
+    { team: "Metropolitans 92", from: 2021, to: 2023 }, { team: "Paris Basketball", from: 2023, to: 2025 },
+    { team: "CSM Oradea", from: 2025, to: 2026 }, { team: "Partizan", from: 2026, to: null } ] },
+  { name: "Nick Smith Jr.", career: [
+    { team: "Charlotte Hornets", from: 2023, to: 2025 }, { team: "Los Angeles Lakers", from: 2025, to: 2026 },
+    { team: "Real Madrid", from: 2026, to: null } ] }
+);
 RAW.push(
   // late signing (2026-09-28). Promitheas (Jan-Jun 2024) and Panionios (10 games, autumn 2025)
   // sit inside the neighbouring stints and are absorbed by clean(), like every short spell.

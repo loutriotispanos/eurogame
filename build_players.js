@@ -175,7 +175,7 @@ const SEASON_REMOVE = new Set([
   "Paul Eboua", "Zac Seljaas", "Shaquille Harrison", "Braian Angola",    // ASVEL
   "Thomas Heurtel", "Melvin Ajinca", "Glynn Watson Jr.",   // (Ndiaye → Olympiacos)
   "Bastien Vautier", "Armel Traore",
-  "Marcio Santos", "Lonnie Walker IV", "Jeffrey Dowtin Jr.",             // Maccabi Tel Aviv
+  "Lonnie Walker IV", "Jeffrey Dowtin Jr.",             // Maccabi Tel Aviv (Marcio Santos → Baskonia, re-homed 2026-09-29)
   "Zach Hankins", "Tamir Blatt",
   "Giannoulis Larentzakis",         // Olympiacos (Fall → Panathinaikos, Ntilikina → Paris)
   "Monte Morris", "Shaquielle McKissic",
@@ -212,6 +212,11 @@ const SEASON_RETURN = [
 // Players new to the database for 2026-27 (researched in batches; careers
 // live in build_careers.js under "2026-27 new arrivals").
 const SEASON_ADD = [
+  // late signings (2026-09-28/30)
+  // Partizan, short-term deal covering Derek Willis's injury. Paris-born, Malian passport too, played for France (2014).
+  {"name":"Bandja Sy","team":"Partizan","nationality":"France","position":"Forward","height":205,"birthYear":1990,"number":95},
+  // Real Madrid, one-year deal; signed in September, not yet registered for the EuroLeague at Round 2.
+  {"name":"Nick Smith Jr.","team":"Real Madrid","nationality":"USA","position":"Guard","height":188,"birthYear":2004,"number":1},
   // late signing (2026-09-28): Olympiacos, one-year deal. Greek-American, plays for Greece (debut 2023).
   {"name":"George Papas","team":"Olympiacos","nationality":"Greece","position":"Guard","height":196,"birthYear":1998,"number":1},
   // batch 6 (2026-09-24): the last ten
@@ -305,6 +310,8 @@ const SEASON_ADD = [
 
 const SEASON_MOVE = {
   "Bryant Dunston":  { team: "Olympiacos", number: 42 },     // re-homed: non-active (ex-Milano), signed 2026-09-28
+  "Marcio Santos":   { team: "Baskonia", number: 11 },       // re-homed: non-active (ex-Maccabi), signed 2026-09-29. NUMBER UNVERIFIED (not registered yet; #3 is DJ Stewart's) — check the official roster
+  "Ish Wainright":   { team: "Hapoel Tel Aviv", number: 12 }, // stays, was #24 (official roster, 2026-09-30)
   "Mike James":      { team: "Anadolu Efes", number: 55 },   // from AS Monaco
   "Matthew Strazel": { team: "Anadolu Efes", number: 32 },   // from AS Monaco
   "Collin Malcolm":  { team: "Anadolu Efes", number: 17 },   // from Hapoel Tel Aviv

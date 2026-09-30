@@ -117,7 +117,7 @@ window.PATHS = [
   {"a":"Derrick Alston Jr.","b":"Ercan Osmani","par":3},
   {"a":"Guy Palatin","b":"Olek Balcerowski","par":3},
   {"a":"A.J. Lawson","b":"Tai Odiase","par":3},
-  {"a":"Ethan Thompson","b":"Florent Pietrus","par":3},
+  {"a":"Ethan Thompson","b":"Stefan Miljenovic","par":3},
   {"a":"Ender Arslan","b":"Aliou Diarra","par":3},
   {"a":"Tai Odiase","b":"Jonas Maciulis","par":3},
   {"a":"Devon Dotson","b":"Marko Milic","par":3},

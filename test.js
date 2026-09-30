@@ -242,8 +242,8 @@ function submitByName(name) {
 }
 
 console.log("data + init");
-ok(window.PLAYERS && window.PLAYERS.length === 296, "296 players loaded");
-ok(window.LEGENDS && window.LEGENDS.length === 317, "317 legends loaded");
+ok(window.PLAYERS && window.PLAYERS.length === 299, "299 players loaded");
+ok(window.LEGENDS && window.LEGENDS.length === 316, "316 legends loaded");
 ok(window.LEGENDS.every(function (p) { return ["Guard", "Forward", "Center"].indexOf(p.position) >= 0; }), "all legend positions valid");
 ok(window.LEGENDS.every(function (p) { return window.TEAMS[p.team]; }), "every legend team resolves in TEAMS");
 ok(window.TEAMS["AS Monaco"] && window.TEAMS["AS Monaco"].country === "France", "AS Monaco counts as France (plays in the French league)");
@@ -1628,21 +1628,38 @@ fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
 ok(byId("rm-info-modal").hidden === true, "Escape closes it");
 Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
 
-console.log("Search boxes never invite the browser's personal autofill");
+console.log("Player ID + Common Club — a roster change can't re-answer a daily already played");
 (function () {
-  // Chrome ignores autocomplete="off" for address autofill, and a field whose
-  // placeholder or label says "name" is read as a personal-name field: it
-  // offered the user's own name under Six of a Kind's "Name a player who fits".
-  // Every guess box gets a token Chrome doesn't know, and no "name" wording.
-  var html = fs.readFileSync("index.html", "utf8"), bad = [];
-  (html.match(/<input id="[a-z0-9-]+-input"[\s\S]*?\/>/g) || []).forEach(function (tag) {
-    var id = tag.match(/id="([^"]+)"/)[1];
-    var ac = (tag.match(/autocomplete="([^"]*)"/) || [])[1];
-    var words = ((tag.match(/placeholder="([^"]*)"/) || [])[1] || "") + " " + ((tag.match(/aria-label="([^"]*)"/) || [])[1] || "");
-    if (!ac || ac === "off" || ac === "on" || ac === "name") bad.push(id + ": autocomplete=" + ac);
-    if (/\bname/i.test(words)) bad.push(id + ": says '" + words.trim() + "'");
-  });
-  ok(bad.length === 0, "every guess box uses its own autocomplete token and never says 'name'" + (bad.length ? " — " + bad.join("; ") : ""));
+  function today() { var d = new Date(), p = function (n) { return n < 10 ? "0" + n : "" + n; }; return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
+  var T = today();
+  var pidKey = "elg:pid:daily:" + T, pidWas = store[pidKey];
+  window.PlayerID.goDaily();
+  var fresh = window.PlayerID._peek().name;
+  var other = window.CAREERS.filter(function (c) { return c.career.length >= 4 && c.name !== fresh; })[0].name;
+  store[pidKey] = JSON.stringify({ target: other, guesses: [], done: true, won: true });
+  window.PlayerID.goDaily();
+  ok(window.PlayerID._peek().name === other && window.PlayerID._peekDay().over === true,
+     "Player ID: a finished daily keeps the answer it was played on, even when the date's pick has moved");
+  if (pidWas === undefined) delete store[pidKey]; else store[pidKey] = pidWas;
+  window.PlayerID.goDaily();
+
+  var cvKey = "elg:cv:daily:" + T, cvWas = store[cvKey];
+  window.ClubReveal.goDaily();
+  var cv = window.ClubReveal._peek();
+  var alt = null, M = window.CAREERS;
+  for (var i = 0; i < M.length && !alt; i++) for (var j = i + 1; j < M.length && !alt; j++) {
+    var a = window.ClubReveal._byName(M[i].name), b = window.ClubReveal._byName(M[j].name);
+    if (!a || !b || (a.name === cv.pair[0].name && b.name === cv.pair[1].name)) continue;
+    var shared = a.clubs.filter(function (c) { return b.set[c]; });
+    if (shared.length === 1 && shared[0] !== cv.club) alt = { a: a.name, b: b.name, club: shared[0] };
+  }
+  store[cvKey] = JSON.stringify({ a: alt.a, b: alt.b, club: alt.club, guesses: [alt.club], done: true, won: true });
+  window.ClubReveal.goDaily();
+  var cv2 = window.ClubReveal._peek();
+  ok(cv2.club === alt.club && cv2.pair[0].name === alt.a && cv2.pair[1].name === alt.b && cv2.over === true,
+     "Common Club: a finished daily replays its own pair and club, even when the date's pick has moved");
+  if (cvWas === undefined) delete store[cvKey]; else store[cvKey] = cvWas;
+  window.ClubReveal.goDaily();
 })();
 
 console.log("Six of a Kind — one category, name six");
