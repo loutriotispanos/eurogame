@@ -1761,8 +1761,8 @@
 
     <div class="controls">
       <div class="search">
-        <input id="guess-input" type="text" autocomplete="off" spellcheck="false"
-               placeholder="Type a player's name…"
+        <input id="guess-input" type="text" autocomplete="mp-guess" spellcheck="false"
+               placeholder="Type a player…"
                role="combobox" aria-expanded="false" aria-controls="dropdown"
                aria-autocomplete="list" aria-haspopup="listbox" aria-label="Guess a player" />
         <div id="dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
@@ -1827,7 +1827,7 @@
       <div id="pid-guesses" class="pid-guesses"></div>
       <div class="controls">
         <div class="search">
-          <input id="pid-input" type="text" autocomplete="off" spellcheck="false"
+          <input id="pid-input" type="text" autocomplete="pid-guess" spellcheck="false"
                  placeholder="Guess the player…"
                  role="combobox" aria-expanded="false" aria-controls="pid-dropdown"
                  aria-autocomplete="list" aria-haspopup="listbox" aria-label="Guess the player" />
@@ -1861,10 +1861,10 @@
       <div id="c5-guesses" class="pid-guesses"></div>
       <div class="controls">
         <div class="search">
-          <input id="c5-input" type="text" autocomplete="off" spellcheck="false"
-                 placeholder="Name the missing player…"
+          <input id="c5-input" type="text" autocomplete="c5-guess" spellcheck="false"
+                 placeholder="Who's the missing starter?"
                  role="combobox" aria-expanded="false" aria-controls="c5-dropdown"
-                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Name the missing player" />
+                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Guess the missing starter" />
           <div id="c5-dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
         </div>
         <button id="c5-giveup" type="button">Give up</button>
@@ -1950,10 +1950,10 @@
       <div id="gr-banner" class="banner" hidden></div>
       <div class="controls">
         <div class="search">
-          <input id="gr-input" type="text" autocomplete="off" spellcheck="false"
-                 placeholder="Pick a cell, then name a player…"
+          <input id="gr-input" type="text" autocomplete="gr-guess" spellcheck="false"
+                 placeholder="Pick a cell, then type a player…"
                  role="combobox" aria-expanded="false" aria-controls="gr-dropdown"
-                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Name a player for the selected cell" />
+                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Guess a player for the selected cell" />
           <div id="gr-dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
         </div>
         <button id="gr-giveup" type="button">Give up</button>
@@ -2163,10 +2163,10 @@
       <div id="sk-answers" class="sk-answers" hidden></div>
       <div id="sk-controls" class="controls">
         <div class="search">
-          <input id="sk-input" type="text" autocomplete="off" spellcheck="false"
-                 placeholder="Name a player who fits…"
+          <input id="sk-input" type="text" autocomplete="sk-guess" spellcheck="false"
+                 placeholder="Type a player who fits…"
                  role="combobox" aria-expanded="false" aria-controls="sk-dropdown"
-                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Name a player who fits the category" />
+                 aria-autocomplete="list" aria-haspopup="listbox" aria-label="Guess a player who fits the category" />
           <div id="sk-dropdown" class="dropdown" role="listbox" aria-label="Player suggestions" hidden></div>
         </div>
         <button id="sk-giveup" type="button">Give up</button>
