@@ -76,7 +76,7 @@ const POSITIONS = ["Guard", "Forward", "Center"];
 
 const byType = { nat: [], pos: [], club: [], natpos: [] };
 function consider(type, a, b) {
-  const n = G._answers(a, b).length;
+  const n = G._answers(a, b, true).length;   // the known players: the game also counts the archive's
   if (n >= MIN_ANSWERS && n <= MAX_ANSWERS) byType[type].push({ a, b });
 }
 CLUBS.forEach(function (c) {

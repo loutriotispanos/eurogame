@@ -32,15 +32,16 @@
   function initials(name) { var p = String(name).trim().split(/\s+/); return ((p[0] || "")[0] || "") + ((p[1] || "")[0] || ""); }
   function avatarColor(name) { var h = 0; for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0; return "hsl(" + (h % 360) + ",45%,42%)"; }
 
-  // --- Player universe: only players whose FULL career we know ----------------
-  // The Grid checks "played for club X" against our data, so it MUST only offer
-  // players whose whole path we have — otherwise a genuinely-correct guess
-  // (e.g. a current roster player who also played elsewhere years ago) gets
-  // rejected because we only stored his current club. So the pool is the
-  // careers.js players (the well-travelled veterans + legends), each enriched
-  // with his current-roster and Final-Four clubs. Every offered name is then
-  // accurately answerable, and cells still have several right answers.
-  var UNIVERSE = null;
+  // --- Player universe ----------------------------------------------------------
+  // The careers.js players (every club of their whole path), each enriched with
+  // his current-roster and Final-Four clubs — the KNOWN players, the ones the
+  // generators (build_grids.js, build_sixes.js) build puzzles from, so every cell
+  // and category is answerable by names a fan knows.
+  // Then EVERYBODY (owner's rule for the history expansion): once history.js is
+  // in, every player of every EuroLeague roster since 2000-01 joins, and a player
+  // counts for a club if we have him there — any EuroLeague season since 2000, or
+  // any stint in our full careers. Only ever adds: no answer stops counting.
+  var UNIVERSE = null, merged = false, version = 0;
   // Careers keep era-accurate club names ("Tau Ceramica"), criteria use the
   // modern one ("Baskonia") — clubs.js is the shared map that says they're the
   // same club, so the 2000s greats answer today's criterion. Registered under
@@ -48,10 +49,10 @@
   // stops matching.
   var canonClub = (window.CLUBS && window.CLUBS.canonical) ? window.CLUBS.canonical : function (t) { return t; };
   function universe() {
-    if (UNIVERSE) return UNIVERSE;
+    if (UNIVERSE) { if (!merged && window.HISTORY) mergeHistory(); return UNIVERSE; }
     var u = {};
     CAREERS.forEach(function (c) {
-      var e = u[c.name] = { name: c.name, nat: c.nationality, pos: c.position, clubs: {} };
+      var e = u[c.name] = { name: c.name, nat: c.nationality, pos: c.position, clubs: {}, known: 1 };
       c.career.concat(c.also || []).forEach(function (s) { e.clubs[s.team] = 1; e.clubs[canonClub(s.team)] = 1; });   // "also": on the roster, inside another club's years
     });
     function addClub(name, team) { if (u[name]) { u[name].clubs[team] = 1; u[name].clubs[canonClub(team)] = 1; } }
@@ -59,7 +60,27 @@
     LEGENDS.forEach(function (p) { addClub(p.name, p.team); });
     LINEUPS.forEach(function (L) { L.five.forEach(function (p) { addClub(p.name, L.team); }); });
     UNIVERSE = u;
+    mergeHistory();
     return u;
+  }
+  function mergeHistory() {
+    var H = window.HISTORY;
+    if (merged || !H || !UNIVERSE || (window.ELG_COMP && window.ELG_COMP.id === "eurocup")) return;
+    merged = true; version++;
+    var u = UNIVERSE;
+    H.boards.forEach(function (b) {
+      b[3].forEach(function (x) {
+        var p = H.people[x[0]];
+        var e = u[p[0]] || (u[p[0]] = { name: p[0], nat: p[1], pos: p[2] || "", clubs: {} });
+        e.clubs[b[1]] = 1; e.clubs[canonClub(b[1])] = 1;
+      });
+    });
+  }
+  // Ask for history.js (shared loader); then() runs when the universe has it.
+  function withHistory(then) {
+    var L = window.ELG_HISTORY;
+    if (!L || !L.load) { if (then) then(); return; }
+    L.load(function () { universe(); mergeHistory(); if (then) then(); });
   }
   function fits(name, crit) {
     var e = universe()[name];
@@ -69,9 +90,10 @@
     if (crit.t === "pos") return e.pos === crit.v;
     return false;
   }
-  function answers(a, b) {
+  // known=true: the known players only, the list the generators guarantee.
+  function answers(a, b, known) {
     var u = universe(), out = [];
-    for (var name in u) if (fits(name, a) && fits(name, b)) out.push(name);
+    for (var name in u) if ((!known || u[name].known) && fits(name, a) && fits(name, b)) out.push(name);
     return out;
   }
   function critLabel(c) { return c.t === "pos" ? c.v + "s" : c.v; }
@@ -225,10 +247,11 @@
   }
 
   // --- Autocomplete ----------------------------------------------------------
-  var NAMES = null;
+  var NAMES = null, NAMES_V = -1;
   function namePool() {
-    if (NAMES) return NAMES;
-    var u = universe(); NAMES = [];
+    var u = universe();
+    if (NAMES && NAMES_V === version) return NAMES;
+    NAMES = []; NAMES_V = version;
     for (var n in u) NAMES.push({ name: n });
     NAMES.sort(function (a, b) { return a.name < b.name ? -1 : 1; });
     return NAMES;
@@ -536,7 +559,7 @@
   }
 
   window.TheGrid = {
-    onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
+    onShow: function () { withHistory(); if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("practice"); },
     goMode: setMode,
@@ -551,7 +574,9 @@
     _shareText: shareText,
     _fits: fits,
     _answers: answers,
-    _universe: universe
+    _universe: universe,
+    _version: function () { universe(); return version; },
+    _withHistory: withHistory
   };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
