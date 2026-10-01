@@ -1618,6 +1618,7 @@ if (rmAmb) {
 
 console.log("Roster Master — how-to modal");
 Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
+eval(fs.readFileSync("history.js", "utf8"));   // what the on-demand <script> would bring
 window.RosterMaster.onShow();
 ok(byId("rm-info-modal").hidden === false, "first onShow auto-opens the how-to");
 fire(byId("rm-info-close"), "click");
@@ -1628,6 +1629,102 @@ ok(byId("rm-info-modal").hidden === false, "info button re-opens it manually");
 fireDoc("keydown", { key: "Escape", preventDefault: function () {} });
 ok(byId("rm-info-modal").hidden === true, "Escape closes it");
 Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
+
+console.log("Roster Master — every season since 2000-01 (history.js, on demand)");
+(function () {
+  var RM = window.RosterMaster, H = window.HISTORY, h = RM._history();
+  var rmKey = function (kind, s, c) { return "elg:rm:" + kind + ":" + s + ":" + c; };
+  ok(h.state === "ready" && h.seasons[0] === "2026-27" && h.seasons[1] === H.seasons[H.seasons.length - 1] && h.seasons[h.seasons.length - 1] === "2000-01",
+     "seasons run newest first: this one, then every archive season back to 2000-01 (" + h.seasons.length + ")");
+  ok(h.seasons.length === H.seasons.length + 1 && +H.seasons[H.seasons.length - 1].slice(0, 4) + 1 === 2026,
+     "…the archive ends the season before ours, so no season is listed twice");
+  ok(h.boards === H.boards.length + 20, "one board per club per season: " + h.boards + " in all");
+  RM._seasons();
+  var kids = byId("rm-picker").children;
+  ok(RM._peek().view === "seasons" && kids.length === h.seasons.length && /2026-27/.test(kids[0].innerHTML) && /2000-01/.test(kids[kids.length - 1].innerHTML),
+     "the start is the season list, this season first");
+  ok(byId("rm-picker-actions").hidden === true && byId("rm-season-head").hidden === true, "…with no Clear all and no back button there");
+  ok(/Boards ★ \d+\/\d+/.test(byId("rm-summary").textContent), "…and the summary counts boards, seasons and clubs complete");
+  RM._season("2001-02");
+  var n0102 = H.boards.filter(function (b) { return H.seasons[b[0]] === "2001-02"; }).length;
+  ok(n0102 === 32 && byId("rm-picker").children.length === 32, "2001-02 lists all 32 of its clubs");
+  ok(win._pushedState && win._pushedState.season === "2001-02" && !win._pushedState.club, "picking a season is a history entry (Back returns to the seasons)");
+  ok(byId("rm-season-head").hidden === false && /2001-02/.test(byId("rm-season-title").textContent), "…headed by the season, with a way back");
+  // an old board: Baskonia in 2005-06 played as Tau Ceramica
+  var bi = H.boards.filter(function (b) { return H.seasons[b[0]] === "2005-06" && b[1] === "Baskonia"; })[0];
+  RM._open("Baskonia", false, "2005-06");
+  var pk = RM._peek();
+  ok(pk.season === "2005-06" && pk.club === "Baskonia" && pk.total === bi[3].length && pk.named === 0, "an archive board opens empty (" + bi[3].length + " slots)");
+  ok(win._pushedState.season === "2005-06" && win._pushedState.club === "Baskonia", "…as a history entry carrying its season");
+  ok(byId("rm-club").innerHTML.indexOf(bi[2]) >= 0 && /Baskonia/.test(byId("rm-club").innerHTML) && /2005-06/.test(byId("rm-club").innerHTML),
+     "…titled with the club's name that season (" + bi[2] + "), our name and the season beside it");
+  var someone = H.people[bi[3][0][0]][0];
+  ok(RM._guess(someone) === "hit" && store[rmKey("board", "2005-06", "Baskonia")], "naming a player saves the board under its season and club");
+  RM._open("Baskonia", false, "2006-07");
+  ok(RM._peek().named === 0, "…and every board is its own recall: the next season starts empty");
+  RM._open("Baskonia", false, "2005-06");
+  ok(RM._peek().named === 1, "…while the first keeps its name");
+  // a namesake carries his birth year, which nobody types
+  var nsBoard = null, nsName = null;
+  H.boards.some(function (b) { return b[3].some(function (x) { var n = H.people[x[0]][0]; if (/\(b\. \d{4}\)$/.test(n)) { nsBoard = b; nsName = n; return true; } return false; }); });
+  RM._open(nsBoard[1], false, H.seasons[nsBoard[0]]);
+  ok(RM._guess(nsName.replace(/\s*\(b\. \d{4}\)$/, "")) === "hit", "a namesake is named without his birth year (" + nsName + ")");
+  // the feed has no number for some, and no position for a few
+  var nnBoard = H.boards.filter(function (b) { return b[3].some(function (x) { return x[1] == null && H.people[x[0]][2] === ""; }); })[0];
+  RM._open(nnBoard[1], false, H.seasons[nnBoard[0]]);
+  var nnP = nnBoard[3].filter(function (x) { return x[1] == null && H.people[x[0]][2] === ""; })[0];
+  RM._guess(H.people[nnP[0]][0]);
+  var groupsHtml = (byId("rm-groups").children || []).map(function (sec) { return (sec.children || []).map(function (c) { return (c.innerHTML || "") + (c.children || []).map(function (d) { return d.innerHTML || ""; }).join(""); }).join(""); }).join("");
+  ok(/Position not listed/.test(groupsHtml) && !/#null|#undefined/.test(groupsHtml) && !/#null/.test(byId("rm-flash").textContent),
+     "a player with no number or position gets a slot under 'Position not listed', never '#null'");
+  ok(H.boards.every(function (b) { var s = {}; return b[3].every(function (x) { if (s[x[0]]) return false; s[x[0]] = 1; return true; }); }),
+     "a player released and re-signed in one season fills one slot, not two");
+  // royal purple: a season complete
+  var setGold = function (s, c) {
+    var b = H.boards.filter(function (x) { return H.seasons[x[0]] === s && x[1] === c; })[0];
+    var n = b ? b[3].length : window.PLAYERS.filter(function (p) { return p.team === c; }).length;
+    store[rmKey("best", s, c)] = JSON.stringify({ n: n, of: n });
+  };
+  var s00 = H.boards.filter(function (b) { return b[0] === 0; });
+  s00.slice(1).forEach(function (b) { setGold("2000-01", b[1]); });
+  ok(!RM._purple.season("2000-01"), "a season with one club short is not purple");
+  setGold("2000-01", s00[0][1]);
+  RM._seasons();
+  var last = byId("rm-picker").children[byId("rm-picker").children.length - 1];
+  ok(RM._purple.season("2000-01") && /purple/.test(last.className), "every club of 2000-01 gold → the season turns royal purple in the season list");
+  // royal purple: a club complete in every season it played
+  var seasonsOf = {}; H.boards.forEach(function (b) { (seasonsOf[b[1]] = seasonsOf[b[1]] || []).push(H.seasons[b[0]]); });
+  var pc = Object.keys(seasonsOf).filter(function (c) { return !window.PLAYERS.some(function (p) { return p.team === c; }) && seasonsOf[c].length >= 2 && seasonsOf[c].indexOf("2000-01") < 0; })
+    .sort(function (a, b) { return seasonsOf[a].length - seasonsOf[b].length; })[0];
+  seasonsOf[pc].slice(1).forEach(function (s) { setGold(s, pc); });
+  ok(!RM._purple.club(pc), "a club with one season short is not purple (" + pc + ")");
+  setGold(seasonsOf[pc][0], pc);
+  RM._season(seasonsOf[pc][0]);
+  var title = H.boards.filter(function (b) { return b[1] === pc && H.seasons[b[0]] === seasonsOf[pc][0]; })[0][2];
+  var tile = byId("rm-picker").children.filter(function (c) { return (c.innerHTML || "").indexOf(title) >= 0; })[0];
+  ok(RM._purple.club(pc) && tile && /purple/.test(tile.className), "a club gold in every season it played turns purple in each season's club list (" + pc + ", " + seasonsOf[pc].length + " seasons)");
+  ok(window.Records._collect().rm.all.gold >= s00.length, "the Records page counts the archive's gold boards");
+  // the crown: everything
+  H.boards.forEach(function (b) { setGold(H.seasons[b[0]], b[1]); });
+  var cur = {}; window.PLAYERS.forEach(function (p) { cur[p.team] = 1; });
+  Object.keys(cur).forEach(function (c) { setGold("2026-27", c); });
+  RM._seasons();
+  ok(RM._tally().crown && /👑/.test(byId("rm-summary").textContent) && /👑/.test(RM.chipLabel()), "every board gold → the crown, on the season list and the hub tile");
+  // saves from before the archive move to this season's boards, once
+  Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
+  var rmOly = window.PLAYERS.filter(function (p) { return p.team === "Olympiacos"; });
+  store["elg:rm:board:Olympiacos"] = JSON.stringify([rmOly[0].name]);
+  store["elg:rm:best:Olympiacos"] = JSON.stringify({ n: 3, of: rmOly.length });
+  store["elg:rm:open"] = JSON.stringify("Olympiacos");
+  RM._migrate();
+  ok(store[rmKey("board", "2026-27", "Olympiacos")] && !("elg:rm:board:Olympiacos" in store) && JSON.parse(store[rmKey("best", "2026-27", "Olympiacos")]).n === 3,
+     "an old save (no season in its key) becomes this season's board, best included, and the old key goes");
+  ok(JSON.parse(store["elg:rm:open"]).s === "2026-27" && JSON.parse(store["elg:rm:open"]).c === "Olympiacos", "…and the board left open is still the one reopened");
+  RM._open("Olympiacos");
+  ok(RM._peek().named === 1, "…with its names on it");
+  Object.keys(store).forEach(function (k) { if (k.indexOf("elg:rm:") === 0) delete store[k]; });
+  RM._back();
+})();
 
 console.log("Player ID + Common Club — a roster change can't re-answer a daily already played");
 (function () {
@@ -1718,9 +1815,10 @@ console.log("History — every completed EuroLeague season since 2000-01 (histor
   ok(chk.status === 0, "history.js is current with its snapshots and decisions — else run `node build_history.js`");
   var gz = require("zlib").gzipSync(fs.readFileSync("history.js")).length;
   ok(gz < 150 * 1024, "history.js stays light: " + Math.round(gz / 1024) + " KB compressed (limit 150)");
-  var shell = fs.readFileSync("index.html", "utf8");
-  ok(shell.indexOf("history.js") === -1 && fs.readFileSync("sw.js", "utf8").indexOf("history.js") === -1,
-     "…and nothing loads it yet: it arrives on demand with the first game that uses it");
+  var shell = fs.readFileSync("index.html", "utf8"), sw = fs.readFileSync("sw.js", "utf8");
+  var assets = /var ASSETS = \[([\s\S]*?)\];/.exec(sw)[1];
+  ok(shell.indexOf("history.js") === -1 && assets.indexOf("history.js") === -1 && /ON_DEMAND = \["history\.js"\]/.test(sw),
+     "…and it never rides with the page: it arrives on demand (Roster Master) and the offline cache keeps it for whoever has it");
 })();
 
 console.log("Six of a Kind — one category, name six");
@@ -2695,7 +2793,7 @@ ok(rc.extras.some(function (x) { return x.line.indexOf("best streak 12") >= 0; }
 var rcG0 = rc.rm.gold;
 var rmTeam2 = window.PLAYERS.filter(function (p) { return p.team !== "AS Monaco"; })[0].team;
 var rmSize2 = window.PLAYERS.filter(function (p) { return p.team === rmTeam2; }).length;
-store["elg:rm:best:" + rmTeam2] = JSON.stringify({ n: rmSize2, of: rmSize2 });
+store["elg:rm:best:2026-27:" + rmTeam2] = JSON.stringify({ n: rmSize2, of: rmSize2 });
 rc = window.Records._collect();
 ok(rc.rm.gold === rcG0 + 1, "a full-roster best counts as one more gold club");
 ok(rc.rm.of === window.PLAYERS.length && rc.rm.named >= rmSize2, "Roster Master totals count every rostered player");
@@ -3139,7 +3237,7 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
 (function () {
   console.log("Roster Master — Reveal missing shows the rest, and it never counts");
   var C = "Panathinaikos", ros = window.PLAYERS.filter(function (p) { return p.team === C; });
-  var saveB = store["elg:rm:board:" + C], saveBest = store["elg:rm:best:" + C], saveRev = store["elg:rm:rev:" + C];
+  var saveB = store["elg:rm:board:2026-27:" + C], saveBest = store["elg:rm:best:2026-27:" + C], saveRev = store["elg:rm:rev:2026-27:" + C];
   window.RosterMaster._open(C);
   window.RosterMaster._clear();
   var first = ros[0], second = ros[1];
@@ -3161,7 +3259,7 @@ ok(window.OddOneOut._peek().archive === false, "the Daily tab is always a way ho
   window.RosterMaster._clear();
   ok(window.RosterMaster._peek().revealed === 0 && window.RosterMaster._peek().named === 0, "Clear board wipes the reveal too, so the club can be tried again");
   var put = function (k, v) { if (v === undefined) delete store[k]; else store[k] = v; };
-  put("elg:rm:board:" + C, saveB); put("elg:rm:best:" + C, saveBest); put("elg:rm:rev:" + C, saveRev);
+  put("elg:rm:board:2026-27:" + C, saveB); put("elg:rm:best:2026-27:" + C, saveBest); put("elg:rm:rev:2026-27:" + C, saveRev);
   window.RosterMaster._back();
 })();
 

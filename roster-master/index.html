@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Euroball" />
 <link rel="apple-touch-icon" href="../icon-192.png" />
-<title>Roster Master — name every 2026-27 EuroLeague roster | Euroball</title>
+<title>Roster Master — name every EuroLeague roster since 2000 | Euroball</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%8F%80%3C/text%3E%3C/svg%3E" />
 
 <!-- SEO + social preview. og:image / twitter:image are ABSOLUTE now the domain is
@@ -28,12 +28,12 @@
      dynamic og:title would be read as the default anyway — per-game previews
      would need real static pages per game. -->
 <link id="canonical" rel="canonical" href="https://euroballgames.com/roster-master/" />
-<meta name="description" content="The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good." />
+<meta name="description" content="The long game: name every player on every EuroLeague roster since 2000-01, season by season, club by club, from memory. No autocomplete, no hints. A full roster turns gold for good." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Euroball" />
 <meta property="og:url" content="https://euroballgames.com/roster-master/" />
 <meta property="og:title" content="Roster Master — Euroball" />
-<meta property="og:description" content="The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good." />
+<meta property="og:description" content="The long game: name every player on every EuroLeague roster since 2000-01, season by season, club by club, from memory. No autocomplete, no hints. A full roster turns gold for good." />
 <meta property="og:image" content="https://euroballgames.com/og-image.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
@@ -41,7 +41,7 @@
 <meta property="og:image:alt" content="Euroball — twelve daily European basketball puzzles" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Roster Master — Euroball" />
-<meta name="twitter:description" content="The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good." />
+<meta name="twitter:description" content="The long game: name every player on every EuroLeague roster since 2000-01, season by season, club by club, from memory. No autocomplete, no hints. A full roster turns gold for good." />
 <meta name="twitter:image" content="https://euroballgames.com/og-image.png" />
 <meta name="twitter:image:alt" content="Euroball — twelve daily European basketball puzzles" />
 
@@ -168,6 +168,7 @@
     --green: #4a8b52;
     --green-wash: #eaf1e8;
     --yellow: #c9a22b;
+    --rm-purple: #5f2a8c; --rm-purple-bg: #efe7f4;   /* Roster Master: a season or a club complete */
     --grey: #d9d0bd;
     --red: #a33d33;              /* red as a rule or a fill */
     --red-ink: #9c3a30;          /* …and red as type, which needs its own value
@@ -828,6 +829,7 @@
     --rule-strong: #897f6b;/* masthead double-rule — defined, not glaring */
     --green: #538d4e; --yellow: #b59f3b; --grey: #443c2f;   /* Wordle dark-board greens/golds — muted, not neon */
     --green-wash: #1d2a1e;
+    --rm-purple: #b996e0; --rm-purple-bg: #261d31;
     --red: #b0574f; --red-ink: #e0a196; --red-soft: #8f544c; --red-wash: #2c1c1b;
     --accent: #cf7b41; --accent-2: #b56d33;                 /* desaturated ~20% for dark (Material) */
     --tile: #2e2820; --tile-hi: #383022;
@@ -1169,6 +1171,17 @@
   .rm-chip.gold .rm-chip-meta { color: #8a6d1a; }
   .rm-chip.gold .rm-chip-club::after { content: " \2605"; color: #b28e1c; }
   .rm-gold-line { color: #8a6d1a !important; font-weight: 700; }
+  /* Royal purple: a whole season, or a club in every season. Crown: everything. */
+  .rm-chip.purple { border-color: var(--rm-purple); box-shadow: inset 0 3px 0 var(--rm-purple); background: var(--rm-purple-bg); }
+  .rm-chip.purple .rm-chip-meta { color: var(--rm-purple); }
+  .rm-chip.purple .rm-chip-club::after { content: " \2605"; color: var(--rm-purple); }
+  .rm-season.purple .rm-chip-club::after { content: none; }   /* the season tile already counts its stars */
+  .rm-crown-line { color: var(--rm-purple) !important; font-weight: 700; }
+  .rm-season .rm-chip-club { font-variant-numeric: tabular-nums; white-space: nowrap; font-size: clamp(13px, min(calc(var(--rm-tile-h, 80px) * .26), calc(var(--rm-tile-w, 100px) * .17)), 26px); }
+  .rm-season.rm-wait { color: var(--muted); font-style: italic; align-items: center; justify-content: center; }
+  #rm-season-head[hidden] { display: none; }
+  .rm-head-pad { flex: none; width: 1px; }
+  .rm-sub { display: block; font: 600 var(--t-7)/1.2 var(--font-sans); color: var(--muted); letter-spacing: 0; margin-top: 2px; }
   .rm-board { width: 100%; min-width: 0; margin: 0 auto; }
   .rm-club .rm-crest { width: clamp(40px, 6vw, 56px); }
   .rm-board[hidden] { display: none; }
@@ -1431,7 +1444,7 @@
   "@type": "VideoGame",
   "name": "Roster Master — Euroball",
   "url": "https://euroballgames.com/roster-master/",
-  "description": "The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good.",
+  "description": "The long game: name every player on every EuroLeague roster since 2000-01, season by season, club by club, from memory. No autocomplete, no hints. A full roster turns gold for good.",
   "inLanguage": "en",
   "genre": [
     "Puzzle",
@@ -1473,10 +1486,18 @@
     },
     {
       "@type": "Question",
-      "name": "How current are the rosters?",
+      "name": "Where do the rosters come from?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "They are the 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season. Transfers made after that check are not reflected."
+        "text": "This season's are our 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season; transfers made after that check are not reflected. Every earlier season, back to 2000-01, is the official EuroLeague roster for that season."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is on an old roster?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Everyone on the club's official roster that season who played at least one EuroLeague game somewhere. A player who never got on the floor for that club, but played for another, is on the board."
       }
     },
     {
@@ -1696,7 +1717,7 @@
       <a class="game-card" href="../roster-master/" data-game="rostermaster">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-rostermaster"/></svg></span>
         <span class="gc-text"><span class="gc-title">Roster Master</span>
-          <span class="gc-desc">The 2026-27 rosters, from memory — name every player, club by club. Your best score sticks.</span></span>
+          <span class="gc-desc"><span class="comp-text" data-ec="The 2026-27 rosters">Every roster since 2000-01</span>, from memory — name every player, club by club. Your best score sticks.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="../six-of-a-kind/" data-game="sixofakind">
@@ -2133,10 +2154,15 @@
     <header>
       <button id="rm-info-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">i</button>
       <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-rostermaster"/></svg></span><span><span class="accent">Roster</span> Master</span></h1>
-      <div class="tagline">Name every player on every 2026-27 roster</div>
+      <div id="rm-tagline" class="tagline">Every EuroLeague roster, every season since 2000-01</div>
     </header>
     <div class="app">
       <div id="rm-summary" class="pid-stats"></div>
+      <div id="rm-season-head" class="rm-board-head" hidden>
+        <button id="rm-seasons-back" type="button">← All seasons</button>
+        <div id="rm-season-title" class="rm-club"></div>
+        <span class="rm-head-pad" aria-hidden="true"></span>
+      </div>
       <div id="rm-picker" class="rm-picker" aria-label="Pick a club"></div>
       <div id="rm-picker-actions" class="cn-actions">
         <button id="rm-clear-all" type="button">Clear all boards</button>
@@ -2261,16 +2287,18 @@
     <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Roster Master" tabindex="-1">
       <button id="rm-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
       <h2>How to play</h2>
-      <p>The big one: name <strong>every player on every 2026-27 roster</strong>, club by club, from memory.</p>
+      <p>The big one: name <strong>every player on every <span class="comp-text" data-ec="2026-27 roster">EuroLeague roster since 2000-01</span></strong>, club by club, from memory.</p>
       <ul>
+        <li data-ec-hide>Pick a <strong>season</strong>, then a club. Every season is here, every club that played it, with its full official roster, including players who never got on the floor for that club.</li>
         <li>Pick a club — its board shows <strong>empty slots</strong> under Guards, Forwards and Centers, so you always know how many you're missing.</li>
         <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type a name and a match fills its slot instantly. A surname is enough when it's unique on that roster; accents and dots don't matter.</li>
         <li>Your progress <strong>saves automatically</strong>, per club. Come back any time.</li>
         <li>Stuck? <strong>Reveal missing</strong> shows the players you haven't named. They don't count toward your score or the gold ★; <strong>Clear board</strong> lets you try that club again.</li>
-        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card. <em>Clear all boards</em> on the club list does the same for all <span class="comp-text" data-ec="{c}">twenty</span> at once.</li>
-        <li>Name a full roster once and that club turns <strong>gold ★ — for good</strong>, even if you clear it. Collect all <span class="comp-text" data-ec="{c}">twenty</span>.</li>
+        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card. <em>Clear all boards</em> on a season's club list does the same for every club that season.</li>
+        <li>Name a full roster once and that board turns <strong>gold ★ — for good</strong>, even if you clear it.</li>
+        <li data-ec-hide>Every club of a season gold: that season turns <strong class="rm-crown-line">royal purple</strong>. A club gold in every season it played: that club turns purple too. All of it: the <strong>crown</strong>.</li>
       </ul>
-      <p class="modal-note">Rosters are our cross-checked 2026-27 database — the exact squads the other games play by. No daily here; this is the long game.</p>
+      <p class="modal-note"><span class="comp-text" data-ec="Rosters are our cross-checked 2026-27 database, the exact squads the other games play by.">This season is our cross-checked 2026-27 database, the exact squads the other games play by. The older seasons are the official EuroLeague rosters.</span> No daily here; this is the long game.</p>
     </div>
   </div>
 
@@ -2401,22 +2429,25 @@
        it. app.js shows it on the hub only (data-seo-view). build_pages.js drops
        it from every game page and gives the EuroCup hub its own. -->
   <section class="seo-copy" data-seo-view="rostermaster">
-    <h2 class="seo-lede">Roster Master — all twenty rosters, from memory</h2>
-    <p>The big one, and the only game here with no daily. Twenty clubs, 299 players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.</p>
+    <h2 class="seo-lede">Roster Master — every EuroLeague roster since 2000, from memory</h2>
+    <p>The big one, and the only game here with no daily. 27 seasons, from 2000-01 to this one, 588 club rosters and 9235 names to recall, with nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and it turns gold permanently.</p>
     <h3>How to play Roster Master</h3>
     <ul>
-      <li>Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.</li>
+      <li>Pick a season, then a club. Its board shows empty slots by position, so you always know exactly how many you are missing.</li>
       <li>Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.</li>
       <li>Progress saves automatically, per club. Come back whenever — this is not a single sitting.</li>
       <li>Clear board starts a club over, but your best percentage survives on the club's card. Complete a roster once and the gold ★ is yours even if you clear it.</li>
+      <li>Every club of a season gold turns the season royal purple; a club gold in every season it played turns purple too. All of them: the crown.</li>
       <li>Stuck? Reveal missing shows the players you have not named yet. They earn nothing, not the score, not the gold ★, and Clear board lets you try the club again.</li>
     </ul>
     <h3>Frequently asked questions</h3>
     <dl class="seo-faq">
       <dt>Why is there no autocomplete?</dt>
       <dd>Because the game is recall. Every other game on the site offers a name list so you do not have to spell Spanoulis; here a list would let you walk the roster instead of remembering it, which is the entire puzzle.</dd>
-      <dt>How current are the rosters?</dt>
-      <dd>They are the 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season. Transfers made after that check are not reflected.</dd>
+      <dt>Where do the rosters come from?</dt>
+      <dd>This season's are our 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season; transfers made after that check are not reflected. Every earlier season, back to 2000-01, is the official EuroLeague roster for that season.</dd>
+      <dt>Who is on an old roster?</dt>
+      <dd>Everyone on the club's official roster that season who played at least one EuroLeague game somewhere. A player who never got on the floor for that club, but played for another, is on the board.</dd>
       <dt>Does Roster Master affect my hub streak?</dt>
       <dd>No. It has no daily, so it sits outside the streak entirely. Your best score per club is kept on the Records page.</dd>
       <dt>What happens if I clear a board by accident?</dt>
@@ -2430,7 +2461,7 @@
       <li>Come back later. A name you couldn't recall today often turns up while you are watching a game.</li>
     </ul>
     <h3>What's in the game</h3>
-    <p>20 clubs and 299 players, cross-checked against the official 2026–27 rosters at the start of the season. Every club also has its own page with the full roster, the squad in numbers and its former players: see <a href="../clubs/">the clubs</a>.</p>
+    <p>This season: 20 clubs and 299 players, cross-checked against the official 2026–27 rosters at the start of the season. Before that, every season back to 2000-01 from the official rosters: 588 boards in all. Every current club also has its own page with the full roster, the squad in numbers and its former players: see <a href="../clubs/">the clubs</a>.</p>
     <h3>If you like Roster Master</h3>
     <ul>
       <li><a href="../mystery-player/">Mystery Player</a>: Guess the mystery EuroLeague player in 8 tries.</li>
