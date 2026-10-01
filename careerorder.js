@@ -35,6 +35,12 @@
     hard: SUIT.filter(function (c) { return c.career.length >= 7; }),
     daily: SUIT.filter(function (c) { return c.career.length >= 4 && c.career.length <= 7; })
   };
+  // From ACTIVE_DAILY_FROM the Daily is a current player (owner's rule for the
+  // history expansion). The date picks by index, so the dates before it keep the
+  // pool they were played on: an Archive replay is the puzzle everyone had.
+  var ACTIVE_DAILY_FROM = "2026-10-02";
+  var ACTIVE_DAILY = POOLS.daily.filter(function (c) { return c.active; });
+  function dailyPool(d) { return d >= ACTIVE_DAILY_FROM ? ACTIVE_DAILY : POOLS.daily; }
   var CHECKS = 3;                 // checks allowed before the answer is revealed
 
   var els = {};
@@ -56,7 +62,7 @@
 
   // --- Selection -------------------------------------------------------------
   function poolFor(d) { return d === "daily" ? POOLS.daily : POOLS[d] || POOLS.medium; }
-  function dailyPlayer() { var p = POOLS.daily; return p[hashStr(dayKey) % p.length]; }
+  function dailyPlayer() { var p = dailyPool(dayKey); return p[hashStr(dayKey) % p.length]; }
   function buildSegments(c) { return c.career.slice().sort(function (a, b) { return a.from - b.from; }); }
   function identity(n) { var a = []; for (var i = 0; i < n; i++) a.push(i); return a; }
   function isIdentity(a) { for (var i = 0; i < a.length; i++) if (a[i] !== i) return false; return true; }
@@ -257,7 +263,7 @@
     var t = order[i]; order[i] = order[j]; order[j] = t;
     renderList(); updateCounter(); updateButtons();
   }
-  // The save names its player. The date picks him by index into POOLS.daily, and
+  // The save names its player. The date picks him by index into the daily pool, and
   // any change to the careers (a signing, a new career) moves that index: without
   // the name, a board saved against one player would reload against another.
   function saveDaily() { lsSet(K.daily(dayKey), { player: player ? player.name : null, order: order.slice(), tries: tries, confirmed: confirmed.slice(), done: over, won: won }); }
@@ -311,7 +317,7 @@
     order = scramble(segments.length, seed == null ? Math.random : mulberry32(seed));
   }
   function dealDaily() {
-    var p = POOLS.daily;
+    var p = dailyPool(dayKey);
     if (!p.length) { if (els.counter) els.counter.textContent = "No players loaded."; return; }
     var saved = lsGet(K.daily(dayKey), null);
     // A save that names its player replays that player, even if today's pick

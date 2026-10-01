@@ -68,8 +68,8 @@ var STATS = (function () {
     players: w.PLAYERS.length, legends: w.LEGENDS.length, careers: w.CAREERS.length,
     elClubs: Object.keys(elTeams).length, nats: Object.keys(nats).length,
     pidPool: count(w.CAREERS, function (c) { return c.career.length >= 2; }),
-    pidDaily: count(w.CAREERS, function (c) { return c.career.length >= 4; }),
-    coSuit: suit.length, coDaily: count(suit, function (c) { return c.career.length >= 4 && c.career.length <= 7; }),
+    pidDaily: count(w.CAREERS, function (c) { return c.career.length >= 4 && c.active; }),
+    coSuit: suit.length, coDaily: count(suit, function (c) { return c.career.length >= 4 && c.career.length <= 7 && c.active; }),
     careerClubs: Object.keys(careerClubs).length, answerClubs: Object.keys(answers).length,
     lineups: w.LINEUPS.length, f4seasons: ss.length, f4first: ss[0], f4last: ss[ss.length - 1],
     f4gapNote: gaps.length ? "; " + gaps.join(" and ") + (gaps.length === 1 ? " isn't" : " aren't") + " in the archive yet" : "",
@@ -129,6 +129,7 @@ var PAGES = [
     faq: [
       ["Why only two guesses?", "Because the career path is a very strong clue once you read it properly. Two guesses keeps it a test of recognition rather than a process of elimination."],
       ["Do NBA years show up in the path?", "Yes. Many European careers pass through the NBA, and those stints appear in the timeline like any other club — often they are the clue that fixes the era for you."],
+      ["Who can be the Daily?", "A current player: someone on a 2026–27 EuroLeague roster whose career has at least four clubs. The practice modes are where the retired greats are."],
       ["What is the difference between Active, Non-active and Both?", "Active draws only from players on a 2026–27 EuroLeague roster. Non-active draws from players no longer on a current roster, retired greats included. Both mixes them, which is the hardest because the era is no longer a hint."],
       ["How many careers are in the game?", "{careers} full career timelines, compiled from official club rosters, Wikipedia, FIBA and Proballers, and cross-checked against the official 2026–27 EuroLeague rosters."]
     ]
@@ -514,7 +515,7 @@ var EXTRA = {
       "Count the countries. A career that never leaves Spain or Greece belongs to a different kind of player from one that crosses six leagues.",
       "Use the era. A path that starts in the 1990s rules out every current player at once, and switching to Both mode is what makes that clue matter."
     ],
-    inside: "{careers} career timelines, club by club with the years, compiled from official club rosters, Wikipedia, FIBA and Proballers. Practice draws from every career with at least two clubs ({pidPool} of them), and the Daily from the {pidDaily} with four or more, so the route always has a story in it.",
+    inside: "{careers} career timelines, club by club with the years, compiled from official club rosters, Wikipedia, FIBA and Proballers. Practice draws from every career with at least two clubs ({pidPool} of them), and the Daily from the {pidDaily} current players with four or more, so the route always has a story in it and the answer is someone you can watch this season.",
     example: "Maroussi 2001–2005, Panathinaikos 2005–2006, Houston Rockets 2006–2007, Panathinaikos 2007–2010, Olympiacos 2010–2021. A Greek start, one NBA season, a return, and then a move straight across Greek basketball's great rivalry, where he stayed eleven years. Nobody else has that route. It's Vassilis Spanoulis.",
     related: ["careerorder", "mystery", "pathbetween"]
   },
@@ -547,7 +548,7 @@ var EXTRA = {
       "Use each check to learn. A club that locks green is fixed, so every check makes the problem smaller.",
       "Think in eras. Clubs change their sponsor names, and knowing when a team was called what can place a stint on its own."
     ],
-    inside: "{coSuit} careers are long and varied enough to make a fair puzzle: three or more clubs, and no club twice, since two identical tiles would make the order ambiguous. The Daily uses the {coDaily} with four to seven clubs. Easy has up to four, Medium five or six, and Hard seven or more.",
+    inside: "{coSuit} careers are long and varied enough to make a fair puzzle: three or more clubs, and no club twice, since two identical tiles would make the order ambiguous. The Daily uses the {coDaily} current players among them with four to seven clubs. Easy has up to four, Medium five or six, and Hard seven or more.",
     example: "Mike James: KK Zagreb, Paffoni Omegna, Baskonia, Panathinaikos, Phoenix Suns, Olimpia Milano, CSKA Moscow, AS Monaco, Anadolu Efes. Nine clubs is a Hard puzzle, but it comes apart quickly once you place the ends. He has just joined Efes, so that goes last, after the years at Monaco. The two small Croatian and Italian clubs are where it started. The NBA season in Phoenix sits between Panathinaikos and Milano.",
     related: ["playerid", "pathbetween", "clubreveal"]
   },
