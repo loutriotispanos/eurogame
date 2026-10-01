@@ -802,6 +802,32 @@ input.value = agName; fire(input, "input");
 ok(!dd.hidden && dd.children[0].className === "dropdown-empty" && /Already guessed/.test(dd.children[0].textContent),
    "re-typing a guessed name explains it was already guessed");
 
+console.log("Player ID + Career Order — the Daily is a current player from 2026-10-02");
+(function () {
+  function hash(s) { var h = 2166136261 >>> 0; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function day(base, k) { var d = new Date(base + "T12:00:00"); d.setDate(d.getDate() + k); var p = function (n) { return n < 10 ? "0" + n : "" + n; }; return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
+  function distinct(c) { var s = {}; return c.career.every(function (e) { if (s[e.team]) return false; s[e.team] = 1; return true; }); }
+  var C = window.CAREERS, PID = window.PlayerID, CO = window.CareerOrder;
+  var oldPid = C.filter(function (c) { return c.career.length >= 4; });
+  var oldCo = C.filter(function (c) { return c.career.length >= 4 && c.career.length <= 7 && distinct(c); });
+  var clean = function () { Object.keys(store).forEach(function (k) { if (/^elg:(pid|co):daily:/.test(k)) delete store[k]; }); };
+  clean();
+  var after = [], before = [], coAfter = [], coBefore = [];
+  for (var k = 0; k < 60; k++) {
+    var a = day("2026-10-02", k), b = day("2026-10-01", -k);
+    PID.goArchive(a); if (!PID._peek().active) after.push(a + " " + PID._peek().name);
+    PID.goArchive(b); if (PID._peek().name !== oldPid[hash(b) % oldPid.length].name) before.push(b);
+    CO.goArchive(a); var ca = CO._peek().name; if (!C.filter(function (c) { return c.name === ca; })[0].active) coAfter.push(a + " " + ca);
+    CO.goArchive(b); if (CO._peek().name !== oldCo[hash(b) % oldCo.length].name) coBefore.push(b);
+  }
+  ok(after.length === 0, "Player ID: every Daily from 2026-10-02 is a current player (60 days)" + (after.length ? " — " + after.slice(0, 3).join("; ") : ""));
+  ok(before.length === 0, "Player ID: every Daily before it is still the player it always was, so the Archive replays what people played" + (before.length ? " — " + before.slice(0, 3).join(", ") : ""));
+  ok(coAfter.length === 0, "Career Order: every Daily from 2026-10-02 is a current player (60 days)" + (coAfter.length ? " — " + coAfter.slice(0, 3).join("; ") : ""));
+  ok(coBefore.length === 0, "Career Order: every Daily before it is unchanged" + (coBefore.length ? " — " + coBefore.slice(0, 3).join(", ") : ""));
+  clean();
+  PID.goDaily(); if (CO.goDaily) CO.goDaily();
+})();
+
 console.log("Player ID — how-to modal + first-visit help");
 delete store["elg:pid:seenhelp"];
 window.PlayerID.onShow();

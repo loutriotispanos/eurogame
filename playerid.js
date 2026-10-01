@@ -47,8 +47,16 @@
   function pool() {
     return CAREERS.filter(function (c) { return c.career.length >= 2 && (filter === "active" ? c.active : filter === "retired" ? !c.active : true); });
   }
+  // From ACTIVE_DAILY_FROM the Daily is a current player (owner's rule for the
+  // history expansion). The date picks by index, so the dates before it keep the
+  // pool they were played on: an Archive replay is the puzzle everyone had.
+  var ACTIVE_DAILY_FROM = "2026-10-02";
+  function dailyPool(d) {
+    var activeOnly = d >= ACTIVE_DAILY_FROM;
+    return CAREERS.filter(function (c) { return c.career.length >= 4 && (!activeOnly || c.active); });
+  }
   function dailyTarget() {
-    var p = CAREERS.filter(function (c) { return c.career.length >= 4; });
+    var p = dailyPool(dayKey);
     return p.length ? p[hashStr(dayKey) % p.length] : null;
   }
   // Autocomplete suggests from the matching roster so the answer is always offered.
