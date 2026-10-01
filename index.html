@@ -165,6 +165,7 @@
     --green: #4a8b52;
     --green-wash: #eaf1e8;
     --yellow: #c9a22b;
+    --rm-purple: #5f2a8c; --rm-purple-bg: #efe7f4;   /* Roster Master: a season or a club complete */
     --grey: #d9d0bd;
     --red: #a33d33;              /* red as a rule or a fill */
     --red-ink: #9c3a30;          /* …and red as type, which needs its own value
@@ -825,6 +826,7 @@
     --rule-strong: #897f6b;/* masthead double-rule — defined, not glaring */
     --green: #538d4e; --yellow: #b59f3b; --grey: #443c2f;   /* Wordle dark-board greens/golds — muted, not neon */
     --green-wash: #1d2a1e;
+    --rm-purple: #b996e0; --rm-purple-bg: #261d31;
     --red: #b0574f; --red-ink: #e0a196; --red-soft: #8f544c; --red-wash: #2c1c1b;
     --accent: #cf7b41; --accent-2: #b56d33;                 /* desaturated ~20% for dark (Material) */
     --tile: #2e2820; --tile-hi: #383022;
@@ -1166,6 +1168,17 @@
   .rm-chip.gold .rm-chip-meta { color: #8a6d1a; }
   .rm-chip.gold .rm-chip-club::after { content: " \2605"; color: #b28e1c; }
   .rm-gold-line { color: #8a6d1a !important; font-weight: 700; }
+  /* Royal purple: a whole season, or a club in every season. Crown: everything. */
+  .rm-chip.purple { border-color: var(--rm-purple); box-shadow: inset 0 3px 0 var(--rm-purple); background: var(--rm-purple-bg); }
+  .rm-chip.purple .rm-chip-meta { color: var(--rm-purple); }
+  .rm-chip.purple .rm-chip-club::after { content: " \2605"; color: var(--rm-purple); }
+  .rm-season.purple .rm-chip-club::after { content: none; }   /* the season tile already counts its stars */
+  .rm-crown-line { color: var(--rm-purple) !important; font-weight: 700; }
+  .rm-season .rm-chip-club { font-variant-numeric: tabular-nums; white-space: nowrap; font-size: clamp(13px, min(calc(var(--rm-tile-h, 80px) * .26), calc(var(--rm-tile-w, 100px) * .17)), 26px); }
+  .rm-season.rm-wait { color: var(--muted); font-style: italic; align-items: center; justify-content: center; }
+  #rm-season-head[hidden] { display: none; }
+  .rm-head-pad { flex: none; width: 1px; }
+  .rm-sub { display: block; font: 600 var(--t-7)/1.2 var(--font-sans); color: var(--muted); letter-spacing: 0; margin-top: 2px; }
   .rm-board { width: 100%; min-width: 0; margin: 0 auto; }
   .rm-club .rm-crest { width: clamp(40px, 6vw, 56px); }
   .rm-board[hidden] { display: none; }
@@ -1600,7 +1613,7 @@
       <a class="game-card" href="roster-master/" data-game="rostermaster">
         <span class="gc-ico"><svg viewBox="0 0 24 24"><use href="#ico-rostermaster"/></svg></span>
         <span class="gc-text"><span class="gc-title">Roster Master</span>
-          <span class="gc-desc">The 2026-27 rosters, from memory — name every player, club by club. Your best score sticks.</span></span>
+          <span class="gc-desc"><span class="comp-text" data-ec="The 2026-27 rosters">Every roster since 2000-01</span>, from memory — name every player, club by club. Your best score sticks.</span></span>
         <span class="gc-daily" hidden></span>
       </a>
       <a class="game-card" href="six-of-a-kind/" data-game="sixofakind">
@@ -2037,10 +2050,15 @@
     <header>
       <button id="rm-info-btn" class="icon-btn" type="button" aria-label="How to play" title="How to play">i</button>
       <h1><span class="h1-ico"><svg viewBox="0 0 24 24"><use href="#ico-rostermaster"/></svg></span><span><span class="accent">Roster</span> Master</span></h1>
-      <div class="tagline">Name every player on every 2026-27 roster</div>
+      <div id="rm-tagline" class="tagline">Every EuroLeague roster, every season since 2000-01</div>
     </header>
     <div class="app">
       <div id="rm-summary" class="pid-stats"></div>
+      <div id="rm-season-head" class="rm-board-head" hidden>
+        <button id="rm-seasons-back" type="button">← All seasons</button>
+        <div id="rm-season-title" class="rm-club"></div>
+        <span class="rm-head-pad" aria-hidden="true"></span>
+      </div>
       <div id="rm-picker" class="rm-picker" aria-label="Pick a club"></div>
       <div id="rm-picker-actions" class="cn-actions">
         <button id="rm-clear-all" type="button">Clear all boards</button>
@@ -2165,16 +2183,18 @@
     <div class="modal" role="dialog" aria-modal="true" aria-label="How to play — Roster Master" tabindex="-1">
       <button id="rm-info-close" class="modal-close" type="button" aria-label="Close">&times;</button>
       <h2>How to play</h2>
-      <p>The big one: name <strong>every player on every 2026-27 roster</strong>, club by club, from memory.</p>
+      <p>The big one: name <strong>every player on every <span class="comp-text" data-ec="2026-27 roster">EuroLeague roster since 2000-01</span></strong>, club by club, from memory.</p>
       <ul>
+        <li data-ec-hide>Pick a <strong>season</strong>, then a club. Every season is here, every club that played it, with its full official roster, including players who never got on the floor for that club.</li>
         <li>Pick a club — its board shows <strong>empty slots</strong> under Guards, Forwards and Centers, so you always know how many you're missing.</li>
         <li><strong>No suggestions, no autocomplete</strong> — pure recall. Type a name and a match fills its slot instantly. A surname is enough when it's unique on that roster; accents and dots don't matter.</li>
         <li>Your progress <strong>saves automatically</strong>, per club. Come back any time.</li>
         <li>Stuck? <strong>Reveal missing</strong> shows the players you haven't named. They don't count toward your score or the gold ★; <strong>Clear board</strong> lets you try that club again.</li>
-        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card. <em>Clear all boards</em> on the club list does the same for all <span class="comp-text" data-ec="{c}">twenty</span> at once.</li>
-        <li>Name a full roster once and that club turns <strong>gold ★ — for good</strong>, even if you clear it. Collect all <span class="comp-text" data-ec="{c}">twenty</span>.</li>
+        <li><strong>Clear board</strong> starts a club over — but your <strong>best score (%)</strong> survives on the club's card. <em>Clear all boards</em> on a season's club list does the same for every club that season.</li>
+        <li>Name a full roster once and that board turns <strong>gold ★ — for good</strong>, even if you clear it.</li>
+        <li data-ec-hide>Every club of a season gold: that season turns <strong class="rm-crown-line">royal purple</strong>. A club gold in every season it played: that club turns purple too. All of it: the <strong>crown</strong>.</li>
       </ul>
-      <p class="modal-note">Rosters are our cross-checked 2026-27 database — the exact squads the other games play by. No daily here; this is the long game.</p>
+      <p class="modal-note"><span class="comp-text" data-ec="Rosters are our cross-checked 2026-27 database, the exact squads the other games play by.">This season is our cross-checked 2026-27 database, the exact squads the other games play by. The older seasons are the official EuroLeague rosters.</span> No daily here; this is the long game.</p>
     </div>
   </div>
 

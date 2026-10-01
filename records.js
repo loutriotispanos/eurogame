@@ -45,21 +45,12 @@
     return out;
   }
 
-  // Roster Master: sum the surviving bests (elg:rm:best:<club> = {n, of});
-  // gold = a club whose best covers its whole current roster.
+  // Roster Master: this season's surviving bests and gold clubs, plus the
+  // every-season count when known. Asked of Roster Master itself, which owns
+  // the save keys (one per season and club).
   function rosterMaster() {
-    var players = window.PLAYERS || [];
-    var perClub = {};
-    players.forEach(function (p) { perClub[p.team] = (perClub[p.team] || 0) + 1; });
-    var clubs = Object.keys(perClub);
-    var named = 0, gold = 0;
-    clubs.forEach(function (c) {
-      var b = lsGet("elg:rm:best:" + c, null);
-      if (!b || !b.n) return;
-      named += Math.min(b.n, perClub[c]);
-      if (b.n >= perClub[c]) gold++;
-    });
-    return { named: named, of: players.length, gold: gold, clubs: clubs.length };
+    var R = window.RosterMaster;
+    return R && R.records ? R.records() : { named: 0, of: 0, gold: 0, clubs: 0, all: null };
   }
 
   function collect() {
@@ -99,7 +90,11 @@
     h += "<div class='rec-sect'>Roster Master</div>";
     var pct = d.rm.of ? Math.round((d.rm.named / d.rm.of) * 100) : 0;
     h += "<div class='rec-row rec-line'>Named <b>" + d.rm.named + "/" + d.rm.of + "</b> (" + pct + "%) · <b>" + d.rm.gold +
-      "</b> of " + d.rm.clubs + " clubs gold ★</div>";
+      "</b> of " + d.rm.clubs + " clubs gold ★" + (d.rm.season ? " · " + d.rm.season : "") + "</div>";
+    var all = d.rm.all;
+    if (all && all.crown) h += "<div class='rec-row rec-line'>👑 <b>Every roster, every season</b>: Roster Master complete</div>";
+    else if (all && all.gold) h += "<div class='rec-row rec-line'>Every season since 2000-01: <b>" + all.gold + "/" + all.boards + "</b> boards ★ · <b>" +
+      all.seasonsDone + "</b> seasons and <b>" + all.clubsDone + "</b> clubs complete</div>";
 
     el.innerHTML = h;
   }

@@ -667,9 +667,8 @@
       if (hasChallenge()) { showView("mystery"); return; }
       var st = e.state || { v: "home" };
       showView(st.v || "home", st.archive ? "archive:" + st.archive : (st.mode || undefined));
-      if (st.v === "rostermaster" && window.RosterMaster) {   // sub-state: picker vs a club board
-        if (st.club) window.RosterMaster._open(st.club, true);
-        else window.RosterMaster._back(true);
+      if (st.v === "rostermaster" && window.RosterMaster) {   // sub-state: seasons, a season's clubs, or a board
+        window.RosterMaster._nav(st);
       }
     });
     var linked = linkedGame();

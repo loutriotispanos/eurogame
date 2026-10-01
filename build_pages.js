@@ -43,7 +43,7 @@ var ROOT = __dirname;
 var STATS = (function () {
   var w = {};
   ["clubs.js", "players.js", "legends.js", "careers.js", "lineups.js", "puzzles.js", "grids.js", "paths.js", "oddones.js", "sixes.js",
-   "eurocup_players.js", "eurocup_careers.js", "eurocup_grids.js", "eurocup_paths.js"].forEach(function (f) {
+   "eurocup_players.js", "eurocup_careers.js", "eurocup_grids.js", "eurocup_paths.js", "history.js"].forEach(function (f) {
     new Function("window", fs.readFileSync(path.join(ROOT, f), "utf8"))(w);
   });
   var canon = w.CLUBS.canonical;
@@ -75,6 +75,8 @@ var STATS = (function () {
     f4gapNote: gaps.length ? "; " + gaps.join(" and ") + (gaps.length === 1 ? " isn't" : " aren't") + " in the archive yet" : "",
     puzzles: w.PUZZLES.length, grids: w.GRIDS.length, oddones: w.ODDONES.length, sixes: w.SIXES.length,
     paths: w.PATHS.length, par2: par(w.PATHS, 2), par3: par(w.PATHS, 3), par4: par(w.PATHS, 4),
+    rmSeasons: w.HISTORY.seasons.length + 1, rmBoards: w.HISTORY.boards.length + Object.keys(elTeams).length,
+    rmNames: w.HISTORY.boards.reduce(function (n, b) { return n + b[3].length; }, w.PLAYERS.length),
     ecPlayers: w.EUROCUP_PLAYERS.length, ecClubs: Object.keys(w.EUROCUP_TEAMS).length, ecCareers: w.EUROCUP_CAREERS.length,
     ecCoSuit: ecSuit.length, ecGrids: w.EUROCUP_GRIDS.length,
     ecPaths: w.EUROCUP_PATHS.length, ecPar2: par(w.EUROCUP_PATHS, 2), ecPar3: par(w.EUROCUP_PATHS, 3), ecPar4: par(w.EUROCUP_PATHS, 4)
@@ -285,20 +287,22 @@ var PAGES = [
   },
   {
     view: "rostermaster", slug: "roster-master", name: "Roster Master",
-    title: "Roster Master — name every 2026-27 EuroLeague roster | Euroball",
-    desc: "The long game: name every player on all twenty 2026-27 EuroLeague rosters from memory. No autocomplete, no hints. Progress saves per club and a full roster turns the club gold for good.",
-    h1: "Roster Master — all twenty rosters, from memory",
-    intro: "The big one, and the only game here with no daily. Twenty clubs, {players} players, and nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and that club turns gold permanently.",
+    title: "Roster Master — name every EuroLeague roster since 2000 | Euroball",
+    desc: "The long game: name every player on every EuroLeague roster since 2000-01, season by season, club by club, from memory. No autocomplete, no hints. A full roster turns gold for good.",
+    h1: "Roster Master — every EuroLeague roster since 2000, from memory",
+    intro: "The big one, and the only game here with no daily. {rmSeasons} seasons, from 2000-01 to this one, {rmBoards} club rosters and {rmNames} names to recall, with nothing but empty slots under Guards, Forwards and Centers. No autocomplete, no suggestions, no hints — pure recall. Name a full roster and it turns gold permanently.",
     how: [
-      "Pick a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
+      "Pick a season, then a club. Its board shows empty slots by position, so you always know exactly how many you are missing.",
       "Type a name. A match fills its slot instantly. A surname is enough when it is unique on that roster, and accents and dots do not matter.",
       "Progress saves automatically, per club. Come back whenever — this is not a single sitting.",
       "Clear board starts a club over, but your best percentage survives on the club's card. Complete a roster once and the gold ★ is yours even if you clear it.",
+      "Every club of a season gold turns the season royal purple; a club gold in every season it played turns purple too. All of them: the crown.",
       "Stuck? Reveal missing shows the players you have not named yet. They earn nothing, not the score, not the gold ★, and Clear board lets you try the club again."
     ],
     faq: [
       ["Why is there no autocomplete?", "Because the game is recall. Every other game on the site offers a name list so you do not have to spell Spanoulis; here a list would let you walk the roster instead of remembering it, which is the entire puzzle."],
-      ["How current are the rosters?", "They are the 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season. Transfers made after that check are not reflected."],
+      ["Where do the rosters come from?", "This season's are our 2026–27 EuroLeague squads, cross-checked club by club against the official rosters at the start of the season; transfers made after that check are not reflected. Every earlier season, back to 2000-01, is the official EuroLeague roster for that season."],
+      ["Who is on an old roster?", "Everyone on the club's official roster that season who played at least one EuroLeague game somewhere. A player who never got on the floor for that club, but played for another, is on the board."],
       ["Does Roster Master affect my hub streak?", "No. It has no daily, so it sits outside the streak entirely. Your best score per club is kept on the Records page."],
       ["What happens if I clear a board by accident?", "You lose the filled slots but not your record. The best percentage stays on the club card, and a gold ★ once earned is permanent."]
     ]
@@ -608,7 +612,7 @@ var EXTRA = {
       "A surname is enough when it is unique on the roster, so type “Tavares”, not the full name.",
       "Come back later. A name you couldn't recall today often turns up while you are watching a game."
     ],
-    inside: "{elClubs} clubs and {players} players, cross-checked against the official 2026–27 rosters at the start of the season. Every club also has its own page with the full roster, the squad in numbers and its former players: see <a href=\"../clubs/\">the clubs</a>.",
+    inside: "This season: {elClubs} clubs and {players} players, cross-checked against the official 2026–27 rosters at the start of the season. Before that, every season back to 2000-01 from the official rosters: {rmBoards} boards in all. Every current club also has its own page with the full roster, the squad in numbers and its former players: see <a href=\"../clubs/\">the clubs</a>.",
     related: ["mystery", "thegrid", "higherlower"]
   },
   sixofakind: {
