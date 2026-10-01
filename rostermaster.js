@@ -184,25 +184,20 @@
     Object.keys(BY_SEASON).forEach(function (s) { BY_SEASON[s].sort(function (a, b) { return BOARDS[a].title < BOARDS[b].title ? -1 : 1; }); });
     hist.state = "ready";
   }
+  // The file itself comes through the shared loader (competition.js), so The
+  // Grid and Six of a Kind use the same copy.
   function ensureHistory(cb) {
     if (hist.state === "none" || hist.state === "ready" || hist.state === "failed") { cb(); return; }
     if (window.HISTORY) { ingest(window.HISTORY); cb(); return; }
     hist.waiting.push(cb);
     if (hist.state === "loading") return;
     hist.state = "loading";
-    function done(ok) {
-      if (ok && window.HISTORY) ingest(window.HISTORY); else hist.state = "failed";
+    function done() {
+      if (window.HISTORY) ingest(window.HISTORY); else hist.state = "failed";
       var w = hist.waiting; hist.waiting = [];
       w.forEach(function (f) { f(); });
     }
-    try {
-      var root = (window.Hub && window.Hub._siteRoot) ? window.Hub._siteRoot() : "/";
-      var s = document.createElement("script");
-      s.src = root + "history.js";
-      s.onload = function () { done(true); };
-      s.onerror = function () { done(false); };
-      (document.head || document.body).appendChild(s);
-    } catch (e) { done(false); }
+    if (window.ELG_HISTORY && window.ELG_HISTORY.load) window.ELG_HISTORY.load(done); else done();
   }
   // Purple and the crown are about the whole archive, so they wait for it.
   function whole() { return hist.state === "ready" || hist.state === "none"; }

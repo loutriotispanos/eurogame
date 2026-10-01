@@ -1847,21 +1847,52 @@ console.log("History — every completed EuroLeague season since 2000-01 (histor
      "…and it never rides with the page: it arrives on demand (Roster Master) and the offline cache keeps it for whoever has it");
 })();
 
+console.log("The Grid + Six of a Kind — everybody since 2000-01 counts");
+(function () {
+  var GR = window.TheGrid, H = window.HISTORY, U = GR._universe();
+  var feedOnly = H.people.filter(function (p) { return !p[5]; });
+  ok(feedOnly.every(function (p) { return U[p[0]]; }), "every one of the " + feedOnly.length + " archive-only players can be named");
+  var miss = [];
+  H.boards.forEach(function (b) {
+    b[3].forEach(function (x) {
+      var n = H.people[x[0]][0];
+      if (!GR._fits(n, { t: "club", v: window.CLUBS.canonical(b[1]) })) miss.push(n + " @ " + b[1] + " " + H.seasons[b[0]]);
+    });
+  });
+  ok(miss.length === 0, "…and every player counts for every club whose EuroLeague roster he was on since 2000-01" + (miss.length ? " — " + miss.slice(0, 3).join("; ") : ""));
+  var p0 = feedOnly.filter(function (p) { return p[2]; })[0];
+  ok(GR._fits(p0[0], { t: "nat", v: p0[1] }) && GR._fits(p0[0], { t: "pos", v: p0[2] }), "an archive player answers his nationality and position too (" + p0[0] + ")");
+  // never takes anything away from a known player
+  var lost = [];
+  window.CAREERS.forEach(function (c) {
+    c.career.forEach(function (s) { if (!GR._fits(c.name, { t: "club", v: window.CLUBS.canonical(s.team) })) lost.push(c.name + " @ " + s.team); });
+    if (U[c.name].nat !== c.nationality || U[c.name].pos !== c.position) lost.push(c.name + " (profile)");
+  });
+  ok(lost.length === 0, "a known player keeps his own nationality, position and every club of his career" + (lost.length ? " — " + lost.slice(0, 3).join("; ") : ""));
+  var more = window.SIXES.filter(function (p) { return GR._answers(p.a, p.b).length > GR._answers(p.a, p.b, true).length; }).length;
+  ok(more > window.SIXES.length / 2, "Six of a Kind: most categories gain answers from the archive (" + more + " of " + window.SIXES.length + ")");
+  // Six of a Kind: an archive player is a right answer, and a save naming one survives the reload
+  var SK = window.SixOfAKind;
+  SK.goDaily && SK.goDaily();
+  var pk = SK._peek(), extra = pk.answers.filter(function (n) { return !U[n].known; })[0];
+  ok(!!extra, "today's category accepts an archive player (" + extra + ")");
+})();
+
 console.log("Six of a Kind — one category, name six");
 (function () {
   var SK = window.SixOfAKind, GR = window.TheGrid, SIXES = window.SIXES;
   ok(SIXES.length >= 60, "the bank holds " + SIXES.length + " categories");
   var sigs = {}, badCount = [], badType = [], dupes = 0, noDem = [];
   SIXES.forEach(function (p) {
-    var n = GR._answers(p.a, p.b).length;
-    if (n < 10 || n > 40) badCount.push(JSON.stringify(p) + "=" + n);
+    var n = GR._answers(p.a, p.b, true).length, all = GR._answers(p.a, p.b).length;
+    if (n < 10 || n > 40 || all < n) badCount.push(JSON.stringify(p) + "=" + n + "/" + all);
     var t = p.a.t + "/" + p.b.t;
     if (["club/club", "club/nat", "club/pos", "nat/pos"].indexOf(t) < 0) badType.push(t);
     var sig = [p.a.t + ":" + p.a.v, p.b.t + ":" + p.b.v].sort().join("|");
     if (sigs[sig]) dupes++; sigs[sig] = 1;
     [p.a, p.b].forEach(function (c) { if (c.t === "nat" && !SK._demonyms[c.v]) noDem.push(c.v); });
   });
-  ok(badCount.length === 0, "every category has 10–40 answers by The Grid's own predicates" + (badCount.length ? " — " + badCount.slice(0, 3).join(", ") : ""));
+  ok(badCount.length === 0, "every category has 10–40 answers among the known players (the generator's guarantee), and counting everybody only adds to them" + (badCount.length ? " — " + badCount.slice(0, 3).join(", ") : ""));
   ok(badType.length === 0 && dupes === 0, "only the four category shapes, and no category twice");
   ok(noDem.length === 0, "every nationality in the bank reads as an adjective in the clue" + (noDem.length ? " — missing " + noDem.join(", ") : ""));
   ok(SK._clue({ a: { t: "club", v: "FC Barcelona" }, b: { t: "nat", v: "Serbia" } }) === "Serbian players who played for FC Barcelona" &&

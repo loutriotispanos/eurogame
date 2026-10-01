@@ -158,7 +158,7 @@ function compatFor(col) {
   const m = {};
   for (const r of CLUBS) {
     if (col.t === "club" && col.v === r) continue;
-    const n = G._answers({ t: "club", v: r }, col).length;
+    const n = G._answers({ t: "club", v: r }, col, true).length;
     if (n >= minFor({ t: "club", v: r }, col)) m[r] = n;
   }
   compat[k] = m;
@@ -202,7 +202,7 @@ while (puzzles.length < TARGET && attempts < ATTEMPTS) {
 
   // 3) the whole board must be fillable with 9 DISTINCT players
   const cellAnswers = [];
-  for (const row of rows) for (const col of cols) cellAnswers.push(G._answers(row, col));
+  for (const row of rows) for (const col of cols) cellAnswers.push(G._answers(row, col, true));
   if (!hasDistinctFill(cellAnswers)) continue;
 
   const sig = rows.concat(cols).map(useKey).sort().join("|");

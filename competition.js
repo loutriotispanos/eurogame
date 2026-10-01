@@ -74,6 +74,36 @@
     else document.documentElement.removeAttribute("data-comp");
   } catch (e) {}
 
+  // history.js (every completed EuroLeague season since 2000-01, ~67 KB
+  // compressed) is the one data file no page ships with. The games that use it
+  // ask for it here the first time they open, and share the one copy. The
+  // EuroCup has no history, so there it is never fetched ("none").
+  var hist = { state: window.HISTORY ? "ready" : "idle", waiting: [] };
+  window.ELG_HISTORY = {
+    state: function () { return comp === "eurocup" ? "none" : window.HISTORY ? "ready" : hist.state; },
+    // cb() runs once the file is in (window.HISTORY) or has failed to load; a
+    // failure leaves "idle", so the next open tries again.
+    load: function (cb) {
+      cb = cb || function () {};
+      if (comp === "eurocup" || window.HISTORY) { cb(); return; }
+      hist.waiting.push(cb);
+      if (hist.state === "loading") return;
+      hist.state = "loading";
+      function done() {
+        hist.state = window.HISTORY ? "ready" : "idle";
+        var w = hist.waiting; hist.waiting = [];
+        w.forEach(function (f) { try { f(); } catch (e) {} });
+      }
+      try {
+        var root = (window.Hub && window.Hub._siteRoot) ? window.Hub._siteRoot() : (window.__ELG_ROOT__ || "/");
+        var s = document.createElement("script");
+        s.src = root + "history.js";
+        s.onload = done; s.onerror = done;
+        (document.head || document.body).appendChild(s);
+      } catch (e) { done(); }
+    }
+  };
+
   if (comp !== "eurocup") return;
 
   window.EL_PLAYERS = window.PLAYERS;

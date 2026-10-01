@@ -75,6 +75,7 @@ var STATS = (function () {
     f4gapNote: gaps.length ? "; " + gaps.join(" and ") + (gaps.length === 1 ? " isn't" : " aren't") + " in the archive yet" : "",
     puzzles: w.PUZZLES.length, grids: w.GRIDS.length, oddones: w.ODDONES.length, sixes: w.SIXES.length,
     paths: w.PATHS.length, par2: par(w.PATHS, 2), par3: par(w.PATHS, 3), par4: par(w.PATHS, 4),
+    everybody: (function () { var s = {}; w.CAREERS.forEach(function (c) { s[c.name] = 1; }); w.HISTORY.people.forEach(function (p) { s[p[0]] = 1; }); return Object.keys(s).length; })(),
     rmSeasons: w.HISTORY.seasons.length + 1, rmBoards: w.HISTORY.boards.length + Object.keys(elTeams).length,
     rmNames: w.HISTORY.boards.reduce(function (n, b) { return n + b[3].length; }, w.PLAYERS.length),
     ecPlayers: w.EUROCUP_PLAYERS.length, ecClubs: Object.keys(w.EUROCUP_TEAMS).length, ecCareers: w.EUROCUP_CAREERS.length,
@@ -204,7 +205,8 @@ var PAGES = [
       "Each player can be used only once on the board, so spend your flexible names carefully. Most cells have several right answers."
     ],
     faq: [
-      ["Why was my answer rejected when the player really did fit?", "The Grid only accepts well-travelled players, current and non-active, whose full career is in the database. A newcomer still at his first club will be turned down even when he genuinely fits — a rule that keeps every offered name accurately checkable in both directions."],
+      ["Who can I name?", "Anyone who has played in the EuroLeague since 2000-01, plus the older greats whose careers we hold: {everybody} players. A player counts for a club if we have him there, which means any EuroLeague season with that club since 2000, or any stint in his career."],
+      ["Why was my answer rejected when the player really did fit?", "Usually because the club in question was outside the EuroLeague years we hold: a domestic-league spell before 2000, or a stop that is not in a career timeline. Every EuroLeague roster since 2000-01 is in, so a EuroLeague season always counts."],
       ["What is an Immaculate?", "Filling all nine cells without a single wrong guess. It is a badge on the result, not a separate mode."],
       ["Can two cells take the same player?", "No. Each player can appear once on the board. That constraint is what makes the shared-answer cells hard: two neighbouring cells may have almost the same answer list between them."],
       ["Can I give up on the Daily?", "Yes. Give up fills each empty cell with one answer that would have fitted, and asks once before it commits since there is no second grid that day. It records a loss for The Grid but still counts as played, so the hub streak survives."]
@@ -321,9 +323,9 @@ var PAGES = [
       "Name six and you win. The Daily is the same category for everyone and keeps your hub streak alive."
     ],
     faq: [
-      ["Why was my answer rejected when the player really did fit?", "Like The Grid, Six of a Kind only knows well-travelled players, current and non-active, whose full career is in the database. A newcomer still at his first club is turned down even when he genuinely fits, which keeps every name accurately checkable in both directions."],
+      ["Who can I name?", "The same {everybody} players as The Grid: anyone who has played in the EuroLeague since 2000-01, plus the older greats whose careers we hold. A player counts for a club if we have him there, which means any EuroLeague season with that club since 2000, or any stint in his career."],
       ["Does a short stint count?", "Yes. A player counts for a club if it appears anywhere in his career, loans and one-season stops included, or if he was ever on that club's official EuroLeague roster since 2000, even without playing a minute there."],
-      ["How hard can a category be?", "Never impossible and never a giveaway: every one of the {sixes} categories has between ten and forty right answers, so six always means digging past the obvious names."],
+      ["How hard can a category be?", "Never impossible and never a giveaway: every one of the {sixes} categories has at least ten right answers among the players a fan knows best, and the archive since 2000 adds more, so six always means digging past the obvious names."],
       ["Can I give up on the Daily?", "Yes. Give up ends the round and shows everyone who fitted. It asks once before it commits, records a loss for Six of a Kind, but still counts as played, so the hub streak survives."]
     ]
   }
@@ -559,7 +561,7 @@ var EXTRA = {
       "Short stints and NBA spells count, so think about loans and one-season stops, not just the clubs a player is known for.",
       "Twelve guesses for nine cells makes a miss affordable. Using a player in the wrong cell is not, because each player can only go on the board once."
     ],
-    inside: "{grids} daily grids built from the {careers} careers in the database. Every cell is checked to have at least one right answer, and most have several. Rows and columns mix clubs, nationalities and positions, and a player counts for a club if it appears anywhere in his career.",
+    inside: "{grids} daily grids built from the {careers} careers in the database. Every cell is checked to have at least one right answer, and most have several. Rows and columns mix clubs, nationalities and positions, and a player counts for a club if it appears anywhere in his career or he was on its EuroLeague roster in any season since 2000-01. Any of {everybody} players can answer.",
     example: "Take the cell where Olympiacos meets France. Evan Fournier is the obvious answer, but the database knows three more: Frank Ntilikina, Moustapha Fall and Kim Tillie. Since each player can be used only once, look at the rest of the board before you spend the famous one. A France or guard cell elsewhere may need him more.",
     related: ["connections", "clubreveal", "pathbetween"]
   },
@@ -623,7 +625,7 @@ var EXTRA = {
       "Journeymen are your friends. A player who has been at seven clubs fits a surprising number of categories.",
       "Check the nationality twice. It is the national team a player plays for, so a naturalised player counts for his adopted country."
     ],
-    inside: "{sixes} categories, each crossing two of the same criteria The Grid uses: a club with a nationality, a position or a second club, or a nationality with a position. Every one has between ten and forty right answers among the {careers} careers in the database.",
+    inside: "{sixes} categories, each crossing two of the same criteria The Grid uses: a club with a nationality, a position or a second club, or a nationality with a position. Every one has between ten and forty right answers among the {careers} careers in the database, and more once every EuroLeague player since 2000-01 is counted: {everybody} names can answer.",
     example: "Take centers who played for CSKA Moscow. Nikola Milutinov and Kyle Hines are the easy start, and Boban Marjanovic, Nenad Krstic, David Andersen and Sasha Kaun make six. The database knows only nine, fewer than the ten every real category needs, which is why this one is an example here and never a puzzle.",
     related: ["thegrid", "rostermaster", "connections"]
   }

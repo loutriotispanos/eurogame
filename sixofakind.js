@@ -236,10 +236,11 @@
   // --- Autocomplete ----------------------------------------------------------
   // The list is EVERY player The Grid can judge, not just the ones who fit: it
   // spells names for you, it never tells you who is in the category.
-  var NAMES = null;
+  var NAMES = null, NAMES_V = -1;
   function namePool() {
-    if (NAMES) return NAMES;
-    var u = GRID._universe(); NAMES = [];
+    var u = GRID._universe(), v = GRID._version();
+    if (NAMES && NAMES_V === v) return NAMES;
+    NAMES = []; NAMES_V = v;
     for (var n in u) NAMES.push({ name: n });
     NAMES.sort(function (x, y) { return x.name < y.name ? -1 : 1; });
     return NAMES;
@@ -342,6 +343,14 @@
     els.input.value = ""; els.input.disabled = false;
     els.banner.hidden = true; els.answers.hidden = true; els.answers.innerHTML = ""; flash("");
   }
+  // Every player since 2000-01 counts once history.js is in: the count and the
+  // end-of-game list catch up when it lands.
+  function refreshAnswers() {
+    if (!puzzle) return;
+    answers = GRID._answers(puzzle.a, puzzle.b);
+    renderClue();
+    if (over) renderAnswers();
+  }
   function begin() {
     answers = GRID._answers(puzzle.a, puzzle.b);
     dealt = true;
@@ -359,7 +368,10 @@
     else if (saved && saved.puzzle !== pIdx) saved = null;
     begin();
     if (saved) {
-      found = (saved.found || []).filter(function (n) { return answers.indexOf(n) >= 0; }).slice(0, NEED);
+      // A name we can't judge yet (an archive player, before history.js is in)
+      // stays: dropping it would rewrite the save without him.
+      var u = GRID._universe();
+      found = (saved.found || []).filter(function (n) { return answers.indexOf(n) >= 0 || !u[n]; }).slice(0, NEED);
       misses = (saved.misses || []).slice(0, STRIKES);
       over = !!saved.done; won = !!saved.won;
     }
@@ -485,7 +497,7 @@
   }
 
   window.SixOfAKind = {
-    onShow: function () { if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
+    onShow: function () { GRID._withHistory(refreshAnswers); if (isArchive) setMode("daily"); else if (!dealt) deal(); if (maybeFirstHelp()) return; if (els.input && !over) els.input.focus(); },   // a hub open always lands on TODAY's edition
     goDaily: function () { setMode("daily"); },
     goPractice: function () { setMode("practice"); },
     goMode: setMode,
